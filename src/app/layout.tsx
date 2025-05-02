@@ -40,7 +40,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${Pretendard.className}`}>{children}</body>
+      <body className={`${Pretendard.className}`}>
+        <main className="grid grid-rows-[20px_1fr_20px] min-h-screen p-4 pb-20 sm:p-20 ">
+          {children}
+        </main>
+      </body>
     </html>
   );
 }
