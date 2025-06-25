@@ -10,6 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { EditProfileDialog } from "@/feature/dashboard/EditProfileDialog";
 
 export default function DashboardPage() {
   return (
@@ -24,9 +25,10 @@ export default function DashboardPage() {
       <section className="space-y-4 ">
         <div className="flex justify-between items-center">
           <h3 className="font-bold text-base lg:text-lg">작가 정보</h3>
-          <Button variant="muted" size="sm">
+          {/* <Button variant="muted" size="sm">
             <Pencil className="w-4 h-4 mr-1" /> Edit
-          </Button>
+          </Button> */}
+          <EditProfileDialog />
         </div>
 
         <div className="flex gap-4 items-start">
