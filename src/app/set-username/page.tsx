@@ -52,7 +52,7 @@ export default function SetUserNamePage() {
             id="username"
             placeholder="예: jakdang, jakdang_123"
             {...register("username", {
-              required: "필명을 입력해주세요.",
+              required: "닉네임을 입력해주세요.",
               pattern: {
                 value: /^[a-zA-Z0-9_]{3,20}$/,
                 message: "3~20자의 영문, 숫자, 언더스코어만 사용 가능합니다.",
@@ -72,7 +72,7 @@ export default function SetUserNamePage() {
         </div>
 
         <Button type="submit" size="xl" className="w-full mt-6">
-          필명 설정하기
+          닉네임 설정하기
         </Button>
       </form>
     </section>
