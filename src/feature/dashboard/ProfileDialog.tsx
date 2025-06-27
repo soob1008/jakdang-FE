@@ -56,9 +56,6 @@ export function ProfileDialog() {
       }
 
       setPreviewUrl(URL.createObjectURL(file));
-    } else {
-      setSelectedFile(null);
-      setPreviewUrl(null);
     }
   };
 
