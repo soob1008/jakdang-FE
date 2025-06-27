@@ -11,7 +11,7 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
+import { X } from "lucide-react";
 import { ReactNode } from "react";
 import clsx from "clsx";
 
@@ -35,8 +35,8 @@ export function ResponsiveDialog({
   return (
     <Dialog>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-
       <DialogContent
+        showCloseButton={false}
         className={clsx(
           "fixed z-50 flex flex-col bg-white",
           // 모바일: 전체 페이지
@@ -46,16 +46,28 @@ export function ResponsiveDialog({
         )}
       >
         {/* ✅ 모바일 상단 헤더 */}
+        {/* 모바일 헤더 내부에만 닫기 버튼을 배치하고 */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 sm:hidden">
           <div />
           <span className="text-base font-medium">{title}</span>
-          <div className="w-10" />
+          <DialogClose asChild>
+            <X className="w-5 h-5" />
+          </DialogClose>
         </div>
 
         {/* ✅ PC 헤더 */}
-        <DialogHeader className="hidden sm:block">
-          <DialogTitle>{title}</DialogTitle>
-          {description && <DialogDescription>{description}</DialogDescription>}
+        <DialogHeader className="hidden sm:flex flex-row justify-between">
+          <div>
+            <DialogTitle>{title}</DialogTitle>
+            {description && (
+              <DialogDescription className="mt-2">
+                {description}
+              </DialogDescription>
+            )}
+          </div>
+          <DialogClose asChild>
+            <X className="w-5 h-5" />
+          </DialogClose>
         </DialogHeader>
 
         {/* ✅ 내용 */}
@@ -65,7 +77,7 @@ export function ResponsiveDialog({
 
         {/* ✅ 하단 버튼 */}
         <DialogFooter className="px-4 sm:px-0 pb-6 sm:pb-0">
-          <Button onClick={onSubmit} className="w-full sm:w-auto">
+          <Button onClick={onSubmit} className="w-full sm:w-auto h-12 sm:h-9">
             {submitText}
           </Button>
         </DialogFooter>
