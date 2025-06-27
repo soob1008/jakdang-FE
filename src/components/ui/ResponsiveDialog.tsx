@@ -11,7 +11,7 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, X } from "lucide-react";
+import { X } from "lucide-react";
 import { ReactNode } from "react";
 import clsx from "clsx";
 
