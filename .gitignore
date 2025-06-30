@@ -3,3 +3,5 @@ node_modules
 .history
 .next
 .yarn
+
+.env.local
