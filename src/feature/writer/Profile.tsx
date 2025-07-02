@@ -1,0 +1,50 @@
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { Heart, HeartIcon } from "lucide-react";
+
+export default function Profile() {
+  return (
+    <section className="flex flex-col items-center gap-2 mb-6">
+      <div className="text-center">
+        <div className="overflow-hidden w-24 h-24 mx-auto rounded-full">
+          <Image
+            src="/test.png"
+            width={240}
+            height={240}
+            alt="작가 프로필 사진"
+            className="w-24 h-24"
+          />
+        </div>
+        <h2 className="mt-3 text-lg font-bold">SUBIN</h2>
+        <p className="text-sm text-gray-600 text-center">
+          우연히 마주친 문장이 당신을 닮았으면 좋겠어요.
+        </p>
+        <p className="text-sm text-gray-400">#산문 #에세이</p>
+
+        {/* SNS 아이콘 자리 */}
+        <div className="flex items-center justify-center gap-3 mt-4">
+          {/* Replace with actual icons */}
+          <div className="w-6 h-6 bg-gray-400 rounded-full" />
+          <div className="w-6 h-6 bg-gray-400 rounded-full" />
+          <div className="w-6 h-6 bg-gray-400 rounded-full" />
+          <div className="w-6 h-6 bg-gray-400 rounded-full" />
+        </div>
+      </div>
+
+      <div className="flex justify-around w-full sm:w-1/2 text-sm text-gray-600 mt-6">
+        <div className="flex flex-col items-center">
+          <span className="text-lg font-bold">0</span>
+          <span>Books</span>
+        </div>
+        <div className="w-[1px] h-12 bg-gray-100"></div>
+        <button className="text-center" aria-label="응원하기">
+          <div className="font-semibold">32</div>
+          <div className="flex items-center gap-1">
+            Likes
+            <Heart className="w-4 h-4" fill="#fff" />
+          </div>
+        </button>
+      </div>
+    </section>
+  );
+}
