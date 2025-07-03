@@ -45,8 +45,8 @@ export default function Profile() {
           className="text-center"
           aria-label="응원하기"
           onClick={() => {
-            setIsLike(!isLike);
-            setLikeCount(isLike ? likeCount - 1 : likeCount + 1);
+            setIsLike((prev) => !prev);
+            setLikeCount((prev) => prev + (isLike ? -1 : 1));
           }}
         >
           <div className="font-semibold">{likeCount}</div>
