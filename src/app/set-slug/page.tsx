@@ -38,19 +38,6 @@ export default function SetUserNamePage() {
 
   const onSubmit = async (data: FormValues) => {
     const slug = data.slug.trim().toLowerCase(); // 소문자 정규화
-
-    // 주소 중복 확인 및 저장 로직
-    const { exists } = await duplicateCheck(slug);
-
-    // 중복된 슬러그가 있는 경우
-    if (exists) {
-      setError("slug", {
-        type: "manual",
-        message: "이미 사용 중인 주소입니다.",
-      });
-      return;
-    }
-
     // 사용자 인증 세션 가져오기
     const {
       data: { session },
@@ -64,12 +51,24 @@ export default function SetUserNamePage() {
       return;
     }
 
+    // 주소 중복 확인 및 저장 로직
+    const { exists } = await duplicateCheck(userId, slug);
+
+    // 중복된 슬러그가 있는 경우
+    if (exists) {
+      setError("slug", {
+        type: "manual",
+        message: "이미 사용 중인 주소입니다.",
+      });
+      return;
+    }
+
     // 유저 주소 업데이트
     const { error: updateError } = await updateUserSlug(userId, slug);
 
     if (!updateError) {
       toast.success("닉네임이 성공적으로 설정되었습니다.");
-      router.push(`/profile/@${slug}`);
+      router.push(`/profile`);
     }
   };
 

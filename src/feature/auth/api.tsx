@@ -43,31 +43,35 @@ export async function createUser({ id, email }: { id: string; email: string }) {
   return { error };
 }
 
-export async function duplicateCheck(slug: string) {
+export async function duplicateCheck(userId: string, slug: string) {
   const { data, error } = await supabase
     .from("users")
     .select("id")
     .eq("slug", slug)
-    .single();
+    .maybeSingle();
 
-  if (error) {
+  if (error && error.code !== "PGRST116") {
     toast.error("중복 확인 중 오류가 발생했습니다.");
     return { exists: false, error };
   }
 
-  return { exists: !!data, error: null };
+  // 같은 slug가 있고, 그게 다른 유저의 것이라면 중복
+  const exists = data !== null && data.id !== userId;
+
+  return { exists, error: null };
 }
 
 export async function updateUserSlug(userId: string, slug: string) {
   const { error } = await supabase
     .from("users")
     .update({ slug })
-    .eq("id", userId);
+    .eq("id", userId)
+    .throwOnError();
 
   if (error) {
     toast.error("주소저장에 실패했어요.");
     return { error };
   }
 
-  return { error: null };
+  return { error };
 }
