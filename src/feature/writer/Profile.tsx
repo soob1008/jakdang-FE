@@ -1,6 +1,5 @@
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import { Heart, HeartIcon } from "lucide-react";
+import { Heart } from "lucide-react";
 
 export default function Profile() {
   return (
