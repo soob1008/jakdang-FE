@@ -1,39 +1,22 @@
 import Image from "next/image";
 
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ProfileDialog } from "@/feature/profile/ProfileDialog";
-import { PostDialog } from "@/feature/profile/PostDialog";
-import { WorkDialog } from "@/feature/profile/WorkDialog";
+import { PostDialog } from "@/feature/profile/dialog/PostDialog";
+import { WorkDialog } from "@/feature/profile/dialog/WorkDialog";
+import UserInfo from "@/feature/profile/UserInfo";
+import AuthorInfo from "@/feature/profile/AuthorInfo";
+import AuthorIntro from "@/feature/profile/AuthorIntro";
 
 export default function ProfilePage() {
   return (
     <div className="space-y-10 pb-40">
       {/* 사용자 정보 */}
-      <section className="pb-4 border-b border-gray-200">
-        <b className="block text-base lg:text-lg">1008sb@gmail.com</b>
-        <span className="text-sm text-gray-500">@username</span>
-      </section>
-
+      <UserInfo />
       {/* 작가 정보 */}
-      <section className="space-y-4 ">
-        <div className="flex justify-between items-center">
-          <h3 className="font-bold text-base lg:text-lg">작가 정보</h3>
-          <ProfileDialog />
-        </div>
+      <AuthorInfo />
 
-        <div className="flex gap-4 items-start">
-          <Avatar className="w-20 h-20">
-            <AvatarImage src="/test.png" alt="프로필 이미지" />
-            <AvatarFallback>프로필이미지</AvatarFallback>
-          </Avatar>
-          <div className="text-sm space-y-1">
-            <strong className="block font-medium">필명</strong>
-            <p className="text-gray-500">소개글을 예시를 써주세요.</p>
-          </div>
-        </div>
-      </section>
-
+      {/* 작가 한줄 소개 */}
+      <AuthorIntro />
       {/* 글 등록 */}
       <section className="space-y-4">
         <div className="flex justify-between items-center">

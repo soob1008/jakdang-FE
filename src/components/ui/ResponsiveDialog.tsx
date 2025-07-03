@@ -60,7 +60,7 @@ export function ResponsiveDialog({
           <div>
             <DialogTitle>{title}</DialogTitle>
             {description && (
-              <DialogDescription className="mt-2">
+              <DialogDescription className="mt-2 break-words">
                 {description}
               </DialogDescription>
             )}
