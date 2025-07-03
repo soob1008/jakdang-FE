@@ -11,7 +11,6 @@ export async function loginWithMagicLink(email: string) {
   });
 
   if (error) {
-    console.error("로그인 요청 실패", error.message);
     toast("로그인 요청에 실패했습니다.");
   }
 

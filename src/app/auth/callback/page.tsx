@@ -51,6 +51,12 @@ export default function AuthCallback() {
         return;
       }
 
+      if (userError && userError.code !== "PGRST116") {
+        toast.error(`유저 정보 조회 실패: ${userError.message}`);
+        router.replace("/auth/login");
+        return;
+      }
+
       if (!userData?.slug) {
         // 최초 닉네임 설정이 되어있지 않으면 닉네임 설정 페이지로 이동
         router.replace("/set-slug");

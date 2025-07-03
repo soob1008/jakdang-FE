@@ -5,6 +5,7 @@ import { Heart } from "lucide-react";
 
 export default function Profile() {
   const [isLike, setIsLike] = useState(false);
+  const [likeCount, setLikeCount] = useState(32); // 초기 좋아요 수
 
   return (
     <section className="flex flex-col items-center gap-2 mb-6">
@@ -43,9 +44,12 @@ export default function Profile() {
         <button
           className="text-center"
           aria-label="응원하기"
-          onClick={() => setIsLike(!isLike)}
+          onClick={() => {
+            setIsLike(!isLike);
+            setLikeCount(isLike ? likeCount - 1 : likeCount + 1);
+          }}
         >
-          <div className="font-semibold">32</div>
+          <div className="font-semibold">{likeCount}</div>
           <div className="flex items-center gap-1">
             Likes
             <Heart
