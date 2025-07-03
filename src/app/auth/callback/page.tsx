@@ -17,7 +17,7 @@ export default function AuthCallback() {
 
       if (!session) {
         console.error("로그인 실패 ❌", error);
-        router.replace("/auth/login");
+        // router.replace("/auth/login");
         return;
       }
 

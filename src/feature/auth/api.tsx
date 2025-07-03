@@ -1,4 +1,5 @@
 import { supabase } from "@/lib/supabase";
+import { toast } from "sonner";
 
 // 로그인 요청 함수
 export async function loginWithMagicLink(email: string) {
@@ -11,9 +12,7 @@ export async function loginWithMagicLink(email: string) {
 
   if (error) {
     console.error("로그인 요청 실패", error.message);
-    alert("로그인 요청에 실패했습니다.");
-  } else {
-    alert("메일함을 확인해주세요! 로그인 링크를 보냈습니다.");
+    toast("로그인 요청에 실패했습니다.");
   }
 
   return error;

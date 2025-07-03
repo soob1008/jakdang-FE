@@ -3,6 +3,7 @@ import "./globals.css";
 import localFont from "next/font/local";
 import { Header } from "@/components/layout/header";
 import { Providers } from "./providers";
+import { Toaster } from "@/components/ui/sonner";
 
 const Pretendard = localFont({
   src: [
@@ -30,6 +31,7 @@ export default function RootLayout({
           <main className="min-h-screen pt-14 px-4 lg:px-6">
             <div className="max-w-3xl mx-auto w-full pt-8">{children}</div>
           </main>
+          <Toaster position="top-center" />
         </Providers>
       </body>
     </html>
