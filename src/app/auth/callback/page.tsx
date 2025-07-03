@@ -14,12 +14,12 @@ export default function AuthCallback() {
     const handleLogin = async () => {
       const {
         data: { session },
-        error,
       } = await supabase.auth.getSession();
 
       if (!session) {
         toast.error("로그인 실패 ");
         router.replace("/auth/login");
+        return;
       }
 
       const user = session.user;
