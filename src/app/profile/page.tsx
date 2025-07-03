@@ -6,7 +6,7 @@ import { ProfileDialog } from "@/feature/profile/ProfileDialog";
 import { PostDialog } from "@/feature/profile/PostDialog";
 import { WorkDialog } from "@/feature/profile/WorkDialog";
 
-export default function DashboardPage() {
+export default function ProfilePage() {
   return (
     <div className="space-y-10 pb-40">
       {/* 사용자 정보 */}
