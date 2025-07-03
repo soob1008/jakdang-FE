@@ -4,6 +4,8 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
+import { getUser, createUser } from "@/feature/auth/api";
+import { toast } from "sonner";
 
 export default function AuthCallback() {
   const router = useRouter();
@@ -12,36 +14,54 @@ export default function AuthCallback() {
     const handleLogin = async () => {
       const {
         data: { session },
-        error,
       } = await supabase.auth.getSession();
 
       if (!session) {
-        console.error("로그인 실패 ❌", error);
+        toast.error("로그인 실패 ");
         router.replace("/auth/login");
         return;
       }
 
       const user = session.user;
 
-      // 사용자 정보 조회
-      //   const { data: profile, error: profileError } = await supabase
-      //     .from("profiles")
-      //     .select("nickname")
-      //     .eq("id", user.id)
-      //     .single();
+      // users 테이블에서 유저정보 조회
+      const { data: userData, error: userError } = await getUser(user.id);
 
-      //   if (profileError) {
-      //     console.error("프로필 정보 조회 실패 ❌", profileError);
-      //     router.replace("/auth/login");
-      //     return;
-      //   }
+      // 최초 로그인 시 유저 정보가 없으면
+      if (userError && userError.code === "PGRST116") {
+        if (!user.email) {
+          toast("유저 이메일 정보가 없습니다.");
+          router.replace("/auth/login");
+          return;
+        }
 
-      if (user) {
+        // 유저 정보 등록
+        const { error: createUserError } = await createUser({
+          id: user.id,
+          email: user.email,
+        });
+
+        if (createUserError) {
+          toast(`유저 정보 등록 실패: ${createUserError.message}`);
+          router.replace("/auth/login");
+          return;
+        }
+
+        router.replace("/set-slug");
+        return;
+      }
+
+      if (userError && userError.code !== "PGRST116") {
+        toast.error(`유저 정보 조회 실패: ${userError.message}`);
+        router.replace("/auth/login");
+        return;
+      }
+
+      if (!userData?.slug) {
         // 최초 닉네임 설정이 되어있지 않으면 닉네임 설정 페이지로 이동
-        router.replace("/set-nickname");
+        router.replace("/set-slug");
       } else {
-        // 닉네임이 있다면 대시보드로 이동
-        router.replace("/dashboard");
+        router.replace(`/profile/@${userData.slug}`);
       }
     };
 

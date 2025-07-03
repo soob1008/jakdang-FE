@@ -1,7 +1,12 @@
+"use client";
+import { useState } from "react";
 import Image from "next/image";
 import { Heart } from "lucide-react";
 
 export default function Profile() {
+  const [isLike, setIsLike] = useState(false);
+  const [likeCount, setLikeCount] = useState(32); // 초기 좋아요 수
+
   return (
     <section className="flex flex-col items-center gap-2 mb-6">
       <div className="text-center">
@@ -36,11 +41,22 @@ export default function Profile() {
           <span>Books</span>
         </div>
         <div className="w-[1px] h-12 bg-gray-100"></div>
-        <button className="text-center" aria-label="응원하기">
-          <div className="font-semibold">32</div>
+        <button
+          className="text-center"
+          aria-label="응원하기"
+          onClick={() => {
+            setIsLike((prev) => !prev);
+            setLikeCount((prev) => prev + (isLike ? -1 : 1));
+          }}
+        >
+          <div className="font-semibold">{likeCount}</div>
           <div className="flex items-center gap-1">
             Likes
-            <Heart className="w-4 h-4" fill="#fff" />
+            <Heart
+              className="w-4 h-4"
+              fill={isLike ? "#f00" : "#fff"}
+              stroke={isLike ? "#f00" : "currentColor"}
+            />
           </div>
         </button>
       </div>
