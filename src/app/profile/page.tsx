@@ -2,11 +2,11 @@ import Image from "next/image";
 
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ProfileDialog } from "@/feature/dashboard/ProfileDialog";
-import { PostDialog } from "@/feature/dashboard/PostDialog";
-import { WorkDialog } from "@/feature/dashboard/WorkDialog";
+import { ProfileDialog } from "@/feature/profile/ProfileDialog";
+import { PostDialog } from "@/feature/profile/PostDialog";
+import { WorkDialog } from "@/feature/profile/WorkDialog";
 
-export default function DashboardPage() {
+export default function ProfilePage() {
   return (
     <div className="space-y-10 pb-40">
       {/* 사용자 정보 */}

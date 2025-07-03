@@ -4,58 +4,103 @@ import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import clsx from "clsx";
+import { duplicateCheck, updateUserSlug } from "@/feature/auth/api";
+import { toast } from "sonner";
+import { supabase } from "@/lib/supabase";
+import { useRouter } from "next/navigation";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-type FormValues = {
-  username: string;
-};
+const schema = z.object({
+  slug: z
+    .string()
+    .min(5, "5자 이상 입력해주세요.")
+    .max(20, "20자 이하로 입력해주세요.")
+    .regex(/^[a-z0-9]+$/, "영문 소문자 또는 숫자만 사용할 수 있어요."),
+});
+
+type FormValues = z.infer<typeof schema>;
 
 export default function SetUserNamePage() {
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
     watch,
-    formState: { errors },
-  } = useForm<FormValues>();
+    formState: { errors, isValid },
+    setError,
+  } = useForm<FormValues>({
+    resolver: zodResolver(schema),
+    mode: "onChange",
+  });
 
-  const username = watch("username");
+  const username = watch("slug");
 
-  const onSubmit = (data: FormValues) => {
-    console.log("닉네임 제출됨:", data.username);
-    // TODO: 중복 확인 및 저장 로직
+  const onSubmit = async (data: FormValues) => {
+    const slug = data.slug.trim().toLowerCase(); // 소문자 정규화
+    // 사용자 인증 세션 가져오기
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+
+    const userId = session?.user?.id;
+
+    if (!userId) {
+      toast.error("사용자 정보를 확인할 수 없습니다.");
+      router.push("/auth/login");
+      return;
+    }
+
+    // 주소 중복 확인 및 저장 로직
+    const { exists } = await duplicateCheck(userId, slug);
+
+    // 중복된 슬러그가 있는 경우
+    if (exists) {
+      setError("slug", {
+        type: "manual",
+        message: "이미 사용 중인 주소입니다.",
+      });
+      return;
+    }
+
+    // 유저 주소 업데이트
+    const { error: updateError } = await updateUserSlug(userId, slug);
+
+    if (!updateError) {
+      toast.success("주소가 성공적으로 설정되었습니다.");
+      router.push(`/profile`);
+    }
   };
 
-  const hasError = Boolean(errors.username);
+  const hasError = Boolean(errors.slug);
   const isEmpty = !username || username.trim() === "";
 
   return (
     <section aria-labelledby="username-heading">
       <header>
-        <h2 id="username-heading" className="text-2xl lg:text-3xl font-bold">
-          닉네임 설정
+        <h2 id="slug-heading" className="text-2xl lg:text-3xl font-bold">
+          작가 주소를 만들기
         </h2>
         <p className="mt-2 text-sm lg:text-base text-gray-500 leading-relaxed">
-          작당에서 사용할 고유한 닉네임을 입력해주세요.
-          <br />
-          닉네임은 공개 주소(<code>@닉네임</code>)로 사용되며, 한 번 설정하면
-          변경이 어려워요.
+          작당에서 사용할 고유 주소를 만들어주세요.
+          <br />이 주소는 <code>@사용자명</code> 형태로 프로필 링크에 사용돼요.
           <br className="hidden sm:block" />
-          <span className="mt-1 block">
-            닉네임은 나의 고유 주소이고, 프로필에 표시되는{" "}
-            <strong>필명은 이후 자유롭게 설정</strong>할 수 있어요.
-          </span>
+          영어 소문자 또는 소문자 영어 + 숫자 조합만 사용할 수 있고, 다른
+          작가와의 중복은 허용되지 않아요.
         </p>
       </header>
 
       <form className="mt-14" onSubmit={handleSubmit(onSubmit)}>
         <div>
           <Input
-            id="username"
-            placeholder="예: jakdang, jakdang_123"
-            {...register("username", {
-              required: "닉네임을 입력해주세요.",
+            id="slug"
+            placeholder="예: jakdang, jakdang123"
+            {...register("slug", {
+              required: "주소를 입력해주세요.",
               pattern: {
-                value: /^[a-zA-Z0-9_]{3,20}$/,
-                message: "3~20자의 영문, 숫자, 언더스코어만 사용 가능합니다.",
+                value: /^[a-z0-9]{5,20}$/,
+                message: "5~20자의 영문 소문자 또는 숫자만 사용할 수 있어요.",
               },
             })}
             className={clsx(
@@ -65,14 +110,17 @@ export default function SetUserNamePage() {
             )}
           />
           {hasError && (
-            <p className="mt-1 text-sm text-red-500">
-              {errors.username?.message}
-            </p>
+            <p className="mt-1 text-sm text-red-500">{errors.slug?.message}</p>
           )}
         </div>
 
-        <Button type="submit" size="xl" className="w-full mt-6">
-          닉네임 설정하기
+        <Button
+          type="submit"
+          size="xl"
+          className="w-full mt-6"
+          disabled={!isValid}
+        >
+          주소 설정하기
         </Button>
       </form>
     </section>
