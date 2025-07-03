@@ -69,7 +69,7 @@ export async function updateUserSlug(userId: string, slug: string) {
     .throwOnError();
 
   if (error) {
-    toast.error("주소저장에 실패했어요.");
+    toast.error("주소 저장에 실패했어요.");
     return { error };
   }
 

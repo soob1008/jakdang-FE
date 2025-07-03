@@ -32,6 +32,7 @@ export default function SetUserNamePage() {
     setError,
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
+    mode: "onChange",
   });
 
   const username = watch("slug");
@@ -67,7 +68,7 @@ export default function SetUserNamePage() {
     const { error: updateError } = await updateUserSlug(userId, slug);
 
     if (!updateError) {
-      toast.success("닉네임이 성공적으로 설정되었습니다.");
+      toast.success("주소가 성공적으로 설정되었습니다.");
       router.push(`/profile`);
     }
   };
@@ -94,11 +95,11 @@ export default function SetUserNamePage() {
         <div>
           <Input
             id="slug"
-            placeholder="예: jakdang, jakdang_123"
+            placeholder="예: jakdang, jakdang123"
             {...register("slug", {
-              required: "닉네임을 입력해주세요.",
+              required: "주소를 입력해주세요.",
               pattern: {
-                value: /^[a-z0-9]{3,20}$/,
+                value: /^[a-z0-9]{5,20}$/,
                 message: "5~20자의 영문 소문자 또는 숫자만 사용할 수 있어요.",
               },
             })}
@@ -119,7 +120,7 @@ export default function SetUserNamePage() {
           className="w-full mt-6"
           disabled={!isValid}
         >
-          닉네임 설정하기
+          주소 설정하기
         </Button>
       </form>
     </section>
