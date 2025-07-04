@@ -6,17 +6,23 @@ import { WorkDialog } from "@/feature/profile/dialog/WorkDialog";
 import UserInfo from "@/feature/profile/UserInfo";
 import AuthorInfo from "@/feature/profile/AuthorInfo";
 import AuthorIntro from "@/feature/profile/AuthorIntro";
+import AuthorTag from "@/feature/profile/AuthorTag";
 
 export default function ProfilePage() {
   return (
     <div className="space-y-10 pb-40">
       {/* 사용자 정보 */}
       <UserInfo />
+
       {/* 작가 정보 */}
       <AuthorInfo />
 
       {/* 작가 한줄 소개 */}
       <AuthorIntro />
+
+      {/* 관심 분야 태그 등록 */}
+      <AuthorTag />
+
       {/* 글 등록 */}
       <section className="space-y-4">
         <div className="flex justify-between items-center">
