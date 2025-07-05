@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Pencil, Trash } from "lucide-react";
+import { Pencil, Trash, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { WorkDialog } from "@/feature/profile/dialog/WorkDialog";
 import { Badge } from "@/components/ui/badge";
@@ -10,7 +10,9 @@ import { Switch } from "@/components/ui/switch";
 
 export default function WorkList() {
   const [showAll, setShowAll] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
+  const [mode, setMode] = useState<"create" | "edit">("create");
   // 예시용 더미 데이터 (실제 작품 리스트로 대체)
   const items = [1, 2, 3, 4, 5, 6, 7, 8];
   const visibleItems = showAll ? items : items.slice(0, 6);
@@ -24,7 +26,18 @@ export default function WorkList() {
     <section className="space-y-4">
       <div className="flex justify-between items-center">
         <h3 className="font-bold text-base lg:text-lg">작품 등록</h3>
-        <WorkDialog />
+        <Button
+          variant="muted"
+          size="sm"
+          onClick={() => {
+            setMode("create");
+            setIsOpen(true);
+          }}
+          aria-label="Create Link"
+        >
+          <Plus className="w-4 h-4 mr-1" />
+          Create
+        </Button>
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
@@ -46,6 +59,11 @@ export default function WorkList() {
                   size="icon"
                   variant="outline"
                   className="w-7 h-7 p-1 rounded-full"
+                  onClick={() => {
+                    setMode("edit");
+                    setIsOpen(true);
+                  }}
+                  aria-label="Edit Work"
                 >
                   <Pencil className="w-4 h-4" />
                 </Button>
@@ -89,6 +107,27 @@ export default function WorkList() {
           </Button>
         </div>
       )}
+
+      <WorkDialog
+        mode={mode}
+        open={isOpen}
+        onOpenChange={setIsOpen}
+        defaultValues={
+          mode === "edit"
+            ? {
+                title: "랑과 나의 사막",
+                content:
+                  "사막에서 만난 새로운 만남과 이별을 담은 우리들의 이야기",
+                link: "https://example.com",
+                isRepresentative: true,
+              }
+            : undefined
+        }
+        onSubmitSuccess={(data, file) => {
+          // 수정 후 로직
+          setIsOpen(false);
+        }}
+      />
     </section>
   );
 }

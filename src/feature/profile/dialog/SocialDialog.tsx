@@ -3,7 +3,6 @@
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Plus } from "lucide-react";
 
 import {
   Form,
@@ -20,37 +19,44 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
+
 import { ResponsiveDialog } from "@/components/ui/ResponsiveDialog";
-import { Dispatch, SetStateAction } from "react";
 
 const schema = z.object({
   platform: z.enum(["twitter", "instagram", "brunch", "x", "medium"]),
   url: z.string().url("올바른 링크를 입력해주세요"),
 });
 
-type SocialFormValues = z.infer<typeof schema>;
+export type SocialFormValues = z.infer<typeof schema>;
+
+interface SocialDialogProps {
+  mode?: "create" | "edit";
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  defaultValues?: Partial<SocialFormValues>;
+  onSubmitSuccess?: (data: SocialFormValues) => void;
+}
 
 export default function SocialDialog({
   mode = "create",
   open = false,
-  setIsOpen,
-}: {
-  mode?: "create" | "edit";
-  open?: boolean;
-  setIsOpen?: Dispatch<SetStateAction<boolean>>;
-}) {
+  onOpenChange,
+  defaultValues,
+  onSubmitSuccess,
+}: SocialDialogProps) {
   const form = useForm<SocialFormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
-      platform: "twitter",
-      url: "",
+      platform: defaultValues?.platform ?? "twitter",
+      url: defaultValues?.url ?? "",
     },
   });
 
+  const isEdit = mode === "edit";
+
   const onSubmit = (data: SocialFormValues) => {
     console.log("SNS 등록 정보:", data);
-    // 저장 또는 수정 처리
+    onSubmitSuccess?.(data);
   };
 
   const platformLabelMap: Record<SocialFormValues["platform"], string> = {
@@ -63,16 +69,12 @@ export default function SocialDialog({
 
   return (
     <ResponsiveDialog
-      trigger={
-        <Button variant="muted" size="sm">
-          <Plus className="w-4 h-4 mr-1" /> Create
-        </Button>
-      }
+      trigger={undefined}
       open={open}
-      onOpenChange={setIsOpen}
-      title={mode === "create" ? "SNS 링크 추가" : "SNS 링크 수정"}
+      onOpenChange={onOpenChange}
+      title={isEdit ? "SNS 링크 수정" : "SNS 링크 추가"}
       description="등록할 SNS 종류를 선택하고, 연결할 링크를 입력해주세요."
-      submitText="추가하기"
+      submitText={isEdit ? "수정하기" : "추가하기"}
       onSubmit={form.handleSubmit(onSubmit)}
     >
       <Form {...form}>

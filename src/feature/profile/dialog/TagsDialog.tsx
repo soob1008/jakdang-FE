@@ -19,7 +19,6 @@ import { ResponsiveDialog } from "@/components/ui/ResponsiveDialog";
 import { Badge } from "@/components/ui/badge";
 
 const schema = z.object({
-  penName: z.string().optional(),
   tags: z.array(z.string()),
 });
 
@@ -29,7 +28,6 @@ export default function TagsDialog() {
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
-      penName: "",
       tags: [],
     },
   });

@@ -9,7 +9,7 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Plus, ImageIcon } from "lucide-react";
+import { Plus, ImageIcon, Pencil } from "lucide-react";
 import {
   Form,
   FormField,
@@ -30,14 +30,28 @@ const schema = z.object({
 
 type WorkValues = z.infer<typeof schema>;
 
-export function WorkDialog() {
+interface WorkDialogProps {
+  mode?: "create" | "edit";
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  defaultValues?: Partial<WorkValues>;
+  onSubmitSuccess?: (data: WorkValues, file?: File | null) => void;
+}
+
+export function WorkDialog({
+  mode = "create",
+  open,
+  onOpenChange,
+  defaultValues,
+  onSubmitSuccess,
+}: WorkDialogProps) {
   const form = useForm<WorkValues>({
     resolver: zodResolver(schema),
     defaultValues: {
-      title: "",
-      content: "",
-      link: "",
-      isRepresentative: false,
+      title: defaultValues?.title ?? "",
+      content: defaultValues?.content ?? "",
+      link: defaultValues?.link ?? "",
+      isRepresentative: defaultValues?.isRepresentative ?? false,
     },
   });
 
@@ -69,19 +83,22 @@ export function WorkDialog() {
     console.log("링크:", data.link);
     console.log("대표작 여부:", data.isRepresentative);
     console.log("이미지:", selectedFile);
-    // 저장 로직
+    onSubmitSuccess?.(data, selectedFile);
   };
+
+  const isEdit = mode === "edit";
 
   return (
     <ResponsiveDialog
-      trigger={
-        <Button variant="muted" size="sm">
-          <Plus className="w-4 h-4 mr-1" /> Create
-        </Button>
+      trigger={undefined}
+      title={isEdit ? "작품 수정" : "작품 등록"}
+      description={
+        isEdit ? "작가님의 작품을 수정하세요." : "작가님의 작품을 등록해주세요."
       }
-      title="작품 등록"
-      description="작가님의 작품을 등록하세요."
       onSubmit={form.handleSubmit(onSubmit)}
+      open={open}
+      onOpenChange={onOpenChange}
+      submitText={isEdit ? "수정하기" : "등록하기"}
     >
       <Form {...form}>
         <div className="space-y-4">

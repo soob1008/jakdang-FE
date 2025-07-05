@@ -6,7 +6,7 @@ import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Plus } from "lucide-react";
+import { Plus, Pencil } from "lucide-react";
 import {
   Form,
   FormField,
@@ -22,34 +22,50 @@ const linkSchema = z.object({
   url: z.string().url({ message: "올바른 링크 주소를 입력해주세요." }),
 });
 
-type LinkValues = z.infer<typeof linkSchema>;
+export type LinkValues = z.infer<typeof linkSchema>;
 
-export function LinkDialog() {
+interface LinkDialogProps {
+  mode: "create" | "edit";
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  defaultValues?: Partial<LinkValues>;
+  onSubmitSuccess?: (data: LinkValues) => void;
+}
+
+export function LinkDialog({
+  mode,
+  open,
+  onOpenChange,
+  defaultValues,
+  onSubmitSuccess,
+}: LinkDialogProps) {
+  const isEdit = mode === "edit";
+
   const form = useForm<LinkValues>({
     resolver: zodResolver(linkSchema),
     defaultValues: {
-      label: "",
-      url: "",
+      label: defaultValues?.label ?? "",
+      url: defaultValues?.url ?? "",
     },
   });
 
   const onSubmit = (data: LinkValues) => {
-    console.log("링크 제목:", data.label);
-    console.log("링크 주소:", data.url);
-    // TODO: 저장 로직
+    onSubmitSuccess?.(data);
   };
 
   return (
     <ResponsiveDialog
-      trigger={
-        <Button variant="muted" size="sm">
-          <Plus className="w-4 h-4 mr-1" /> Create
-        </Button>
+      trigger={undefined}
+      open={open}
+      onOpenChange={onOpenChange}
+      title={isEdit ? "링크 수정" : "외부 링크 등록"}
+      description={
+        isEdit
+          ? "등록된 링크 정보를 수정할 수 있어요."
+          : "블로그나 포트폴리오 등 연결할 링크를 등록해주세요."
       }
-      title="외부 링크 등록"
-      description="블로그나 포트폴리오 등 연결할 링크를 등록해주세요."
       onSubmit={form.handleSubmit(onSubmit)}
-      submitText="등록하기"
+      submitText={isEdit ? "수정하기" : "등록하기"}
     >
       <Form {...form}>
         <div className="space-y-4">
