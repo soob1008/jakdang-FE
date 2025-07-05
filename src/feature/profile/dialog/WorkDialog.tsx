@@ -21,18 +21,18 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { ResponsiveDialog } from "@/components/ui/ResponsiveDialog";
 
-const postSchema = z.object({
+const schema = z.object({
   title: z.string().min(1, { message: "제목을 입력해주세요." }),
   content: z.string().min(1, { message: "내용을 입력해주세요." }),
   link: z.string().optional(),
   isRepresentative: z.boolean().optional(),
 });
 
-type PostValues = z.infer<typeof postSchema>;
+type WorkValues = z.infer<typeof schema>;
 
 export function WorkDialog() {
-  const form = useForm<PostValues>({
-    resolver: zodResolver(postSchema),
+  const form = useForm<WorkValues>({
+    resolver: zodResolver(schema),
     defaultValues: {
       title: "",
       content: "",
@@ -63,7 +63,7 @@ export function WorkDialog() {
     }
   };
 
-  const onSubmit = (data: PostValues) => {
+  const onSubmit = (data: WorkValues) => {
     console.log("제목:", data.title);
     console.log("글:", data.content);
     console.log("링크:", data.link);
