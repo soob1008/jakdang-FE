@@ -18,12 +18,14 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
+import { Checkbox } from "@/components/ui/checkbox";
 import { ResponsiveDialog } from "@/components/ui/ResponsiveDialog";
 
 const postSchema = z.object({
   title: z.string().min(1, { message: "제목을 입력해주세요." }),
   content: z.string().min(1, { message: "내용을 입력해주세요." }),
   link: z.string().optional(),
+  isRepresentative: z.boolean().optional(),
 });
 
 type PostValues = z.infer<typeof postSchema>;
@@ -35,6 +37,7 @@ export function WorkDialog() {
       title: "",
       content: "",
       link: "",
+      isRepresentative: false,
     },
   });
 
@@ -53,7 +56,6 @@ export function WorkDialog() {
     const file = e.target.files?.[0];
     if (file) {
       setSelectedFile(file);
-
       if (previewUrl) {
         URL.revokeObjectURL(previewUrl);
       }
@@ -65,6 +67,7 @@ export function WorkDialog() {
     console.log("제목:", data.title);
     console.log("글:", data.content);
     console.log("링크:", data.link);
+    console.log("대표작 여부:", data.isRepresentative);
     console.log("이미지:", selectedFile);
     // 저장 로직
   };
@@ -82,6 +85,23 @@ export function WorkDialog() {
     >
       <Form {...form}>
         <div className="space-y-4">
+          {/* ✅ 대표작 체크박스 - 맨 위 */}
+          <FormField
+            control={form.control}
+            name="isRepresentative"
+            render={({ field }) => (
+              <FormItem className="flex items-center space-x-2">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <FormLabel className="m-0 text-sm">대표작으로 설정</FormLabel>
+              </FormItem>
+            )}
+          />
+
           {/* 제목 */}
           <FormField
             control={form.control}

@@ -6,7 +6,6 @@ import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Plus } from "lucide-react";
 import {
   Form,
@@ -18,26 +17,26 @@ import {
 } from "@/components/ui/form";
 import { ResponsiveDialog } from "@/components/ui/ResponsiveDialog";
 
-const postSchema = z.object({
-  title: z.string().min(1, { message: "제목을 입력해주세요." }),
-  content: z.string().min(1, { message: "내용을 입력해주세요." }),
+const linkSchema = z.object({
+  label: z.string().min(1, { message: "링크 제목을 입력해주세요." }),
+  url: z.string().url({ message: "올바른 링크 주소를 입력해주세요." }),
 });
 
-type PostValues = z.infer<typeof postSchema>;
+type LinkValues = z.infer<typeof linkSchema>;
 
-export function PostDialog() {
-  const form = useForm<PostValues>({
-    resolver: zodResolver(postSchema),
+export function LinkDialog() {
+  const form = useForm<LinkValues>({
+    resolver: zodResolver(linkSchema),
     defaultValues: {
-      title: "",
-      content: "",
+      label: "",
+      url: "",
     },
   });
 
-  const onSubmit = (data: PostValues) => {
-    console.log("제목:", data.title);
-    console.log("글:", data.content);
-    // 저장 로직
+  const onSubmit = (data: LinkValues) => {
+    console.log("링크 제목:", data.label);
+    console.log("링크 주소:", data.url);
+    // TODO: 저장 로직
   };
 
   return (
@@ -47,20 +46,24 @@ export function PostDialog() {
           <Plus className="w-4 h-4 mr-1" /> Create
         </Button>
       }
-      title="글 등록"
-      description="자유롭게 쓰고 싶은 글을 작성하세요."
+      title="외부 링크 등록"
+      description="블로그나 포트폴리오 등 연결할 링크를 등록해주세요."
       onSubmit={form.handleSubmit(onSubmit)}
+      submitText="등록하기"
     >
       <Form {...form}>
         <div className="space-y-4">
           <FormField
             control={form.control}
-            name="title"
+            name="label"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>제목</FormLabel>
+                <FormLabel>링크 제목</FormLabel>
                 <FormControl>
-                  <Input placeholder="글 제목" {...field} />
+                  <Input
+                    placeholder="예: 내 블로그, 브런치, 출판사 페이지"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -69,14 +72,14 @@ export function PostDialog() {
 
           <FormField
             control={form.control}
-            name="content"
+            name="url"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>내용</FormLabel>
+                <FormLabel>링크 주소</FormLabel>
                 <FormControl>
-                  <Textarea
-                    placeholder="글 작성"
-                    className="resize-none h-40"
+                  <Input
+                    type="url"
+                    placeholder="https://example.com"
                     {...field}
                   />
                 </FormControl>

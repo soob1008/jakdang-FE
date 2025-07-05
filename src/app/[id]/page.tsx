@@ -1,13 +1,13 @@
-import Profile from "@/feature/writer/Profile";
-import Masterpiece from "@/feature/writer/Masterpiece";
-import Works from "@/feature/writer/Works";
+import Profile from "@/feature/author/Profile";
+import Masterpiece from "@/feature/author/Masterpiece";
+import WorkList from "@/feature/author/WorkList";
 
 export default function WriterPage() {
   return (
     <div>
       <Profile />
       <Masterpiece />
-      <Works />
+      <WorkList />
     </div>
   );
 }
