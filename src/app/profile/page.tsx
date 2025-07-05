@@ -1,4 +1,3 @@
-import { PostDialog } from "@/feature/profile/dialog/LinkDialog";
 import UserInfo from "@/feature/profile/UserInfo";
 import AuthorInfo from "@/feature/profile/AuthorInfo";
 import AuthorIntro from "@/feature/profile/AuthorIntro";
