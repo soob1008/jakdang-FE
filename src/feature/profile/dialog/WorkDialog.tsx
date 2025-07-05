@@ -9,7 +9,7 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Plus, ImageIcon } from "lucide-react";
+import { Plus, ImageIcon, Pencil } from "lucide-react";
 import {
   Form,
   FormField,
@@ -18,23 +18,40 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
+import { Checkbox } from "@/components/ui/checkbox";
 import { ResponsiveDialog } from "@/components/ui/ResponsiveDialog";
 
-const postSchema = z.object({
+const schema = z.object({
   title: z.string().min(1, { message: "제목을 입력해주세요." }),
   content: z.string().min(1, { message: "내용을 입력해주세요." }),
   link: z.string().optional(),
+  isRepresentative: z.boolean().optional(),
 });
 
-type PostValues = z.infer<typeof postSchema>;
+type WorkValues = z.infer<typeof schema>;
 
-export function WorkDialog() {
-  const form = useForm<PostValues>({
-    resolver: zodResolver(postSchema),
+interface WorkDialogProps {
+  mode?: "create" | "edit";
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  defaultValues?: Partial<WorkValues>;
+  onSubmitSuccess?: (data: WorkValues, file?: File | null) => void;
+}
+
+export function WorkDialog({
+  mode = "create",
+  open,
+  onOpenChange,
+  defaultValues,
+  onSubmitSuccess,
+}: WorkDialogProps) {
+  const form = useForm<WorkValues>({
+    resolver: zodResolver(schema),
     defaultValues: {
-      title: "",
-      content: "",
-      link: "",
+      title: defaultValues?.title ?? "",
+      content: defaultValues?.content ?? "",
+      link: defaultValues?.link ?? "",
+      isRepresentative: defaultValues?.isRepresentative ?? false,
     },
   });
 
@@ -53,7 +70,6 @@ export function WorkDialog() {
     const file = e.target.files?.[0];
     if (file) {
       setSelectedFile(file);
-
       if (previewUrl) {
         URL.revokeObjectURL(previewUrl);
       }
@@ -61,27 +77,48 @@ export function WorkDialog() {
     }
   };
 
-  const onSubmit = (data: PostValues) => {
+  const onSubmit = (data: WorkValues) => {
     console.log("제목:", data.title);
     console.log("글:", data.content);
     console.log("링크:", data.link);
+    console.log("대표작 여부:", data.isRepresentative);
     console.log("이미지:", selectedFile);
-    // 저장 로직
+    onSubmitSuccess?.(data, selectedFile);
   };
+
+  const isEdit = mode === "edit";
 
   return (
     <ResponsiveDialog
-      trigger={
-        <Button variant="muted" size="sm">
-          <Plus className="w-4 h-4 mr-1" /> Create
-        </Button>
+      trigger={undefined}
+      title={isEdit ? "작품 수정" : "작품 등록"}
+      description={
+        isEdit ? "작가님의 작품을 수정하세요." : "작가님의 작품을 등록해주세요."
       }
-      title="작품 등록"
-      description="작가님의 작품을 등록하세요."
       onSubmit={form.handleSubmit(onSubmit)}
+      open={open}
+      onOpenChange={onOpenChange}
+      submitText={isEdit ? "수정하기" : "등록하기"}
     >
       <Form {...form}>
         <div className="space-y-4">
+          {/* ✅ 대표작 체크박스 - 맨 위 */}
+          <FormField
+            control={form.control}
+            name="isRepresentative"
+            render={({ field }) => (
+              <FormItem className="flex items-center space-x-2">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <FormLabel className="m-0 text-sm">대표작으로 설정</FormLabel>
+              </FormItem>
+            )}
+          />
+
           {/* 제목 */}
           <FormField
             control={form.control}

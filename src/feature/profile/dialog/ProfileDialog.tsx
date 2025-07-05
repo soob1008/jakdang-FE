@@ -17,12 +17,15 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import { ResponsiveDialog } from "@/components/ui/ResponsiveDialog";
 
 const schema = z.object({
   penName: z.string().min(1, "필명을 입력해주세요."),
-  bio: z.string().min(1, "소개글을 입력해주세요."),
+  slug: z
+    .string()
+    .min(5, "주소는 최소 5자 이상이어야 해요.")
+    .max(20, "주소는 최대 20자까지 가능해요.")
+    .regex(/^[a-z0-9]+$/, "영어 소문자와 숫자만 사용할 수 있어요."),
 });
 
 type ProfileFormValues = z.infer<typeof schema>;
@@ -32,7 +35,7 @@ export function ProfileDialog() {
     resolver: zodResolver(schema),
     defaultValues: {
       penName: "",
-      bio: "",
+      slug: "",
     },
   });
 
@@ -61,7 +64,7 @@ export function ProfileDialog() {
 
   const onSubmit = (data: ProfileFormValues) => {
     console.log("필명:", data.penName);
-    console.log("소개글:", data.bio);
+
     console.log("이미지:", selectedFile);
     // 저장 로직 실행
   };
@@ -135,19 +138,17 @@ export function ProfileDialog() {
             )}
           />
 
-          {/* 소개글 */}
+          {/* 필명 */}
           <FormField
             control={form.control}
-            name="bio"
+            name="slug"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>소개글</FormLabel>
+                <FormLabel>
+                  주소 <span className="text-red-500">*</span>
+                </FormLabel>
                 <FormControl>
-                  <Textarea
-                    placeholder="간단한 소개글"
-                    className="resize-none h-32"
-                    {...field}
-                  />
+                  <Input placeholder="예: jakdang, jakdang123" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
