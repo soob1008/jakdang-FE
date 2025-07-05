@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/badge";
-import AuthorTagDialog from "@/feature/profile/dialog/AuthorTagDialog";
+import AuthorTagDialog from "@/feature/profile/dialog/TagsDialog";
 
-export default function AuthorTag() {
+export default function ProfileTags() {
   return (
     <section className="space-y-4">
       <div className="flex justify-between items-center">

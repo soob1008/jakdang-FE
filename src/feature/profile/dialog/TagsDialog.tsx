@@ -25,7 +25,7 @@ const schema = z.object({
 
 type ProfileFormValues = z.infer<typeof schema>;
 
-export default function AuthorTagDialog() {
+export default function TagsDialog() {
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(schema),
     defaultValues: {

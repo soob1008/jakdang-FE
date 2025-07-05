@@ -6,7 +6,8 @@ import { WorkDialog } from "@/feature/profile/dialog/WorkDialog";
 import UserInfo from "@/feature/profile/UserInfo";
 import AuthorInfo from "@/feature/profile/AuthorInfo";
 import AuthorIntro from "@/feature/profile/AuthorIntro";
-import AuthorTag from "@/feature/profile/AuthorTag";
+import ProfileTags from "@/feature/profile/ProfileTags";
+import SocialLinks from "@/feature/profile/SocialLinks";
 
 export default function ProfilePage() {
   return (
@@ -21,19 +22,10 @@ export default function ProfilePage() {
       <AuthorIntro />
 
       {/* 관심 분야 태그 등록 */}
-      <AuthorTag />
+      <ProfileTags />
 
-      {/* 글 등록 */}
-      <section className="space-y-4">
-        <div className="flex justify-between items-center">
-          <h3 className="font-bold text-base lg:text-lg">글 등록</h3>
-          <PostDialog />
-        </div>
-
-        <div className="border border-gray-200 rounded-md text-sm text-gray-500 p-4">
-          등록된 글이 없습니다.
-        </div>
-      </section>
+      {/* SNS 링크 등록 */}
+      <SocialLinks />
 
       {/* 작품 등록 */}
       <section className="space-y-4">
@@ -69,6 +61,18 @@ export default function ProfilePage() {
               </CardContent>
             </Card>
           ))}
+        </div>
+      </section>
+
+      {/* 링크 등록 */}
+      <section className="space-y-4">
+        <div className="flex justify-between items-center">
+          <h3 className="font-bold text-base lg:text-lg">링크 등록</h3>
+          <PostDialog />
+        </div>
+
+        <div className="border border-gray-200 rounded-md text-sm text-gray-500 p-4">
+          등록된 글이 없습니다.
         </div>
       </section>
     </div>
