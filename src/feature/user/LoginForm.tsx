@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import clsx from "clsx";
-import { loginWithMagicLink } from "@/feature/auth/api";
+import { loginWithMagicLink } from "@/feature/user/api.client";
 import {
   AlertDialog,
   AlertDialogAction,

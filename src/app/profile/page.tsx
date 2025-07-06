@@ -1,12 +1,20 @@
-import UserInfo from "@/feature/profile/UserInfo";
-import AuthorInfo from "@/feature/profile/AuthorInfo";
-import AuthorIntro from "@/feature/profile/AuthorIntro";
-import ProfileTags from "@/feature/profile/ProfileTags";
-import SocialLinks from "@/feature/profile/SocialLinks";
-import WorkList from "@/feature/profile/WorkList";
-import LinkList from "@/feature/profile/LinkList";
+import UserInfo from "@/feature/profile/components/UserInfo";
+import AuthorInfo from "@/feature/profile/components/AuthorInfo";
+import AuthorIntro from "@/feature/profile/components/AuthorIntro";
+import ProfileTags from "@/feature/profile/components/ProfileTags";
+import SocialLinks from "@/feature/profile/components/SocialLinks";
+import WorkList from "@/feature/profile/components/WorkList";
+import LinkList from "@/feature/profile/components/LinkList";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 
-export default function ProfilePage() {
+export default async function ProfilePage() {
+  const supabase = await createSupabaseServerClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  console.log("ProfilePage user:", user);
+
   return (
     <div className="space-y-10 pb-40">
       {/* 사용자 정보 */}
