@@ -25,7 +25,7 @@ import {
 
 import { format } from "date-fns";
 import { useForm } from "react-hook-form";
-import { cn } from "@/app/lib/utils";
+import { cn } from "@/lib/utils";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 

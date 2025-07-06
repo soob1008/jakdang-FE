@@ -3,7 +3,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/app/lib/supabase/supabase";
+import { supabase } from "@/lib/supabase/supabase";
 import { getUser, createUser } from "@/feature/auth/api";
 import { toast } from "sonner";
 

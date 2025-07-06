@@ -5,7 +5,7 @@ import ProfileTags from "@/feature/profile/components/ProfileTags";
 import SocialLinks from "@/feature/profile/components/SocialLinks";
 import WorkList from "@/feature/profile/components/WorkList";
 import LinkList from "@/feature/profile/components/LinkList";
-import { createSupabaseServerClient } from "@/app/lib/supabase/server";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export default async function ProfilePage() {
   const supabase = await createSupabaseServerClient();

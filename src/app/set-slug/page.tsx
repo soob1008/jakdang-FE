@@ -6,11 +6,10 @@ import { Button } from "@/components/ui/button";
 import clsx from "clsx";
 import { duplicateCheck, updateUserSlug } from "@/feature/auth/api";
 import { toast } from "sonner";
-import { supabase } from "@/app/lib/supabase/supabase";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createClient } from "@/app/lib/supabase/client";
+import { createClient } from "@/lib/supabase/client";
 
 const schema = z.object({
   slug: z

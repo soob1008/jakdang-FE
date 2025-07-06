@@ -1,5 +1,5 @@
-import { createSupabaseServerClient } from "@/app/lib/supabase/server";
-import { createClient } from "@/app/lib/supabase/client";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
 
 // 로그인 요청 함수
