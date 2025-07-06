@@ -6,6 +6,8 @@ import SocialLinks from "@/feature/profile/components/SocialLinks";
 import WorkList from "@/feature/profile/components/WorkList";
 import LinkList from "@/feature/profile/components/LinkList";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
+import { getUser } from "@/feature/user/api.server";
 
 export default async function ProfilePage() {
   const supabase = await createSupabaseServerClient();
@@ -15,16 +17,29 @@ export default async function ProfilePage() {
 
   console.log("ProfilePage user:", user);
 
+  if (!user) {
+    redirect("/auth/login");
+  }
+
+  const { data: author, error: authorError } = await getUser(user.id);
+
+  if (authorError) {
+    console.error("Error fetching author data:", authorError);
+    redirect("/auth/login");
+  }
+
+  console.log("ProfilePage author:", author);
+
   return (
     <div className="space-y-10 pb-40">
       {/* 사용자 정보 */}
-      <UserInfo />
+      <UserInfo author={author} />
 
       {/* 작가 정보 */}
-      <AuthorInfo />
+      <AuthorInfo author={author} />
 
       {/* 작가 한줄 소개 */}
-      <AuthorIntro />
+      <AuthorIntro id={author.id} intro={author.intro_text} />
 
       {/* 관심 분야 태그 등록 */}
       <ProfileTags />

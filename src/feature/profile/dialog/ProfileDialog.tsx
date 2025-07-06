@@ -18,9 +18,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ResponsiveDialog } from "@/components/ui/ResponsiveDialog";
+import { Author } from "@/feature/user/type";
+import { updateUser } from "@/feature/user/api.server";
+import { toast } from "sonner";
 
 const schema = z.object({
-  penName: z.string().min(1, "필명을 입력해주세요."),
+  displayName: z.string().min(1, "필명을 입력해주세요."),
   slug: z
     .string()
     .min(5, "주소는 최소 5자 이상이어야 해요.")
@@ -30,14 +33,26 @@ const schema = z.object({
 
 type ProfileFormValues = z.infer<typeof schema>;
 
-export function ProfileDialog() {
+interface ProfileDialogProps {
+  author: Author;
+}
+
+export function ProfileDialog({ author }: ProfileDialogProps) {
+  const [isOpen, setIsOpen] = useState(false);
+
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
-      penName: "",
-      slug: "",
+      displayName: author?.display_name || "",
+      slug: author?.slug || "",
     },
   });
+
+  const {
+    control,
+    handleSubmit,
+    formState: { isValid },
+  } = form;
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string>("");
@@ -62,15 +77,41 @@ export function ProfileDialog() {
     }
   };
 
-  const onSubmit = (data: ProfileFormValues) => {
-    console.log("필명:", data.penName);
+  const onSubmit = async (data: ProfileFormValues) => {
+    // TODO: 이미지 저장 처리
 
-    console.log("이미지:", selectedFile);
     // 저장 로직 실행
+    const { error } = await updateUser(author.id, {
+      display_name: data.displayName,
+      slug: data.slug,
+    });
+
+    if (error) {
+      console.error("사용자 업데이트 실패:", error);
+      return;
+    }
+
+    setSelectedFile(null);
+    setPreviewUrl("");
+    toast.success("프로필이 성공적으로 업데이트되었습니다.");
+    setIsOpen(false);
   };
 
   return (
     <ResponsiveDialog
+      open={isOpen}
+      onOpenChange={(open) => {
+        setIsOpen(open);
+
+        if (!open) {
+          form.reset({
+            displayName: author?.display_name || "",
+            slug: author?.slug || "",
+          });
+          setSelectedFile(null);
+          // setPreviewUrl(author?.image_url || "");
+        }
+      }}
       trigger={
         <Button variant="muted" size="sm">
           <Pencil className="w-4 h-4 mr-1" />
@@ -79,7 +120,8 @@ export function ProfileDialog() {
       }
       title="프로필 수정"
       description="필명과 소개글을 자유롭게 작성해주세요."
-      onSubmit={form.handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(onSubmit)}
+      disabled={!isValid}
     >
       <Form {...form}>
         <div className="space-y-6">
@@ -125,11 +167,13 @@ export function ProfileDialog() {
 
           {/* 필명 */}
           <FormField
-            control={form.control}
-            name="penName"
+            control={control}
+            name="displayName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>필명</FormLabel>
+                <FormLabel>
+                  필명 <span className="text-red-500">*</span>
+                </FormLabel>
                 <FormControl>
                   <Input placeholder="필명 입력" {...field} />
                 </FormControl>
@@ -140,7 +184,7 @@ export function ProfileDialog() {
 
           {/* 필명 */}
           <FormField
-            control={form.control}
+            control={control}
             name="slug"
             render={({ field }) => (
               <FormItem>
