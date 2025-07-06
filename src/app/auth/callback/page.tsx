@@ -4,7 +4,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase/supabase";
-import { getUser, createUser } from "@/feature/auth/api";
+import { getUser, createUser } from "@/feature/user/api.client";
 import { toast } from "sonner";
 
 export default function AuthCallback() {

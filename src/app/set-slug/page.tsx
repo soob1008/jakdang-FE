@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import clsx from "clsx";
-import { duplicateCheck, updateUserSlug } from "@/feature/auth/api";
+import { duplicateCheck, updateUserSlug } from "@/feature/user/api.client";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
