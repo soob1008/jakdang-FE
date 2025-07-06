@@ -35,8 +35,6 @@ type ProfileFormValues = z.infer<typeof schema>;
 
 interface ProfileDialogProps {
   author: Author;
-  open?: boolean;
-  onOpenChange?: (open: boolean) => void;
 }
 
 export function ProfileDialog({ author }: ProfileDialogProps) {
