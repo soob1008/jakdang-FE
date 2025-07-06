@@ -15,7 +15,11 @@ export default function AuthorInfo({ author }: AuthorInfoProps) {
       </div>
       <div className="flex gap-4 items-center">
         <Avatar className="w-20 h-20">
-          <AvatarImage src="/test.png" alt="프로필 이미지" />
+          <AvatarImage
+            src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${author?.profile_image_url}`}
+            alt="프로필 이미지"
+            className="object-cover"
+          />
           <AvatarFallback>프로필이미지</AvatarFallback>
         </Avatar>
         <div className="text-sm space-y-1">

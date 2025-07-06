@@ -10,6 +10,16 @@ const nextConfig: NextConfig = {
     });
     return config;
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "wffisibzgiiugnltkuvs.supabase.co",
+        port: "",
+        pathname: "/storage/v1/object/public/jakdang-images/**",
+      },
+    ],
+  },
 };
 
 export default nextConfig;
