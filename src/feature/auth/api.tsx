@@ -48,7 +48,7 @@ export async function createUser({ id, email }: { id: string; email: string }) {
 }
 
 export async function duplicateCheck(userId: string, slug: string) {
-  const supabase = await createSupabaseServerClient();
+  const supabase = createClient();
 
   const { data, error } = await supabase
     .from("users")
@@ -68,7 +68,7 @@ export async function duplicateCheck(userId: string, slug: string) {
 }
 
 export async function updateUserSlug(userId: string, slug: string) {
-  const supabase = await createSupabaseServerClient();
+  const supabase = createClient();
 
   const { error } = await supabase
     .from("users")

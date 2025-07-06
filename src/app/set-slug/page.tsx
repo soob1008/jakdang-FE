@@ -10,6 +10,7 @@ import { supabase } from "@/app/lib/supabase/supabase";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { createClient } from "@/app/lib/supabase/client";
 
 const schema = z.object({
   slug: z
@@ -40,11 +41,23 @@ export default function SetUserNamePage() {
   const onSubmit = async (data: FormValues) => {
     const slug = data.slug.trim().toLowerCase(); // 소문자 정규화
     // 사용자 인증 세션 가져오기
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
+    const supabase = createClient();
 
-    const userId = session?.user?.id;
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      toast.error("사용자 정보를 가져올 수 없습니다.");
+      router.push("/auth/login");
+      return;
+    }
+
+    // const {
+    //   data: { session },
+    // } = await supabase.auth.getSession();
+
+    const userId = user?.id;
 
     if (!userId) {
       toast.error("사용자 정보를 확인할 수 없습니다.");
@@ -52,10 +65,12 @@ export default function SetUserNamePage() {
       return;
     }
 
-    // 주소 중복 확인 및 저장 로직
+    // // 주소 중복 확인 및 저장 로직
     const { exists } = await duplicateCheck(userId, slug);
 
-    // 중복된 슬러그가 있는 경우
+    console.log("user", user, exists);
+
+    // // 중복된 슬러그가 있는 경우
     if (exists) {
       setError("slug", {
         type: "manual",
@@ -64,7 +79,7 @@ export default function SetUserNamePage() {
       return;
     }
 
-    // 유저 주소 업데이트
+    // // 유저 주소 업데이트
     const { error: updateError } = await updateUserSlug(userId, slug);
 
     if (!updateError) {
