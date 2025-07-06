@@ -18,9 +18,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ResponsiveDialog } from "@/components/ui/ResponsiveDialog";
+import { Author } from "@/feature/user/type";
+import { updateUser } from "@/feature/user/api.server";
+import { toast } from "sonner";
 
 const schema = z.object({
-  penName: z.string().min(1, "필명을 입력해주세요."),
+  displayName: z.string().min(1, "필명을 입력해주세요."),
   slug: z
     .string()
     .min(5, "주소는 최소 5자 이상이어야 해요.")
@@ -30,12 +33,20 @@ const schema = z.object({
 
 type ProfileFormValues = z.infer<typeof schema>;
 
-export function ProfileDialog() {
+interface ProfileDialogProps {
+  author: Author;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+}
+
+export function ProfileDialog({ author }: ProfileDialogProps) {
+  const [isOpen, setIsOpen] = useState(false);
+
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
-      penName: "",
-      slug: "",
+      displayName: author?.display_name || "",
+      slug: author?.slug || "",
     },
   });
 
@@ -62,15 +73,30 @@ export function ProfileDialog() {
     }
   };
 
-  const onSubmit = (data: ProfileFormValues) => {
-    console.log("필명:", data.penName);
+  const onSubmit = async (data: ProfileFormValues) => {
+    // TODO: 이미지 저장 처리
 
-    console.log("이미지:", selectedFile);
     // 저장 로직 실행
+    const { error } = await updateUser(author.id, {
+      display_name: data.displayName,
+      slug: data.slug,
+    });
+
+    if (error) {
+      console.error("사용자 업데이트 실패:", error);
+      return;
+    }
+
+    setSelectedFile(null);
+    setPreviewUrl("");
+    toast.success("프로필이 성공적으로 업데이트되었습니다.");
+    setIsOpen(false);
   };
 
   return (
     <ResponsiveDialog
+      open={isOpen}
+      onOpenChange={setIsOpen}
       trigger={
         <Button variant="muted" size="sm">
           <Pencil className="w-4 h-4 mr-1" />
@@ -126,7 +152,7 @@ export function ProfileDialog() {
           {/* 필명 */}
           <FormField
             control={form.control}
-            name="penName"
+            name="displayName"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>필명</FormLabel>

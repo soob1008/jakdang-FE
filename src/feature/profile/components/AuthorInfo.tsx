@@ -1,12 +1,17 @@
 import { ProfileDialog } from "@/feature/profile/dialog/ProfileDialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Author } from "@/feature/user/type";
 
-export default function AuthorInfo() {
+interface AuthorInfoProps {
+  author: Author;
+}
+
+export default function AuthorInfo({ author }: AuthorInfoProps) {
   return (
     <section className="space-y-4 ">
       <div className="flex justify-between items-center">
         <h3 className="font-bold text-base lg:text-lg">작가 정보</h3>
-        <ProfileDialog />
+        <ProfileDialog author={author} />
       </div>
       <div className="flex gap-4 items-center">
         <Avatar className="w-20 h-20">
@@ -14,8 +19,10 @@ export default function AuthorInfo() {
           <AvatarFallback>프로필이미지</AvatarFallback>
         </Avatar>
         <div className="text-sm space-y-1">
-          <strong className="block font-medium">김수빈</strong>
-          <p className="text-gray-500">@subin</p>
+          <strong className="block font-medium">
+            {author?.display_name || "필명"}
+          </strong>
+          <p className="text-gray-500">@{author?.slug}</p>
         </div>
       </div>
     </section>

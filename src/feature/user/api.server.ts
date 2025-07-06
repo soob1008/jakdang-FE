@@ -1,4 +1,7 @@
+"use server";
+
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { revalidatePath } from "next/cache";
 
 /* 
   사용자 정보 조회 함수
@@ -29,4 +32,27 @@ export async function createUser({ id, email }: { id: string; email: string }) {
   });
 
   return { error };
+}
+
+type UpdatableUserData = {
+  display_name?: string;
+  slug?: string;
+  image_url?: string;
+  intro_text?: string;
+  // 필요한 경우 여기에 더 추가 가능
+};
+
+export async function updateUser(id: string, data: UpdatableUserData) {
+  const supabase = await createSupabaseServerClient();
+
+  const { error } = await supabase.from("users").update(data).eq("id", id);
+
+  if (error) {
+    console.error("사용자 업데이트 실패:", error);
+    return { error };
+  }
+
+  revalidatePath(`/profile/${id}`); // 해당 유저 페이지 다시 불러옴
+
+  return { error: null };
 }
