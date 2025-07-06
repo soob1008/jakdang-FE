@@ -39,7 +39,7 @@ type UpdatableUserData = {
   slug?: string;
   image_url?: string;
   intro_text?: string;
-  // 필요한 경우 여기에 더 추가 가능
+  profile_image_url?: string;
 };
 
 export async function updateUser(id: string, data: UpdatableUserData) {

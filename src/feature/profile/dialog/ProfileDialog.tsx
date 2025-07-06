@@ -1,12 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { z } from "zod";
 import Image from "next/image";
 import { Pencil, ImageIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
 import {
   Form,
   FormItem,
@@ -21,6 +20,8 @@ import { ResponsiveDialog } from "@/components/ui/ResponsiveDialog";
 import { Author } from "@/feature/user/type";
 import { updateUser } from "@/feature/user/api.server";
 import { toast } from "sonner";
+import { uploadImage } from "@/feature/common/api.client";
+import { BASIC_PROFILE_IMAGE } from "@/lib/const";
 
 const schema = z.object({
   displayName: z.string().min(1, "필명을 입력해주세요."),
@@ -29,6 +30,7 @@ const schema = z.object({
     .min(5, "주소는 최소 5자 이상이어야 해요.")
     .max(20, "주소는 최대 20자까지 가능해요.")
     .regex(/^[a-z0-9]+$/, "영어 소문자와 숫자만 사용할 수 있어요."),
+  profile_image_url: z.string().optional(),
 });
 
 type ProfileFormValues = z.infer<typeof schema>;
@@ -45,45 +47,42 @@ export function ProfileDialog({ author }: ProfileDialogProps) {
     defaultValues: {
       displayName: author?.display_name || "",
       slug: author?.slug || "",
+      profile_image_url: author?.profile_image_url || "",
     },
   });
 
   const {
     control,
     handleSubmit,
+    watch,
+    setValue,
     formState: { isValid },
   } = form;
 
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string>("");
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file: File | null = e.target.files?.[0] || null;
 
-  useEffect(() => {
-    return () => {
-      if (previewUrl) {
-        URL.revokeObjectURL(previewUrl);
-      }
-    };
-  }, [previewUrl]);
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
     if (file) {
-      setSelectedFile(file);
-      if (previewUrl) {
-        URL.revokeObjectURL(previewUrl);
+      const { imagePath, error } = await uploadImage(file, author.id);
+
+      if (error) {
+        console.error("이미지 업로드 실패:", error);
+        toast.error("이미지 업로드에 실패했습니다.");
+        return;
       }
 
-      setPreviewUrl(URL.createObjectURL(file));
+      setValue("profile_image_url", imagePath);
+    } else {
+      toast.error("이미지 파일을 선택해주세요.");
+      return;
     }
   };
 
   const onSubmit = async (data: ProfileFormValues) => {
-    // TODO: 이미지 저장 처리
-
-    // 저장 로직 실행
     const { error } = await updateUser(author.id, {
       display_name: data.displayName,
       slug: data.slug,
+      profile_image_url: data.profile_image_url,
     });
 
     if (error) {
@@ -91,8 +90,6 @@ export function ProfileDialog({ author }: ProfileDialogProps) {
       return;
     }
 
-    setSelectedFile(null);
-    setPreviewUrl("");
     toast.success("프로필이 성공적으로 업데이트되었습니다.");
     setIsOpen(false);
   };
@@ -107,9 +104,8 @@ export function ProfileDialog({ author }: ProfileDialogProps) {
           form.reset({
             displayName: author?.display_name || "",
             slug: author?.slug || "",
+            profile_image_url: author?.profile_image_url || "",
           });
-          setSelectedFile(null);
-          // setPreviewUrl(author?.image_url || "");
         }
       }}
       trigger={
@@ -125,43 +121,57 @@ export function ProfileDialog({ author }: ProfileDialogProps) {
     >
       <Form {...form}>
         <div className="space-y-6">
-          {/* 이미지 업로드 */}
           <FormItem>
-            <FormLabel>프로필 이미지</FormLabel>
-            <FormControl>
-              <div className="flex flex-col gap-2">
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  id="file-upload"
-                  className="hidden"
-                />
-                <label
-                  htmlFor="file-upload"
-                  className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-md border border-input bg-background hover:bg-accent hover:text-accent-foreground transition cursor-pointer"
-                >
-                  <ImageIcon className="w-4 h-4" />
-                  이미지 선택
-                </label>
+            <FormField
+              control={control}
+              name="profile_image_url"
+              render={({}) => (
+                <FormItem>
+                  <FormLabel>프로필 이미지</FormLabel>
+                  <FormControl>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      id="file-upload"
+                      onChange={handleImageChange}
+                      className="hidden"
+                    />
+                  </FormControl>
 
-                <span className="text-sm text-muted-foreground italic">
-                  {selectedFile?.name ?? "선택된 파일 없음"}
-                </span>
-              </div>
-            </FormControl>
+                  <div className="flex flex-col gap-2">
+                    <label
+                      htmlFor="file-upload"
+                      className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-md border border-input bg-background hover:bg-accent hover:text-accent-foreground transition cursor-pointer"
+                    >
+                      <ImageIcon className="w-4 h-4" />
+                      이미지 선택
+                    </label>
 
-            {previewUrl && (
-              <div className="mt-3 flex justify-center">
-                <Image
-                  src={previewUrl}
-                  alt="프로필 미리보기"
-                  width={100}
-                  height={100}
-                  className="rounded-full object-cover border w-24 h-24"
-                />
-              </div>
-            )}
+                    <span className="text-sm text-muted-foreground italic">
+                      {watch("profile_image_url")
+                        ? "이미지가 선택되었습니다."
+                        : "선택된 파일 없음"}
+                    </span>
+                  </div>
+
+                  {watch("profile_image_url") && (
+                    <div className="mt-3 flex justify-center">
+                      <Image
+                        src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${
+                          watch("profile_image_url") || BASIC_PROFILE_IMAGE
+                        }`}
+                        alt="프로필 미리보기"
+                        width={100}
+                        height={100}
+                        className="rounded-full object-cover border w-24 h-24"
+                      />
+                    </div>
+                  )}
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormMessage />
           </FormItem>
 

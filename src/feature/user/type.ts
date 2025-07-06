@@ -3,7 +3,7 @@ export interface Author {
   email: string;
   slug?: string;
   display_name?: string;
-  profile_image?: string;
+  profile_image_url?: string;
   likes_count: number;
   intro_text?: string;
 }

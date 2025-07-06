@@ -1,12 +1,17 @@
 import { ProfileDialog } from "@/feature/profile/dialog/ProfileDialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Author } from "@/feature/user/type";
+import { BASIC_PROFILE_IMAGE } from "@/lib/const";
 
 interface AuthorInfoProps {
   author: Author;
 }
 
 export default function AuthorInfo({ author }: AuthorInfoProps) {
+  if (!author) {
+    return null; // 작가 정보가 없을 경우 아무것도 렌더링하지 않음
+  }
+
   return (
     <section className="space-y-4 ">
       <div className="flex justify-between items-center">
@@ -15,7 +20,15 @@ export default function AuthorInfo({ author }: AuthorInfoProps) {
       </div>
       <div className="flex gap-4 items-center">
         <Avatar className="w-20 h-20">
-          <AvatarImage src="/test.png" alt="프로필 이미지" />
+          <AvatarImage
+            src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${
+              author?.profile_image_url
+                ? author?.profile_image_url
+                : BASIC_PROFILE_IMAGE
+            }`}
+            alt="프로필 이미지"
+            className="object-cover"
+          />
           <AvatarFallback>프로필이미지</AvatarFallback>
         </Avatar>
         <div className="text-sm space-y-1">
