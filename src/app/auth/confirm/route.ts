@@ -3,7 +3,7 @@ import { type NextRequest } from "next/server";
 
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
-import { getUser, createUser } from "@/feature/user/api.client";
+import { getUser, createUser } from "@/feature/user/api.server";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -36,9 +36,6 @@ export async function GET(request: NextRequest) {
       console.error("사용자 이메일 정보가 없습니다.");
       return redirect("/auth/login");
     }
-
-    console.log("user.id", user.id);
-    console.log("user.email", user.email);
 
     const { error: createUserError } = await createUser({
       id: user.id,
