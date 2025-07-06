@@ -7,9 +7,6 @@ export async function uploadImage(file: File, userId: string) {
   const fileExt = file.name.split(".").pop()?.toLowerCase();
   const filePath = `/${userId}/${Date.now()}/${fileExt || "image"}`;
 
-  console.log("업로드할 파일 경로:", filePath);
-  console.log("업로드할 파일 이름:", file.name);
-
   // 이미지 업로드
   const { data, error } = await supabase.storage
     .from(IMAGE_BUCKET_NAME)

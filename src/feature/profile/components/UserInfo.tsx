@@ -14,7 +14,8 @@ export default function UserInfo({ author }: UserInfoProps) {
         variant="outline-primary"
         size="sm"
         onClick={() => {
-          window.open(`/@${author.slug}`, "_blank");
+          const slug = author.slug || "";
+          window.open(`/@${slug}`, "_blank");
         }}
       >
         내 페이지
