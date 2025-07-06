@@ -6,7 +6,6 @@ import Image from "next/image";
 import { Pencil, ImageIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
 import {
   Form,
   FormItem,
@@ -22,6 +21,7 @@ import { Author } from "@/feature/user/type";
 import { updateUser } from "@/feature/user/api.server";
 import { toast } from "sonner";
 import { uploadImage } from "@/feature/common/api.client";
+import { BASIC_PROFILE_IMAGE } from "@/lib/const";
 
 const schema = z.object({
   displayName: z.string().min(1, "필명을 입력해주세요."),
@@ -121,7 +121,6 @@ export function ProfileDialog({ author }: ProfileDialogProps) {
     >
       <Form {...form}>
         <div className="space-y-6">
-          {/* 이미지 업로드 */}
           <FormItem>
             <FormField
               control={control}
@@ -158,9 +157,9 @@ export function ProfileDialog({ author }: ProfileDialogProps) {
                   {watch("profile_image_url") && (
                     <div className="mt-3 flex justify-center">
                       <Image
-                        src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${watch(
-                          "profile_image_url"
-                        )}`}
+                        src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${
+                          watch("profile_image_url") || BASIC_PROFILE_IMAGE
+                        }`}
                         alt="프로필 미리보기"
                         width={100}
                         height={100}
