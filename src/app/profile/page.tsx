@@ -9,7 +9,9 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export default async function ProfilePage() {
   const supabase = await createSupabaseServerClient();
-  const user = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   console.log("ProfilePage user:", user);
 
