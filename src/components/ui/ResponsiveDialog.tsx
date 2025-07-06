@@ -24,6 +24,7 @@ interface ResponsiveDialogProps {
   children: ReactNode;
   onSubmit: () => void;
   submitText?: string;
+  disabled?: boolean;
 }
 
 export function ResponsiveDialog({
@@ -35,6 +36,7 @@ export function ResponsiveDialog({
   children,
   onSubmit,
   submitText = "저장하기",
+  disabled = false,
 }: ResponsiveDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -78,7 +80,11 @@ export function ResponsiveDialog({
 
         {/* 하단 버튼 */}
         <DialogFooter className="px-4 sm:px-0 pb-6 sm:pb-0">
-          <Button onClick={onSubmit} className="w-full sm:w-auto h-12 sm:h-9">
+          <Button
+            onClick={onSubmit}
+            className="w-full sm:w-auto h-12 sm:h-9"
+            disabled={disabled}
+          >
             {submitText}
           </Button>
         </DialogFooter>

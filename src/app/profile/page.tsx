@@ -39,7 +39,7 @@ export default async function ProfilePage() {
       <AuthorInfo author={author} />
 
       {/* 작가 한줄 소개 */}
-      <AuthorIntro text={author.intro_text} />
+      <AuthorIntro id={author.id} intro={author.intro_text} />
 
       {/* 관심 분야 태그 등록 */}
       <ProfileTags />

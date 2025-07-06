@@ -50,6 +50,12 @@ export function ProfileDialog({ author }: ProfileDialogProps) {
     },
   });
 
+  const {
+    control,
+    handleSubmit,
+    formState: { isValid },
+  } = form;
+
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string>("");
 
@@ -96,7 +102,18 @@ export function ProfileDialog({ author }: ProfileDialogProps) {
   return (
     <ResponsiveDialog
       open={isOpen}
-      onOpenChange={setIsOpen}
+      onOpenChange={(open) => {
+        setIsOpen(open);
+
+        if (!open) {
+          form.reset({
+            displayName: author?.display_name || "",
+            slug: author?.slug || "",
+          });
+          setSelectedFile(null);
+          // setPreviewUrl(author?.image_url || "");
+        }
+      }}
       trigger={
         <Button variant="muted" size="sm">
           <Pencil className="w-4 h-4 mr-1" />
@@ -105,7 +122,8 @@ export function ProfileDialog({ author }: ProfileDialogProps) {
       }
       title="프로필 수정"
       description="필명과 소개글을 자유롭게 작성해주세요."
-      onSubmit={form.handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(onSubmit)}
+      disabled={!isValid}
     >
       <Form {...form}>
         <div className="space-y-6">
@@ -151,11 +169,13 @@ export function ProfileDialog({ author }: ProfileDialogProps) {
 
           {/* 필명 */}
           <FormField
-            control={form.control}
+            control={control}
             name="displayName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>필명</FormLabel>
+                <FormLabel>
+                  필명 <span className="text-red-500">*</span>
+                </FormLabel>
                 <FormControl>
                   <Input placeholder="필명 입력" {...field} />
                 </FormControl>
@@ -166,7 +186,7 @@ export function ProfileDialog({ author }: ProfileDialogProps) {
 
           {/* 필명 */}
           <FormField
-            control={form.control}
+            control={control}
             name="slug"
             render={({ field }) => (
               <FormItem>
