@@ -1,13 +1,13 @@
-import { supabase } from "@/lib/supabase";
+import { createSupabaseServerClient } from "@/app/lib/supabase/server";
+import { createClient } from "@/app/lib/supabase/client";
 import { toast } from "sonner";
 
 // 로그인 요청 함수
 export async function loginWithMagicLink(email: string) {
+  const supabase = createClient();
+
   const { error } = await supabase.auth.signInWithOtp({
     email,
-    options: {
-      emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`,
-    },
   });
 
   if (error) {
@@ -25,6 +25,8 @@ export async function loginWithMagicLink(email: string) {
   사용 예시: const { data, error } = await getUser("user-id");
 */
 export async function getUser(userId: string) {
+  const supabase = await createSupabaseServerClient();
+
   const { data, error } = await supabase
     .from("users")
     .select("*")
@@ -35,6 +37,8 @@ export async function getUser(userId: string) {
 }
 
 export async function createUser({ id, email }: { id: string; email: string }) {
+  const supabase = await createSupabaseServerClient();
+
   const { error } = await supabase.from("users").insert({
     id,
     email,
@@ -44,6 +48,8 @@ export async function createUser({ id, email }: { id: string; email: string }) {
 }
 
 export async function duplicateCheck(userId: string, slug: string) {
+  const supabase = await createSupabaseServerClient();
+
   const { data, error } = await supabase
     .from("users")
     .select("id")
@@ -62,6 +68,8 @@ export async function duplicateCheck(userId: string, slug: string) {
 }
 
 export async function updateUserSlug(userId: string, slug: string) {
+  const supabase = await createSupabaseServerClient();
+
   const { error } = await supabase
     .from("users")
     .update({ slug })

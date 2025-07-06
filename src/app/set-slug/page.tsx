@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import clsx from "clsx";
 import { duplicateCheck, updateUserSlug } from "@/feature/auth/api";
 import { toast } from "sonner";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/app/lib/supabase/supabase";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -80,7 +80,7 @@ export default function SetUserNamePage() {
     <section aria-labelledby="username-heading">
       <header>
         <h2 id="slug-heading" className="text-2xl lg:text-3xl font-bold">
-          작가 주소를 만들기
+          작가 주소 만들기
         </h2>
         <p className="mt-2 text-sm lg:text-base text-gray-500 leading-relaxed">
           작당에서 사용할 고유 주소를 만들어주세요.

@@ -3,7 +3,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/app/lib/supabase/supabase";
 import { getUser, createUser } from "@/feature/auth/api";
 import { toast } from "sonner";
 
@@ -11,10 +11,25 @@ export default function AuthCallback() {
   const router = useRouter();
 
   useEffect(() => {
+    const tokenHash = new URLSearchParams(window.location.search).get(
+      "token_hash"
+    );
+
+    if (!tokenHash) return;
+
     const handleLogin = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
+      const { data, error } = await supabase.auth.verifyOtp({
+        token_hash: tokenHash,
+        type: "email",
+      });
+
+      if (error) {
+        toast.error("로그인 실패");
+        router.replace("/auth/login");
+        return;
+      }
+
+      const { session, user } = data;
 
       if (!session) {
         toast.error("로그인 실패 ");
@@ -22,7 +37,11 @@ export default function AuthCallback() {
         return;
       }
 
-      const user = session.user;
+      if (!user) {
+        toast.error("사용자 정보가 없습니다.");
+        router.replace("/auth/login");
+        return;
+      }
 
       // users 테이블에서 유저정보 조회
       const { data: userData, error: userError } = await getUser(user.id);

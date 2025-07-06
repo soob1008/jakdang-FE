@@ -5,8 +5,14 @@ import ProfileTags from "@/feature/profile/components/ProfileTags";
 import SocialLinks from "@/feature/profile/components/SocialLinks";
 import WorkList from "@/feature/profile/components/WorkList";
 import LinkList from "@/feature/profile/components/LinkList";
+import { createSupabaseServerClient } from "@/app/lib/supabase/server";
 
-export default function ProfilePage() {
+export default async function ProfilePage() {
+  const supabase = await createSupabaseServerClient();
+  const user = await supabase.auth.getUser();
+
+  console.log("ProfilePage user:", user);
+
   return (
     <div className="space-y-10 pb-40">
       {/* 사용자 정보 */}
