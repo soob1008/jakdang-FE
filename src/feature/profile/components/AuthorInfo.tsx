@@ -13,7 +13,7 @@ export default function AuthorInfo({ author }: AuthorInfoProps) {
   }
 
   return (
-    <section className="space-y-4 ">
+    <section className="space-y-4">
       <div className="flex justify-between items-center">
         <h3 className="font-bold text-base lg:text-lg">작가 정보</h3>
         <ProfileDialog author={author} />

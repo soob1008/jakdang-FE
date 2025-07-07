@@ -5,7 +5,6 @@ import { z } from "zod";
 import { Pencil, X } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
 import {
   Form,
   FormItem,
@@ -29,7 +28,7 @@ type FormValues = z.infer<typeof schema>;
 
 interface TagsDialogProps {
   id: string;
-  tags: AuthorTag[]; // [{ id: '', tag: '' }]
+  tags: AuthorTag[];
 }
 
 export default function TagsDialog({ id, tags }: TagsDialogProps) {
@@ -52,41 +51,42 @@ export default function TagsDialog({ id, tags }: TagsDialogProps) {
     formState: { isValid },
   } = form;
 
+  const handleTagAdd = () => {
+    const rawTags = inputTag
+      .split(",")
+      .map((t) => t.trim())
+      .filter(Boolean);
+
+    if (rawTags.length === 0) return;
+
+    const currentTags = getValues("tags");
+    const maxTags = 5;
+
+    const uniqueNewTags = rawTags
+      .filter(
+        (tag) => !currentTags.some((t) => t.tag === tag) && tag.length <= 10
+      )
+      .slice(0, maxTags - currentTags.length);
+
+    if (uniqueNewTags.length === 0) return;
+
+    const updatedTags = [
+      ...currentTags,
+      ...uniqueNewTags.map((tag) => ({
+        id: crypto.randomUUID(),
+        tag,
+      })),
+    ];
+
+    setValue("tags", updatedTags);
+    setInputTag("");
+  };
+
   const handleTagKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.nativeEvent.isComposing) return;
-
     if (e.key === "Enter" || e.key === "Comma") {
       e.preventDefault();
-
-      const newTags = inputTag
-        .split(",")
-        .map((tag) => tag.trim())
-        .filter((tag) => tag.length > 0);
-
-      if (newTags.length === 0) return;
-
-      const currentTags = getValues("tags");
-
-      const filtered = newTags
-        .filter(
-          (tag) =>
-            !currentTags.some((t) => t.tag === tag) &&
-            tag.length <= 10 &&
-            currentTags.length < 5
-        )
-        .slice(0, 5 - currentTags.length);
-
-      if (filtered.length > 0) {
-        setValue("tags", [
-          ...currentTags,
-          ...filtered.map((tag) => ({
-            id: crypto.randomUUID(),
-            tag,
-          })),
-        ]);
-      }
-
-      setInputTag("");
+      handleTagAdd();
     }
   };
 
@@ -116,7 +116,7 @@ export default function TagsDialog({ id, tags }: TagsDialogProps) {
         onOpenChange={(open) => {
           setIsOpen(open);
           if (!open) {
-            reset({ tags }); // 닫힐 때 원래 상태로 되돌림
+            reset({ tags });
           }
         }}
         trigger={
@@ -125,8 +125,8 @@ export default function TagsDialog({ id, tags }: TagsDialogProps) {
             Edit
           </Button>
         }
-        title="관심 태그 수정"
-        description="관심 있는 태그를 최대 5개까지 입력할 수 있어요. 각 태그는 10자 이내로 작성해주세요."
+        title="관심 태그"
+        description="최대 5개, 태그당 10자까지 입력할 수 있어요."
         onSubmit={handleSubmit(onSubmit)}
         disabled={!isValid}
       >
@@ -135,14 +135,25 @@ export default function TagsDialog({ id, tags }: TagsDialogProps) {
           <FormItem>
             <FormLabel>태그</FormLabel>
             <FormControl>
-              <Input
-                placeholder="태그 입력 후 Enter 또는 쉼표로 추가"
-                value={inputTag}
-                onChange={(e) => setInputTag(e.target.value)}
-                onKeyDown={handleTagKeyDown}
-                disabled={watch("tags").length >= 5}
-                maxLength={10}
-              />
+              <div className="flex items-center gap-2">
+                <Input
+                  placeholder="태그 입력 후 Enter 또는 쉼표로 추가"
+                  value={inputTag}
+                  onChange={(e) => setInputTag(e.target.value)}
+                  onKeyDown={handleTagKeyDown}
+                  disabled={watch("tags").length >= 5}
+                  maxLength={10}
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="lg"
+                  onClick={handleTagAdd}
+                  disabled={!inputTag.trim() || watch("tags").length >= 5}
+                >
+                  입력
+                </Button>
+              </div>
             </FormControl>
             <FormMessage />
           </FormItem>

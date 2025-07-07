@@ -19,7 +19,7 @@ export default function ProfileTags({ id, tags }: ProfileTagsProps) {
           <p className="text-gray-500">관심 분야가 없습니다.</p>
         ) : (
           tags.map((tag) => (
-            <Badge key={tag.id} variant="outline">
+            <Badge key={tag.id} variant="outline" size="xs">
               #{tag.tag}
             </Badge>
           ))
