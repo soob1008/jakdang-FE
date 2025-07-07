@@ -16,6 +16,7 @@ export default function SocialLinks({ userId, socials }: SocialLinksProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [mode, setMode] = useState<"create" | "edit">("create");
   const [selectedLink, setSelectedLink] = useState<{
+    id?: string;
     platform: string;
     url: string;
   } | null>(null);
@@ -44,17 +45,18 @@ export default function SocialLinks({ userId, socials }: SocialLinksProps) {
           등록된 SNS 가 없습니다.
         </p>
       ) : (
-        <ul className="flex flex-col gap-3 mt-3">
+        <div className="flex flex-col gap-3 mt-3">
           {socials.map((social) => (
             <SocialLinkItem
               key={social.id}
+              userId={userId}
               social={social}
               setMode={setMode}
               setIsOpen={setIsOpen}
               setSelectedLink={setSelectedLink}
             />
           ))}
-        </ul>
+        </div>
       )}
 
       <SocialDialog

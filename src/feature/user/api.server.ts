@@ -170,21 +170,25 @@ export async function getUserSNS(userId: string) {
   return { data, error: null };
 }
 
+type UpdatableSNSData = {
+  platform?: string;
+  url?: string;
+  is_active?: boolean;
+};
+
 export async function updateUserSNS(
   userId: string,
-  mode: "create" | "edit",
-  data: { platform: string; url: string; id?: string }
+  data: UpdatableSNSData,
+  id?: string
 ) {
   const supabase = await createSupabaseServerClient();
 
-  if (mode === "edit" && data.id) {
+  if (id) {
+    console.log("SNS 수정 요청:", { userId, data, id });
     const { error } = await supabase
       .from("user_sns")
-      .update({
-        platform: data.platform,
-        url: data.url,
-      })
-      .eq("id", data.id)
+      .update(data)
+      .eq("id", id)
       .eq("user_id", userId);
 
     if (error) throw new Error("SNS 수정에 실패했습니다.");
@@ -207,4 +211,22 @@ export async function updateUserSNS(
     revalidatePath(`/profile`);
     return { error: null };
   }
+}
+
+export async function deleteUserSNS(id: string, userId: string) {
+  const supabase = await createSupabaseServerClient();
+
+  const { error } = await supabase
+    .from("user_sns")
+    .delete()
+    .eq("id", id)
+    .eq("user_id", userId);
+
+  if (error) {
+    console.error("SNS 삭제 실패:", error);
+    throw new Error("SNS 삭제에 실패했습니다.");
+  }
+
+  revalidatePath(`/profile`);
+  return { error: null };
 }

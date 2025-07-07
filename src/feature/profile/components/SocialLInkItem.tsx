@@ -1,9 +1,23 @@
+import { useState } from "react";
 import { Pencil, Trash } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { AuthorSNS } from "@/feature/user/type";
 import { Button } from "@/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { toast } from "sonner";
+import { deleteUserSNS, updateUserSNS } from "@/feature/user/api.server";
 
 interface SocialLinkItemProps {
+  userId: string;
   social: AuthorSNS;
   setMode: (mode: "create" | "edit") => void;
   setIsOpen: (isOpen: boolean) => void;
@@ -11,34 +25,42 @@ interface SocialLinkItemProps {
 }
 
 export default function SocialLinkItem({
+  userId,
   social,
   setMode,
   setIsOpen,
   setSelectedLink,
 }: SocialLinkItemProps) {
+  const [isOpenDeleteAlert, setIsOpenDeleteAlert] = useState(false);
+
+  const handleToggle = async (checked: boolean) => {
+    const { error } = await updateUserSNS(
+      userId,
+      { is_active: checked },
+      social.id
+    );
+    if (error) {
+      toast.error("SNS 활성화 상태 변경에 실패했어요.");
+      return;
+    }
+    toast.success(`SNS가 ${checked ? "활성화" : "비활성화"} 되었습니다.`);
+  };
+
+  const handleDelete = async () => {
+    const { error } = await deleteUserSNS(social.id, userId);
+    if (error) {
+      toast.error("SNS 삭제에 실패했어요.");
+      return;
+    }
+    toast.success("SNS가 삭제되었습니다.");
+    setIsOpenDeleteAlert(false);
+  };
+
   return (
-    <li className="border border-gray-200 rounded-md p-4 flex flex-col gap-2 text-sm">
-      {/* 플랫폼명 */}
+    <div className="border border-gray-200 rounded-md p-4 flex flex-col gap-2 text-sm">
       <div className="flex items-center gap-2 text-muted-foreground font-medium">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
-          <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-          <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
-        </svg>
         {social.platform}
       </div>
-
-      {/* 링크 주소 */}
       <a
         href={social.url}
         target="_blank"
@@ -49,29 +71,52 @@ export default function SocialLinkItem({
       </a>
 
       <div className="flex justify-between items-center">
-        <Switch />
-        <div className="flex items-center">
+        <Switch checked={social.is_active} onCheckedChange={handleToggle} />
+
+        <div className="flex items-center gap-2">
           <Button
             variant="ghost"
             size="icon"
-            className="text-muted-foreground"
+            className="text-muted-foreground hover:bg-white"
             onClick={() => {
               setMode("edit");
-              setSelectedLink({ platform: social.platform, url: social.url }); // ✅ 전달
+              setSelectedLink({
+                id: social.id,
+                platform: social.platform,
+                url: social.url,
+              });
               setIsOpen(true);
             }}
           >
             <Pencil className="w-4 h-4" />
           </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="hover:bg-gray-100 text-muted-foreground"
+          <AlertDialog
+            open={isOpenDeleteAlert}
+            onOpenChange={setIsOpenDeleteAlert}
           >
-            <Trash className="w-4 h-4" />
-          </Button>
+            <AlertDialogTrigger>
+              <Trash className="w-4 h-4 text-muted-foreground hover:text-gray-900" />
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>삭제하시겠습니까?</AlertDialogTitle>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel
+                  onClick={() => {
+                    setIsOpenDeleteAlert(false);
+                  }}
+                >
+                  취소
+                </AlertDialogCancel>
+                <AlertDialogAction onClick={handleDelete}>
+                  삭제
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       </div>
-    </li>
+    </div>
   );
 }

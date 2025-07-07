@@ -49,14 +49,23 @@ export default function SocialDialog({
 }: SocialDialogProps) {
   const form = useForm<SocialFormValues>({
     resolver: zodResolver(schema),
+    mode: "onChange",
     defaultValues: {
       platform: defaultValues?.platform ?? undefined,
       url: defaultValues?.url ?? "",
     },
   });
-  const { watch, setValue, handleSubmit } = form;
+
+  const {
+    watch,
+    setValue,
+    handleSubmit,
+    formState: { isValid },
+  } = form;
 
   const isEdit = mode === "edit";
+
+  console.log(watch());
 
   useEffect(() => {
     if (open) {
@@ -68,10 +77,8 @@ export default function SocialDialog({
   }, [open, defaultValues, form]);
 
   const onSubmit = async (data: SocialFormValues) => {
-    const { error } = await updateUserSNS(userId, mode, {
-      ...data,
-      id: defaultValues?.id,
-    });
+    console.log(data, defaultValues?.id);
+    const { error } = await updateUserSNS(userId, data, defaultValues?.id);
 
     if (error) {
       toast.error("SNS 저장 중 문제가 발생했어요.");
@@ -83,16 +90,17 @@ export default function SocialDialog({
   };
 
   return (
-    <ResponsiveDialog
-      trigger={undefined}
-      open={open}
-      onOpenChange={onOpenChange}
-      title={isEdit ? "SNS 링크 수정" : "SNS 링크 추가"}
-      description="SNS 종류와 링크를 입력하세요."
-      submitText={isEdit ? "수정하기" : "추가하기"}
-      onSubmit={handleSubmit(onSubmit)}
-    >
-      <Form {...form}>
+    <Form {...form}>
+      <ResponsiveDialog
+        trigger={undefined}
+        open={open}
+        onOpenChange={onOpenChange}
+        title={isEdit ? "SNS 링크 수정" : "SNS 링크 추가"}
+        description="SNS 종류와 링크를 입력하세요."
+        submitText={isEdit ? "수정" : "추가"}
+        onSubmit={handleSubmit(onSubmit)}
+        disabled={!isValid}
+      >
         <div className="space-y-6">
           {/* SNS 종류 선택 */}
           <FormItem>
@@ -131,7 +139,7 @@ export default function SocialDialog({
             <FormMessage />
           </FormItem>
         </div>
-      </Form>
-    </ResponsiveDialog>
+      </ResponsiveDialog>
+    </Form>
   );
 }

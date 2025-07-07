@@ -17,6 +17,7 @@ export interface AuthorSNS {
   id: string;
   platform: SocialPlatform;
   url: string;
+  is_active: boolean;
 }
 
 export type SocialPlatform =
