@@ -97,12 +97,8 @@ export async function updateUserSlug(userId: string, slug: string) {
 export async function updateUserTags(userId: string, tags: AuthorTag[]) {
   const supabase = await createSupabaseServerClient();
 
-  if (tags.length === 0) {
-    return { error: null };
-  }
-
-  // 기존 태그 조회
-  const { data: existingTags, error: fetchError } = await supabase
+  // 1. 기존 태그 조회
+  const { data: existingTags = [], error: fetchError } = await supabase
     .from("user_tags")
     .select("tag")
     .eq("user_id", userId);
@@ -112,27 +108,45 @@ export async function updateUserTags(userId: string, tags: AuthorTag[]) {
     return { error: fetchError };
   }
 
-  const existingSet = new Set(existingTags?.map((t) => t.tag));
-  const uniqueNewTags = tags.filter((tag) => !existingSet.has(tag.tag));
+  const incomingTagSet = new Set(tags.map((t) => t.tag));
+  const existingTagSet = new Set(existingTags?.map((t) => t.tag));
 
-  if (uniqueNewTags.length === 0) {
-    return { error: null };
+  // 2. 삭제할 태그 계산
+  const tagsToDelete = [...existingTagSet].filter(
+    (tag) => !incomingTagSet.has(tag)
+  );
+
+  if (tagsToDelete.length > 0) {
+    const { error: deleteError } = await supabase
+      .from("user_tags")
+      .delete()
+      .eq("user_id", userId)
+      .in("tag", tagsToDelete);
+
+    if (deleteError) {
+      console.error("태그 삭제 오류:", deleteError);
+      return { error: deleteError };
+    }
   }
 
-  const newTags = uniqueNewTags.map((tag) => ({
-    id: crypto.randomUUID(), // 임시 ID 생성
-    user_id: userId,
-    tag: tag.tag,
-  }));
+  // 3. 삽입할 태그 계산
+  const tagsToInsert = tags
+    .filter((t) => !existingTagSet.has(t.tag))
+    .map((t) => ({
+      id: crypto.randomUUID(),
+      user_id: userId,
+      tag: t.tag,
+    }));
 
-  const { error: insertError } = await supabase
-    .from("user_tags")
-    .insert(newTags)
-    .throwOnError();
+  if (tagsToInsert.length > 0) {
+    const { error: insertError } = await supabase
+      .from("user_tags")
+      .insert(tagsToInsert);
 
-  if (insertError) {
-    console.error("태그 저장 오류:", insertError);
-    return { error: insertError };
+    if (insertError) {
+      console.error("태그 저장 오류:", insertError);
+      return { error: insertError };
+    }
   }
 
   revalidatePath(`/profile`);

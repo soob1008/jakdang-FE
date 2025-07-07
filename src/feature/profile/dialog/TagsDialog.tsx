@@ -169,7 +169,7 @@ export default function TagsDialog({ id, tags }: TagsDialogProps) {
                   #{tag.tag}
                   <button
                     type="button"
-                    onClick={() => handleTagRemove(index)}
+                    onClick={() => handleTagRemove(tag.id)}
                     className="ml-1 text-muted-foreground"
                   >
                     <X className="w-3 h-3" />
