@@ -2,7 +2,6 @@
 
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
-import { toast } from "sonner";
 import { AuthorTag } from "@/feature/user/type";
 
 /* 
@@ -87,7 +86,7 @@ export async function updateUserSlug(userId: string, slug: string) {
     .throwOnError();
 
   if (error) {
-    toast.error("주소 저장에 실패했어요.");
+    console.error("주소 저장에 실패했어요.");
     return { error };
   }
 

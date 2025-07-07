@@ -9,7 +9,7 @@ interface UserInfoProps {
 export default function UserInfo({ author }: UserInfoProps) {
   return (
     <section className="flex justify-between items-center pb-4 border-b border-gray-200">
-      <b className="block">{author.email}</b>
+      <b>{author.email}</b>
       <Button
         variant="outline-primary"
         size="sm"
