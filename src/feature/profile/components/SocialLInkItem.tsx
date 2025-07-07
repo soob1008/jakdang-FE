@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { deleteUserSNS, updateUserSNS } from "@/feature/user/api.server";
 import { handleAction } from "@/feature/common/api/action";
+import Image from "next/image";
 
 interface SocialLinkItemProps {
   userId: string;
@@ -59,7 +60,14 @@ export default function SocialLinkItem({
 
   return (
     <div className="border border-gray-200 rounded-md p-4 flex flex-col gap-2 text-sm">
-      <div className="flex items-center gap-2 text-muted-foreground font-medium">
+      <div className="flex items-center gap-2 font-medium">
+        <Image
+          src={`/assets/social/${social.platform.toLowerCase()}.webp`}
+          width={24}
+          height={24}
+          alt={`${social.platform} icon`}
+          className="w-5 h-5 object-cover"
+        />
         {social.platform}
       </div>
       <a
@@ -70,7 +78,6 @@ export default function SocialLinkItem({
       >
         {social.url}
       </a>
-
       <div className="flex justify-between items-center">
         <Switch checked={social.is_active} onCheckedChange={handleToggle} />
 

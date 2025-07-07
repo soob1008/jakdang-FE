@@ -4,7 +4,6 @@ export const BASIC_PROFILE_IMAGE = `/basic/profile1.png`;
 
 export const SOCIAL_PLATFORMS_OPTIONS = [
   { label: "인스타그램", value: "instagram" },
-  { label: "트위터", value: "twitter" },
   { label: "X (구 트위터)", value: "x" },
   { label: "페이스북", value: "facebook" },
   { label: "쓰레드", value: "threads" },
