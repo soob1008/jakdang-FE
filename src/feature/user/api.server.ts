@@ -296,7 +296,7 @@ export async function deleteUserLink(id: string, userId: string) {
 
   if (error) {
     console.error("링크 삭제 실패:", error);
-    throw new Error("링크 삭제에 실패했습니다.");
+    return { error: new Error("링크 삭제에 실패했습니다.") };
   }
 
   revalidatePath(`/profile`);
