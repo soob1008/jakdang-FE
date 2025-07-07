@@ -30,3 +30,10 @@ export type SocialPlatform =
   | "medium"
   | "linkedin"
   | "blog";
+
+export interface AuthorLink {
+  id: string;
+  title: string;
+  url: string;
+  is_active: boolean;
+}

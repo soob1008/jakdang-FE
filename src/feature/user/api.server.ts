@@ -166,7 +166,7 @@ export async function getUserSNS(userId: string) {
     return { data: null, error };
   }
 
-  return { data, error: null };
+  return { socials: data, error: null };
 }
 
 type UpdatableSNSData = {
@@ -229,4 +229,21 @@ export async function deleteUserSNS(id: string, userId: string) {
 
   revalidatePath(`/profile`);
   return { error: null };
+}
+
+// 외부 링크
+export async function getUserLinks(userId: string) {
+  const supabase = await createSupabaseServerClient();
+
+  const { data, error } = await supabase
+    .from("user_links")
+    .select("*")
+    .eq("user_id", userId);
+
+  if (error) {
+    console.error("링크 정보 조회 실패:", error);
+    return { links: null, error };
+  }
+
+  return { links: data, error: null };
 }

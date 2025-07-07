@@ -7,7 +7,12 @@ import WorkList from "@/feature/profile/components/WorkList";
 import LinkList from "@/feature/profile/components/LinkList";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
-import { getUser, getUserTags, getUserSNS } from "@/feature/user/api.server";
+import {
+  getUser,
+  getUserTags,
+  getUserSNS,
+  getUserLinks,
+} from "@/feature/user/api.server";
 
 export default async function ProfilePage() {
   const supabase = await createSupabaseServerClient();
@@ -23,7 +28,8 @@ export default async function ProfilePage() {
 
   const { data: author, error: authorError } = await getUser(user.id);
   const { tags } = await getUserTags(user.id);
-  const { data: userSocials } = await getUserSNS(user.id);
+  const { socials } = await getUserSNS(user.id);
+  const { links } = await getUserLinks(user.id);
 
   if (authorError) {
     console.error("Error fetching author data:", authorError);
@@ -31,7 +37,7 @@ export default async function ProfilePage() {
   }
 
   console.log("ProfilePage author:", author);
-  console.log("ProfilePage sns", userSocials);
+  console.log("ProfilePage sns", socials);
 
   return (
     <div className="pb-40">
@@ -49,11 +55,11 @@ export default async function ProfilePage() {
         <ProfileTags userId={author.id} tags={tags ?? []} />
 
         {/* SNS 링크 등록 */}
-        <SocialLinks userId={author.id} socials={userSocials ?? []} />
+        <SocialLinks userId={author.id} socials={socials ?? []} />
 
         {/* 링크 등록 */}
 
-        <LinkList />
+        <LinkList userId={author.id} links={links ?? []} />
 
         {/* 작품 등록 */}
         <WorkList />
