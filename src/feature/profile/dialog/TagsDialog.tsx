@@ -89,9 +89,8 @@ export default function TagsDialog({ id, tags }: TagsDialogProps) {
     }
   };
 
-  const handleTagRemove = (index: number) => {
-    const newTags = [...getValues("tags")];
-    newTags.splice(index, 1);
+  const handleTagRemove = (tagId: string) => {
+    const newTags = getValues("tags").filter((tag) => tag.id !== tagId);
     setValue("tags", newTags);
   };
 
@@ -159,7 +158,7 @@ export default function TagsDialog({ id, tags }: TagsDialogProps) {
 
           {/* 태그 목록 */}
           <ul className="flex flex-wrap gap-2">
-            {watch("tags").map((tag, index) => (
+            {watch("tags").map((tag) => (
               <li key={tag.id}>
                 <Badge
                   variant="outline"
