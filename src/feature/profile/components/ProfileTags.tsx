@@ -3,16 +3,16 @@ import AuthorTagDialog from "@/feature/profile/dialog/TagsDialog";
 import { AuthorTag } from "@/feature/user/type";
 
 interface ProfileTagsProps {
-  id: string;
+  userId: string;
   tags: AuthorTag[];
 }
 
-export default function ProfileTags({ id, tags }: ProfileTagsProps) {
+export default function ProfileTags({ userId, tags }: ProfileTagsProps) {
   return (
     <section className="space-y-4">
       <div className="flex justify-between items-center">
         <h3 className="font-bold text-base lg:text-lg">관심 분야</h3>
-        <AuthorTagDialog id={id} tags={tags} />
+        <AuthorTagDialog userId={userId} tags={tags} />
       </div>
       <div className="flex items-center gap-2">
         {!tags || tags.length === 0 ? (

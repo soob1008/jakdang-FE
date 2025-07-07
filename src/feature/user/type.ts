@@ -12,3 +12,19 @@ export interface AuthorTag {
   id: string;
   tag: string;
 }
+
+export interface AuthorSNS {
+  id: string;
+  platform: SocialPlatform;
+  url: string;
+}
+
+export type SocialPlatform =
+  | "instagram"
+  | "facebook"
+  | "threads"
+  | "youtube"
+  | "x"
+  | "branch"
+  | "linkedin"
+  | "blog";

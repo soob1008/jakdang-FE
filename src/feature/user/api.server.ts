@@ -3,6 +3,7 @@
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import { AuthorTag } from "@/feature/user/type";
+import { openAlert } from "@/feature/common/error";
 
 /* 
   사용자 정보 조회 함수
@@ -67,7 +68,7 @@ export async function getUserTags(userId: string) {
     .eq("user_id", userId);
 
   if (error) {
-    console.error("사용자 태그 조회 실패:", error);
+    openAlert("사용자 태그 조회 실패:");
     return { data: [], error };
   }
 
@@ -150,4 +151,60 @@ export async function updateUserTags(userId: string, tags: AuthorTag[]) {
 
   revalidatePath(`/profile`);
   return { error: null };
+}
+
+// SNS
+export async function getUserSNS(userId: string) {
+  const supabase = await createSupabaseServerClient();
+
+  const { data, error } = await supabase
+    .from("user_sns")
+    .select("*")
+    .eq("user_id", userId);
+
+  if (error) {
+    console.error("SNS 정보 조회 실패:", error);
+    return { data: null, error };
+  }
+
+  return { data, error: null };
+}
+
+export async function updateUserSNS(
+  userId: string,
+  mode: "create" | "edit",
+  data: { platform: string; url: string; id?: string }
+) {
+  const supabase = await createSupabaseServerClient();
+
+  if (mode === "edit" && data.id) {
+    const { error } = await supabase
+      .from("user_sns")
+      .update({
+        platform: data.platform,
+        url: data.url,
+      })
+      .eq("id", data.id)
+      .eq("user_id", userId);
+
+    if (error) throw new Error("SNS 수정에 실패했습니다.");
+
+    revalidatePath(`/profile`);
+    return { error: null };
+  } else {
+    const { error } = await supabase.from("user_sns").insert({
+      id: crypto.randomUUID(),
+      user_id: userId,
+      platform: data.platform,
+      url: data.url,
+    });
+
+    if (error) {
+      console.error("SNS 추가 실패:", error);
+      return { error };
+    }
+
+    revalidatePath(`/profile`);
+    return { error: null };
+  }
 }
