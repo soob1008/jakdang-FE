@@ -67,7 +67,7 @@ export async function getUserTags(userId: string) {
     .eq("user_id", userId);
 
   if (error) {
-    console.error("사용자 태그 조회 실패:", error);
+    console.error("사용자 태그 조회 실패:");
     return { data: [], error };
   }
 
@@ -146,6 +146,85 @@ export async function updateUserTags(userId: string, tags: AuthorTag[]) {
       console.error("태그 저장 오류:", insertError);
       return { error: insertError };
     }
+  }
+
+  revalidatePath(`/profile`);
+  return { error: null };
+}
+
+// SNS
+export async function getUserSNS(userId: string) {
+  const supabase = await createSupabaseServerClient();
+
+  const { data, error } = await supabase
+    .from("user_sns")
+    .select("*")
+    .eq("user_id", userId);
+
+  if (error) {
+    console.error("SNS 정보 조회 실패:", error);
+    return { data: null, error };
+  }
+
+  return { data, error: null };
+}
+
+type UpdatableSNSData = {
+  platform?: string;
+  url?: string;
+  is_active?: boolean;
+};
+
+export async function updateUserSNS(
+  userId: string,
+  data: UpdatableSNSData,
+  id?: string
+) {
+  const supabase = await createSupabaseServerClient();
+
+  if (id) {
+    console.log("SNS 수정 요청:", { userId, data, id });
+    const { error } = await supabase
+      .from("user_sns")
+      .update(data)
+      .eq("id", id)
+      .eq("user_id", userId);
+
+    if (error) {
+      return { error };
+    }
+
+    revalidatePath(`/profile`);
+    return { error: null };
+  } else {
+    const { error } = await supabase.from("user_sns").insert({
+      id: crypto.randomUUID(),
+      user_id: userId,
+      platform: data.platform,
+      url: data.url,
+    });
+
+    if (error) {
+      return { error };
+    }
+
+    revalidatePath(`/profile`);
+    return { error: null };
+  }
+}
+
+export async function deleteUserSNS(id: string, userId: string) {
+  const supabase = await createSupabaseServerClient();
+
+  const { error } = await supabase
+    .from("user_sns")
+    .delete()
+    .eq("id", id)
+    .eq("user_id", userId);
+
+  if (error) {
+    console.error("SNS 삭제 실패:", error);
+    throw new Error("SNS 삭제에 실패했습니다.");
   }
 
   revalidatePath(`/profile`);

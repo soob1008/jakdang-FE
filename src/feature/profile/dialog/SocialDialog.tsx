@@ -1,9 +1,9 @@
 "use client";
 
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-
 import {
   Form,
   FormItem,
@@ -19,65 +19,86 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
+import { SOCIAL_PLATFORMS_OPTIONS, SOCIAL_PLATFORM_KEYS } from "@/lib/const";
 import { ResponsiveDialog } from "@/components/ui/ResponsiveDialog";
+import { toast } from "sonner";
+import { updateUserSNS } from "@/feature/user/api.server";
 
 const schema = z.object({
-  platform: z.enum(["twitter", "instagram", "brunch", "x", "medium"]),
+  platform: z.enum(SOCIAL_PLATFORM_KEYS as [string, ...string[]]),
   url: z.string().url("올바른 링크를 입력해주세요"),
 });
 
-export type SocialFormValues = z.infer<typeof schema>;
+export type SocialFormValues = z.infer<typeof schema> & { id?: string };
 
 interface SocialDialogProps {
+  userId: string;
   mode?: "create" | "edit";
-  open?: boolean;
-  onOpenChange?: (open: boolean) => void;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
   defaultValues?: Partial<SocialFormValues>;
   onSubmitSuccess?: (data: SocialFormValues) => void;
 }
 
 export default function SocialDialog({
+  userId,
   mode = "create",
   open = false,
   onOpenChange,
   defaultValues,
-  onSubmitSuccess,
 }: SocialDialogProps) {
   const form = useForm<SocialFormValues>({
     resolver: zodResolver(schema),
+    mode: "onChange",
     defaultValues: {
-      platform: defaultValues?.platform ?? "twitter",
+      platform: defaultValues?.platform ?? undefined,
       url: defaultValues?.url ?? "",
     },
   });
 
+  const {
+    watch,
+    setValue,
+    handleSubmit,
+    formState: { isValid },
+  } = form;
+
   const isEdit = mode === "edit";
 
-  const onSubmit = (data: SocialFormValues) => {
-    console.log("SNS 등록 정보:", data);
-    onSubmitSuccess?.(data);
-  };
+  useEffect(() => {
+    if (open) {
+      form.reset({
+        platform: defaultValues?.platform ?? undefined,
+        url: defaultValues?.url ?? "",
+      });
+    }
+  }, [open, defaultValues, form]);
 
-  const platformLabelMap: Record<SocialFormValues["platform"], string> = {
-    twitter: "Twitter",
-    instagram: "Instagram",
-    brunch: "Brunch",
-    x: "X (구 Twitter)",
-    medium: "Medium",
+  const onSubmit = async (data: SocialFormValues) => {
+    console.log(data, defaultValues?.id);
+    const { error } = await updateUserSNS(userId, data, defaultValues?.id);
+
+    if (error) {
+      toast.error("SNS 저장 중 문제가 발생했어요.");
+      return;
+    }
+
+    toast.success(isEdit ? "SNS를 수정했어요." : "SNS를 추가했어요.");
+    onOpenChange(false);
   };
 
   return (
-    <ResponsiveDialog
-      trigger={undefined}
-      open={open}
-      onOpenChange={onOpenChange}
-      title={isEdit ? "SNS 링크 수정" : "SNS 링크 추가"}
-      description="등록할 SNS 종류를 선택하고, 연결할 링크를 입력해주세요."
-      submitText={isEdit ? "수정하기" : "추가하기"}
-      onSubmit={form.handleSubmit(onSubmit)}
-    >
-      <Form {...form}>
+    <Form {...form}>
+      <ResponsiveDialog
+        trigger={undefined}
+        open={open}
+        onOpenChange={onOpenChange}
+        title={isEdit ? "SNS 링크 수정" : "SNS 링크 추가"}
+        description="SNS 종류와 링크를 입력하세요."
+        submitText={isEdit ? "수정" : "추가"}
+        onSubmit={handleSubmit(onSubmit)}
+        disabled={!isValid}
+      >
         <div className="space-y-6">
           {/* SNS 종류 선택 */}
           <FormItem>
@@ -85,15 +106,15 @@ export default function SocialDialog({
             <FormControl>
               <Select
                 onValueChange={(val) =>
-                  form.setValue("platform", val as SocialFormValues["platform"])
+                  setValue("platform", val as SocialFormValues["platform"])
                 }
-                defaultValue={form.getValues("platform")}
+                value={watch("platform")}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="SNS 선택" />
                 </SelectTrigger>
                 <SelectContent>
-                  {Object.entries(platformLabelMap).map(([value, label]) => (
+                  {SOCIAL_PLATFORMS_OPTIONS.map(({ value, label }) => (
                     <SelectItem key={value} value={value}>
                       {label}
                     </SelectItem>
@@ -116,7 +137,7 @@ export default function SocialDialog({
             <FormMessage />
           </FormItem>
         </div>
-      </Form>
-    </ResponsiveDialog>
+      </ResponsiveDialog>
+    </Form>
   );
 }

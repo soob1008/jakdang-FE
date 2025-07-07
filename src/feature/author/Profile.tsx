@@ -26,12 +26,15 @@ export default function Profile() {
         <p className="text-sm text-gray-400">#산문 #에세이</p>
 
         {/* SNS 아이콘 자리 */}
-        <div className="flex items-center justify-center gap-3 mt-4">
+        <div className="flex items-center justify-center gap-6 mt-4 flex-wrap">
           {/* Replace with actual icons */}
-          <div className="w-6 h-6 bg-gray-400 rounded-full" />
-          <div className="w-6 h-6 bg-gray-400 rounded-full" />
-          <div className="w-6 h-6 bg-gray-400 rounded-full" />
-          <div className="w-6 h-6 bg-gray-400 rounded-full" />
+          <Image
+            src="/assets/social/instagram.webp"
+            width={24}
+            height={24}
+            alt="Instagram"
+            className="w-6 h-6"
+          />
         </div>
       </div>
 

@@ -20,8 +20,9 @@ import { ResponsiveDialog } from "@/components/ui/ResponsiveDialog";
 import { Author } from "@/feature/user/type";
 import { updateUser } from "@/feature/user/api.server";
 import { toast } from "sonner";
-import { uploadImage } from "@/feature/common/api.client";
+import { uploadImage } from "@/feature/common/api/api.client";
 import { BASIC_PROFILE_IMAGE } from "@/lib/const";
+import { handleAction } from "@/feature/common/api/action";
 
 const schema = z.object({
   displayName: z.string().min(1, "필명을 입력해주세요."),
@@ -63,15 +64,13 @@ export function ProfileDialog({ author }: ProfileDialogProps) {
     const file: File | null = e.target.files?.[0] || null;
 
     if (file) {
-      const { imagePath, error } = await uploadImage(file, author.id);
-
-      if (error) {
-        console.error("이미지 업로드 실패:", error);
-        toast.error("이미지 업로드에 실패했습니다.");
-        return;
-      }
-
-      setValue("profile_image_url", imagePath);
+      await handleAction(() => uploadImage(file, author.id), {
+        successMessage: "이미지가 성공적으로 업로드되었습니다.",
+        errorMessage: "이미지 업로드에 실패했습니다.",
+        onSuccess: ({ imagePath }) => {
+          setValue("profile_image_url", imagePath);
+        },
+      });
     } else {
       toast.error("이미지 파일을 선택해주세요.");
       return;
@@ -79,19 +78,22 @@ export function ProfileDialog({ author }: ProfileDialogProps) {
   };
 
   const onSubmit = async (data: ProfileFormValues) => {
-    const { error } = await updateUser(author.id, {
-      display_name: data.displayName,
-      slug: data.slug,
-      profile_image_url: data.profile_image_url,
-    });
-
-    if (error) {
-      console.error("사용자 업데이트 실패:", error);
-      return;
-    }
-
-    toast.success("프로필이 성공적으로 업데이트되었습니다.");
-    setIsOpen(false);
+    await handleAction(
+      () => {
+        return updateUser(author.id, {
+          display_name: data.displayName,
+          slug: data.slug,
+          profile_image_url: data.profile_image_url,
+        });
+      },
+      {
+        successMessage: "프로필이 성공적으로 업데이트되었습니다.",
+        errorMessage: "프로필 업데이트에 실패했습니다.",
+        onSuccess: () => {
+          setIsOpen(false);
+        },
+      }
+    );
   };
 
   return (

@@ -26,11 +26,11 @@ const schema = z.object({
 type ProfileFormValues = z.infer<typeof schema>;
 
 interface AuthorIntroDialogProps {
-  id: string;
+  userId: string;
   intro?: string;
 }
 
-export function AuthorIntroDialog({ id, intro }: AuthorIntroDialogProps) {
+export function AuthorIntroDialog({ userId, intro }: AuthorIntroDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const form = useForm<ProfileFormValues>({
@@ -46,7 +46,7 @@ export function AuthorIntroDialog({ id, intro }: AuthorIntroDialogProps) {
   } = form;
 
   const onSubmit = async (data: ProfileFormValues) => {
-    const { error } = await updateUser(id, {
+    const { error } = await updateUser(userId, {
       intro_text: data.intro,
     });
 

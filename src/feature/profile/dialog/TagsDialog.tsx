@@ -1,4 +1,5 @@
 "use client";
+
 import { useState } from "react";
 import { z } from "zod";
 import { Pencil, X } from "lucide-react";
@@ -26,11 +27,11 @@ const schema = z.object({
 type FormValues = z.infer<typeof schema>;
 
 interface TagsDialogProps {
-  id: string;
+  userId: string;
   tags: AuthorTag[];
 }
 
-export default function TagsDialog({ id, tags }: TagsDialogProps) {
+export default function TagsDialog({ userId, tags }: TagsDialogProps) {
   const [inputTag, setInputTag] = useState("");
   const [isOpen, setIsOpen] = useState(false);
 
@@ -95,7 +96,7 @@ export default function TagsDialog({ id, tags }: TagsDialogProps) {
   };
 
   const onSubmit = async (data: FormValues) => {
-    const { error } = await updateUserTags(id, data.tags);
+    const { error } = await updateUserTags(userId, data.tags);
 
     if (error) {
       console.error("태그 저장 실패:", error);
