@@ -3,7 +3,6 @@
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import { AuthorTag } from "@/feature/user/type";
-import { openAlert } from "@/feature/common/error";
 
 /* 
   사용자 정보 조회 함수
@@ -68,7 +67,7 @@ export async function getUserTags(userId: string) {
     .eq("user_id", userId);
 
   if (error) {
-    openAlert("사용자 태그 조회 실패:");
+    console.error("사용자 태그 조회 실패:");
     return { data: [], error };
   }
 
@@ -191,7 +190,9 @@ export async function updateUserSNS(
       .eq("id", id)
       .eq("user_id", userId);
 
-    if (error) throw new Error("SNS 수정에 실패했습니다.");
+    if (error) {
+      return { error };
+    }
 
     revalidatePath(`/profile`);
     return { error: null };
@@ -204,7 +205,6 @@ export async function updateUserSNS(
     });
 
     if (error) {
-      console.error("SNS 추가 실패:", error);
       return { error };
     }
 

@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
 import { deleteUserSNS, updateUserSNS } from "@/feature/user/api.server";
+import { handleAction } from "@/feature/common/api/action";
 
 interface SocialLinkItemProps {
   userId: string;
@@ -34,26 +35,23 @@ export default function SocialLinkItem({
   const [isOpenDeleteAlert, setIsOpenDeleteAlert] = useState(false);
 
   const handleToggle = async (checked: boolean) => {
-    const { error } = await updateUserSNS(
-      userId,
-      { is_active: checked },
-      social.id
+    await handleAction(
+      () => updateUserSNS(userId, { is_active: checked }, social.id),
+      {
+        successMessage: `SNS가 ${checked ? "활성화" : "비활성화"} 되었습니다.`,
+        errorMessage: "SNS 활성화 상태 변경에 실패했어요.",
+      }
     );
-    if (error) {
-      toast.error("SNS 활성화 상태 변경에 실패했어요.");
-      return;
-    }
-    toast.success(`SNS가 ${checked ? "활성화" : "비활성화"} 되었습니다.`);
   };
 
   const handleDelete = async () => {
-    const { error } = await deleteUserSNS(social.id, userId);
-    if (error) {
-      toast.error("SNS 삭제에 실패했어요.");
-      return;
-    }
-    toast.success("SNS가 삭제되었습니다.");
-    setIsOpenDeleteAlert(false);
+    await handleAction(() => deleteUserSNS(social.id, userId), {
+      successMessage: "SNS가 삭제되었습니다.",
+      errorMessage: "SNS 삭제에 실패했어요.",
+      onSuccess: () => {
+        setIsOpenDeleteAlert(false);
+      },
+    });
   };
 
   return (

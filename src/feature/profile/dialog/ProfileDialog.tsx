@@ -20,7 +20,7 @@ import { ResponsiveDialog } from "@/components/ui/ResponsiveDialog";
 import { Author } from "@/feature/user/type";
 import { updateUser } from "@/feature/user/api.server";
 import { toast } from "sonner";
-import { uploadImage } from "@/feature/common/api.client";
+import { uploadImage } from "@/feature/common/api/api.client";
 import { BASIC_PROFILE_IMAGE } from "@/lib/const";
 
 const schema = z.object({
