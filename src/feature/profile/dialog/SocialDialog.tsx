@@ -75,7 +75,6 @@ export default function SocialDialog({
   }, [open, defaultValues, form]);
 
   const onSubmit = async (data: SocialFormValues) => {
-    console.log(data, defaultValues?.id);
     const { error } = await updateUserSNS(userId, data, defaultValues?.id);
 
     if (error) {

@@ -37,7 +37,7 @@ export default async function ProfilePage() {
   }
 
   console.log("ProfilePage author:", author);
-  console.log("ProfilePage sns", socials);
+  console.log("ProfilePage links", links);
 
   return (
     <div className="pb-40">

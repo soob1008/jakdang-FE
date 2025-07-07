@@ -6,6 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { AuthorLink } from "@/feature/user/type";
 import LinkItem from "@/feature/profile/components/LInkItem";
+import { LinkValues } from "@/feature/profile/dialog/LinkDialog";
+import { handleAction } from "@/feature/common/api/action";
+import { updateUserLinks } from "@/feature/user/api.server";
 
 interface LinkListProps {
   userId: string; // 사용자 ID가 필요할 경우 사용
@@ -16,6 +19,32 @@ export default function LinkList({ userId, links }: LinkListProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [mode, setMode] = useState<"create" | "edit">("create");
   const [selectedLink, setSelectedLink] = useState<AuthorLink | null>(null);
+
+  // 링크 저장
+
+  const handleSaveLink = async (data: LinkValues) => {
+    await handleAction(
+      () =>
+        updateUserLinks(
+          userId,
+          {
+            title: data.title,
+            url: data.url,
+          },
+          selectedLink?.id
+        ),
+      {
+        successMessage: "링크가 저장되었습니다.",
+        errorMessage: "링크 저장 중 문제가 발생했어요.",
+        onSuccess: () => {
+          // 모달 닫기 및 상태 초기화
+          setIsOpen(false);
+          setSelectedLink(null);
+          setMode("create");
+        },
+      }
+    );
+  };
 
   return (
     <section className="space-y-4">
@@ -42,7 +71,16 @@ export default function LinkList({ userId, links }: LinkListProps) {
             등록된 링크가 없습니다.
           </p>
         ) : (
-          links.map((link) => <LinkItem key={link.id} link={link} />)
+          links.map((link) => (
+            <LinkItem
+              key={link.id}
+              userId={userId}
+              link={link}
+              setSelectedLink={setSelectedLink}
+              setMode={setMode}
+              setIsOpen={setIsOpen}
+            />
+          ))
         )}
       </div>
 
@@ -51,10 +89,7 @@ export default function LinkList({ userId, links }: LinkListProps) {
         open={isOpen}
         onOpenChange={setIsOpen}
         defaultValues={selectedLink ?? undefined}
-        onSubmitSuccess={(data) => {
-          console.log("저장된 링크:", data);
-          setIsOpen(false);
-        }}
+        onSubmitSuccess={handleSaveLink}
       />
     </section>
   );

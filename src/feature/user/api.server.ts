@@ -247,3 +247,58 @@ export async function getUserLinks(userId: string) {
 
   return { links: data, error: null };
 }
+
+export async function updateUserLinks(
+  userId: string,
+  data: { title?: string; url?: string; is_active?: boolean },
+  id?: string
+) {
+  const supabase = await createSupabaseServerClient();
+
+  if (id) {
+    const { error } = await supabase
+      .from("user_links")
+      .update(data)
+      .eq("id", id)
+      .eq("user_id", userId);
+
+    if (error) {
+      return { error };
+    }
+
+    revalidatePath(`/profile`);
+    return { error: null };
+  } else {
+    const { error } = await supabase.from("user_links").insert({
+      id: crypto.randomUUID(),
+      user_id: userId,
+      title: data.title,
+      url: data.url,
+    });
+
+    if (error) {
+      return { error };
+    }
+
+    revalidatePath(`/profile`);
+    return { error: null };
+  }
+}
+
+export async function deleteUserLink(id: string, userId: string) {
+  const supabase = await createSupabaseServerClient();
+
+  const { error } = await supabase
+    .from("user_links")
+    .delete()
+    .eq("id", id)
+    .eq("user_id", userId);
+
+  if (error) {
+    console.error("링크 삭제 실패:", error);
+    throw new Error("링크 삭제에 실패했습니다.");
+  }
+
+  revalidatePath(`/profile`);
+  return { error: null };
+}
