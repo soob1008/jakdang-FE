@@ -65,8 +65,6 @@ export default function SocialDialog({
 
   const isEdit = mode === "edit";
 
-  console.log(watch());
-
   useEffect(() => {
     if (open) {
       form.reset({

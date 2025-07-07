@@ -26,6 +26,7 @@ export type SocialPlatform =
   | "threads"
   | "youtube"
   | "x"
-  | "branch"
+  | "brunch"
+  | "medium"
   | "linkedin"
   | "blog";
