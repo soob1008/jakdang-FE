@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -15,7 +16,7 @@ import {
 import { ResponsiveDialog } from "@/components/ui/ResponsiveDialog";
 
 const linkSchema = z.object({
-  label: z.string().min(1, { message: "링크 제목을 입력해주세요." }),
+  title: z.string().min(1, { message: "링크 제목을 입력해주세요." }),
   url: z.string().url({ message: "올바른 링크 주소를 입력해주세요." }),
 });
 
@@ -36,15 +37,24 @@ export function LinkDialog({
   defaultValues,
   onSubmitSuccess,
 }: LinkDialogProps) {
-  const isEdit = mode === "edit";
-
   const form = useForm<LinkValues>({
     resolver: zodResolver(linkSchema),
     defaultValues: {
-      label: defaultValues?.label ?? "",
+      title: defaultValues?.title ?? "",
       url: defaultValues?.url ?? "",
     },
   });
+
+  const isEdit = mode === "edit";
+
+  useEffect(() => {
+    if (open) {
+      form.reset({
+        title: defaultValues?.title ?? "",
+        url: defaultValues?.url ?? "",
+      });
+    }
+  }, [open, defaultValues, form]);
 
   const onSubmit = (data: LinkValues) => {
     onSubmitSuccess?.(data);
@@ -68,7 +78,7 @@ export function LinkDialog({
         <div className="space-y-4">
           <FormField
             control={form.control}
-            name="label"
+            name="title"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>링크 제목</FormLabel>

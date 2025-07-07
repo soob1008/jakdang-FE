@@ -1,21 +1,50 @@
 "use client";
 
 import { useState } from "react";
-import { LinkDialog, LinkValues } from "@/feature/profile/dialog/LinkDialog";
+import { LinkDialog } from "@/feature/profile/dialog/LinkDialog";
 import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
-import { Trash, Pencil, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
+import { AuthorLink } from "@/feature/user/type";
+import LinkItem from "@/feature/profile/components/LInkItem";
+import { LinkValues } from "@/feature/profile/dialog/LinkDialog";
+import { handleAction } from "@/feature/common/api/action";
+import { updateUserLinks } from "@/feature/user/api.server";
 
-export default function LinkList() {
+interface LinkListProps {
+  userId: string; // 사용자 ID가 필요할 경우 사용
+  links: AuthorLink[]; // 외부 링크 목록을 props로 받음
+}
+
+export default function LinkList({ userId, links }: LinkListProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [mode, setMode] = useState<"create" | "edit">("create");
-  const [selectedLink, setSelectedLink] = useState<LinkValues | null>(null);
+  const [selectedLink, setSelectedLink] = useState<AuthorLink | null>(null);
 
-  // 예시 링크 목록
-  const linkItems: LinkValues[] = [
-    { label: "브런치", url: "https://brunch.co.kr/@me" },
-    { label: "깃허브", url: "https://github.com/me" },
-  ];
+  // 링크 저장
+
+  const handleSaveLink = async (data: LinkValues) => {
+    await handleAction(
+      () =>
+        updateUserLinks(
+          userId,
+          {
+            title: data.title,
+            url: data.url,
+          },
+          selectedLink?.id
+        ),
+      {
+        successMessage: "링크가 저장되었습니다.",
+        errorMessage: "링크 저장 중 문제가 발생했어요.",
+        onSuccess: () => {
+          // 모달 닫기 및 상태 초기화
+          setIsOpen(false);
+          setSelectedLink(null);
+          setMode("create");
+        },
+      }
+    );
+  };
 
   return (
     <section className="space-y-4">
@@ -36,60 +65,31 @@ export default function LinkList() {
         </Button>
       </div>
 
-      <ul className="flex flex-col gap-3 mt-3">
-        {linkItems.map((item, idx) => (
-          <li
-            key={idx}
-            className="p-4 border border-gray-200 rounded-md text-sm flex flex-col gap-2"
-          >
-            {/* 링크 URL */}
-            <div className="flex justify-between items-start">
-              <a
-                href={item.url}
-                className="text-muted-foreground hover:text-primary truncate max-w-[80%]"
-                target="_blank"
-              >
-                {item.url}
-              </a>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <Switch />
-              <div className="flex items-center">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="text-muted-foreground"
-                  onClick={() => {
-                    setMode("edit");
-                    setSelectedLink(item);
-                    setIsOpen(true);
-                  }}
-                >
-                  <Pencil className="w-4 h-4" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="text-muted-foreground hover:bg-gray-100"
-                >
-                  <Trash className="w-4 h-4" />
-                </Button>
-              </div>
-            </div>
-          </li>
-        ))}
-      </ul>
+      <div className="flex flex-col gap-3 mt-3">
+        {links.length === 0 ? (
+          <p className="text-center text-muted-foreground">
+            등록된 링크가 없습니다.
+          </p>
+        ) : (
+          links.map((link) => (
+            <LinkItem
+              key={link.id}
+              userId={userId}
+              link={link}
+              setSelectedLink={setSelectedLink}
+              setMode={setMode}
+              setIsOpen={setIsOpen}
+            />
+          ))
+        )}
+      </div>
 
       <LinkDialog
         mode={mode}
         open={isOpen}
         onOpenChange={setIsOpen}
         defaultValues={selectedLink ?? undefined}
-        onSubmitSuccess={(data) => {
-          console.log("저장된 링크:", data);
-          setIsOpen(false);
-        }}
+        onSubmitSuccess={handleSaveLink}
       />
     </section>
   );

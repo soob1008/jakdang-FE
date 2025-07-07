@@ -166,7 +166,7 @@ export async function getUserSNS(userId: string) {
     return { data: null, error };
   }
 
-  return { data, error: null };
+  return { socials: data, error: null };
 }
 
 type UpdatableSNSData = {
@@ -225,6 +225,78 @@ export async function deleteUserSNS(id: string, userId: string) {
   if (error) {
     console.error("SNS 삭제 실패:", error);
     throw new Error("SNS 삭제에 실패했습니다.");
+  }
+
+  revalidatePath(`/profile`);
+  return { error: null };
+}
+
+// 외부 링크
+export async function getUserLinks(userId: string) {
+  const supabase = await createSupabaseServerClient();
+
+  const { data, error } = await supabase
+    .from("user_links")
+    .select("*")
+    .eq("user_id", userId);
+
+  if (error) {
+    console.error("링크 정보 조회 실패:", error);
+    return { links: null, error };
+  }
+
+  return { links: data, error: null };
+}
+
+export async function updateUserLinks(
+  userId: string,
+  data: { title?: string; url?: string; is_active?: boolean },
+  id?: string
+) {
+  const supabase = await createSupabaseServerClient();
+
+  if (id) {
+    const { error } = await supabase
+      .from("user_links")
+      .update(data)
+      .eq("id", id)
+      .eq("user_id", userId);
+
+    if (error) {
+      return { error };
+    }
+
+    revalidatePath(`/profile`);
+    return { error: null };
+  } else {
+    const { error } = await supabase.from("user_links").insert({
+      id: crypto.randomUUID(),
+      user_id: userId,
+      title: data.title,
+      url: data.url,
+    });
+
+    if (error) {
+      return { error };
+    }
+
+    revalidatePath(`/profile`);
+    return { error: null };
+  }
+}
+
+export async function deleteUserLink(id: string, userId: string) {
+  const supabase = await createSupabaseServerClient();
+
+  const { error } = await supabase
+    .from("user_links")
+    .delete()
+    .eq("id", id)
+    .eq("user_id", userId);
+
+  if (error) {
+    console.error("링크 삭제 실패:", error);
+    return { error: new Error("링크 삭제에 실패했습니다.") };
   }
 
   revalidatePath(`/profile`);
