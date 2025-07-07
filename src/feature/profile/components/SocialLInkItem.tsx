@@ -13,7 +13,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { toast } from "sonner";
 import { deleteUserSNS, updateUserSNS } from "@/feature/user/api.server";
 import { handleAction } from "@/feature/common/api/action";
 
@@ -22,7 +21,11 @@ interface SocialLinkItemProps {
   social: AuthorSNS;
   setMode: (mode: "create" | "edit") => void;
   setIsOpen: (isOpen: boolean) => void;
-  setSelectedLink: (link: { platform: string; url: string }) => void; // 추가
+  setSelectedLink: (link: {
+    platform: string;
+    url: string;
+    id?: string;
+  }) => void; // 추가
 }
 
 export default function SocialLinkItem({
