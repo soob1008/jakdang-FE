@@ -7,7 +7,7 @@ import WorkList from "@/feature/profile/components/WorkList";
 import LinkList from "@/feature/profile/components/LinkList";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
-import { getUser } from "@/feature/user/api.server";
+import { getUser, getUserTags } from "@/feature/user/api.server";
 
 export default async function ProfilePage() {
   const supabase = await createSupabaseServerClient();
@@ -22,6 +22,7 @@ export default async function ProfilePage() {
   }
 
   const { data: author, error: authorError } = await getUser(user.id);
+  const { tags } = await getUserTags(user.id);
 
   if (authorError) {
     console.error("Error fetching author data:", authorError);
@@ -29,30 +30,33 @@ export default async function ProfilePage() {
   }
 
   console.log("ProfilePage author:", author);
+  console.log("ProfilePage tags:", tags);
 
   return (
-    <div className="space-y-10 pb-40">
+    <div className="pb-40">
+      <h2 className="mb-8 font-bold text-xl">나의 작당일지</h2>
       {/* 사용자 정보 */}
       <UserInfo author={author} />
+      <div className="flex flex-col gap-18 mt-10">
+        {/* 작가 정보 */}
+        <AuthorInfo author={author} />
 
-      {/* 작가 정보 */}
-      <AuthorInfo author={author} />
+        {/* 작가 한줄 소개 */}
+        <AuthorIntro id={author.id} intro={author.intro_text} />
 
-      {/* 작가 한줄 소개 */}
-      <AuthorIntro id={author.id} intro={author.intro_text} />
+        {/* 관심 분야 태그 등록 */}
+        <ProfileTags id={author.id} tags={tags ?? []} />
 
-      {/* 관심 분야 태그 등록 */}
-      <ProfileTags />
+        {/* SNS 링크 등록 */}
+        <SocialLinks />
 
-      {/* SNS 링크 등록 */}
-      <SocialLinks />
+        {/* 링크 등록 */}
 
-      {/* 링크 등록 */}
+        <LinkList />
 
-      <LinkList />
-
-      {/* 작품 등록 */}
-      <WorkList />
+        {/* 작품 등록 */}
+        <WorkList />
+      </div>
     </div>
   );
 }

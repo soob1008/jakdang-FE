@@ -7,3 +7,8 @@ export interface Author {
   likes_count: number;
   intro_text?: string;
 }
+
+export interface AuthorTag {
+  id: string;
+  tag: string;
+}

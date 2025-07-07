@@ -2,6 +2,7 @@
 
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
+import { AuthorTag } from "@/feature/user/type";
 
 /* 
   사용자 정보 조회 함수
@@ -52,7 +53,101 @@ export async function updateUser(id: string, data: UpdatableUserData) {
     return { error };
   }
 
-  revalidatePath(`/profile/${id}`); // 해당 유저 페이지 다시 불러옴
+  revalidatePath(`/profile`); // 해당 유저 페이지 다시 불러옴
 
+  return { error: null };
+}
+
+export async function getUserTags(userId: string) {
+  const supabase = await createSupabaseServerClient();
+
+  const { data, error } = await supabase
+    .from("user_tags")
+    .select("id, tag")
+    .eq("user_id", userId);
+
+  if (error) {
+    console.error("사용자 태그 조회 실패:", error);
+    return { data: [], error };
+  }
+
+  return {
+    tags: data.map((item) => ({ id: item.id, tag: item.tag })),
+    error: null,
+  };
+}
+
+export async function updateUserSlug(userId: string, slug: string) {
+  const supabase = await createSupabaseServerClient();
+  const { error } = await supabase
+    .from("users")
+    .update({ slug })
+    .eq("id", userId)
+    .throwOnError();
+
+  if (error) {
+    console.error("주소 저장에 실패했어요.");
+    return { error };
+  }
+
+  return { error };
+}
+
+export async function updateUserTags(userId: string, tags: AuthorTag[]) {
+  const supabase = await createSupabaseServerClient();
+
+  // 1. 기존 태그 조회
+  const { data: existingTags = [], error: fetchError } = await supabase
+    .from("user_tags")
+    .select("tag")
+    .eq("user_id", userId);
+
+  if (fetchError) {
+    console.error("기존 태그 조회 오류:", fetchError);
+    return { error: fetchError };
+  }
+
+  const incomingTagSet = new Set(tags.map((t) => t.tag));
+  const existingTagSet = new Set(existingTags?.map((t) => t.tag));
+
+  // 2. 삭제할 태그 계산
+  const tagsToDelete = [...existingTagSet].filter(
+    (tag) => !incomingTagSet.has(tag)
+  );
+
+  if (tagsToDelete.length > 0) {
+    const { error: deleteError } = await supabase
+      .from("user_tags")
+      .delete()
+      .eq("user_id", userId)
+      .in("tag", tagsToDelete);
+
+    if (deleteError) {
+      console.error("태그 삭제 오류:", deleteError);
+      return { error: deleteError };
+    }
+  }
+
+  // 3. 삽입할 태그 계산
+  const tagsToInsert = tags
+    .filter((t) => !existingTagSet.has(t.tag))
+    .map((t) => ({
+      id: crypto.randomUUID(),
+      user_id: userId,
+      tag: t.tag,
+    }));
+
+  if (tagsToInsert.length > 0) {
+    const { error: insertError } = await supabase
+      .from("user_tags")
+      .insert(tagsToInsert);
+
+    if (insertError) {
+      console.error("태그 저장 오류:", insertError);
+      return { error: insertError };
+    }
+  }
+
+  revalidatePath(`/profile`);
   return { error: null };
 }
