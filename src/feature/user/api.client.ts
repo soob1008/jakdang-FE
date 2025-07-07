@@ -17,8 +17,6 @@ export async function loginWithMagicLink(email: string) {
 }
 
 export async function duplicateCheck(userId: string, slug: string) {
-  const supabase = createClient();
-
   const { data, error } = await supabase
     .from("users")
     .select("id")
@@ -34,21 +32,4 @@ export async function duplicateCheck(userId: string, slug: string) {
   const exists = data !== null && data.id !== userId;
 
   return { exists, error: null };
-}
-
-export async function updateUserSlug(userId: string, slug: string) {
-  const supabase = createClient();
-
-  const { error } = await supabase
-    .from("users")
-    .update({ slug })
-    .eq("id", userId)
-    .throwOnError();
-
-  if (error) {
-    toast.error("주소 저장에 실패했어요.");
-    return { error };
-  }
-
-  return { error };
 }

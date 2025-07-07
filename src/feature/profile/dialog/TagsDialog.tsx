@@ -17,78 +17,121 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ResponsiveDialog } from "@/components/ui/ResponsiveDialog";
 import { Badge } from "@/components/ui/badge";
+import { AuthorTag } from "@/feature/user/type";
+import { updateUserTags } from "@/feature/user/api.server";
+import { toast } from "sonner";
 
 const schema = z.object({
-  tags: z.array(z.string()),
+  tags: z.array(z.object({ id: z.string(), tag: z.string() })),
 });
 
-type ProfileFormValues = z.infer<typeof schema>;
+type FormValues = z.infer<typeof schema>;
 
-export default function TagsDialog() {
-  const form = useForm<ProfileFormValues>({
+interface TagsDialogProps {
+  id: string;
+  tags: AuthorTag[]; // [{ id: '', tag: '' }]
+}
+
+export default function TagsDialog({ id, tags }: TagsDialogProps) {
+  const [inputTag, setInputTag] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+
+  const form = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
-      tags: [],
+      tags,
     },
   });
 
-  const [inputTag, setInputTag] = useState("");
-
-  const onSubmit = (data: ProfileFormValues) => {
-    console.log("태그:", data.tags);
-    // 저장 로직 실행
-  };
+  const {
+    handleSubmit,
+    watch,
+    setValue,
+    getValues,
+    reset,
+    formState: { isValid },
+  } = form;
 
   const handleTagKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.nativeEvent.isComposing) return;
 
-    const key = e.key;
-    const code = e.code;
-
-    if (key === "Enter" || code === "Comma") {
+    if (e.key === "Enter" || e.key === "Comma") {
       e.preventDefault();
 
-      const rawTags = inputTag
+      const newTags = inputTag
         .split(",")
         .map((tag) => tag.trim())
         .filter((tag) => tag.length > 0);
 
-      if (rawTags.length === 0) return;
+      if (newTags.length === 0) return;
 
-      const currentTags = form.getValues("tags");
+      const currentTags = getValues("tags");
 
-      const filtered = rawTags
+      const filtered = newTags
         .filter(
           (tag) =>
-            !currentTags.includes(tag) &&
+            !currentTags.some((t) => t.tag === tag) &&
             tag.length <= 10 &&
             currentTags.length < 5
         )
-        .slice(0, 5 - currentTags.length); // 최대 5개 제한
+        .slice(0, 5 - currentTags.length);
 
       if (filtered.length > 0) {
-        form.setValue("tags", [...currentTags, ...filtered]);
+        setValue("tags", [
+          ...currentTags,
+          ...filtered.map((tag) => ({
+            id: crypto.randomUUID(),
+            tag,
+          })),
+        ]);
       }
 
       setInputTag("");
     }
   };
 
+  const handleTagRemove = (index: number) => {
+    const newTags = [...getValues("tags")];
+    newTags.splice(index, 1);
+    setValue("tags", newTags);
+  };
+
+  const onSubmit = async (data: FormValues) => {
+    const { error } = await updateUserTags(id, data.tags);
+
+    if (error) {
+      console.error("태그 저장 실패:", error);
+      toast.error("태그 저장 실패");
+      return;
+    }
+
+    toast.success("태그가 성공적으로 저장되었습니다.");
+    setIsOpen(false);
+  };
+
   return (
-    <ResponsiveDialog
-      trigger={
-        <Button variant="muted" size="sm">
-          <Pencil className="w-4 h-4 mr-1" />
-          Edit
-        </Button>
-      }
-      title="관심 태그 수정"
-      description="관심 있는 태그를 최대 5개까지 입력할 수 있어요. 각 태그는 10자 이내로 작성해주세요."
-      onSubmit={form.handleSubmit(onSubmit)}
-    >
-      <Form {...form}>
+    <Form {...form}>
+      <ResponsiveDialog
+        open={isOpen}
+        onOpenChange={(open) => {
+          setIsOpen(open);
+          if (!open) {
+            reset({ tags }); // 닫힐 때 원래 상태로 되돌림
+          }
+        }}
+        trigger={
+          <Button variant="muted" size="sm">
+            <Pencil className="w-4 h-4 mr-1" />
+            Edit
+          </Button>
+        }
+        title="관심 태그 수정"
+        description="관심 있는 태그를 최대 5개까지 입력할 수 있어요. 각 태그는 10자 이내로 작성해주세요."
+        onSubmit={handleSubmit(onSubmit)}
+        disabled={!isValid}
+      >
         <div className="space-y-6">
-          {/* 태그 */}
+          {/* 태그 입력 필드 */}
           <FormItem>
             <FormLabel>태그</FormLabel>
             <FormControl>
@@ -97,40 +140,35 @@ export default function TagsDialog() {
                 value={inputTag}
                 onChange={(e) => setInputTag(e.target.value)}
                 onKeyDown={handleTagKeyDown}
-                disabled={form.watch("tags").length >= 5}
+                disabled={watch("tags").length >= 5}
                 maxLength={10}
               />
             </FormControl>
             <FormMessage />
           </FormItem>
 
-          {/* 태그 미리보기 */}
+          {/* 태그 목록 */}
           <ul className="flex flex-wrap gap-2">
-            {form.watch("tags").map((tag, index) => (
-              <li key={index}>
+            {watch("tags").map((tag, index) => (
+              <li key={tag.id}>
                 <Badge
                   variant="outline"
                   className="flex items-center gap-1 pr-1"
                 >
-                  #{tag}
+                  #{tag.tag}
                   <button
                     type="button"
-                    onClick={() => {
-                      const updated = form
-                        .getValues("tags")
-                        .filter((t) => t !== tag);
-                      form.setValue("tags", updated);
-                    }}
+                    onClick={() => handleTagRemove(index)}
                     className="ml-1 text-muted-foreground"
                   >
-                    <X className="w-3 h-3 " />
+                    <X className="w-3 h-3" />
                   </button>
                 </Badge>
               </li>
             ))}
           </ul>
         </div>
-      </Form>
-    </ResponsiveDialog>
+      </ResponsiveDialog>
+    </Form>
   );
 }
