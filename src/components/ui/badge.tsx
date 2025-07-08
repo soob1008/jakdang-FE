@@ -30,7 +30,6 @@ const badgeSize = cva("", {
     size: {
       default: "text-sm",
       xs: "text-xs",
-
       lg: "text-lg",
     },
   },

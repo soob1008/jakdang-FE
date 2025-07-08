@@ -64,7 +64,8 @@ export async function getUserTags(userId: string) {
   const { data, error } = await supabase
     .from("user_tags")
     .select("id, tag")
-    .eq("user_id", userId);
+    .eq("user_id", userId)
+    .order("created_at", { ascending: true });
 
   if (error) {
     console.error("사용자 태그 조회 실패:");
@@ -159,7 +160,8 @@ export async function getUserSNS(userId: string) {
   const { data, error } = await supabase
     .from("user_sns")
     .select("*")
-    .eq("user_id", userId);
+    .eq("user_id", userId)
+    .order("created_at", { ascending: true });
 
   if (error) {
     console.error("SNS 정보 조회 실패:", error);
@@ -238,7 +240,8 @@ export async function getUserLinks(userId: string) {
   const { data, error } = await supabase
     .from("user_links")
     .select("*")
-    .eq("user_id", userId);
+    .eq("user_id", userId)
+    .order("created_at", { ascending: true });
 
   if (error) {
     console.error("링크 정보 조회 실패:", error);
@@ -310,7 +313,8 @@ export async function getUserWorks(userId: string) {
   const { data, error } = await supabase
     .from("user_works")
     .select("*")
-    .eq("user_id", userId);
+    .eq("user_id", userId)
+    .order("created_at", { ascending: true });
 
   if (error) {
     console.error("작가 작품 조회 실패:", error);
@@ -350,9 +354,7 @@ export async function updateUserWorks(
     const { error } = await supabase.from("user_works").insert({
       id: crypto.randomUUID(),
       user_id: userId,
-      title: data.title,
-      link: data.link,
-      is_representative: data.is_representative,
+      ...data,
     });
 
     if (error) {

@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -20,14 +21,12 @@ import { ResponsiveDialog } from "@/components/ui/ResponsiveDialog";
 import { uploadImage } from "@/feature/common/api/api.client";
 import { handleAction } from "@/feature/common/api/action";
 import { toast } from "sonner";
-import { BASIC_PROFILE_IMAGE } from "@/lib/const";
-import { useEffect } from "react";
 
 const schema = z.object({
   title: z.string().min(1, { message: "제목을 입력해주세요." }),
   description: z.string().min(1, { message: "내용을 입력해주세요." }),
   image_url: z.string().optional(),
-  url: z.string().url("올바른 링크를 입력해주세요"),
+  url: z.string().optional(),
   is_representative: z.boolean().optional(),
 });
 
@@ -78,7 +77,7 @@ export function WorkDialog({
         is_representative: defaultValues.is_representative ?? false,
       });
     }
-  }, [defaultValues, form]);
+  }, [open, defaultValues, form]);
 
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file: File | null = e.target.files?.[0] || null;
@@ -223,18 +222,20 @@ export function WorkDialog({
                       : "선택된 파일 없음"}
                   </span>
                 </div>
-
-                {watch("image_url") && (
+                <div className="mt-3 max-h-50 border w-3/4 mx-auto overflow-hidden rounded-md relative">
                   <Image
-                    src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${
-                      watch("image_url") || BASIC_PROFILE_IMAGE
+                    src={`${
+                      watch("image_url") && process.env.NEXT_PUBLIC_IMAGE_URL
+                        ? process.env.NEXT_PUBLIC_IMAGE_URL + watch("image_url")
+                        : "/assets/basic_book.jpg"
                     }`}
-                    alt="프로필 미리보기"
+                    alt="작품 미리보기"
                     width={400}
                     height={400}
-                    className="object-cover border rounded w-full h-70"
+                    className="object-contain  rounded w-full h-full"
                   />
-                )}
+                </div>
+
                 <p className="text-xs text-gray-500 text-center">
                   파일을 선택하지 않으면 기본 이미지가 표시됩니다.
                 </p>

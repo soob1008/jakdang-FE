@@ -35,13 +35,22 @@ export default function WorkItem({
     <div>
       <div className="relative w-full aspect-[1] overflow-hidden rounded-md shadow-sm">
         <Image
-          src="/test.png"
+          src={`${
+            work.image_url
+              ? process.env.NEXT_PUBLIC_IMAGE_URL + work.image_url
+              : "/assets/basic_book.jpg"
+          }`}
           alt="작품 이미지"
           fill
-          className="object-cover"
+          className="object-none"
           sizes="(max-width: 640px) 100vw, 50vw"
         />
-        <Badge className="absolute top-2 left-2">대표작</Badge>
+
+        {work.is_representative && (
+          <Badge className="absolute top-2 left-2" size="xs">
+            대표작
+          </Badge>
+        )}
         <div className="absolute top-2 right-2 flex gap-1">
           <Button
             size="icon"
@@ -81,15 +90,23 @@ export default function WorkItem({
           </AlertDialog>
         </div>
       </div>
-      <div className="mt-2">
-        <div className="text-sm font-semibold truncate">랑과 나의 사막</div>
-        <p className="text-xs text-gray-500 line-clamp-2">
-          사막에서 만난 새로운 만남과 이별을 담은 우리들의 이야기
+      <div className="pt-4">
+        <h4 className="font-semibold truncate">{work.title}</h4>
+        <p className="mt-2 h-10 text-sm text-gray-500 line-clamp-2">
+          {work.description || "작품 설명이 없습니다."}
         </p>
-        <div className="flex mt-2 items-center justify-between">
-          <div className="text-xs text-gray-500 truncate max-w-[70%]">
-            https://example.com
-          </div>
+        <div className="flex mt-4 items-center justify-between">
+          {work.url ? (
+            <a
+              href={work.url}
+              className="flex items-center gap-2 text-sm text-gray-500 truncate max-w-[70%] hover:underline"
+            >
+              외부 링크
+              {/* <ExternalLink className="w-3 h-3" /> */}
+            </a>
+          ) : (
+            <div />
+          )}
           <Switch
             className="ml-2"
             checked={work.is_active}

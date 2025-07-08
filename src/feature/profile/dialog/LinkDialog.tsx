@@ -17,7 +17,7 @@ import { ResponsiveDialog } from "@/components/ui/ResponsiveDialog";
 
 const linkSchema = z.object({
   title: z.string().min(1, { message: "링크 제목을 입력해주세요." }),
-  url: z.string().url({ message: "올바른 링크 주소를 입력해주세요." }),
+  url: z.string(),
 });
 
 export type LinkValues = z.infer<typeof linkSchema>;
