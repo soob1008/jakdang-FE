@@ -27,7 +27,7 @@ interface LinkDialogProps {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   defaultValues?: Partial<LinkValues>;
-  onSubmitSuccess?: (data: LinkValues) => void;
+  onSubmitSuccess?: (data: LinkValues) => Promise<void>;
 }
 
 export function LinkDialog({

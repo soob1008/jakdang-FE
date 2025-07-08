@@ -302,3 +302,82 @@ export async function deleteUserLink(id: string, userId: string) {
   revalidatePath(`/profile`);
   return { error: null };
 }
+
+// 작가 작품
+export async function getUserWorks(userId: string) {
+  const supabase = await createSupabaseServerClient();
+
+  const { data, error } = await supabase
+    .from("user_works")
+    .select("*")
+    .eq("user_id", userId);
+
+  if (error) {
+    console.error("작가 작품 조회 실패:", error);
+    return { works: null, error };
+  }
+  return { works: data, error: null };
+}
+
+export async function updateUserWorks(
+  userId: string,
+  data: {
+    title?: string;
+    description?: string;
+    image_url?: string;
+    url?: string;
+    is_active?: boolean;
+    is_representative?: boolean;
+  },
+  id?: string
+) {
+  const supabase = await createSupabaseServerClient();
+
+  if (id) {
+    const { error } = await supabase
+      .from("user_works")
+      .update(data)
+      .eq("id", id)
+      .eq("user_id", userId);
+
+    if (error) {
+      return { error };
+    }
+
+    revalidatePath(`/profile`);
+    return { error: null };
+  } else {
+    const { error } = await supabase.from("user_works").insert({
+      id: crypto.randomUUID(),
+      user_id: userId,
+      title: data.title,
+      link: data.link,
+      is_representative: data.is_representative,
+    });
+
+    if (error) {
+      return { error };
+    }
+
+    revalidatePath(`/profile`);
+    return { error: null };
+  }
+}
+
+export async function deleteUserWork(id: string, userId: string) {
+  const supabase = await createSupabaseServerClient();
+
+  const { error } = await supabase
+    .from("user_works")
+    .delete()
+    .eq("id", id)
+    .eq("user_id", userId);
+
+  if (error) {
+    console.error("작품 삭제 실패:", error);
+    return { error: new Error("작품 삭제에 실패했습니다.") };
+  }
+
+  revalidatePath(`/profile`);
+  return { error: null };
+}

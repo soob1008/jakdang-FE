@@ -12,6 +12,7 @@ import {
   getUserTags,
   getUserSNS,
   getUserLinks,
+  getUserWorks,
 } from "@/feature/user/api.server";
 
 export default async function ProfilePage() {
@@ -30,6 +31,7 @@ export default async function ProfilePage() {
   const { tags } = await getUserTags(user.id);
   const { socials } = await getUserSNS(user.id);
   const { links } = await getUserLinks(user.id);
+  const { works } = await getUserWorks(user.id);
 
   if (authorError) {
     console.error("Error fetching author data:", authorError);
@@ -37,7 +39,7 @@ export default async function ProfilePage() {
   }
 
   console.log("ProfilePage author:", author);
-  console.log("ProfilePage links", links);
+  console.log("ProfilePage works", works);
 
   return (
     <div className="pb-40">
@@ -58,11 +60,10 @@ export default async function ProfilePage() {
         <SocialLinks userId={author.id} socials={socials ?? []} />
 
         {/* 링크 등록 */}
-
         <LinkList userId={author.id} links={links ?? []} />
 
         {/* 작품 등록 */}
-        <WorkList />
+        <WorkList userId={author.id} works={works ?? []} />
       </div>
     </div>
   );

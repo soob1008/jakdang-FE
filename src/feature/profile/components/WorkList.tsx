@@ -1,25 +1,82 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
-import { Pencil, Trash, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { WorkDialog } from "@/feature/profile/dialog/WorkDialog";
-import { Badge } from "@/components/ui/badge";
-import { Switch } from "@/components/ui/switch";
+import { AuthorWork } from "@/feature/user/type";
+import WorkItem from "@/feature/profile/components/WorkItem";
+import { handleAction } from "@/feature/common/api/action";
+import { updateUserWorks, deleteUserWork } from "@/feature/user/api.server";
+import { WorkValues } from "@/feature/profile/dialog/WorkDialog";
 
-export default function WorkList() {
+interface WorkListProps {
+  userId: string;
+  works: AuthorWork[];
+}
+
+export default function WorkList({ userId, works }: WorkListProps) {
+  const [disalogState, setDialogState] = useState<{
+    open: boolean;
+    mode: "create" | "edit";
+    selected: AuthorWork | null;
+  }>({
+    open: false,
+    mode: "create",
+    selected: null,
+  });
+
+  const handleEdit = (work: AuthorWork) => {
+    setDialogState({ open: true, mode: "edit", selected: work });
+  };
+
+  const handleCreate = () => {
+    setDialogState({ open: true, mode: "create", selected: null });
+  };
+
   const [showAll, setShowAll] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
 
-  const [mode, setMode] = useState<"create" | "edit">("create");
-  // 예시용 더미 데이터 (실제 작품 리스트로 대체)
-  const items = [1, 2, 3, 4, 5, 6, 7, 8];
-  const visibleItems = showAll ? items : items.slice(0, 6);
+  const visibleItems = showAll ? works : works.slice(0, 6);
 
-  const handleDelete = (id: number) => {
-    // TODO: 삭제 처리 로직
-    console.log("삭제할 항목:", id);
+  const handleSaveWork = async (data: WorkValues) => {
+    await handleAction(
+      () =>
+        updateUserWorks(
+          userId,
+          {
+            title: data.title,
+            description: data.description,
+            image_url: data.image_url,
+            url: data.url,
+            is_representative: data.is_representative,
+          },
+          disalogState.selected?.id
+        ),
+      {
+        successMessage: "작품이 저장되었습니다.",
+        errorMessage: "작품 저장 중 문제가 발생했어요.",
+        onSuccess: () => {
+          setDialogState({ open: false, mode: "create", selected: null });
+        },
+      }
+    );
+  };
+
+  const handleToggle = async (checked: boolean, workId: string) => {
+    await handleAction(
+      () => updateUserWorks(userId, { is_active: checked }, workId),
+      {
+        successMessage: `작품이 ${checked ? "활성화" : "비활성화"} 되었습니다.`,
+        errorMessage: "작품 상태 변경 중 문제가 발생했어요.",
+      }
+    );
+  };
+
+  const handleDelete = async (workId: string) => {
+    await handleAction(() => deleteUserWork(workId, userId), {
+      successMessage: "작품이 삭제되었습니다.",
+      errorMessage: "작품 삭제 중 문제가 발생했어요.",
+    });
   };
 
   return (
@@ -29,10 +86,7 @@ export default function WorkList() {
         <Button
           variant="muted"
           size="sm"
-          onClick={() => {
-            setMode("create");
-            setIsOpen(true);
-          }}
+          onClick={handleCreate}
           aria-label="Create Link"
         >
           <Plus className="w-4 h-4 mr-1" />
@@ -40,63 +94,25 @@ export default function WorkList() {
         </Button>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
-        {visibleItems.map((item) => (
-          <div key={item}>
-            <div className="relative w-full aspect-[1] overflow-hidden rounded-md shadow-sm">
-              <Image
-                src="/test.png"
-                alt="작품 이미지"
-                fill
-                className="object-cover"
-                sizes="(max-width: 640px) 100vw, 50vw"
-              />
+      {works.length === 0 ? (
+        <p className="text-sm text-center text-muted-foreground">
+          작품이 없습니다.
+        </p>
+      ) : (
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
+          {visibleItems.map((work) => (
+            <WorkItem
+              key={work.id}
+              work={work}
+              onEdit={() => handleEdit(work)}
+              onToggle={handleToggle}
+              onDelete={handleDelete}
+            />
+          ))}
+        </div>
+      )}
 
-              <Badge className="absolute top-2 left-2">대표작</Badge>
-
-              <div className="absolute top-2 right-2 flex gap-1">
-                <Button
-                  size="icon"
-                  variant="outline"
-                  className="w-7 h-7 p-1 rounded-full"
-                  onClick={() => {
-                    setMode("edit");
-                    setIsOpen(true);
-                  }}
-                  aria-label="Edit Work"
-                >
-                  <Pencil className="w-4 h-4" />
-                </Button>
-                <Button
-                  size="icon"
-                  variant="outline"
-                  className="w-7 h-7 p-1 rounded-full"
-                  onClick={() => handleDelete(item)}
-                >
-                  <Trash className="w-4 h-4" />
-                </Button>
-              </div>
-            </div>
-
-            <div className="mt-2">
-              <div className="text-sm font-semibold truncate">
-                랑과 나의 사막
-              </div>
-              <p className="text-xs text-gray-500 line-clamp-2">
-                사막에서 만난 새로운 만남과 이별을 담은 우리들의 이야기
-              </p>
-              <div className="flex mt-2 items-center justify-between">
-                <div className="text-xs text-gray-500 truncate max-w-[70%]">
-                  https://example.com
-                </div>
-                <Switch className="ml-2" />
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {items.length > 6 && (
+      {works.length > 6 && (
         <div className="flex justify-center pt-2">
           <Button
             variant="outline"
@@ -109,24 +125,12 @@ export default function WorkList() {
       )}
 
       <WorkDialog
-        mode={mode}
-        open={isOpen}
-        onOpenChange={setIsOpen}
-        defaultValues={
-          mode === "edit"
-            ? {
-                title: "랑과 나의 사막",
-                content:
-                  "사막에서 만난 새로운 만남과 이별을 담은 우리들의 이야기",
-                link: "https://example.com",
-                isRepresentative: true,
-              }
-            : undefined
-        }
-        onSubmitSuccess={(data, file) => {
-          // 수정 후 로직
-          setIsOpen(false);
-        }}
+        userId={userId}
+        mode={disalogState.mode}
+        open={disalogState.open}
+        onOpenChange={(open) => setDialogState((prev) => ({ ...prev, open }))}
+        defaultValues={disalogState.selected ?? undefined}
+        onSubmitSuccess={handleSaveWork}
       />
     </section>
   );

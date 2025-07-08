@@ -74,7 +74,7 @@ export function ResponsiveDialog({
         </DialogHeader>
 
         {/* 내용 */}
-        <div className="flex-1 px-4 sm:px-0 py-6 sm:py-4 space-y-4 overflow-y-auto">
+        <div className="flex-1 px-4 max-h-140 sm:px-0 py-6 sm:py-4 space-y-4 overflow-y-auto">
           {children}
         </div>
 

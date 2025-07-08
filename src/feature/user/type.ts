@@ -37,3 +37,13 @@ export interface AuthorLink {
   url: string;
   is_active: boolean;
 }
+
+export interface AuthorWork {
+  id: string;
+  title: string;
+  description: string;
+  url?: string;
+  image_url?: string;
+  is_active: boolean;
+  is_representative: boolean;
+}

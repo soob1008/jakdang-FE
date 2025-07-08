@@ -1,15 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Plus, ImageIcon, Pencil } from "lucide-react";
+import { ImageIcon } from "lucide-react";
 import {
   Form,
   FormField,
@@ -20,27 +17,35 @@ import {
 } from "@/components/ui/form";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ResponsiveDialog } from "@/components/ui/ResponsiveDialog";
+import { uploadImage } from "@/feature/common/api/api.client";
+import { handleAction } from "@/feature/common/api/action";
+import { toast } from "sonner";
+import { BASIC_PROFILE_IMAGE } from "@/lib/const";
+import { useEffect } from "react";
 
 const schema = z.object({
   title: z.string().min(1, { message: "제목을 입력해주세요." }),
-  content: z.string().min(1, { message: "내용을 입력해주세요." }),
-  link: z.string().optional(),
-  isRepresentative: z.boolean().optional(),
+  description: z.string().min(1, { message: "내용을 입력해주세요." }),
+  image_url: z.string().optional(),
+  url: z.string().url("올바른 링크를 입력해주세요"),
+  is_representative: z.boolean().optional(),
 });
 
-type WorkValues = z.infer<typeof schema>;
+export type WorkValues = z.infer<typeof schema>;
 
 interface WorkDialogProps {
+  userId: string;
   mode?: "create" | "edit";
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   defaultValues?: Partial<WorkValues>;
-  onSubmitSuccess?: (data: WorkValues, file?: File | null) => void;
+  onSubmitSuccess?: (data: WorkValues) => Promise<void>;
 }
 
 export function WorkDialog({
   mode = "create",
   open,
+  userId,
   onOpenChange,
   defaultValues,
   onSubmitSuccess,
@@ -49,41 +54,51 @@ export function WorkDialog({
     resolver: zodResolver(schema),
     defaultValues: {
       title: defaultValues?.title ?? "",
-      content: defaultValues?.content ?? "",
-      link: defaultValues?.link ?? "",
-      isRepresentative: defaultValues?.isRepresentative ?? false,
+      description: defaultValues?.description ?? "",
+      image_url: defaultValues?.image_url ?? "",
+      url: defaultValues?.url ?? "",
+      is_representative: defaultValues?.is_representative ?? false,
     },
   });
-
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string>("");
+  const {
+    control,
+    watch,
+    setValue,
+    handleSubmit,
+    formState: { isValid },
+  } = form;
 
   useEffect(() => {
-    return () => {
-      if (previewUrl) {
-        URL.revokeObjectURL(previewUrl);
-      }
-    };
-  }, [previewUrl]);
+    if (defaultValues) {
+      form.reset({
+        title: defaultValues.title ?? "",
+        description: defaultValues.description ?? "",
+        image_url: defaultValues.image_url ?? "",
+        url: defaultValues.url ?? "",
+        is_representative: defaultValues.is_representative ?? false,
+      });
+    }
+  }, [defaultValues, form]);
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file: File | null = e.target.files?.[0] || null;
+
     if (file) {
-      setSelectedFile(file);
-      if (previewUrl) {
-        URL.revokeObjectURL(previewUrl);
-      }
-      setPreviewUrl(URL.createObjectURL(file));
+      await handleAction(() => uploadImage(file, userId), {
+        successMessage: "이미지가 성공적으로 업로드되었습니다.",
+        errorMessage: "이미지 업로드에 실패했습니다.",
+        onSuccess: ({ imagePath }) => {
+          setValue("image_url", imagePath);
+        },
+      });
+    } else {
+      toast.error("이미지 파일을 선택해주세요.");
+      return;
     }
   };
 
   const onSubmit = (data: WorkValues) => {
-    console.log("제목:", data.title);
-    console.log("글:", data.content);
-    console.log("링크:", data.link);
-    console.log("대표작 여부:", data.isRepresentative);
-    console.log("이미지:", selectedFile);
-    onSubmitSuccess?.(data, selectedFile);
+    onSubmitSuccess?.(data);
   };
 
   const isEdit = mode === "edit";
@@ -95,17 +110,30 @@ export function WorkDialog({
       description={
         isEdit ? "작가님의 작품을 수정하세요." : "작가님의 작품을 등록해주세요."
       }
-      onSubmit={form.handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(onSubmit)}
       open={open}
-      onOpenChange={onOpenChange}
+      onOpenChange={(open) => {
+        onOpenChange?.(open);
+
+        if (!open) {
+          form.reset({
+            title: defaultValues?.title ?? "",
+            description: defaultValues?.description ?? "",
+            image_url: defaultValues?.image_url ?? "",
+            url: defaultValues?.url ?? "",
+            is_representative: defaultValues?.is_representative ?? false,
+          });
+        }
+      }}
       submitText={isEdit ? "수정하기" : "등록하기"}
+      disabled={!isValid}
     >
       <Form {...form}>
         <div className="space-y-4">
           {/* ✅ 대표작 체크박스 - 맨 위 */}
           <FormField
-            control={form.control}
-            name="isRepresentative"
+            control={control}
+            name="is_representative"
             render={({ field }) => (
               <FormItem className="flex items-center space-x-2">
                 <FormControl>
@@ -121,7 +149,7 @@ export function WorkDialog({
 
           {/* 제목 */}
           <FormField
-            control={form.control}
+            control={control}
             name="title"
             render={({ field }) => (
               <FormItem>
@@ -136,8 +164,8 @@ export function WorkDialog({
 
           {/* 설명 */}
           <FormField
-            control={form.control}
-            name="content"
+            control={control}
+            name="description"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>설명</FormLabel>
@@ -155,8 +183,8 @@ export function WorkDialog({
 
           {/* 링크 */}
           <FormField
-            control={form.control}
-            name="link"
+            control={control}
+            name="url"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>링크</FormLabel>
@@ -180,32 +208,38 @@ export function WorkDialog({
                   id="file-upload"
                   className="hidden"
                 />
-                <label
-                  htmlFor="file-upload"
-                  className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-md border border-input bg-background hover:bg-accent hover:text-accent-foreground transition cursor-pointer"
-                >
-                  <ImageIcon className="w-4 h-4" />
-                  이미지 선택
-                </label>
+                <div className="flex flex-col gap-2">
+                  <label
+                    htmlFor="file-upload"
+                    className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-md border border-input bg-background hover:bg-accent hover:text-accent-foreground transition cursor-pointer"
+                  >
+                    <ImageIcon className="w-4 h-4" />
+                    이미지 선택
+                  </label>
 
-                <span className="text-sm text-muted-foreground italic">
-                  {selectedFile?.name ?? "선택된 파일 없음"}
-                </span>
+                  <span className="text-sm text-muted-foreground italic">
+                    {watch("image_url")
+                      ? "이미지가 선택되었습니다."
+                      : "선택된 파일 없음"}
+                  </span>
+                </div>
+
+                {watch("image_url") && (
+                  <Image
+                    src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${
+                      watch("image_url") || BASIC_PROFILE_IMAGE
+                    }`}
+                    alt="프로필 미리보기"
+                    width={400}
+                    height={400}
+                    className="object-cover border rounded w-full h-70"
+                  />
+                )}
+                <p className="text-xs text-gray-500 text-center">
+                  파일을 선택하지 않으면 기본 이미지가 표시됩니다.
+                </p>
               </div>
             </FormControl>
-
-            <div className="mt-3 space-y-1">
-              <Image
-                src={previewUrl || "/test.png"}
-                alt="미리보기"
-                width={400}
-                height={200}
-                className="rounded-md object-cover w-full h-40 border"
-              />
-              <p className="text-xs text-gray-500 text-center">
-                파일을 선택하지 않으면 기본 이미지가 표시됩니다.
-              </p>
-            </div>
           </FormItem>
         </div>
       </Form>
