@@ -26,7 +26,7 @@ import { updateUserSNS } from "@/feature/user/api.server";
 
 const schema = z.object({
   platform: z.enum(SOCIAL_PLATFORM_KEYS as [string, ...string[]]),
-  url: z.string().url("올바른 링크를 입력해주세요"),
+  url: z.string(),
 });
 
 export type SocialFormValues = z.infer<typeof schema> & { id?: string };
