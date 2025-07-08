@@ -24,6 +24,26 @@ export async function getUser(userId: string) {
   return { data, error };
 }
 
+export async function getAuthor(slug: string) {
+  const supabase = await createSupabaseServerClient();
+
+  const { data, error } = await supabase
+    .from("users")
+    .select(
+      `
+    *,
+    user_tags(*),
+    user_links(*),
+    user_works(*),
+    user_sns(*)
+  `
+    )
+    .eq("slug", slug)
+    .single();
+
+  return { user: data, error };
+}
+
 export async function createUser({ id, email }: { id: string; email: string }) {
   const supabase = await createSupabaseServerClient();
 
