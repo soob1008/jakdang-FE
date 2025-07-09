@@ -1,4 +1,4 @@
-import { ProfileDialog } from "@/feature/profile/dialog/ProfileDialog";
+import { ProfileDialog } from "@/feature/admin/dialog/ProfileDialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Author } from "@/feature/user/type";
 

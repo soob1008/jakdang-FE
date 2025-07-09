@@ -1,4 +1,4 @@
-import { AuthorIntroDialog } from "@/feature/profile/dialog/AuthorIntroDialog";
+import { AuthorIntroDialog } from "@/feature/admin/dialog/AuthorIntroDialog";
 
 interface AuthorIntroProps {
   userId: string;

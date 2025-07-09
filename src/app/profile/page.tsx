@@ -1,10 +1,10 @@
-import UserInfo from "@/feature/profile/components/UserInfo";
-import AuthorInfo from "@/feature/profile/components/AuthorInfo";
-import AuthorIntro from "@/feature/profile/components/AuthorIntro";
-import ProfileTags from "@/feature/profile/components/ProfileTags";
-import SocialLinks from "@/feature/profile/components/SocialLinks";
-import WorkList from "@/feature/profile/components/WorkList";
-import LinkList from "@/feature/profile/components/LinkList";
+import UserInfo from "@/feature/admin/components/UserInfo";
+import AuthorInfo from "@/feature/admin/components/AuthorInfo";
+import AuthorIntro from "@/feature/admin/components/AuthorIntro";
+import ProfileTags from "@/feature/admin/components/ProfileTags";
+import SocialLinks from "@/feature/admin/components/SocialLinks";
+import WorkList from "@/feature/admin/components/WorkList";
+import LinkList from "@/feature/admin/components/LinkList";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import {
