@@ -1,5 +1,5 @@
 import { Badge } from "@/components/ui/badge";
-import AuthorTagDialog from "@/feature/profile/dialog/TagsDialog";
+import AuthorTagDialog from "@/feature/admin/dialog/TagsDialog";
 import { AuthorTag } from "@/feature/user/type";
 
 interface ProfileTagsProps {

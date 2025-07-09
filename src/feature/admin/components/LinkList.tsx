@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { LinkDialog } from "@/feature/profile/dialog/LinkDialog";
+import { LinkDialog } from "@/feature/admin/dialog/LinkDialog";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { AuthorLink } from "@/feature/user/type";
-import LinkItem from "@/feature/profile/components/LInkItem";
-import { LinkValues } from "@/feature/profile/dialog/LinkDialog";
+import LinkItem from "@/feature/admin/components/LInkItem";
+import { LinkValues } from "@/feature/admin/dialog/LinkDialog";
 import { handleAction } from "@/feature/common/api/action";
 import { updateUserLinks, deleteUserLink } from "@/feature/user/api.server";
 

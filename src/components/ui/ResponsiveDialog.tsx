@@ -22,9 +22,10 @@ interface ResponsiveDialogProps {
   onOpenChange?: (open: boolean) => void; // 추가
   description?: string;
   children: ReactNode;
-  onSubmit: () => void;
+  onSubmit?: () => void;
   submitText?: string;
   disabled?: boolean;
+  isSubmit?: boolean; // 기본값 true
 }
 
 export function ResponsiveDialog({
@@ -34,6 +35,7 @@ export function ResponsiveDialog({
   onOpenChange, // 추가
   description,
   children,
+  isSubmit = true,
   onSubmit,
   submitText = "저장하기",
   disabled = false,
@@ -45,8 +47,8 @@ export function ResponsiveDialog({
         showCloseButton={false}
         className={clsx(
           "fixed z-50 flex flex-col bg-white",
-          "top-0 left-0 inset-0 p-0 border-0 rounded-none shadow-none max-w-full sm:hidden",
-          "sm:flex sm:inset-auto sm:top-1/2 sm:left-1/2 sm:translate-x-[-50%] sm:translate-y-[-50%] sm:max-w-md sm:rounded-lg sm:border sm:bg-white sm:p-6"
+          "top-0 left-0 inset-0 p-0 border-0 rounded-none shadow-none max-w-full sm:hidden translate-x-0 translate-y-0 transition-none",
+          "sm:flex sm:inset-auto sm:top-1/2 sm:left-1/2 sm:translate-x-[-50%] sm:translate-y-[-50%] sm:max-w-lg sm:rounded-lg sm:border sm:bg-white sm:p-6"
         )}
       >
         {/* 모바일 헤더 */}
@@ -74,19 +76,21 @@ export function ResponsiveDialog({
         </DialogHeader>
 
         {/* 내용 */}
-        <div className="flex-1 px-4 max-h-140 sm:px-0 py-6 sm:py-4 space-y-4 overflow-y-auto">
+        <div className="flex-1 px-4 sm:max-h-140 sm:px-0 py-6 sm:py-4 space-y-4 overflow-y-auto">
           {children}
         </div>
 
         {/* 하단 버튼 */}
         <DialogFooter className="px-4 sm:px-0 pb-6 sm:pb-0">
-          <Button
-            onClick={onSubmit}
-            className="w-full sm:w-auto h-12 sm:h-9"
-            disabled={disabled}
-          >
-            {submitText}
-          </Button>
+          {isSubmit && (
+            <Button
+              onClick={onSubmit}
+              className="w-full sm:w-auto h-12 sm:h-9"
+              disabled={disabled}
+            >
+              {submitText}
+            </Button>
+          )}
         </DialogFooter>
       </DialogContent>
     </Dialog>

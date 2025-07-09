@@ -42,7 +42,7 @@ export default function WorkItem({
           }`}
           alt="작품 이미지"
           fill
-          className="object-none"
+          className="object-contain"
           sizes="(max-width: 640px) 100vw, 50vw"
         />
 

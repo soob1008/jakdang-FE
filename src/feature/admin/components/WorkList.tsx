@@ -3,12 +3,12 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { WorkDialog } from "@/feature/profile/dialog/WorkDialog";
+import { WorkDialog } from "@/feature/admin/dialog/WorkDialog";
 import { AuthorWork } from "@/feature/user/type";
-import WorkItem from "@/feature/profile/components/WorkItem";
+import WorkItem from "@/feature/admin/components/WorkItem";
 import { handleAction } from "@/feature/common/api/action";
 import { updateUserWorks, deleteUserWork } from "@/feature/user/api.server";
-import { WorkValues } from "@/feature/profile/dialog/WorkDialog";
+import { WorkValues } from "@/feature/admin/dialog/WorkDialog";
 
 interface WorkListProps {
   userId: string;

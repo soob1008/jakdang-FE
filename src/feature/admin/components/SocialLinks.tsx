@@ -2,10 +2,10 @@
 
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import SocialDialog from "@/feature/profile/dialog/SocialDialog";
+import SocialDialog from "@/feature/admin/dialog/SocialDialog";
 import { useState } from "react";
 import { AuthorSNS } from "@/feature/user/type";
-import SocialLinkItem from "@/feature/profile/components/SocialLInkItem";
+import SocialLinkItem from "@/feature/admin/components/SocialLInkItem";
 
 interface SocialLinksProps {
   userId: string;
