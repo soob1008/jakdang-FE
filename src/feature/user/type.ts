@@ -1,3 +1,10 @@
+export interface AuthorProfile extends Author {
+  user_tags: AuthorTag[];
+  sns: AuthorSNS[];
+  user_links: AuthorLink[];
+  user_works: AuthorWork[];
+}
+
 export interface Author {
   id: string;
   email: string;
@@ -42,8 +49,8 @@ export interface AuthorWork {
   id: string;
   title: string;
   description: string;
-  url?: string;
-  image_url?: string;
-  is_active: boolean;
+  image_url: string;
+  url: string;
   is_representative: boolean;
+  is_active: boolean;
 }

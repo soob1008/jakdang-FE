@@ -45,7 +45,7 @@ export function ResponsiveDialog({
         showCloseButton={false}
         className={clsx(
           "fixed z-50 flex flex-col bg-white",
-          "top-0 left-0 inset-0 p-0 border-0 rounded-none shadow-none max-w-full sm:hidden",
+          "top-0 left-0 inset-0 p-0 border-0 rounded-none shadow-none max-w-full sm:hidden translate-x-0 translate-y-0 transition-none",
           "sm:flex sm:inset-auto sm:top-1/2 sm:left-1/2 sm:translate-x-[-50%] sm:translate-y-[-50%] sm:max-w-md sm:rounded-lg sm:border sm:bg-white sm:p-6"
         )}
       >

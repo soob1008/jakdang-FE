@@ -36,11 +36,15 @@ export default function Profile({ user }: ProfileProps) {
       <div className="text-center">
         <div className="overflow-hidden w-24 h-24 mx-auto rounded-full">
           <Image
-            src="/test.png"
+            src={
+              user.profile_image_url
+                ? `${process.env.NEXT_PUBLIC_IMAGE_URL}/${user.profile_image_url}`
+                : "/assets/profile_default.png"
+            }
             width={240}
             height={240}
             alt="작가 프로필 사진"
-            className="w-24 h-24"
+            className="w-24 h-24 object-cover"
           />
         </div>
         <h2 className="mt-3 text-lg font-bold">{user.display_name}</h2>

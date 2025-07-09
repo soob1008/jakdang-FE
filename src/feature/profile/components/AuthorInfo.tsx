@@ -1,7 +1,6 @@
 import { ProfileDialog } from "@/feature/profile/dialog/ProfileDialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Author } from "@/feature/user/type";
-import { BASIC_PROFILE_IMAGE } from "@/lib/const";
 
 interface AuthorInfoProps {
   author: Author;
@@ -21,11 +20,11 @@ export default function AuthorInfo({ author }: AuthorInfoProps) {
       <div className="flex gap-4 items-center">
         <Avatar className="w-20 h-20">
           <AvatarImage
-            src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${
-              author?.profile_image_url
-                ? author?.profile_image_url
-                : BASIC_PROFILE_IMAGE
-            }`}
+            src={
+              author.profile_image_url
+                ? `${process.env.NEXT_PUBLIC_IMAGE_URL}/${author.profile_image_url}`
+                : "assets/profile_default.png"
+            }
             alt="프로필 이미지"
             className="object-cover"
           />

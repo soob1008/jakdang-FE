@@ -21,7 +21,6 @@ import { Author } from "@/feature/user/type";
 import { updateUser } from "@/feature/user/api.server";
 import { toast } from "sonner";
 import { uploadImage } from "@/feature/common/api/api.client";
-import { BASIC_PROFILE_IMAGE } from "@/lib/const";
 import { handleAction } from "@/feature/common/api/action";
 
 const schema = z.object({
@@ -156,19 +155,21 @@ export function ProfileDialog({ author }: ProfileDialogProps) {
                     </span>
                   </div>
 
-                  {watch("profile_image_url") && (
-                    <div className="mt-3 flex justify-center">
-                      <Image
-                        src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${
-                          watch("profile_image_url") || BASIC_PROFILE_IMAGE
-                        }`}
-                        alt="프로필 미리보기"
-                        width={100}
-                        height={100}
-                        className="rounded-full object-cover border w-24 h-24"
-                      />
-                    </div>
-                  )}
+                  <div className="mt-3 flex justify-center">
+                    <Image
+                      src={
+                        watch("profile_image_url")
+                          ? `${process.env.NEXT_PUBLIC_IMAGE_URL}${watch(
+                              "profile_image_url"
+                            )}`
+                          : "assets/profile_default.png"
+                      }
+                      alt="프로필 미리보기"
+                      width={100}
+                      height={100}
+                      className="rounded-full object-cover border w-24 h-24"
+                    />
+                  </div>
 
                   <FormMessage />
                 </FormItem>

@@ -1,6 +1,6 @@
 import ProfileContainer from "@/feature/author/container/ProfileContainer";
-import Masterpiece from "@/feature/author/Masterpiece";
 import WorkList from "@/feature/author/WorkList";
+import RepresentativeWorkContainer from "@/feature/author/container/RepresentativeWorkContainer";
 
 interface AuthorPageProps {
   params: { id: string };
@@ -14,7 +14,7 @@ export default function AuthorPage({ params }: AuthorPageProps) {
   return (
     <>
       <ProfileContainer slug={slug} />
-      <Masterpiece />
+      <RepresentativeWorkContainer slug={slug} />
       <WorkList />
     </>
   );
