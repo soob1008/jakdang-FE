@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Heart } from "lucide-react";
+import { Heart, Mail } from "lucide-react";
 import {
   Author,
   AuthorTag,
@@ -40,7 +40,7 @@ export default function Profile({ user }: ProfileProps) {
           />
         </div>
         <h2 className="mt-3 text-lg font-bold">{user.display_name}</h2>
-        <p className="text-sm text-gray-600 text-center">{user.intro_text}</p>
+        <p className="text-sm text-gray-600 text-center">{user.tagline}</p>
 
         <ul className="mt-2 flex items-center justify-center gap-2">
           {user.user_tags.map((tag) => (
@@ -70,6 +70,9 @@ export default function Profile({ user }: ProfileProps) {
               />
             </a>
           ))}
+          <a href={`mailto:${user.email}`} aria-label="이메일">
+            <Mail className="w-6 h-6 text-gray-600 hover:text-gray-800 transition-colors" />
+          </a>
         </div>
       </div>
 

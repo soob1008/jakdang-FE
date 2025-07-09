@@ -5,7 +5,6 @@ import { AuthorProfile, AuthorWork } from "@/feature/user/type";
 import WorkDialog from "./components/WorkDialog";
 
 interface WorkListProps {
-  // Define any props if needed
   user: AuthorProfile;
 }
 
