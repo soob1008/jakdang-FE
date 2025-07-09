@@ -1,6 +1,6 @@
 import UserInfo from "@/feature/admin/components/UserInfo";
 import AuthorInfo from "@/feature/admin/components/AuthorInfo";
-import AuthorIntro from "@/feature/admin/components/AuthorIntro";
+import AuthorBio from "@/feature/admin/components/AuthorBio";
 import ProfileTags from "@/feature/admin/components/ProfileTags";
 import SocialLinks from "@/feature/admin/components/SocialLinks";
 import WorkList from "@/feature/admin/components/WorkList";
@@ -21,8 +21,6 @@ export default async function ProfilePage() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  console.log("ProfilePage user:", user);
-
   if (!user) {
     redirect("/auth/login");
   }
@@ -33,13 +31,16 @@ export default async function ProfilePage() {
   const { links } = await getUserLinks(user.id);
   const { works } = await getUserWorks(user.id);
 
+  if (!author) {
+    return (
+      <div className="text-center text-gray-500">정보를 불러오는 중...</div>
+    );
+  }
+
   if (authorError) {
     console.error("Error fetching author data:", authorError);
     redirect("/auth/login");
   }
-
-  console.log("ProfilePage author:", author);
-  console.log("ProfilePage works", works);
 
   return (
     <div className="pb-40">
@@ -50,8 +51,8 @@ export default async function ProfilePage() {
         {/* 작가 정보 */}
         <AuthorInfo author={author} />
 
-        {/* 작가 한줄 소개 */}
-        <AuthorIntro userId={author.id} intro={author.intro_text} />
+        {/* 작가 소개 */}
+        <AuthorBio userId={author.id} bio={author.bio} />
 
         {/* 관심 분야 태그 등록 */}
         <ProfileTags userId={author.id} tags={tags ?? []} />

@@ -59,7 +59,8 @@ type UpdatableUserData = {
   display_name?: string;
   slug?: string;
   image_url?: string;
-  intro_text?: string;
+  tagline?: string;
+  bio?: string;
   profile_image_url?: string;
 };
 

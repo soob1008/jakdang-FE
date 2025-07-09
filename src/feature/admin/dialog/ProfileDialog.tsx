@@ -22,15 +22,17 @@ import { updateUser } from "@/feature/user/api.server";
 import { toast } from "sonner";
 import { uploadImage } from "@/feature/common/api/api.client";
 import { handleAction } from "@/feature/common/api/action";
+import { Textarea } from "@/components/ui/textarea";
 
 const schema = z.object({
-  displayName: z.string().min(1, "필명을 입력해주세요."),
+  display_name: z.string().min(1, "필명을 입력해주세요."),
   slug: z
     .string()
     .min(5, "주소는 최소 5자 이상이어야 해요.")
     .max(20, "주소는 최대 20자까지 가능해요.")
     .regex(/^[a-z0-9]+$/, "영어 소문자와 숫자만 사용할 수 있어요."),
   profile_image_url: z.string().optional(),
+  tagline: z.string().max(40, "최대 40자까지 가능합니다.").optional(),
 });
 
 type ProfileFormValues = z.infer<typeof schema>;
@@ -45,9 +47,10 @@ export function ProfileDialog({ author }: ProfileDialogProps) {
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
-      displayName: author?.display_name || "",
+      display_name: author?.display_name || "",
       slug: author?.slug || "",
       profile_image_url: author?.profile_image_url || "",
+      tagline: author?.tagline || "",
     },
   });
 
@@ -79,11 +82,7 @@ export function ProfileDialog({ author }: ProfileDialogProps) {
   const onSubmit = async (data: ProfileFormValues) => {
     await handleAction(
       () => {
-        return updateUser(author.id, {
-          display_name: data.displayName,
-          slug: data.slug,
-          profile_image_url: data.profile_image_url,
-        });
+        return updateUser(author.id, data);
       },
       {
         successMessage: "프로필이 성공적으로 업데이트되었습니다.",
@@ -103,9 +102,10 @@ export function ProfileDialog({ author }: ProfileDialogProps) {
 
         if (!open) {
           form.reset({
-            displayName: author?.display_name || "",
+            display_name: author?.display_name || "",
             slug: author?.slug || "",
             profile_image_url: author?.profile_image_url || "",
+            tagline: author?.tagline || "",
           });
         }
       }}
@@ -181,7 +181,7 @@ export function ProfileDialog({ author }: ProfileDialogProps) {
           {/* 필명 */}
           <FormField
             control={control}
-            name="displayName"
+            name="display_name"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
@@ -206,6 +206,25 @@ export function ProfileDialog({ author }: ProfileDialogProps) {
                 </FormLabel>
                 <FormControl>
                   <Input placeholder="예: jakdang, jakdang123" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={control}
+            name="tagline"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>한 줄 문장</FormLabel>
+                <FormControl>
+                  <Textarea
+                    placeholder="ex) 우연히 마주친 문장이 당신을 닮았으면 좋겠어요."
+                    maxLength={40}
+                    className="resize-none h-20"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

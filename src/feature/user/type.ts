@@ -12,7 +12,8 @@ export interface Author {
   display_name?: string;
   profile_image_url?: string;
   likes_count: number;
-  intro_text?: string;
+  tagline?: string;
+  bio?: string;
 }
 
 export interface AuthorTag {

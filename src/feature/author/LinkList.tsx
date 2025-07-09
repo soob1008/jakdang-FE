@@ -11,7 +11,7 @@ export default function LinkList({ links }: LinkListProps) {
 
   return (
     <section>
-      <h2 className="mb-4 text-lg font-bold">링크</h2>
+      <h2 className="mb-4 text-lg font-bold">작가의 공간들</h2>
       <ul className="flex flex-col gap-3">
         {links.map((link) => (
           <li key={link.id}>

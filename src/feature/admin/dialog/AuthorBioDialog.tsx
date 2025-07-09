@@ -20,23 +20,23 @@ import { updateUser } from "@/feature/user/api.server";
 import { toast } from "sonner";
 
 const schema = z.object({
-  intro: z.string().min(1, "한 줄 문장을 입력해주세요."),
+  bio: z.string().min(1, "작가 소개를 입력해주세요."),
 });
 
 type ProfileFormValues = z.infer<typeof schema>;
 
-interface AuthorIntroDialogProps {
+interface AuthorBioDialogProps {
   userId: string;
-  intro?: string;
+  bio?: string;
 }
 
-export function AuthorIntroDialog({ userId, intro }: AuthorIntroDialogProps) {
+export function AuthorBioDialog({ userId, bio }: AuthorBioDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
-      intro: intro || "",
+      bio: bio || "",
     },
   });
   const {
@@ -47,7 +47,7 @@ export function AuthorIntroDialog({ userId, intro }: AuthorIntroDialogProps) {
 
   const onSubmit = async (data: ProfileFormValues) => {
     const { error } = await updateUser(userId, {
-      intro_text: data.intro,
+      bio: data.bio,
     });
 
     if (error) {
@@ -55,7 +55,7 @@ export function AuthorIntroDialog({ userId, intro }: AuthorIntroDialogProps) {
       return;
     }
 
-    toast.success("한줄 문장이 성공적으로 업데이트되었습니다.");
+    toast.success("소개글이 성공적으로 업데이트되었습니다.");
     setIsOpen(false);
   };
 
@@ -66,7 +66,7 @@ export function AuthorIntroDialog({ userId, intro }: AuthorIntroDialogProps) {
         setIsOpen(open);
 
         if (!open) {
-          form.reset({ intro: intro || "" });
+          form.reset({ bio: bio || "" });
         }
       }}
       trigger={
@@ -75,8 +75,8 @@ export function AuthorIntroDialog({ userId, intro }: AuthorIntroDialogProps) {
           Edit
         </Button>
       }
-      title="한 줄 문장"
-      description="당신의 색깔을 담은 한 문장을 써보세요."
+      title="작가 소개"
+      description="작가의 소개글을 작성해주세요."
       onSubmit={handleSubmit(onSubmit)}
       disabled={!isValid}
     >
@@ -85,15 +85,14 @@ export function AuthorIntroDialog({ userId, intro }: AuthorIntroDialogProps) {
           {/* 소개글 */}
           <FormField
             control={control}
-            name="intro"
+            name="bio"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>한 줄 문장</FormLabel>
+                <FormLabel>소개글</FormLabel>
                 <FormControl>
                   <Textarea
-                    placeholder="ex) 우연히 마주친 문장이 당신을 닮았으면 좋겠어요."
-                    maxLength={40}
-                    className="resize-none h-20"
+                    placeholder="ex) 사라지는 것들에 대해 쓰고, 남겨지는 마음을 기록합니다. 단어 하나로 누군가의 하루가 바뀌길 바라며 오늘도 씁니다."
+                    className="resize-none h-70"
                     {...field}
                   />
                 </FormControl>

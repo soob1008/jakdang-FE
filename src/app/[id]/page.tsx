@@ -2,7 +2,7 @@ import { getAuthor } from "@/feature/user/api.server";
 import Profile from "@/feature/author/Profile";
 import RepresentativeWork from "@/feature/author/RepresentativeWork";
 import WorkList from "@/feature/author/WorkList";
-import Intro from "@/feature/author/Intro";
+import Bio from "@/feature/author/Bio";
 import LinkList from "@/feature/author/LinkList";
 
 interface AuthorPageProps {
@@ -24,7 +24,7 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
   return (
     <div className="flex flex-col gap-22 pb-40">
       <Profile user={user} />
-      <Intro />
+      <Bio bio={user.bio} />
       <LinkList links={user.user_links} />
       <RepresentativeWork user={user} />
       <WorkList user={user} />
