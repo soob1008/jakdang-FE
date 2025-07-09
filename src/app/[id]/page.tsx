@@ -1,23 +1,33 @@
-import ProfileContainer from "@/feature/author/container/ProfileContainer";
+import { getAuthor } from "@/feature/user/api.server";
+import Profile from "@/feature/author/Profile";
+import RepresentativeWork from "@/feature/author/RepresentativeWork";
 import WorkList from "@/feature/author/WorkList";
-import RepresentativeWorkContainer from "@/feature/author/container/RepresentativeWorkContainer";
-import IntroContainer from "@/feature/author/container/IntroContainer";
+import Intro from "@/feature/author/Intro";
+import LinkList from "@/feature/author/LinkList";
 
 interface AuthorPageProps {
   params: { id: string };
 }
 
-export default function AuthorPage({ params }: AuthorPageProps) {
-  console.log("AuthorPage id:", params.id);
+export default async function AuthorPage({ params }: AuthorPageProps) {
   const slug = decodeURIComponent(params.id).replace(/^@/, "");
-  console.log("Decoded slug:", slug);
+  const { user } = await getAuthor(slug);
+
+  if (!user) {
+    return (
+      <div className="text-center text-gray-500">
+        작가 정보를 불러오는 중...
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-22 pb-40">
-      <ProfileContainer slug={slug} />
-      <IntroContainer />
-      <RepresentativeWorkContainer slug={slug} />
-      <WorkList />
+      <Profile user={user} />
+      <Intro />
+      <LinkList links={user.user_links} />
+      <RepresentativeWork user={user} />
+      <WorkList user={user} />
     </div>
   );
 }

@@ -48,9 +48,9 @@ export interface AuthorLink {
 export interface AuthorWork {
   id: string;
   title: string;
-  description: string;
-  image_url: string;
-  url: string;
+  description?: string;
+  image_url?: string;
+  url?: string;
   is_representative: boolean;
   is_active: boolean;
 }

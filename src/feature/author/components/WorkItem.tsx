@@ -1,24 +1,37 @@
 import Image from "next/image";
+import { AuthorWork } from "@/feature/user/type";
 
-export default function WorkItem() {
+interface WorkItemProps {
+  work: AuthorWork;
+  onClick: (work: AuthorWork) => void;
+}
+
+export default function WorkItem({ work, onClick }: WorkItemProps) {
   return (
-    <div>
-      <div className="relative w-full aspect-[1] overflow-hidden rounded-md shadow-sm">
+    <button
+      type="button"
+      onClick={() => onClick(work)}
+      className="flex flex-col items-start w-full text-left hover:opacity-90 transition"
+    >
+      <div className="overflow-hidden rounded w-full">
         <Image
-          src="/test.png"
-          alt="작품 이미지"
-          fill
-          className="object-cover"
-          sizes="(max-width: 640px) 100vw, 50vw"
+          src={
+            work?.image_url
+              ? `${process.env.NEXT_PUBLIC_IMAGE_URL}/${work.image_url}`
+              : "/assets/basic_book.jpg"
+          }
+          width={240}
+          height={240}
+          alt={work?.title}
+          className="object-contain h-56 w-full"
         />
       </div>
-
-      <div className="mt-2">
-        <div className="text-sm font-semibold truncate">랑과 나의 사막</div>
-        <p className="text-xs text-gray-500 line-clamp-2">
-          사막에서 만난 새로운 만남과 이별을 담은 우리들의 이야기
+      <div className="mt-4 w-full">
+        <h3 className="font-semibold truncate">{work?.title}</h3>
+        <p className="mt-2 text-sm text-gray-500 line-clamp-2">
+          {work?.description}
         </p>
       </div>
-    </div>
+    </button>
   );
 }

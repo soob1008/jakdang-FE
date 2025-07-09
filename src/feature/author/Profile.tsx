@@ -23,14 +23,6 @@ export default function Profile({ user }: ProfileProps) {
   const [isLike, setIsLike] = useState(false);
   // const [likeCount, setLikeCount] = useState(32); // 초기 좋아요 수
 
-  if (!user) {
-    return (
-      <div className="text-center text-gray-500">
-        작가 정보를 불러오는 중...
-      </div>
-    );
-  }
-
   return (
     <section className="flex flex-col items-center gap-2 ">
       <div className="text-center">
