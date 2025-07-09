@@ -92,7 +92,7 @@ export function AuthorBioDialog({ userId, bio }: AuthorBioDialogProps) {
                 <FormControl>
                   <Textarea
                     placeholder="ex) 사라지는 것들에 대해 쓰고, 남겨지는 마음을 기록합니다. 단어 하나로 누군가의 하루가 바뀌길 바라며 오늘도 씁니다."
-                    className="resize-none h-70"
+                    className="resize-none h-72"
                     {...field}
                   />
                 </FormControl>

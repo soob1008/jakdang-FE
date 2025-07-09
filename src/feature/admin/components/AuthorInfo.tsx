@@ -23,7 +23,7 @@ export default function AuthorInfo({ author }: AuthorInfoProps) {
             src={
               author.profile_image_url
                 ? `${process.env.NEXT_PUBLIC_IMAGE_URL}/${author.profile_image_url}`
-                : "assets/profile_default.png"
+                : "/assets/profile_default.png"
             }
             alt="프로필 이미지"
             className="object-cover"

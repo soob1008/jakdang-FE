@@ -162,7 +162,7 @@ export function ProfileDialog({ author }: ProfileDialogProps) {
                           ? `${process.env.NEXT_PUBLIC_IMAGE_URL}${watch(
                               "profile_image_url"
                             )}`
-                          : "assets/profile_default.png"
+                          : "/assets/profile_default.png"
                       }
                       alt="프로필 미리보기"
                       width={100}

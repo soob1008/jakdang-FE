@@ -11,7 +11,15 @@ interface AuthorPageProps {
 
 export default async function AuthorPage({ params }: AuthorPageProps) {
   const slug = decodeURIComponent(params.id).replace(/^@/, "");
-  const { user } = await getAuthor(slug);
+  const { user, error } = await getAuthor(slug);
+
+  if (error) {
+    return (
+      <div className="text-center text-red-500 mt-10">
+        작가 정보를 불러오지 못했습니다.
+      </div>
+    );
+  }
 
   if (!user) {
     return (
