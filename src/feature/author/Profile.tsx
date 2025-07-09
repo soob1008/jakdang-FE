@@ -32,7 +32,7 @@ export default function Profile({ user }: ProfileProps) {
   }
 
   return (
-    <section className="flex flex-col items-center gap-2 mb-6">
+    <section className="flex flex-col items-center gap-2 ">
       <div className="text-center">
         <div className="overflow-hidden w-24 h-24 mx-auto rounded-full">
           <Image

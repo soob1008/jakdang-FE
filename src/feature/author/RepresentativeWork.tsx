@@ -13,7 +13,7 @@ interface RepresentativeWorkProps {
 
 export default function RepresentativeWork({ user }: RepresentativeWorkProps) {
   return (
-    <section className="mt-20">
+    <section>
       <h2 className="mb-3 font-bold text-lg">대표작</h2>
       <Carousel>
         <CarouselContent>
