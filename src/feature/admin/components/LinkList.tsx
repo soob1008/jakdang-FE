@@ -9,6 +9,7 @@ import LinkItem from "@/feature/admin/components/LInkItem";
 import { LinkValues } from "@/feature/admin/dialog/LinkDialog";
 import { handleAction } from "@/feature/common/api/action";
 import { updateUserLinks, deleteUserLink } from "@/feature/user/api.server";
+import EmptyText from "@/components/ui/EmptyText";
 
 interface LinkListProps {
   userId: string; // 사용자 ID가 필요할 경우 사용
@@ -77,9 +78,7 @@ export default function LinkList({ userId, links }: LinkListProps) {
 
       <ul className="flex flex-col gap-3 mt-3">
         {links.length === 0 ? (
-          <p className="text-muted-foreground text-center">
-            등록된 링크가 없습니다.
-          </p>
+          <EmptyText message="외부 링크가 없습니다. " />
         ) : (
           links.map((link) => (
             <LinkItem

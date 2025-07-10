@@ -32,7 +32,7 @@ export default function RootLayout({
           <ViewerProvider />
           <Header />
           <main className="min-h-screen pt-14 px-4 lg:px-6">
-            <div className="max-w-3xl mx-auto w-full pt-8">{children}</div>
+            <div className="max-w-3xl mx-auto w-full">{children}</div>
           </main>
           <Footer />
           <Toaster position="top-center" />

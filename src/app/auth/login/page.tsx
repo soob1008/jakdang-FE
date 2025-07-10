@@ -2,7 +2,7 @@ import { LoginForm } from "@/feature/user/LoginForm";
 
 export default function LoginPage() {
   return (
-    <section aria-labelledby="login-heading">
+    <section aria-labelledby="login-heading" className="pt-8">
       <header>
         <h2 id="login-heading" className="text-2xl lg:text-3xl font-bold">
           로그인

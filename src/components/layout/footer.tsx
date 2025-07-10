@@ -11,7 +11,7 @@ export default function Footer() {
           <Link href="/term/service" className="hover:underline">
             이용약관
           </Link>
-          <Link href="/privacy" className="hover:underline">
+          <Link href="/term/privacy" className="hover:underline">
             개인정보 처리방침
           </Link>
         </div>

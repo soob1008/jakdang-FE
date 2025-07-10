@@ -1,6 +1,6 @@
 export default function PrivacyPolicyPage() {
   return (
-    <div className="text-sm leading-relaxed text-gray-700">
+    <div className="pt-8 text-sm leading-relaxed text-gray-700">
       <h2 className="text-2xl font-bold mb-6">개인정보 처리방침</h2>
 
       <section className="space-y-4">

@@ -6,6 +6,7 @@ import SocialDialog from "@/feature/admin/dialog/SocialDialog";
 import { useState } from "react";
 import { AuthorSNS } from "@/feature/user/type";
 import SocialLinkItem from "@/feature/admin/components/SocialLInkItem";
+import EmptyText from "@/components/ui/EmptyText";
 
 interface SocialLinksProps {
   userId: string;
@@ -41,9 +42,7 @@ export default function SocialLinks({ userId, socials }: SocialLinksProps) {
       </div>
 
       {socials.length === 0 ? (
-        <p className="text-center text-muted-foreground">
-          등록된 SNS 가 없습니다.
-        </p>
+        <EmptyText message="SNS 링크가 없습니다. " />
       ) : (
         <div className="flex flex-col gap-3 mt-3">
           {socials.map((social) => (
