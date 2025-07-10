@@ -18,6 +18,14 @@ interface RepresentativeWorkProps {
 export default function RepresentativeWork({ user }: RepresentativeWorkProps) {
   const [selectedWork, setSelectedWork] = useState<AuthorWork | null>(null);
 
+  if (
+    !user ||
+    !user.user_works ||
+    user.user_works.filter((work) => work.is_representative).length === 0
+  ) {
+    return null;
+  }
+
   return (
     <section>
       <h2 className="mb-5 font-bold text-lg">대표작</h2>

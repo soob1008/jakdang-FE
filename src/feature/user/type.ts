@@ -11,7 +11,7 @@ export interface Author {
   slug?: string;
   display_name?: string;
   profile_image_url?: string;
-  likes_count: number;
+  like_count: number;
   tagline?: string;
   bio?: string;
 }

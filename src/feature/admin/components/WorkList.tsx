@@ -95,9 +95,7 @@ export default function WorkList({ userId, works }: WorkListProps) {
       </div>
 
       {works.length === 0 ? (
-        <p className="text-sm text-center text-muted-foreground">
-          작품이 없습니다.
-        </p>
+        <p className="text-center text-muted-foreground">작품이 없습니다.</p>
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
           {visibleItems.map((work) => (
