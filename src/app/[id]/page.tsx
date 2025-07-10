@@ -18,7 +18,16 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
   const slug = decodeURIComponent(params.id).replace(/^@/, "");
   const { user, error } = await getAuthor(slug);
 
-  if (!user || error) {
+  if (error) {
+    console.error("Error fetching author data:", error);
+    return (
+      <div className="text-center text-gray-500">
+        작가 정보를 불러오는 중 오류가 발생했습니다.
+      </div>
+    );
+  }
+
+  if (!user) {
     return (
       <div className="text-center text-gray-500">
         작가 정보를 불러오는 중...

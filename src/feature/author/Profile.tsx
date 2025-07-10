@@ -35,7 +35,7 @@ export default function Profile({ user }: ProfileProps) {
     (async () => {
       await handleAction(() => hasLikedAuthor(user.id, viewerId), {
         onSuccess: (data) => {
-          setIsLike(data.liked);
+          setIsLike(Boolean(data.liked));
         },
       });
     })();
@@ -61,6 +61,9 @@ export default function Profile({ user }: ProfileProps) {
           ? "좋아요를 취소했습니다."
           : "좋아요를 눌렀습니다.",
         errorMessage: "좋아요 처리 중 문제가 발생했어요.",
+        onSuccess: (data) => {
+          setIsLike(!!data.liked);
+        },
       }
     );
   };
