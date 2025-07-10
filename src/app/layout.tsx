@@ -4,6 +4,7 @@ import localFont from "next/font/local";
 import { Header } from "@/components/layout/header";
 import { Providers } from "./providers";
 import { Toaster } from "@/components/ui/sonner";
+import { ViewerProvider } from "@/feature/viewer/ViewerProvider";
 
 const Pretendard = localFont({
   src: [
@@ -27,6 +28,7 @@ export default function RootLayout({
     <html lang="ko">
       <body className={`${Pretendard.className} bg-background`}>
         <Providers>
+          <ViewerProvider />
           <Header />
           <main className="min-h-screen pt-14 px-4 lg:px-6">
             <div className="max-w-3xl mx-auto w-full pt-8">{children}</div>

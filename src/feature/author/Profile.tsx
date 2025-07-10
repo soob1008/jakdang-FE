@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Heart, Mail } from "lucide-react";
 import {
@@ -10,6 +10,8 @@ import {
   AuthorLink,
   AuthorWork,
 } from "@/feature/user/type";
+import { handleAction } from "../common/api/action";
+import { hasLikedAuthor, updateLikeAuthor } from "../viewer/api.server";
 
 interface ProfileProps {
   user: Author & {
@@ -21,7 +23,47 @@ interface ProfileProps {
 }
 export default function Profile({ user }: ProfileProps) {
   const [isLike, setIsLike] = useState(false);
-  // const [likeCount, setLikeCount] = useState(32); // 초기 좋아요 수
+
+  useEffect(() => {
+    const viewerId = localStorage.getItem("viewer_id");
+
+    if (!viewerId) {
+      console.error("Viewer ID가 없습니다. 좋아요 상태를 확인할 수 없습니다.");
+      return;
+    }
+
+    (async () => {
+      await handleAction(() => hasLikedAuthor(user.id, viewerId), {
+        onSuccess: (data) => {
+          setIsLike(data.liked);
+        },
+      });
+    })();
+  }, [user]);
+
+  const handleLikeToggle = async () => {
+    const viewerId = localStorage.getItem("viewer_id");
+
+    if (!viewerId) {
+      console.error("Viewer ID가 없습니다. 좋아요를 처리할 수 없습니다.");
+      return;
+    }
+
+    if (!user.slug) {
+      console.error("User slug가 없습니다. 좋아요를 처리할 수 없습니다.");
+      return;
+    }
+
+    await handleAction(
+      () => updateLikeAuthor(user.id, viewerId, user.slug as string),
+      {
+        successMessage: isLike
+          ? "좋아요를 취소했습니다."
+          : "좋아요를 눌렀습니다.",
+        errorMessage: "좋아요 처리 중 문제가 발생했어요.",
+      }
+    );
+  };
 
   return (
     <section className="flex flex-col items-center gap-2 ">
@@ -85,12 +127,9 @@ export default function Profile({ user }: ProfileProps) {
         <button
           className="text-center"
           aria-label="응원하기"
-          onClick={() => {
-            // setIsLike((prev) => !prev);
-            // setLikeCount((prev) => prev + (isLike ? -1 : 1));
-          }}
+          onClick={handleLikeToggle}
         >
-          <div className="font-semibold">{user.likes_count}</div>
+          <div className="font-semibold">{user.like_count || 0}</div>
           <div className="flex items-center gap-1">
             Likes
             <Heart
