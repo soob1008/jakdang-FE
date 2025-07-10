@@ -171,7 +171,7 @@ export function WorkDialog({
                 <FormControl>
                   <Textarea
                     placeholder="작품에 대한 설명을 써주세요."
-                    className="resize-none h-20"
+                    className="resize-none h-50"
                     {...field}
                   />
                 </FormControl>
