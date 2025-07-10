@@ -5,6 +5,7 @@ import { Header } from "@/components/layout/header";
 import { Providers } from "./providers";
 import { Toaster } from "@/components/ui/sonner";
 import { ViewerProvider } from "@/feature/viewer/ViewerProvider";
+import Footer from "@/components/layout/footer";
 
 const Pretendard = localFont({
   src: [
@@ -33,6 +34,7 @@ export default function RootLayout({
           <main className="min-h-screen pt-14 px-4 lg:px-6">
             <div className="max-w-3xl mx-auto w-full pt-8">{children}</div>
           </main>
+          <Footer />
           <Toaster position="top-center" />
         </Providers>
       </body>
