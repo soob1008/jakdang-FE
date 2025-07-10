@@ -12,9 +12,7 @@ interface AuthorPageProps {
 export default async function AuthorPage({ params }: AuthorPageProps) {
   if (!params || !params.id) {
     return (
-      <div className="text-center text-gray-500">
-        작가 정보를 불러오는 중...
-      </div>
+      <div className="text-center text-gray-500">작가가 존재하지 않습니다.</div>
     );
   }
   const slug = decodeURIComponent(params.id).replace(/^@/, "");
