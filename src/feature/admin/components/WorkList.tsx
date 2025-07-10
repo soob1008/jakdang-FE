@@ -9,6 +9,7 @@ import WorkItem from "@/feature/admin/components/WorkItem";
 import { handleAction } from "@/feature/common/api/action";
 import { updateUserWorks, deleteUserWork } from "@/feature/user/api.server";
 import { WorkValues } from "@/feature/admin/dialog/WorkDialog";
+import EmptyText from "@/components/ui/EmptyText";
 
 interface WorkListProps {
   userId: string;
@@ -95,7 +96,7 @@ export default function WorkList({ userId, works }: WorkListProps) {
       </div>
 
       {works.length === 0 ? (
-        <p className="text-center text-muted-foreground">작품이 없습니다.</p>
+        <EmptyText message="작품이 없습니다." />
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
           {visibleItems.map((work) => (

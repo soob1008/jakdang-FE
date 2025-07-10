@@ -4,6 +4,7 @@ import RepresentativeWork from "@/feature/author/RepresentativeWork";
 import WorkList from "@/feature/author/WorkList";
 import Bio from "@/feature/author/Bio";
 import LinkList from "@/feature/author/LinkList";
+import EmpltyText from "@/components/ui/EmptyText";
 
 interface AuthorPageProps {
   params: { id: string };
@@ -19,7 +20,6 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
   const { user, error } = await getAuthor(slug);
 
   if (error) {
-    console.error("Error fetching author data:", error);
     return (
       <div className="text-center text-gray-500">
         작가 정보를 불러오는 중 오류가 발생했습니다.
@@ -39,15 +39,13 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
     return (
       <div className="flex flex-col gap-22 pb-40">
         <Profile user={user} />
-        <div className="mt-20 text-center text-gray-500">
-          작가의 공간을 준비중입니다.
-        </div>
+        <EmpltyText message="작가의 공간을 준비중입니다." />
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col gap-22 pb-40">
+    <div className="flex flex-col gap-22 pt-8 pb-40">
       <Profile user={user} />
       <Bio bio={user.bio} />
       <LinkList links={user.user_links} />

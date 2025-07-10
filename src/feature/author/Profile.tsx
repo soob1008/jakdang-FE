@@ -124,7 +124,7 @@ export default function Profile({ user }: ProfileProps) {
       <div className="flex justify-around w-full sm:w-1/2 text-sm text-gray-600 mt-6">
         <div className="flex flex-col items-center">
           <span className="text-lg font-bold">{user.user_works.length}</span>
-          <span>Books</span>
+          <span>Works</span>
         </div>
         <div className="w-[1px] h-12 bg-gray-100"></div>
         <button

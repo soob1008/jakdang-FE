@@ -43,7 +43,7 @@ export default async function ProfilePage() {
   }
 
   return (
-    <div className="pb-40">
+    <div className="pt-8 pb-40">
       <h2 className="mb-8 font-bold text-xl">나의 작당일지</h2>
       {/* 사용자 정보 */}
       <UserInfo author={author} />
