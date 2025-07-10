@@ -11,6 +11,10 @@ interface WorkListProps {
 export default function WorkList({ user }: WorkListProps) {
   const [selectedWork, setSelectedWork] = useState<AuthorWork | null>(null);
 
+  if (user.user_works.length === 0) {
+    return null;
+  }
+
   return (
     <section>
       <h2 className="font-bold text-lg mb-3">모든 작품</h2>

@@ -41,7 +41,7 @@ export default function SocialLinks({ userId, socials }: SocialLinksProps) {
       </div>
 
       {socials.length === 0 ? (
-        <p className="text-sm text-center text-muted-foreground">
+        <p className="text-center text-muted-foreground">
           등록된 SNS 가 없습니다.
         </p>
       ) : (

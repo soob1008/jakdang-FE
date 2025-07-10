@@ -28,6 +28,17 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
     );
   }
 
+  if (!user.bio && !user.user_links?.length && !user.user_works?.length) {
+    return (
+      <div className="flex flex-col gap-22 pb-40">
+        <Profile user={user} />
+        <div className="mt-20 text-center text-gray-500">
+          작가의 공간을 준비중입니다.
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col gap-22 pb-40">
       <Profile user={user} />

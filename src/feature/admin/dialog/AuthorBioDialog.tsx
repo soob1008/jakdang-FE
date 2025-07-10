@@ -20,7 +20,7 @@ import { updateUser } from "@/feature/user/api.server";
 import { toast } from "sonner";
 
 const schema = z.object({
-  bio: z.string().min(1, "작가 소개를 입력해주세요."),
+  bio: z.string().optional(),
 });
 
 type ProfileFormValues = z.infer<typeof schema>;
