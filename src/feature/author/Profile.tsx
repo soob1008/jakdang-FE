@@ -14,6 +14,7 @@ import { handleAction } from "../common/api/action";
 import { hasLikedAuthor, updateLikeAuthor } from "../viewer/api.server";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { event } from "@/lib/ga/gtag";
 
 interface ProfileProps {
   user: Author & {
@@ -44,6 +45,12 @@ export default function Profile({ user }: ProfileProps) {
   }, [user]);
 
   const handleLikeToggle = async () => {
+    event({
+      action: "like_click",
+      category: "engagement",
+      label: "작가 좋아요",
+    });
+
     const viewerId = localStorage.getItem("viewer_id");
 
     if (!viewerId) {
@@ -77,6 +84,12 @@ export default function Profile({ user }: ProfileProps) {
   };
 
   const handleShare = async () => {
+    event({
+      action: "share_button_click",
+      category: "engagement",
+      label: "작가 공유하기",
+    });
+
     if (navigator.share) {
       try {
         await navigator.share({
