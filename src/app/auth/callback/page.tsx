@@ -3,8 +3,8 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabase/supabase";
-import { getUser, createUser } from "@/feature/user/api.client";
+import { createClient } from "@/lib/supabase/client";
+import { getUser, createUser } from "@/feature/user/api.server";
 import { toast } from "sonner";
 
 export default function AuthCallback() {
@@ -18,6 +18,7 @@ export default function AuthCallback() {
     if (!tokenHash) return;
 
     const handleLogin = async () => {
+      const supabase = createClient();
       const { data, error } = await supabase.auth.verifyOtp({
         token_hash: tokenHash,
         type: "email",
