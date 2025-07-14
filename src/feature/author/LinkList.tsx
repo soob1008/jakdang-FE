@@ -25,8 +25,7 @@ export default function LinkList({ links }: LinkListProps) {
         })
         .catch((error) => {
           if ((error as Error).name !== "AbortError") {
-            console.error("공유 실패:", error);
-            toast("공유에 실패했어요.");
+            toast.error("공유에 실패했어요.");
           }
         });
     } else {

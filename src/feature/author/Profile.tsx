@@ -71,9 +71,8 @@ export default function Profile({ user }: ProfileProps) {
   };
 
   const handleCopyLink = () => {
-    navigator.clipboard.writeText(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/author/${user.slug}`
-    );
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || window.location.origin;
+    navigator.clipboard.writeText(`${baseUrl}/author/${user.slug}`);
     toast.success("링크가 클립보드에 복사되었습니다.");
   };
 
@@ -87,8 +86,7 @@ export default function Profile({ user }: ProfileProps) {
         // 공유 성공 후 처리 (선택 사항)
       } catch (error: unknown) {
         if ((error as Error).name !== "AbortError") {
-          console.error("공유 실패:", error);
-          toast("공유에 실패했어요.");
+          toast.error("공유에 실패했어요.");
         }
       }
     } else {
