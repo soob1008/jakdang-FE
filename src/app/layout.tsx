@@ -9,6 +9,7 @@ import Footer from "@/components/layout/footer";
 import { GA_TRACKING_ID } from "@/lib/ga/gtag";
 import Script from "next/script";
 import GoogleAnalyticsTracker from "@/feature/analytics/GoogleAnalytics";
+import { Suspense } from "react";
 
 const Pretendard = localFont({
   src: [
@@ -45,6 +46,7 @@ export default function RootLayout({
                 gtag('js', new Date());
                 gtag('config', '${GA_TRACKING_ID}', {
                   page_path: window.location.pathname,
+                  send_page_view: false,
                 });
               `}
             </Script>
@@ -61,7 +63,9 @@ export default function RootLayout({
           <Footer />
           <Toaster position="top-center" />
         </Providers>
-        <GoogleAnalyticsTracker />
+        <Suspense fallback={null}>
+          <GoogleAnalyticsTracker />
+        </Suspense>
       </body>
     </html>
   );

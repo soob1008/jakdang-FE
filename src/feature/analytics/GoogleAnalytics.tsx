@@ -9,7 +9,8 @@ export default function GoogleAnalyticsTracker() {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    const url = `${pathname}?${searchParams}`;
+    const queryString = searchParams.toString();
+    const url = queryString ? `${pathname}?${queryString}` : pathname;
 
     pageView(url);
   }, [pathname, searchParams]);
