@@ -7,16 +7,19 @@ import LinkList from "@/feature/author/LinkList";
 import EmpltyText from "@/components/ui/EmptyText";
 
 interface AuthorPageProps {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export default async function AuthorPage({ params }: AuthorPageProps) {
-  if (!params || !params.id) {
+  const { id } = await params;
+
+  if (!id) {
     return (
       <div className="text-center text-gray-500">작가가 존재하지 않습니다.</div>
     );
   }
-  const slug = decodeURIComponent(params.id).replace(/^@/, "");
+
+  const slug = decodeURIComponent(id).replace(/^@/, "");
   const { user, error } = await getAuthor(slug);
 
   if (error) {
