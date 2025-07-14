@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { Heart, Mail } from "lucide-react";
+import { Heart, Mail, Copy, Share2 } from "lucide-react";
 import {
   Author,
   AuthorTag,
@@ -12,6 +12,8 @@ import {
 } from "@/feature/user/type";
 import { handleAction } from "../common/api/action";
 import { hasLikedAuthor, updateLikeAuthor } from "../viewer/api.server";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 interface ProfileProps {
   user: Author & {
@@ -68,6 +70,32 @@ export default function Profile({ user }: ProfileProps) {
     );
   };
 
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/author/${user.slug}`
+    );
+    toast.success("링크가 클립보드에 복사되었습니다.");
+  };
+
+  const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: document.title,
+          url: window.location.href,
+        });
+        // 공유 성공 후 처리 (선택 사항)
+      } catch (error: unknown) {
+        if ((error as Error).name !== "AbortError") {
+          console.error("공유 실패:", error);
+          toast("공유에 실패했어요.");
+        }
+      }
+    } else {
+      toast.error("이 브라우저는 공유 기능을 지원하지 않아요.");
+    }
+  };
+
   return (
     <section className="flex flex-col items-center gap-2 ">
       <div className="text-center">
@@ -99,12 +127,7 @@ export default function Profile({ user }: ProfileProps) {
         <div className="flex items-center justify-center gap-6 mt-4 flex-wrap">
           {/* Replace with actual icons */}
           {user.user_sns.map((sns) => (
-            <a
-              href={sns.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              key={sns.id}
-            >
+            <a href={sns.url} rel="noopener noreferrer" key={sns.id}>
               <Image
                 key={sns.id}
                 src={`/assets/social/${sns.platform}.webp`}
@@ -119,6 +142,26 @@ export default function Profile({ user }: ProfileProps) {
             <Mail className="w-6 h-6 text-gray-600 hover:text-gray-800 transition-colors" />
           </a>
         </div>
+      </div>
+
+      {/* 공유하기 */}
+      <div className="flex items-center justify-center gap-4 mt-2">
+        <Button
+          variant="outline-primary"
+          size="sm"
+          onClick={handleCopyLink}
+          aria-label="링크 복사"
+        >
+          <Copy /> 링크
+        </Button>
+        <Button
+          variant="outline-primary"
+          size="sm"
+          aria-label="링크 공유하기"
+          onClick={handleShare}
+        >
+          <Share2 /> 공유
+        </Button>
       </div>
 
       <div className="flex justify-around w-full sm:w-1/2 text-sm text-gray-600 mt-6">
