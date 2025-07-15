@@ -73,7 +73,7 @@ export async function updateLikeAuthor(
       return { error: decrementError };
     }
 
-    revalidatePath(`/author/@${slug}`);
+    revalidatePath(`/@${slug}`);
     return { liked: false };
   } else {
     // 5. 좋아요 추가 - viewer_likes 삽입
@@ -110,7 +110,7 @@ export async function updateLikeAuthor(
       return { error: incrementError };
     }
 
-    revalidatePath(`/author/@${slug}`);
+    revalidatePath(`/@${slug}`);
     return { liked: true };
   }
 }
