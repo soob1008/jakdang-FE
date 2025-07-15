@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -11,6 +12,8 @@ import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createClient } from "@/lib/supabase/client";
+import Loading from "@/app/loading";
+import { handleAction } from "@/feature/common/api/action";
 
 const schema = z.object({
   slug: z
@@ -24,6 +27,7 @@ type FormValues = z.infer<typeof schema>;
 
 export default function SetUserNamePage() {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
     register,
@@ -53,10 +57,6 @@ export default function SetUserNamePage() {
       return;
     }
 
-    // const {
-    //   data: { session },
-    // } = await supabase.auth.getSession();
-
     const userId = user?.id;
 
     if (!userId) {
@@ -68,8 +68,6 @@ export default function SetUserNamePage() {
     // // 주소 중복 확인 및 저장 로직
     const { exists } = await duplicateCheck(userId, slug);
 
-    console.log("user", user, exists);
-
     // // 중복된 슬러그가 있는 경우
     if (exists) {
       setError("slug", {
@@ -79,13 +77,18 @@ export default function SetUserNamePage() {
       return;
     }
 
-    // // 유저 주소 업데이트
-    const { error: updateError } = await updateUserSlug(userId, slug);
+    setIsLoading(true);
 
-    if (!updateError) {
-      toast.success("주소가 성공적으로 설정되었습니다.");
-      router.push(`/profile`);
-    }
+    // 유저 주소 업데이트
+    await handleAction(async () => await updateUserSlug(userId, slug), {
+      successMessage: "주소가 성공적으로 설정되었습니다.",
+      errorMessage: "주소 설정에 실패했습니다. 다시 시도해주세요.",
+      onSuccess: () => {
+        router.push("/profile");
+      },
+    });
+
+    setIsLoading(false);
   };
 
   const hasError = Boolean(errors.slug);
@@ -93,6 +96,7 @@ export default function SetUserNamePage() {
 
   return (
     <section className="pt-8" aria-labelledby="username-heading">
+      {isLoading && <Loading />}
       <header>
         <h2 id="slug-heading" className="text-2xl lg:text-3xl font-bold">
           작가 주소 만들기
