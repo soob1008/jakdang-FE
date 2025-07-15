@@ -7,6 +7,9 @@ export async function loginWithMagicLink(email: string) {
 
   const { error } = await supabase.auth.signInWithOtp({
     email,
+    options: {
+      emailRedirectTo: `${process.env.NEXT_PUBLIC_BASE_URL}/auth/confirm`,
+    },
   });
 
   if (error) {
