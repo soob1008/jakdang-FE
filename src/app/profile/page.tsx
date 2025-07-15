@@ -14,7 +14,6 @@ import {
   getUserLinks,
   getUserWorks,
 } from "@/feature/user/api.server";
-import Loading from "../loading";
 
 export default async function ProfilePage() {
   const supabase = await createSupabaseServerClient();
