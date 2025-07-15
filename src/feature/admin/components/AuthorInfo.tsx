@@ -28,14 +28,16 @@ export default function AuthorInfo({ author }: AuthorInfoProps) {
             alt="프로필 이미지"
             className="object-cover"
           />
-          <AvatarFallback>프로필이미지</AvatarFallback>
+          <AvatarFallback>
+            <div className="w-full h-full bg-gray-200" />
+          </AvatarFallback>
         </Avatar>
         <div>
-          <div className="flex items-center text-sm gap-2">
+          <div className="flex items-center gap-2">
             <strong className="block font-medium">
               {author?.display_name || "필명"}
             </strong>
-            <span className="text-xs text-gray-500">@{author?.slug}</span>
+            <span className="text-sm text-gray-500">@{author?.slug}</span>
           </div>
           <p className="mt-2 text-gray-500 text-sm">
             {author?.tagline || "작가의 한줄 소개가 없습니다."}

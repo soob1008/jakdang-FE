@@ -10,6 +10,7 @@ import {
   AuthorLink,
   AuthorWork,
 } from "@/feature/user/type";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { handleAction } from "../common/api/action";
 import { hasLikedAuthor, updateLikeAuthor } from "../viewer/api.server";
 import { Button } from "@/components/ui/button";
@@ -79,7 +80,7 @@ export default function Profile({ user }: ProfileProps) {
 
   const handleCopyLink = () => {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || window.location.origin;
-    navigator.clipboard.writeText(`${baseUrl}/author/${user.slug}`);
+    navigator.clipboard.writeText(`${baseUrl}/${user.slug}`);
     toast.success("링크가 클립보드에 복사되었습니다.");
   };
 
@@ -111,17 +112,20 @@ export default function Profile({ user }: ProfileProps) {
     <section className="flex flex-col items-center gap-2 ">
       <div className="text-center">
         <div className="overflow-hidden w-24 h-24 mx-auto rounded-full">
-          <Image
-            src={
-              user.profile_image_url
-                ? `${process.env.NEXT_PUBLIC_IMAGE_URL}/${user.profile_image_url}`
-                : "/assets/profile_default.png"
-            }
-            width={240}
-            height={240}
-            alt="작가 프로필 사진"
-            className="w-24 h-24 object-cover"
-          />
+          <Avatar className="w-24 h-24">
+            <AvatarImage
+              src={
+                user.profile_image_url
+                  ? `${process.env.NEXT_PUBLIC_IMAGE_URL}/${user.profile_image_url}`
+                  : "/assets/profile_default.png"
+              }
+              alt="프로필 이미지"
+              className="object-cover"
+            />
+            <AvatarFallback>
+              <div className="w-full h-full bg-gray-200" />
+            </AvatarFallback>
+          </Avatar>
         </div>
         <h2 className="mt-3 text-lg font-bold">{user.display_name}</h2>
         <p className="text-sm text-gray-600 text-center">{user.tagline}</p>
@@ -135,7 +139,7 @@ export default function Profile({ user }: ProfileProps) {
         </ul>
 
         {/* SNS 아이콘 자리 */}
-        <div className="flex items-center justify-center gap-6 mt-4 flex-wrap">
+        <div className="flex items-center justify-center gap-5 mt-4 flex-wrap">
           {/* Replace with actual icons */}
           {user.user_sns.map((sns) => (
             <a href={sns.url} rel="noopener noreferrer" key={sns.id}>
@@ -145,12 +149,12 @@ export default function Profile({ user }: ProfileProps) {
                 width={24}
                 height={24}
                 alt={sns.platform}
-                className="w-6 h-6"
+                className="w-5 h-5"
               />
             </a>
           ))}
           <a href={`mailto:${user.email}`} aria-label="이메일">
-            <Mail className="w-6 h-6 text-gray-600 hover:text-gray-800 transition-colors" />
+            <Mail className="w-6 h-6 text-gray-800 transition-colors" />
           </a>
         </div>
       </div>
@@ -163,7 +167,7 @@ export default function Profile({ user }: ProfileProps) {
           onClick={handleCopyLink}
           aria-label="링크 복사"
         >
-          <Copy /> 링크
+          <Copy /> 복사
         </Button>
         <Button
           variant="outline-primary"
@@ -175,9 +179,9 @@ export default function Profile({ user }: ProfileProps) {
         </Button>
       </div>
 
-      <div className="flex justify-around w-full sm:w-1/2 text-sm text-gray-600 mt-6">
+      <div className="flex items-center justify-around w-full sm:w-1/2 text-sm text-gray-600 mt-6">
         <div className="flex flex-col items-center">
-          <span className="text-lg font-bold">{user.user_works.length}</span>
+          <span className="font-semibold">{user.user_works.length}</span>
           <span>Works</span>
         </div>
         <div className="w-[1px] h-12 bg-gray-100"></div>
