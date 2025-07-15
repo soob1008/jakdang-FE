@@ -33,7 +33,9 @@ export default async function ProfilePage() {
 
   if (!author) {
     return (
-      <div className="text-center text-gray-500">정보를 불러오는 중...</div>
+      <div className="pt-8 text-center text-gray-500">
+        작가 정보가 없습니다.
+      </div>
     );
   }
 
