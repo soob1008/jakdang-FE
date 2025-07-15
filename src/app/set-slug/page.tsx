@@ -92,7 +92,7 @@ export default function SetUserNamePage() {
   const isEmpty = !username || username.trim() === "";
 
   return (
-    <section aria-labelledby="username-heading">
+    <section className="pt-8" aria-labelledby="username-heading">
       <header>
         <h2 id="slug-heading" className="text-2xl lg:text-3xl font-bold">
           작가 주소 만들기
