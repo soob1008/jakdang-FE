@@ -18,7 +18,9 @@ export default function WorkItem({ work, onClick }: WorkItemProps) {
       className="flex flex-col items-start w-full text-left hover:opacity-90 transition"
     >
       <div className="overflow-hidden rounded w-full relative">
-        {!loaded && <Skeleton className="w-full h-full" />}
+        {!loaded && (
+          <Skeleton className="absolute top-0 left-0 w-full h-full" />
+        )}
         <Image
           src={
             work?.image_url
