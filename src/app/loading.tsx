@@ -1,8 +1,14 @@
 import { Spinner } from "@/components/ui/spinner";
+import { cn } from "@/lib/utils";
 
 export default function Loading() {
   return (
-    <div className="fixed top-0 left-0 right-0 bottom-0 z-10 flex justify-center items-center h-screen bg-black/10">
+    <div
+      className={cn(
+        "fixed inset-0 z-50 flex items-center justify-center bg-white/60 backdrop-blur-sm"
+      )}
+    >
+      {" "}
       <Spinner className="w-14 h-14 text-gray-500" />
     </div>
   );
