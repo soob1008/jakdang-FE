@@ -15,6 +15,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface WorkItemProps {
   work: AuthorWork;
@@ -30,10 +31,14 @@ export default function WorkItem({
   onDelete,
 }: WorkItemProps) {
   const [isOpenDeleteAlert, setIsOpenDeleteAlert] = useState(false);
+  const [loaded, setLoaded] = useState(false);
 
   return (
     <div>
       <div className="relative w-full aspect-[1] overflow-hidden rounded-md shadow-sm">
+        {!loaded && (
+          <Skeleton className="absolute top-0 left-0 w-full h-full" />
+        )}
         <Image
           src={`${
             work.image_url
@@ -44,8 +49,8 @@ export default function WorkItem({
           fill
           className="object-contain"
           sizes="(max-width: 640px) 100vw, 50vw"
+          onLoad={() => setLoaded(true)}
         />
-
         {work.is_representative && (
           <Badge className="absolute top-2 left-2" size="xs">
             대표작

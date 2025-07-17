@@ -1,5 +1,7 @@
+import { useState } from "react";
 import Image from "next/image";
 import { AuthorWork } from "@/feature/user/type";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface WorkItemProps {
   work: AuthorWork;
@@ -7,23 +9,28 @@ interface WorkItemProps {
 }
 
 export default function WorkItem({ work, onClick }: WorkItemProps) {
+  const [loaded, setLoaded] = useState(false);
+
   return (
     <button
       type="button"
       onClick={() => onClick(work)}
       className="flex flex-col items-start w-full text-left hover:opacity-90 transition"
     >
-      <div className="overflow-hidden rounded w-full">
+      <div className="overflow-hidden rounded w-full relative border aspect-[1]">
+        {!loaded && (
+          <Skeleton className="absolute top-0 left-0 w-full h-full " />
+        )}
         <Image
           src={
             work?.image_url
               ? `${process.env.NEXT_PUBLIC_IMAGE_URL}/${work.image_url}`
               : "/assets/basic_book.jpg"
           }
-          width={240}
-          height={240}
+          fill
           alt={work?.title}
-          className="object-contain h-56 w-full"
+          className="w-full h-full object-contain"
+          onLoad={() => setLoaded(true)}
         />
       </div>
       <div className="mt-4 w-full">

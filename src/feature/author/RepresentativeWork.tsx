@@ -34,7 +34,7 @@ export default function RepresentativeWork({ user }: RepresentativeWorkProps) {
           {user?.user_works.map((work) => {
             if (work.is_representative === false) return null;
             return (
-              <CarouselItem key={work.id} className="basis-2/3 sm:basis-1/3">
+              <CarouselItem key={work.id} className="basis-1/2 sm:basis-1/3">
                 <WorkItem work={work} onClick={() => setSelectedWork(work)} />
               </CarouselItem>
             );
