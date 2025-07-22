@@ -63,12 +63,12 @@ export default function RootLayout({
       <body className={`${Pretendard.className}`}>
         <Providers>
           <SidebarProvider>
-            <AppSidebar />
-            <main className="flex h-screen gap-4 w-full bg-secondary dark:bg-background ">
-              <div className="flex-1 h-full overflow-y-auto ">
-                {/* <SidebarTrigger /> */}
-                {children}
-              </div>
+            <div className="relative">
+              <AppSidebar />
+              <SidebarTrigger className="absolute top-1 right-[-34px]" />
+            </div>
+            <main className="flex h-screen gap-4 w-full bg-muted dark:bg-background ">
+              <div className="flex-1 h-full overflow-y-auto ">{children}</div>
             </main>
           </SidebarProvider>
           {/* <Footer /> */}

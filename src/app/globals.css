@@ -53,9 +53,9 @@
   --popover-foreground: oklch(0.145 0 0);
   --primary: oklch(0.42 0.2551 279.17);
   --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(97.6% 0.01 260);
+  --secondary: oklch(0.9483 0.0311 306.2);
   --secondary-foreground: oklch(0.42 0.2551 279.17);
-  --muted: oklch(0.96 0.020359 298.1966);
+  --muted: oklch(0.9861 0.0085 308.36);
   --muted-foreground: oklch(0.556 0 0);
   --accent: oklch(0.97 0 0);
   --accent-foreground: oklch(0.205 0 0);
@@ -129,4 +129,16 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+@font-face {
+  font-family: "GongGothicMedium";
+  src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10@1.0/GongGothicMedium.woff")
+    format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+.font-gong {
+  font-family: "GongGothicMedium", sans-serif;
 }

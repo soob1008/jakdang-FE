@@ -1,3 +1,6 @@
+"use client";
+
+import { usePathname } from "next/navigation";
 import { Settings, LogOut, Blocks, Brush } from "lucide-react";
 import {
   Sidebar,
@@ -10,11 +13,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-// import {
-//   Collapsible,
-//   CollapsibleContent,
-//   CollapsibleTrigger,
-// } from "@/components/ui/collapsible";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,56 +21,86 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import Link from "next/link";
+import clsx from "clsx"; // tailwind class 병합용 라이브러리 (optional)
+import { SidebarTrigger } from "@/components/ui/sidebar";
+
+// 메뉴 구조
+const MENUS = [
+  {
+    label: "나의 공간",
+    items: [
+      {
+        label: "구성하기",
+        href: "/admin/block",
+        icon: Blocks,
+      },
+      {
+        label: "꾸미기",
+        href: "/admin/design",
+        icon: Brush,
+      },
+    ],
+  },
+  {
+    label: "설정",
+    items: [
+      {
+        label: "Settings",
+        href: "/admin/settings",
+        icon: Settings,
+      },
+    ],
+  },
+];
 
 export function AppSidebar() {
+  const pathname = usePathname();
+
   return (
-    <Sidebar className="bg-white h-full border-r">
+    <Sidebar className="bg-white h-full border-none shadow-[4px_6px_10px_-2px_rgba(0,0,0,0.04)]">
       <SidebarContent className="py-6 px-2">
-        <SidebarGroupLabel className="flex justify-center font-bold text-2xl text-primary">
+        {/* 로고 */}
+        <SidebarGroupLabel className="flex justify-center mt-8 mb-10 font-bold font-gong text-2xl text-primary">
           작당
         </SidebarGroupLabel>
-        <SidebarGroup>
-          <SidebarGroupLabel>나의 공간</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <SidebarMenuItem className="px-2 py-1.5 rounded-2xl bg-primary text-primary-foreground">
-                <SidebarMenuButton asChild className="">
-                  <Link href="/settings">
-                    <Blocks className="mr-2 h-4 w-4" />
-                    <span className="font-medium">구성하기</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <Link href="/settings">
-                    <Brush className="mr-2 h-4 w-4" />
-                    <span>꾸미기</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-        {/* Settings section */}
-        <SidebarGroup>
-          <SidebarGroupLabel>설정</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <a href="/settings">
-                    <Settings className="mr-2 h-4 w-4" />
-                    <span>Settings</span>
-                  </a>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+        {/* 반복되는 그룹 */}
+        {MENUS.map((menu) => (
+          <SidebarGroup key={menu.label}>
+            <SidebarGroupLabel>{menu.label}</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu className="gap-2">
+                {menu.items.map((item) => {
+                  const isActive = pathname === item.href;
+
+                  return (
+                    <SidebarMenuItem
+                      key={item.label}
+                      className={clsx(
+                        "px-2 py-1.5 rounded-2xl transition-colors",
+                        isActive
+                          ? "bg-primary text-primary-foreground"
+                          : "hover:bg-secondary hover:text-secondary-foreground"
+                      )}
+                    >
+                      <SidebarMenuButton
+                        asChild
+                        className="hover:bg-transparent hover:text-inherit"
+                      >
+                        <Link href={item.href}>
+                          <item.icon className="mr-2 h-4 w-4" />
+                          <span className="font-medium">{item.label}</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  );
+                })}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        ))}
       </SidebarContent>
 
-      {/* Footer with user info */}
+      {/* TODO: 로그아웃 처리 */}
       <SidebarFooter className="border-t p-3">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
