@@ -70,7 +70,7 @@ export default function LinkList({ userId, links }: LinkListProps) {
     <section className="space-y-4">
       <div className="flex justify-between items-center">
         <h3 className="font-bold text-base lg:text-lg">외부 링크 등록</h3>
-        <Button variant="muted" size="sm" onClick={handleCreate}>
+        <Button variant="secondary" size="sm" onClick={handleCreate}>
           <Plus className="w-4 h-4 mr-1" />
           Create
         </Button>

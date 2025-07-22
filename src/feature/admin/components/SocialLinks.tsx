@@ -27,7 +27,7 @@ export default function SocialLinks({ userId, socials }: SocialLinksProps) {
       <div className="flex justify-between items-center">
         <h3 className="font-bold text-base lg:text-lg">SNS</h3>
         <Button
-          variant="muted"
+          variant="secondary"
           size="sm"
           onClick={() => {
             setMode("create");

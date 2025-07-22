@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import "./globals.css";
+import "../globals.css";
 import localFont from "next/font/local";
 import { Header } from "@/components/layout/header";
-import { Providers } from "./providers";
+import { Providers } from "../providers";
 import { Toaster } from "@/components/ui/sonner";
 import { ViewerProvider } from "@/feature/viewer/ViewerProvider";
 import Footer from "@/components/layout/footer";
@@ -13,10 +13,18 @@ import { Suspense } from "react";
 
 const Pretendard = localFont({
   src: [
-    { path: "fonts/Pretendard-Regular.woff", weight: "400", style: "normal" },
-    { path: "fonts/Pretendard-Medium.woff", weight: "500", style: "normal" },
-    { path: "fonts/Pretendard-SemiBold.woff", weight: "600", style: "normal" },
-    { path: "fonts/Pretendard-Bold.woff", weight: "700", style: "normal" },
+    {
+      path: "../fonts/Pretendard-Regular.woff",
+      weight: "400",
+      style: "normal",
+    },
+    { path: "../fonts/Pretendard-Medium.woff", weight: "500", style: "normal" },
+    {
+      path: "../fonts/Pretendard-SemiBold.woff",
+      weight: "600",
+      style: "normal",
+    },
+    { path: "../fonts/Pretendard-Bold.woff", weight: "700", style: "normal" },
   ],
   display: "swap",
 });
@@ -57,7 +65,7 @@ export default function RootLayout({
         <Providers>
           <ViewerProvider />
           <Header />
-          <main className="min-h-screen pt-14 px-4 lg:px-6">
+          <main className="min-h-screen pt-14 px-4 lg:px-6 bg-background">
             <div className="max-w-3xl mx-auto w-full">{children}</div>
           </main>
           <Footer />

@@ -85,7 +85,7 @@ export default function WorkList({ userId, works }: WorkListProps) {
       <div className="flex justify-between items-center">
         <h3 className="font-bold text-base lg:text-lg">작품 등록</h3>
         <Button
-          variant="muted"
+          variant="secondary"
           size="sm"
           onClick={handleCreate}
           aria-label="Create Link"
