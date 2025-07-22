@@ -1,22 +1,29 @@
 import type { Metadata } from "next";
-import "./globals.css";
+import "@/app/globals.css";
 import localFont from "next/font/local";
-import { Header } from "@/components/layout/header";
-import { Providers } from "./providers";
+import { Providers } from "@/app/providers";
 import { Toaster } from "@/components/ui/sonner";
-import { ViewerProvider } from "@/feature/viewer/ViewerProvider";
-import Footer from "@/components/layout/footer";
 import { GA_TRACKING_ID } from "@/lib/ga/gtag";
 import Script from "next/script";
 import GoogleAnalyticsTracker from "@/feature/analytics/GoogleAnalytics";
 import { Suspense } from "react";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/app-sidebar";
 
 const Pretendard = localFont({
   src: [
-    { path: "fonts/Pretendard-Regular.woff", weight: "400", style: "normal" },
-    { path: "fonts/Pretendard-Medium.woff", weight: "500", style: "normal" },
-    { path: "fonts/Pretendard-SemiBold.woff", weight: "600", style: "normal" },
-    { path: "fonts/Pretendard-Bold.woff", weight: "700", style: "normal" },
+    {
+      path: "../fonts/Pretendard-Regular.woff",
+      weight: "400",
+      style: "normal",
+    },
+    { path: "../fonts/Pretendard-Medium.woff", weight: "500", style: "normal" },
+    {
+      path: "../fonts/Pretendard-SemiBold.woff",
+      weight: "600",
+      style: "normal",
+    },
+    { path: "../fonts/Pretendard-Bold.woff", weight: "700", style: "normal" },
   ],
   display: "swap",
 });
@@ -53,14 +60,18 @@ export default function RootLayout({
           </>
         )}
       </head>
-      <body className={`${Pretendard.className} bg-background`}>
+      <body className={`${Pretendard.className}`}>
         <Providers>
-          <ViewerProvider />
-          <Header />
-          <main className="min-h-screen pt-14 px-4 lg:px-6">
-            <div className="max-w-3xl mx-auto w-full">{children}</div>
-          </main>
-          <Footer />
+          <SidebarProvider>
+            <AppSidebar />
+            <main className="flex h-screen gap-4 w-full bg-secondary dark:bg-background ">
+              <div className="flex-1 h-full overflow-y-auto ">
+                {/* <SidebarTrigger /> */}
+                {children}
+              </div>
+            </main>
+          </SidebarProvider>
+          {/* <Footer /> */}
           <Toaster position="top-center" />
         </Providers>
         <Suspense fallback={null}>
