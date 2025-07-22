@@ -9,6 +9,7 @@ import GoogleAnalyticsTracker from "@/feature/analytics/GoogleAnalytics";
 import { Suspense } from "react";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
+import AdminHeader from "@/feature/admin/header";
 
 const Pretendard = localFont({
   src: [
@@ -67,8 +68,9 @@ export default function RootLayout({
               <AppSidebar />
               <SidebarTrigger className="absolute top-1 right-[-34px]" />
             </div>
-            <main className="flex h-screen gap-4 w-full bg-muted dark:bg-background ">
-              <div className="flex-1 h-full overflow-y-auto ">{children}</div>
+            <main className="flex flex-col gap-4 w-full bg-muted dark:bg-background">
+              <AdminHeader />
+              <div className=" flex-1">{children}</div>
             </main>
           </SidebarProvider>
           {/* <Footer /> */}
