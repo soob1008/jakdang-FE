@@ -14,7 +14,7 @@ export default function TextOption({ index }: { index: number }) {
   const namePrefix = `blocks.${index}.data`;
 
   return (
-    <div className="border-t pt-4 space-y-6">
+    <>
       <div className="grid grid-cols-2 gap-4">
         {/* 정렬 선택 (아이콘 기반) */}
         <FormField
@@ -142,6 +142,6 @@ export default function TextOption({ index }: { index: number }) {
           </FormItem>
         )}
       />
-    </div>
+    </>
   );
 }

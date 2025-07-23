@@ -4,6 +4,7 @@ import { useState } from "react";
 import TextBlock from "./text/TextBlock";
 import BlockOptions from "./BlockOptions";
 import ImageBlock from "./image/ImageBlock";
+import WorkBlock from "./work/WorkBlock";
 
 interface BlockItemProps {
   index: number;
@@ -46,6 +47,7 @@ export default function BlockItem({ index, block }: BlockItemProps) {
         <div className="px-4 py-6 space-y-2">
           {block.type === "text" && <TextBlock index={index} />}
           {block.type === "image" && <ImageBlock index={index} />}
+          {block.type === "work" && <WorkBlock />}
           {/* 기타 블록 추가 예정 */}
           <BlockOptions type={block.type} />
         </div>

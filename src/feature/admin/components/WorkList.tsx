@@ -98,7 +98,7 @@ export default function WorkList({ userId, works }: WorkListProps) {
       {works.length === 0 ? (
         <EmptyText message="작품이 없습니다." />
       ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
           {visibleItems.map((work) => (
             <WorkItem
               key={work.id}
