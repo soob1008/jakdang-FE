@@ -19,7 +19,7 @@ import {
   ListChecks,
   Network,
 } from "lucide-react";
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import { cn } from "@/lib/utils";
 
 const blockList = [
@@ -88,20 +88,24 @@ const blockList = [
   },
 ];
 
+interface BlockSelectDialogProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  trigger: ReactNode;
+}
+
 export default function BlockSelectDialog({
-  onSelect,
-}: {
-  onSelect: (type: string) => void;
-}) {
+  open,
+  onOpenChange,
+  trigger,
+}: BlockSelectDialogProps) {
   const [selectedType, setSelectedType] = useState<string>("");
 
   console.log(selectedType);
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button variant="outline">블록 추가하기</Button>
-      </DialogTrigger>
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent className="max-w-2xl">
         {/* 너비 살짝 늘림 */}
         <DialogHeader>
@@ -153,12 +157,7 @@ export default function BlockSelectDialog({
           ))}
         </RadioGroup>
         <DialogFooter>
-          <Button
-            onClick={() => {
-              if (selectedType) onSelect(selectedType);
-            }}
-            disabled={!selectedType}
-          >
+          <Button onClick={() => {}} disabled={!selectedType}>
             추가하기
           </Button>
         </DialogFooter>
