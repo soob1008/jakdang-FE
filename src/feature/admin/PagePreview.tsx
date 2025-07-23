@@ -1,4 +1,4 @@
-export default function Preview() {
+export default function PagePreview() {
   return (
     <aside className="sticky top-10 h-fit px-4 flex flex-col items-center justify-center">
       <article className="w-[280px] h-[560px] rounded-[2rem] border border-gray-200 shadow-[0_0_20px_rgba(0,0,0,0.08)] overflow-hidden bg-[#FDCDB0]">

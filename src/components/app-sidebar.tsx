@@ -22,7 +22,6 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import Link from "next/link";
 import clsx from "clsx"; // tailwind class 병합용 라이브러리 (optional)
-import { SidebarTrigger } from "@/components/ui/sidebar";
 
 // 메뉴 구조
 const MENUS = [
@@ -31,7 +30,7 @@ const MENUS = [
     items: [
       {
         label: "구성하기",
-        href: "/admin/block",
+        href: "/admin/compose",
         icon: Blocks,
       },
       {

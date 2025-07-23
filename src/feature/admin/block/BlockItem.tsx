@@ -1,0 +1,78 @@
+import { GripVertical, ChevronDown, ChevronUp } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import TextBlock from "./text/TextBlock";
+import BlockOptions from "./BlockOptions";
+import ImageBlock from "./image/ImageBlock";
+import WorkBlock from "./work/WorkBlock";
+import LinkBlock from "./link/LInkBlock";
+import CalendarBlock from "./calendar/CalendarBlock";
+import SNSBlock from "./sns/SNSBlock";
+import ChallengeBlock from "./challenge/ChallengeBlock";
+import EventBlock from "./event/EventBlock";
+
+export interface Block {
+  id: string;
+  type:
+    | "text" // 글 - 문장/인용
+    | "image" // 이미지
+    | "work" // 작품
+    | "link" // 링크모음
+    | "calendar" // 일정
+    | "sns" // SNS
+    | "challenge" // 글쓰기챌린지
+    | "event"; // 이벤트
+  name?: string; // 블록 이름
+  data?: unknown; // 블록 데이터
+  layout?: string; // 레이아웃 (예: "grid", "list",
+}
+interface BlockItemProps {
+  index: number;
+  block: Block;
+}
+
+export default function BlockItem({ index, block }: BlockItemProps) {
+  const [isOpen, setIsOpen] = useState(true);
+
+  return (
+    <div className="bg-white rounded-lg shadow-sm">
+      {/* 헤더 영역 */}
+      <div className="flex items-center justify-between p-3 border-b">
+        <div className="flex items-center gap-2">
+          <GripVertical className="w-4 h-4 text-muted-foreground cursor-move" />
+          <h4 className="font-semibold">
+            {block.name || block.type.toUpperCase()}
+          </h4>
+        </div>
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          onClick={() => setIsOpen((prev) => !prev)}
+        >
+          {isOpen ? (
+            <ChevronUp className="w-4 h-4" />
+          ) : (
+            <ChevronDown className="w-4 h-4" />
+          )}
+        </Button>
+      </div>
+
+      {/* 내용 영역 */}
+      {isOpen && (
+        <div className="px-4 py-6 space-y-2">
+          {block.type === "text" && <TextBlock index={index} />}
+          {block.type === "image" && <ImageBlock index={index} />}
+          {block.type === "work" && <WorkBlock />}
+          {block.type === "link" && <LinkBlock index={index} />}
+          {block.type === "calendar" && <CalendarBlock index={index} />}
+          {block.type === "sns" && <SNSBlock index={index} />}
+          {block.type === "challenge" && <ChallengeBlock />}
+          {block.type === "event" && <EventBlock />}
+          {/* 기타 블록 추가 예정 */}
+          <BlockOptions type={block.type} />
+        </div>
+      )}
+    </div>
+  );
+}
