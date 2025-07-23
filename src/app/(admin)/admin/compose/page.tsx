@@ -1,38 +1,61 @@
-import Preview from "@/feature/admin/preview";
-import { Button } from "@/components/ui/button";
-import BlockItem from "@/feature/admin/block/block-item";
+"use client";
+
+import { useForm, FormProvider, useFieldArray } from "react-hook-form";
+
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
+import PagePreview from "@/feature/admin/PagePreview";
+import PageEditor from "@/feature/admin/block/PageEditor";
+
+const defaultBlocks = [
+  {
+    type: "text",
+    name: "텍스트",
+    data: { content: "", align: "left", bgColor: "#ffffff" },
+  },
+  { type: "image", name: "이미지", data: { url: "", alt: "" } },
+];
 
 export default function AdminBlockPage() {
-  return (
-    <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6  h-full">
-      {/* 좌측 콘텐츠 (스크롤 영역) */}
-      <article className="pr-2 flex flex-col gap-4 pt-4 pl-10 pb-24 max-w-[900px] w-full mx-auto lg:max-w-none">
-        <div className="flex items-center justify-between pb-2">
-          <h2 className="text-xl font-gong font-medium">페이지 구성</h2>
-          <Button className="w-fit">추가하기</Button>
-        </div>
-        {[
-          "text",
-          "image",
-          "link",
-          "work",
-          "notice",
-          "challenge",
-          "series",
-          "text",
-          "image",
-          "link",
-          "work",
-          "notice",
-          "challenge",
-          "series",
-        ].map((type, i) => (
-          <BlockItem key={i} type={type as any} />
-        ))}
-      </article>
+  const form = useForm<any>({
+    //resolver: zodResolver(),
+    defaultValues: {
+      blocks: defaultBlocks,
+    },
+  });
 
-      {/* 우측 프리뷰 (고정) */}
-      <Preview />
-    </div>
+  const { fields, append } = useFieldArray({
+    control: form.control,
+    name: "blocks",
+  });
+
+  const mutation = useMutation({
+    // mutationFn: async (data: any) => {
+    //   const res = await fetch("/api/page", {
+    //     method: "PATCH",
+    //     headers: { "Content-Type": "application/json" },
+    //     body: JSON.stringify(data),
+    //   });
+    //   if (!res.ok) throw new Error("저장 실패");
+    // },
+    // onSuccess: () => toast.success("페이지 저장 완료!"),
+    // onError: () => toast.error("저장 중 오류가 발생했습니다."),
+  });
+
+  const onSubmit = form.handleSubmit((data) => mutation.mutate(data));
+
+  return (
+    <FormProvider {...form}>
+      <form
+        onSubmit={onSubmit}
+        className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6 h-full"
+      >
+        {/* 좌측 콘텐츠 */}
+        <PageEditor initialData={{ blocks: fields }} />
+
+        {/* 우측 프리뷰 */}
+        <PagePreview />
+      </form>
+    </FormProvider>
   );
 }
