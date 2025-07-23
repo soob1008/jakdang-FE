@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import TextOption from "./text/TextOption";
 import { ChevronDown, ChevronUp } from "lucide-react";
+import ImageOption from "./image/ImageOption";
 
 interface BlockOptionsProps {
   type: string;
@@ -29,7 +30,7 @@ export default function BlockOptions({ type }: BlockOptionsProps) {
       {showOptions && (
         <div className="mt-2">
           {type === "text" && <TextOption index={0} />}
-          {type === "image" && <p>이미지 관련 옵션</p>}
+          {type === "image" && <ImageOption index={0} />}
         </div>
       )}
     </div>

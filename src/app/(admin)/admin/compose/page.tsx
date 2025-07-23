@@ -3,7 +3,6 @@
 import { useForm, FormProvider, useFieldArray } from "react-hook-form";
 
 import { useMutation } from "@tanstack/react-query";
-import { toast } from "sonner";
 import PagePreview from "@/feature/admin/PagePreview";
 import PageEditor from "@/feature/admin/block/PageEditor";
 
@@ -11,9 +10,76 @@ const defaultBlocks = [
   {
     type: "text",
     name: "텍스트",
-    data: { content: "", align: "left", bgColor: "#ffffff" },
+    data: {
+      content: "",
+      align: "left",
+      bgColor: "#ffffff",
+      fontSize: "base",
+    },
   },
-  { type: "image", name: "이미지", data: { url: "", alt: "" } },
+  {
+    type: "image",
+    name: "이미지",
+    data: {
+      url: "",
+      alt: "",
+    },
+  },
+  {
+    type: "work",
+    name: "작품",
+    data: {
+      workIds: [], // 선택된 작품 ID 배열
+      layout: "grid", // 또는 "list"
+    },
+  },
+  {
+    type: "link",
+    name: "링크모음",
+    data: {
+      links: [
+        // { label: "", url: "" }
+      ],
+      style: "default", // "default" | "button" | "grid" 등
+    },
+  },
+  {
+    type: "notice",
+    name: "공지/일정",
+    data: {
+      items: [
+        // { title: "", date: "", description: "" }
+      ],
+      displayMode: "list", // 또는 "calendar"
+    },
+  },
+  {
+    type: "challenge",
+    name: "글쓰기 챌린지",
+    data: {
+      challengeId: null, // 연결된 챌린지 ID
+      layout: "calendar", // 또는 "list", "grass"
+    },
+  },
+  {
+    type: "series",
+    name: "연재 리스트",
+    data: {
+      seriesId: null, // 연재 ID
+      showDescription: true,
+    },
+  },
+  {
+    type: "event",
+    name: "이벤트",
+    data: {
+      title: "",
+      date: "",
+      location: "",
+      description: "",
+      registrationLink: "",
+    },
+  },
 ];
 
 export default function AdminBlockPage() {
