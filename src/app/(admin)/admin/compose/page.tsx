@@ -40,7 +40,15 @@ const defaultBlocks = [
       links: [
         // { label: "", url: "" }
       ],
-      style: "default", // "default" | "button" | "grid" 등
+    },
+  },
+  {
+    type: "sns",
+    name: "SNS",
+    data: {
+      links: [
+        // { label: "", url: "" }
+      ],
     },
   },
   {

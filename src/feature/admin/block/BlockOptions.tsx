@@ -13,7 +13,7 @@ interface BlockOptionsProps {
 export default function BlockOptions({ type }: BlockOptionsProps) {
   const [showOptions, setShowOptions] = useState(true);
 
-  if (type === "link") return null;
+  if (type === "link" || type === "sns") return null;
 
   return (
     <div className="mt-6">
