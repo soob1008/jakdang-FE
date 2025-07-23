@@ -11,6 +11,9 @@ interface BlockOptionsProps {
 
 export default function BlockOptions({ type }: BlockOptionsProps) {
   const [showOptions, setShowOptions] = useState(true);
+
+  if (type === "link") return null;
+
   return (
     <div className="mt-6">
       <div className="flex items-center justify-end">
@@ -37,6 +40,7 @@ export default function BlockOptions({ type }: BlockOptionsProps) {
               <WorkOption index={0} />
             )
           }
+          {/* {type === "link" && <LinkOption index={0} />} */}
         </div>
       )}
     </div>

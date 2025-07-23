@@ -35,7 +35,7 @@ const defaultBlocks = [
   },
   {
     type: "link",
-    name: "링크모음",
+    name: "링크",
     data: {
       links: [
         // { label: "", url: "" }
@@ -44,8 +44,8 @@ const defaultBlocks = [
     },
   },
   {
-    type: "notice",
-    name: "공지/일정",
+    type: "calendar",
+    name: "일정",
     data: {
       items: [
         // { title: "", date: "", description: "" }

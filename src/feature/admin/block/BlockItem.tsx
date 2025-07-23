@@ -5,6 +5,7 @@ import TextBlock from "./text/TextBlock";
 import BlockOptions from "./BlockOptions";
 import ImageBlock from "./image/ImageBlock";
 import WorkBlock from "./work/WorkBlock";
+import LinkBlock from "./link/LInkBlock";
 
 interface BlockItemProps {
   index: number;
@@ -25,7 +26,7 @@ export default function BlockItem({ index, block }: BlockItemProps) {
         <div className="flex items-center gap-2">
           <GripVertical className="w-4 h-4 text-muted-foreground cursor-move" />
           <h4 className="font-semibold">
-            {block.name || block.type.toUpperCase()} 블록
+            {block.name || block.type.toUpperCase()}
           </h4>
         </div>
         <Button
@@ -48,6 +49,7 @@ export default function BlockItem({ index, block }: BlockItemProps) {
           {block.type === "text" && <TextBlock index={index} />}
           {block.type === "image" && <ImageBlock index={index} />}
           {block.type === "work" && <WorkBlock />}
+          {block.type === "link" && <LinkBlock index={index} />}
           {/* 기타 블록 추가 예정 */}
           <BlockOptions type={block.type} />
         </div>
