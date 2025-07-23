@@ -6,6 +6,7 @@ import BlockOptions from "./BlockOptions";
 import ImageBlock from "./image/ImageBlock";
 import WorkBlock from "./work/WorkBlock";
 import LinkBlock from "./link/LInkBlock";
+import CalendarBlock from "./calendar/CalendarBlock";
 
 interface BlockItemProps {
   index: number;
@@ -50,6 +51,7 @@ export default function BlockItem({ index, block }: BlockItemProps) {
           {block.type === "image" && <ImageBlock index={index} />}
           {block.type === "work" && <WorkBlock />}
           {block.type === "link" && <LinkBlock index={index} />}
+          {block.type === "calendar" && <CalendarBlock index={index} />}
           {/* 기타 블록 추가 예정 */}
           <BlockOptions type={block.type} />
         </div>

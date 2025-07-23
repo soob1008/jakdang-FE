@@ -4,6 +4,7 @@ import TextOption from "./text/TextOption";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import ImageOption from "./image/ImageOption";
 import WorkOption from "./work/WorkOption";
+import CalendarOption from "./calendar/CalendarOption";
 
 interface BlockOptionsProps {
   type: string;
@@ -40,6 +41,7 @@ export default function BlockOptions({ type }: BlockOptionsProps) {
               <WorkOption index={0} />
             )
           }
+          {type === "calendar" && <CalendarOption index={0} />}
           {/* {type === "link" && <LinkOption index={0} />} */}
         </div>
       )}
