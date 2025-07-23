@@ -4,7 +4,6 @@ import { Badge } from "@/components/ui/badge";
 import { ExternalLink } from "lucide-react";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
-import Image from "next/image";
 
 interface EventItem {
   id: string;

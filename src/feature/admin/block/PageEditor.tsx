@@ -4,8 +4,9 @@ import { Button } from "@/components/ui/button";
 
 import { useFormContext, useFieldArray } from "react-hook-form";
 import BlockItem from "./BlockItem";
+import { Block } from "./BlockItem"; // Assuming BlockItem.tsx exports Block interface
 
-export default function PageEditor({ initialData }: { initialData: any }) {
+export default function PageEditor() {
   const { control } = useFormContext();
   const { fields } = useFieldArray({ control, name: "blocks" });
   return (
@@ -24,7 +25,9 @@ export default function PageEditor({ initialData }: { initialData: any }) {
 
       <div className="flex flex-col gap-4">
         {fields.map((block, index) => {
-          return <BlockItem key={block.id} index={index} block={block} />;
+          return (
+            <BlockItem key={block.id} index={index} block={block as Block} />
+          );
         })}
       </div>
     </article>

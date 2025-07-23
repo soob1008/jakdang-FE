@@ -1,7 +1,6 @@
 import {
   FormField,
   FormItem,
-  FormLabel,
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
@@ -14,7 +13,7 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { GripVertical, Trash2, MoveUp, MoveDown } from "lucide-react";
+import { GripVertical, Trash2 } from "lucide-react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
 const snsTypes = [
@@ -30,7 +29,7 @@ const snsTypes = [
 export default function SNSBlock({ index }: { index: number }) {
   const namePrefix = `blocks.${index}.data.items`;
   const { control } = useFormContext();
-  const { fields, append, remove, move } = useFieldArray({
+  const { fields, append, remove } = useFieldArray({
     control,
     name: namePrefix,
   });

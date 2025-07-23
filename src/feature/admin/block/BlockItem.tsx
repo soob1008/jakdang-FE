@@ -11,13 +11,24 @@ import SNSBlock from "./sns/SNSBlock";
 import ChallengeBlock from "./challenge/ChallengeBlock";
 import EventBlock from "./event/EventBlock";
 
+export interface Block {
+  id: string;
+  type:
+    | "text" // 글 - 문장/인용
+    | "image" // 이미지
+    | "work" // 작품
+    | "link" // 링크모음
+    | "calendar" // 일정
+    | "sns" // SNS
+    | "challenge" // 글쓰기챌린지
+    | "event"; // 이벤트
+  name?: string; // 블록 이름
+  data?: unknown; // 블록 데이터
+  layout?: string; // 레이아웃 (예: "grid", "list",
+}
 interface BlockItemProps {
   index: number;
-  block: {
-    id: string;
-    type: string;
-    name?: string;
-  };
+  block: Block;
 }
 
 export default function BlockItem({ index, block }: BlockItemProps) {

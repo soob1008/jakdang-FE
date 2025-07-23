@@ -8,14 +8,13 @@ import {
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { LayoutList, Grid2X2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { useFormContext, useFieldArray } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import { GripVertical } from "lucide-react";
 
 export default function WorkOption({ index }: { index: number }) {
   const namePrefix = `blocks.${index}.data`;
-  const imagesPrefix = `${namePrefix}.images`;
-  const { control, watch, setValue } = useFormContext();
-  const { fields, move } = useFieldArray({ control, name: imagesPrefix });
+  const { setValue } = useFormContext();
+  // const { fields, move } = useFieldArray({ control, name: imagesPrefix });
 
   return (
     <div className="space-y-6">

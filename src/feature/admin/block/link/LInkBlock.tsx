@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import {
   FormField,
   FormItem,
-  FormLabel,
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
@@ -12,8 +11,8 @@ import { GripVertical, Plus, Trash2 } from "lucide-react";
 
 export default function LinkBlock({ index }: { index: number }) {
   const namePrefix = `blocks.${index}.data.links`;
-  const { control, register } = useFormContext();
-  const { fields, append, remove, move } = useFieldArray({
+  const { control } = useFormContext();
+  const { fields, append, remove } = useFieldArray({
     control,
     name: namePrefix,
   });

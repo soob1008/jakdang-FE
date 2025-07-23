@@ -69,13 +69,13 @@ export default function CalendarBlock({ index }: { index: number }) {
                         selected={new Date(dateValue)}
                         onSelect={(date) => {
                           setValue(`${namePrefix}.${i}.date`, date);
-                          setTimeout(() => {
-                            document
-                              .querySelector(
-                                `input[name='${namePrefix}.${i}.title']`
-                              )
-                              ?.focus();
-                          }, 50);
+                          //   setTimeout(() => {
+                          //     document
+                          //       .querySelector(
+                          //         `input[name='${namePrefix}.${i}.title']`
+                          //       )
+
+                          //   }, 50);
                         }}
                         initialFocus
                         locale={ko}

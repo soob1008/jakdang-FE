@@ -1,20 +1,14 @@
 import { useFormContext, useFieldArray } from "react-hook-form";
 import { Input } from "@/components/ui/input";
-import {
-  FormField,
-  FormItem,
-  FormLabel,
-  FormControl,
-  FormMessage,
-} from "@/components/ui/form";
+import { FormLabel } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import Image from "next/image";
 
 export default function ImageBlock({ index }: { index: number }) {
   const namePrefix = `blocks.${index}.data.images`;
-  const { control, register, setValue, watch } = useFormContext();
-  const { fields, append, remove } = useFieldArray({
+  const { control, register, watch } = useFormContext();
+  const { fields, remove } = useFieldArray({
     control,
     name: namePrefix,
   });
