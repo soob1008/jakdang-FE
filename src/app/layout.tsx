@@ -1,11 +1,8 @@
 import type { Metadata } from "next";
-import "./globals.css";
+import "@/app/globals.css";
 import localFont from "next/font/local";
-import { Header } from "@/components/layout/header";
-import { Providers } from "./providers";
+import { Providers } from "@/app/providers";
 import { Toaster } from "@/components/ui/sonner";
-import { ViewerProvider } from "@/feature/viewer/ViewerProvider";
-import Footer from "@/components/layout/footer";
 import { GA_TRACKING_ID } from "@/lib/ga/gtag";
 import Script from "next/script";
 import GoogleAnalyticsTracker from "@/feature/analytics/GoogleAnalytics";
@@ -61,14 +58,10 @@ export default function RootLayout({
           </>
         )}
       </head>
-      <body className={`${Pretendard.className} bg-background`}>
+      <body className={`${Pretendard.className}`}>
         <Providers>
-          <ViewerProvider />
-          <Header />
-          <main className="min-h-screen pt-14 px-4 lg:px-6 bg-background">
-            <div className="max-w-3xl mx-auto w-full">{children}</div>
-          </main>
-          <Footer />
+          <main>{children}</main>
+          {/* <Footer /> */}
           <Toaster position="top-center" />
         </Providers>
         <Suspense fallback={null}>
