@@ -29,7 +29,7 @@ export default function CalendarBlock({ index }: { index: number }) {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h4 className="font-semibold text-base">일정</h4>
+        <h4 className="font-semibold text-base">일정 설정</h4>
         <Button
           type="button"
           variant="outline"

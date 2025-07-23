@@ -70,14 +70,6 @@ const defaultBlocks = [
     },
   },
   {
-    type: "series",
-    name: "연재 리스트",
-    data: {
-      seriesId: null, // 연재 ID
-      showDescription: true,
-    },
-  },
-  {
     type: "event",
     name: "이벤트",
     data: {

@@ -9,7 +9,6 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { LayoutList, Grid2X2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useFormContext, useFieldArray } from "react-hook-form";
-import { Button } from "@/components/ui/button";
 import { GripVertical } from "lucide-react";
 
 export default function WorkOption({ index }: { index: number }) {
@@ -81,7 +80,7 @@ export default function WorkOption({ index }: { index: number }) {
       <div className="space-y-2">
         <FormLabel>작품 순서</FormLabel>
         <ul className="space-y-2">
-          {["작품 1", "작품 2", "작품 3"].map((item, i) => (
+          {[{ title: "작품 1", id: "111" }].map((item, i) => (
             <li key={item.id} className="flex items-center gap-2">
               <GripVertical className="w-4 h-4 text-muted-foreground" />
               <Input

@@ -11,7 +11,7 @@ export default function PageEditor({ initialData }: { initialData: any }) {
   return (
     <article className="pr-2 flex flex-col gap-4 pt-4 pl-10 pb-24 max-w-[900px] w-full mx-auto lg:max-w-none">
       <div className="flex items-center justify-between pb-2">
-        <h2 className="text-xl font-gong font-medium">페이지 구성</h2>
+        <h2 className="text-xl font-gong font-medium">내 페이지 편집</h2>
         <div className="flex items-center gap-2">
           <Button type="button" className="w-fit" variant="outline">
             블록 추가하기
