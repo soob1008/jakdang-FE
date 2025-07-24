@@ -35,7 +35,7 @@ export default function BlockItem({ index, block }: BlockItemProps) {
   const [isOpen, setIsOpen] = useState(true);
 
   return (
-    <div className="bg-white rounded-lg shadow-sm">
+    <section className="bg-white rounded-lg shadow-sm">
       {/* 헤더 영역 */}
       <div className="flex items-center justify-between p-3 border-b">
         <div className="flex items-center gap-2">
@@ -73,6 +73,6 @@ export default function BlockItem({ index, block }: BlockItemProps) {
           <BlockOptions type={block.type} />
         </div>
       )}
-    </div>
+    </section>
   );
 }
