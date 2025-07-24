@@ -148,7 +148,9 @@ export default function TagsDialog({ userId, tags }: TagsDialogProps) {
                   variant="outline"
                   size="lg"
                   onClick={handleTagAdd}
-                  disabled={!inputTag.trim() || watch("tags").length >= 5}
+                  disabled={
+                    !inputTag.trim() || (watch("tags") ?? []).length >= 5
+                  }
                 >
                   입력
                 </Button>
