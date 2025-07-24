@@ -161,7 +161,7 @@ export default function TagsDialog({ userId, tags }: TagsDialogProps) {
 
           {/* 태그 목록 */}
           <ul className="flex flex-wrap gap-2">
-            {watch("tags").map((tag) => (
+            {(watch("tags") ?? []).map((tag) => (
               <li key={tag.id}>
                 <Badge
                   variant="outline"
