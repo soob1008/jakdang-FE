@@ -29,15 +29,23 @@ export interface Block {
 interface BlockItemProps {
   index: number;
   block: Block;
+  dragHandleProps?: React.HTMLAttributes<HTMLDivElement>;
 }
 
-export default function BlockItem({ index, block }: BlockItemProps) {
+export default function BlockItem({
+  index,
+  block,
+  dragHandleProps,
+}: BlockItemProps) {
   const [isOpen, setIsOpen] = useState(true);
 
   return (
     <section className="bg-white rounded-lg shadow-sm">
       {/* 헤더 영역 */}
-      <div className="flex items-center justify-between p-3 border-b">
+      <div
+        className="flex items-center justify-between p-3 border-b"
+        {...dragHandleProps}
+      >
         <div className="flex items-center gap-2">
           <GripVertical className="w-4 h-4 text-muted-foreground cursor-move" />
           <h4 className="font-semibold">
