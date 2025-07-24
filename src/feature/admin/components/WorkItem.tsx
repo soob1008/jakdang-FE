@@ -35,7 +35,7 @@ export default function WorkItem({
 
   return (
     <div>
-      <div className="relative w-full aspect-[1] overflow-hidden rounded-md shadow-sm">
+      <div className="relative w-full aspect-[1] overflow-hidden rounded-md shadow-sm bg-white">
         {!loaded && (
           <Skeleton className="absolute top-0 left-0 w-full h-full" />
         )}
