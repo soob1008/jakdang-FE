@@ -14,7 +14,7 @@ import {
   ImageIcon,
   Link2,
   CalendarIcon,
-  Gift,
+  Medal,
   BookOpenText,
   ListChecks,
   Network,
@@ -64,8 +64,8 @@ const blockList = [
       {
         type: "event",
         name: "이벤트",
-        description: "이벤트 정보를 보여줘요",
-        icon: Gift,
+        description: "진행 중인 이벤트를 보여줘요",
+        icon: ListChecks,
       },
     ],
   },
@@ -82,7 +82,7 @@ const blockList = [
         type: "challenge",
         name: "챌린지",
         description: "진행 중인 챌린지를 보여줘요",
-        icon: ListChecks,
+        icon: Medal,
       },
     ],
   },
@@ -94,7 +94,7 @@ interface BlockSelectDialogProps {
   trigger: ReactNode;
 }
 
-export default function BlockSelectDialog({
+export default function BlockDialog({
   open,
   onOpenChange,
   trigger,
@@ -107,55 +107,56 @@ export default function BlockSelectDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent className="max-w-2xl">
-        {/* 너비 살짝 늘림 */}
         <DialogHeader>
           <DialogTitle>블록 선택</DialogTitle>
           <DialogDescription>추가할 블록을 하나 선택하세요.</DialogDescription>
         </DialogHeader>
-        <RadioGroup
-          value={selectedType}
-          onValueChange={setSelectedType}
-          className="space-y-6"
-        >
-          {blockList.map((group) => (
-            <div key={group.category} className="space-y-3">
-              <h4 className="text-sm font-semibold text-muted-foreground">
-                {group.category}
-              </h4>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                {group.blocks.map((block) => {
-                  const Icon = block.icon;
-                  return (
-                    <div key={block.type}>
-                      <input
-                        name="block"
-                        type="radio"
-                        value={block.type}
-                        id={`block-${block.type}`}
-                        className="peer sr-only"
-                      />
-                      <label
-                        htmlFor={`block-${block.type}`}
-                        className={cn(
-                          "p-4 border h-32 rounded-md flex flex-col items-center gap-2 cursor-pointer transition",
-                          "peer-checked:bg-secondary"
-                        )}
-                      >
-                        <Icon className="w-6 h-6" />
-                        <span className="font-medium text-sm">
-                          {block.name}
-                        </span>
-                        <span className="text-xs text-muted-foreground text-center">
-                          {block.description}
-                        </span>
-                      </label>
-                    </div>
-                  );
-                })}
+        <div className="max-h-120 overflow-y-auto">
+          <RadioGroup
+            value={selectedType}
+            onValueChange={setSelectedType}
+            className="space-y-6"
+          >
+            {blockList.map((group) => (
+              <div key={group.category} className="space-y-3">
+                <h4 className="text-sm font-semibold text-muted-foreground">
+                  {group.category}
+                </h4>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                  {group.blocks.map((block) => {
+                    const Icon = block.icon;
+                    return (
+                      <div key={block.type}>
+                        <input
+                          name="block"
+                          type="radio"
+                          value={block.type}
+                          id={`block-${block.type}`}
+                          className="peer sr-only"
+                        />
+                        <label
+                          htmlFor={`block-${block.type}`}
+                          className={cn(
+                            "p-4 border h-32 rounded-md flex flex-col items-center gap-2 cursor-pointer transition",
+                            "peer-checked:bg-secondary"
+                          )}
+                        >
+                          <Icon className="w-6 h-6" />
+                          <span className="font-medium text-sm">
+                            {block.name}
+                          </span>
+                          <span className="text-xs text-muted-foreground text-center">
+                            {block.description}
+                          </span>
+                        </label>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
-          ))}
-        </RadioGroup>
+            ))}
+          </RadioGroup>
+        </div>
         <DialogFooter>
           <Button onClick={() => {}} disabled={!selectedType}>
             추가하기

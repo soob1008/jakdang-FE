@@ -106,20 +106,15 @@ export default function AdminBlockPage() {
   //   // onError: () => toast.error("저장 중 오류가 발생했습니다."),
   // });
 
-  const onSubmit = () => {};
-
   return (
     <FormProvider {...form}>
-      <form
-        onSubmit={onSubmit}
-        className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6 h-full"
-      >
+      <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6 h-full">
         {/* 좌측 콘텐츠 */}
         <PageEditor />
 
         {/* 우측 프리뷰 */}
         <PagePreview />
-      </form>
+      </div>
     </FormProvider>
   );
 }

@@ -140,7 +140,7 @@ export default function TagsDialog({ userId, tags }: TagsDialogProps) {
                   value={inputTag}
                   onChange={(e) => setInputTag(e.target.value)}
                   onKeyDown={handleTagKeyDown}
-                  disabled={watch("tags").length >= 5}
+                  disabled={(watch("tags") ?? []).length >= 5}
                   maxLength={10}
                 />
                 <Button
@@ -148,7 +148,9 @@ export default function TagsDialog({ userId, tags }: TagsDialogProps) {
                   variant="outline"
                   size="lg"
                   onClick={handleTagAdd}
-                  disabled={!inputTag.trim() || watch("tags").length >= 5}
+                  disabled={
+                    !inputTag.trim() || (watch("tags") ?? []).length >= 5
+                  }
                 >
                   입력
                 </Button>
@@ -159,7 +161,7 @@ export default function TagsDialog({ userId, tags }: TagsDialogProps) {
 
           {/* 태그 목록 */}
           <ul className="flex flex-wrap gap-2">
-            {watch("tags").map((tag) => (
+            {(watch("tags") ?? []).map((tag) => (
               <li key={tag.id}>
                 <Badge
                   variant="outline"
