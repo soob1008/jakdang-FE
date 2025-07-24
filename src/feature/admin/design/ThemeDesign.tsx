@@ -18,6 +18,7 @@ export default function ThemeDesign() {
             key={theme.id}
             id={theme.id}
             label={theme.label}
+            fieldName="theme"
             bg={theme.bg}
           />
         ))}

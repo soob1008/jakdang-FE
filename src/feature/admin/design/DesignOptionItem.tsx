@@ -4,18 +4,24 @@ interface ThemeOptionProps {
   id: string;
   label: string;
   bg: string;
+  fieldName: string;
 }
 
-export default function DesignOptionItem({ id, label, bg }: ThemeOptionProps) {
+export default function DesignOptionItem({
+  id,
+  fieldName,
+  label,
+  bg,
+}: ThemeOptionProps) {
   const { register } = useFormContext();
 
   return (
-    <div key={id}>
+    <>
       <input
         type="radio"
         value={id}
         id={id}
-        {...register("theme")}
+        {...register(fieldName)}
         className="peer sr-only"
       />
       <label
@@ -28,6 +34,6 @@ export default function DesignOptionItem({ id, label, bg }: ThemeOptionProps) {
       >
         {label}
       </label>
-    </div>
+    </>
   );
 }
