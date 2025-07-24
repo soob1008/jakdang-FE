@@ -6,12 +6,13 @@ import { useFormContext, useFieldArray } from "react-hook-form";
 import BlockItem from "./BlockItem";
 import { Block } from "./BlockItem";
 import BlockDialog from "./BlockDialog";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 export default function PageEditor() {
   const { control } = useFormContext();
   const { fields } = useFieldArray({ control, name: "blocks" });
 
-  const [openBlockDialog, setOpenBlockDialog] = useState(true);
+  const [openBlockDialog, setOpenBlockDialog] = useState(false);
 
   return (
     <article className="pr-2 flex flex-col gap-4 pt-4 pl-10 pb-24 max-w-[900px] w-full mx-auto lg:max-w-none">
@@ -34,13 +35,40 @@ export default function PageEditor() {
         </div>
       </div>
 
-      <div className="flex flex-col gap-4">
-        {fields.map((block, index) => {
-          return (
-            <BlockItem key={block.id} index={index} block={block as Block} />
-          );
-        })}
-      </div>
+      <DragDropContext onDragEnd={() => {}}>
+        <Droppable droppableId="blocks" type="BLOCK">
+          {(provided) => (
+            <div
+              className="flex flex-col gap-4"
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+            >
+              {fields.map((block, index) => {
+                return (
+                  <Draggable
+                    key={block.id}
+                    draggableId={block.id}
+                    index={index}
+                  >
+                    {(provided) => (
+                      <div ref={provided.innerRef} {...provided.draggableProps}>
+                        <BlockItem
+                          key={block.id}
+                          index={index}
+                          block={block as Block}
+                          dragHandleProps={
+                            provided.dragHandleProps ?? undefined
+                          }
+                        />
+                      </div>
+                    )}
+                  </Draggable>
+                );
+              })}
+            </div>
+          )}
+        </Droppable>
+      </DragDropContext>
     </article>
   );
 }

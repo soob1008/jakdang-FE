@@ -8,14 +8,25 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { GripVertical, Plus, Trash2 } from "lucide-react";
+import {
+  DragDropContext,
+  Draggable,
+  Droppable,
+  DropResult,
+} from "@hello-pangea/dnd";
 
 export default function LinkBlock({ index }: { index: number }) {
   const namePrefix = `blocks.${index}.data.links`;
   const { control } = useFormContext();
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, move } = useFieldArray({
     control,
     name: namePrefix,
   });
+
+  const handleDragEnd = (result: DropResult) => {
+    if (!result.destination) return;
+    move(result.source.index, result.destination.index);
+  };
 
   return (
     <div className="space-y-6">
@@ -31,46 +42,72 @@ export default function LinkBlock({ index }: { index: number }) {
         </Button>
       </div>
 
-      {fields.map((field, i) => (
-        <div key={field.id} className="flex items-start gap-2">
-          <GripVertical className="w-4 h-4 mt-3 text-muted-foreground cursor-move" />
+      <DragDropContext onDragEnd={handleDragEnd}>
+        <Droppable droppableId="links">
+          {(provided) => (
+            <div
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+              className="space-y-4"
+            >
+              {fields.map((field, i) => (
+                <Draggable key={field.id} draggableId={field.id} index={i}>
+                  {(provided) => (
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      className="flex items-start gap-2"
+                    >
+                      <div {...provided.dragHandleProps}>
+                        <GripVertical className="w-4 h-4 mt-3 text-muted-foreground cursor-move" />
+                      </div>
 
-          <div className="w-full space-y-2">
-            <FormField
-              name={`${namePrefix}.${i}.title`}
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input placeholder="링크 제목" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                      <div className="w-full space-y-2">
+                        <FormField
+                          name={`${namePrefix}.${i}.title`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormControl>
+                                <Input placeholder="링크 제목" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
 
-            <FormField
-              name={`${namePrefix}.${i}.url`}
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input placeholder="https://example.com" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
+                        <FormField
+                          name={`${namePrefix}.${i}.url`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormControl>
+                                <Input
+                                  placeholder="https://example.com"
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
 
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            onClick={() => remove(i)}
-          >
-            <Trash2 className="w-4 h-4 text-destructive" />
-          </Button>
-        </div>
-      ))}
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => remove(i)}
+                      >
+                        <Trash2 className="w-4 h-4 text-destructive" />
+                      </Button>
+                    </div>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      </DragDropContext>
     </div>
   );
 }
