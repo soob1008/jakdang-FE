@@ -6,6 +6,13 @@ import { Progress } from "@/components/ui/progress";
 import { ExternalLink } from "lucide-react";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface ChallengeItem {
   id: string;
@@ -48,6 +55,17 @@ export default function ChallengeBlock() {
 
   return (
     <div className="space-y-2">
+      <div>
+        <Select>
+          <SelectTrigger>
+            <SelectValue placeholder="챌린지를 선택하세요" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="birthday">🎂 생일파티</SelectItem>
+            <SelectItem value="house">🏠 집들이</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
       <div className="flex items-center justify-between">
         <h4 className="text-lg font-semibold">{challenge.title}</h4>
         <Button variant="link" asChild className="text-sm px-0 h-auto">

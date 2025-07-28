@@ -1,6 +1,8 @@
+"use client";
+
 import { GripVertical, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TextBlock from "./text/TextBlock";
 import BlockOptions from "./BlockOptions";
 import ImageBlock from "./image/ImageBlock";
@@ -10,6 +12,7 @@ import CalendarBlock from "./calendar/CalendarBlock";
 import SNSBlock from "./sns/SNSBlock";
 import ChallengeBlock from "./challenge/ChallengeBlock";
 import EventBlock from "./event/EventBlock";
+import { Switch } from "@/components/ui/switch";
 
 export interface Block {
   id: string;
@@ -52,18 +55,21 @@ export default function BlockItem({
             {block.name || block.type.toUpperCase()}
           </h4>
         </div>
-        <Button
-          type="button"
-          variant="ghost"
-          size="sm"
-          onClick={() => setIsOpen((prev) => !prev)}
-        >
-          {isOpen ? (
-            <ChevronUp className="w-4 h-4" />
-          ) : (
-            <ChevronDown className="w-4 h-4" />
-          )}
-        </Button>
+        <div className="flex items-center gap-2">
+          <Switch />
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={() => setIsOpen((prev) => !prev)}
+          >
+            {isOpen ? (
+              <ChevronUp className="w-4 h-4" />
+            ) : (
+              <ChevronDown className="w-4 h-4" />
+            )}
+          </Button>
+        </div>
       </div>
 
       {/* 내용 영역 */}

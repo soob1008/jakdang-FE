@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useFormContext, useFieldArray } from "react-hook-form";
 import BlockItem from "./BlockItem";
@@ -10,7 +10,10 @@ import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 export default function PageEditor() {
   const { control } = useFormContext();
-  const { fields } = useFieldArray({ control, name: "blocks" });
+  const { fields } = useFieldArray({
+    control,
+    name: "blocks",
+  });
 
   const [openBlockDialog, setOpenBlockDialog] = useState(false);
 
@@ -28,7 +31,6 @@ export default function PageEditor() {
               </Button>
             }
           />
-
           <Button type="button" className="w-fit">
             저장하기
           </Button>
@@ -43,28 +45,19 @@ export default function PageEditor() {
               ref={provided.innerRef}
               {...provided.droppableProps}
             >
-              {fields.map((block, index) => {
-                return (
-                  <Draggable
-                    key={block.id}
-                    draggableId={block.id}
-                    index={index}
-                  >
-                    {(provided) => (
-                      <div ref={provided.innerRef} {...provided.draggableProps}>
-                        <BlockItem
-                          key={block.id}
-                          index={index}
-                          block={block as Block}
-                          dragHandleProps={
-                            provided.dragHandleProps ?? undefined
-                          }
-                        />
-                      </div>
-                    )}
-                  </Draggable>
-                );
-              })}
+              {fields.map((block, index) => (
+                <Draggable key={block.id} draggableId={block.id} index={index}>
+                  {(provided) => (
+                    <div ref={provided.innerRef} {...provided.draggableProps}>
+                      <BlockItem
+                        index={index}
+                        block={block as Block}
+                        dragHandleProps={provided.dragHandleProps ?? {}}
+                      />
+                    </div>
+                  )}
+                </Draggable>
+              ))}
             </div>
           )}
         </Droppable>

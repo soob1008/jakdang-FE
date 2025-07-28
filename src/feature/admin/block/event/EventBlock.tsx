@@ -4,6 +4,13 @@ import { Badge } from "@/components/ui/badge";
 import { ExternalLink } from "lucide-react";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface EventItem {
   id: string;
@@ -48,6 +55,15 @@ export default function EventBlock() {
 
   return (
     <div className="">
+      <Select>
+        <SelectTrigger>
+          <SelectValue placeholder="챌린지를 선택하세요" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="birthday">🎂 생일파티</SelectItem>
+          <SelectItem value="house">🏠 집들이</SelectItem>
+        </SelectContent>
+      </Select>
       {/* 관리 링크 */}
       <div className="flex items-center justify-between mb-4">
         <h4 className="text-lg font-semibold">{event.title}</h4>
