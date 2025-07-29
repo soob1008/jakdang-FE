@@ -86,12 +86,12 @@ export default function TextOption({ index }: { index: number }) {
             </FormItem>
           )}
         />
-        {/* 배경색 선택 */}
+        {/* 색상 선택 */}
         <FormField
           name={`${namePrefix}.bgColor`}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>배경색</FormLabel>
+              <FormLabel>색상</FormLabel>
               <FormControl>
                 <Input
                   type="color"

@@ -1,11 +1,13 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import PagePreview from "@/feature/admin/PagePreview";
 import PageEditor from "@/feature/admin/block/PageEditor";
 
 const defaultBlocks = [
   {
+    id: "1",
     type: "text",
     name: "텍스트",
     data: {
@@ -16,6 +18,7 @@ const defaultBlocks = [
     },
   },
   {
+    id: "2",
     type: "image",
     name: "이미지",
     data: {
@@ -24,6 +27,7 @@ const defaultBlocks = [
     },
   },
   {
+    id: "3",
     type: "work",
     name: "작품",
     data: {
@@ -32,6 +36,7 @@ const defaultBlocks = [
     },
   },
   {
+    id: "4",
     type: "link",
     name: "링크",
     data: {
@@ -41,6 +46,7 @@ const defaultBlocks = [
     },
   },
   {
+    id: "5",
     type: "sns",
     name: "SNS",
     data: {
@@ -50,6 +56,7 @@ const defaultBlocks = [
     },
   },
   {
+    id: "6",
     type: "calendar",
     name: "일정",
     data: {
@@ -60,6 +67,7 @@ const defaultBlocks = [
     },
   },
   {
+    id: "7",
     type: "challenge",
     name: "글쓰기 챌린지",
     data: {
@@ -68,6 +76,7 @@ const defaultBlocks = [
     },
   },
   {
+    id: "8",
     type: "event",
     name: "이벤트",
     data: {
@@ -87,6 +96,14 @@ export default function AdminBlockPage() {
       blocks: defaultBlocks,
     },
   });
+
+  const [hasMounted, setHasMounted] = useState(false);
+
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
+  if (!hasMounted) return null;
 
   // const { fields } = useFieldArray({
   //   control: form.control,

@@ -19,9 +19,9 @@ export default function DesignOptionItem({
     <>
       <input
         type="radio"
+        {...register(fieldName)}
         value={id}
         id={id}
-        {...register(fieldName)}
         className="peer sr-only"
       />
       <label

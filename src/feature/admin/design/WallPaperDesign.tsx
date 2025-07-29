@@ -12,7 +12,7 @@ export default function WallPaperDesign() {
   return (
     <section className="px-6 py-4 bg-white rounded-xl shadow-sm">
       <h3 className="font-bold">Wallpaper</h3>
-      <div className="grid grid-cols-7 gap-4 mt-4">
+      <div className="grid grid-cols-5 sm:grid-cols-7 gap-4 mt-4">
         {themes.map((theme) => (
           <DesignOptionItem
             key={theme.id}
