@@ -2,7 +2,7 @@
 
 import { GripVertical, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import TextBlock from "./text/TextBlock";
 import BlockOptions from "./BlockOptions";
 import ImageBlock from "./image/ImageBlock";
