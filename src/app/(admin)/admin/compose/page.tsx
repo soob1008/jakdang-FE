@@ -105,24 +105,6 @@ export default function AdminBlockPage() {
 
   if (!hasMounted) return null;
 
-  // const { fields } = useFieldArray({
-  //   control: form.control,
-  //   name: "blocks",
-  // });
-
-  // const mutation = useMutation({
-  //   // mutationFn: async (data: any) => {
-  //   //   const res = await fetch("/api/page", {
-  //   //     method: "PATCH",
-  //   //     headers: { "Content-Type": "application/json" },
-  //   //     body: JSON.stringify(data),
-  //   //   });
-  //   //   if (!res.ok) throw new Error("저장 실패");
-  //   // },
-  //   // onSuccess: () => toast.success("페이지 저장 완료!"),
-  //   // onError: () => toast.error("저장 중 오류가 발생했습니다."),
-  // });
-
   return (
     <FormProvider {...form}>
       <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6 h-full">
