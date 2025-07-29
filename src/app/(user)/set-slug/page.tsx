@@ -83,7 +83,21 @@ export default function SetUserNamePage() {
     await handleAction(async () => await updateUserSlug(userId, slug), {
       successMessage: "주소가 성공적으로 설정되었습니다.",
       errorMessage: "주소 설정에 실패했습니다. 다시 시도해주세요.",
-      onSuccess: () => {
+      onSuccess: async () => {
+        // 1. 페이지의 slug도 같이 업데이트
+        const supabase = createClient(); // 클라이언트에서 사용할 수 있는 Supabase 인스턴스
+
+        const { error } = await supabase
+          .from("pages")
+          .update({ slug }) // users.slug와 동일하게 설정
+          .eq("user_id", userId);
+
+        if (error) {
+          console.error("페이지 slug 업데이트 실패:", error.message);
+          // 선택사항: 사용자에게 알림 띄우기
+        }
+
+        // 2. 페이지 이동
         router.push("/profile");
       },
     });

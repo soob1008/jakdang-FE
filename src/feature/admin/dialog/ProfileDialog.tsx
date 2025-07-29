@@ -110,7 +110,7 @@ export function ProfileDialog({ author }: ProfileDialogProps) {
         }
       }}
       trigger={
-        <Button variant="muted" size="sm">
+        <Button variant="secondary" size="sm">
           <Pencil className="w-4 h-4 mr-1" />
           Edit
         </Button>
