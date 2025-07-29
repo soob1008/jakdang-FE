@@ -29,6 +29,7 @@ export async function GET(request: NextRequest) {
 
   // 1. 기존 사용자 조회
   const { data: userData, error: userError } = await getUser(user.id);
+  let finalUserData = userData;
 
   // 2. 유저 정보 없으면 생성
   if (userError?.code === "PGRST116") {
@@ -51,17 +52,48 @@ export async function GET(request: NextRequest) {
       return redirect("/auth/login");
     }
 
-    return redirect("/set-slug");
+    const result = await getUser(user.id);
+    finalUserData = result.data;
   }
 
-  // 3. 유저 조회 중 다른 에러
-  if (userError) {
-    console.error("사용자 정보를 조회하는 데 실패했습니다.");
+  // 4. pages 테이블에 해당 유저 페이지가 있는지 확인하고 없으면 생성
+  const { data: pages, error: pageError } = await supabase
+    .from("pages")
+    .select("*")
+    .eq("user_id", user.id)
+    .limit(1);
+
+  const page = pages?.[0];
+
+  if (pageError) {
+    console.error("페이지 정보를 조회하는 데 실패했습니다.", pageError.message);
     return redirect("/auth/login");
   }
 
-  // 4. slug 설정 안 돼 있으면
-  if (!userData?.slug) {
+  if (!page) {
+    const { error } = await supabase.from("pages").insert([
+      {
+        id: crypto.randomUUID(),
+        user_id: user.id,
+        title: "내 페이지",
+        is_published: false,
+        theme_id: null,
+        slug: finalUserData.slug,
+        style: JSON.stringify({
+          backgroundColor: "#ffffff",
+          pattern: null,
+        }),
+      },
+    ]);
+
+    if (error) {
+      console.error("페이지 생성 실패:", error.message);
+      return redirect("/auth/login");
+    }
+  }
+
+  // 5. slug 설정 안 돼 있으면
+  if (!finalUserData?.slug) {
     return redirect("/set-slug");
   }
 
