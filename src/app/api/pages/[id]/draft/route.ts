@@ -3,6 +3,7 @@ import { z } from "zod";
 import { NextRequest, NextResponse } from "next/server";
 import { createDefaultBlock } from "@/feature/admin/block/utils";
 import { Block, BlockType } from "@/feature/admin/types";
+import { revalidateTag } from "next/cache";
 
 // 요청 본문에서 type만 받음
 const BlockCreateSchema = z.object({
@@ -151,6 +152,8 @@ export async function DELETE(
   if (updateError) {
     return NextResponse.json({ error: "Delete failed" }, { status: 500 });
   }
+
+  revalidateTag("page");
 
   return NextResponse.json({ message: "Block deleted" });
 }

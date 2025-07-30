@@ -13,7 +13,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createClient } from "@/lib/supabase/client";
 import Loading from "@/app/loading";
-import { handleAction } from "@/feature/common/api/action";
+import { handleAction } from "@/lib/api/action";
 
 const schema = z.object({
   slug: z

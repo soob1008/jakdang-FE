@@ -20,8 +20,8 @@ import { ResponsiveDialog } from "@/components/ui/ResponsiveDialog";
 import { Author } from "@/feature/user/type";
 import { updateUser } from "@/feature/user/api.server";
 import { toast } from "sonner";
-import { uploadImage } from "@/feature/common/api/api.client";
-import { handleAction } from "@/feature/common/api/action";
+import { uploadImage } from "@/lib/api/api.client";
+import { handleAction } from "@/lib/api/action";
 import { Textarea } from "@/components/ui/textarea";
 
 const schema = z.object({

@@ -12,8 +12,10 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ReactNode, useState } from "react";
 import { cn } from "@/lib/utils";
 import { BLOCK_LIST } from "./const";
-import { createDefaultBlock } from "./utils";
-import { BlockType } from "../types";
+import { BlockType, Block } from "../types";
+import { apiClient } from "@/lib/api/api.client";
+import { handleAction } from "@/lib/api/action";
+import { useFormContext } from "react-hook-form";
 
 interface BlockSelectDialogProps {
   open: boolean;
@@ -26,17 +28,34 @@ export default function BlockDialog({
   onOpenChange,
   trigger,
 }: BlockSelectDialogProps) {
+  const { watch } = useFormContext();
   const [selectedType, setSelectedType] = useState<BlockType | null>(null);
 
   console.log("Selected block type:", selectedType);
   // TODO:
-  const handleAddBlock = () => {
-    if (selectedType) {
-      const block = createDefaultBlock(selectedType);
-      console.log("Adding block:", block);
-
-      const body = {};
+  const handleAddBlock = async () => {
+    if (!selectedType) {
+      console.error("No block type selected");
+      return;
     }
+
+    await handleAction(
+      () =>
+        apiClient.post<Block, { type: BlockType }>(
+          `/api/pages/${watch("page").id}/draft`,
+          {
+            type: selectedType,
+          }
+        ),
+      {
+        successMessage: "블록이 성공적으로 추가되었습니다.",
+        errorMessage: "블록 추가에 실패했습니다.",
+        onSuccess: (response) => {
+          console.log("Block added:", response);
+          // 이후 상태 업데이트 등 추가 로직 작성
+        },
+      }
+    );
   };
 
   return (

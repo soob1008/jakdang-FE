@@ -14,7 +14,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { deleteUserSNS, updateUserSNS } from "@/feature/user/api.server";
-import { handleAction } from "@/feature/common/api/action";
+import { handleAction } from "@/lib/api/action";
 import Image from "next/image";
 
 interface SocialLinkItemProps {

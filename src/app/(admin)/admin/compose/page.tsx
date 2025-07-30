@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import PagePreview from "@/feature/admin/PagePreview";
 import PageEditor from "@/feature/admin/block/PageEditor";
-import { handleAction } from "@/feature/common/api/action";
+import { handleAction } from "@/lib/api/action";
 import { Block } from "@/feature/admin/types";
 
 interface PageFormValues {
@@ -30,7 +30,9 @@ export default function AdminBlockPage() {
 
   useEffect(() => {
     const fetchPage = async () =>
-      await fetch(`/api/pages`).then((res) => res.json());
+      await fetch(`/api/pages`, {
+        next: { tags: ["page"] },
+      }).then((res) => res.json());
 
     handleAction(fetchPage, {
       errorMessage: "페이지를 불러오는 데 실패했습니다.",
@@ -40,7 +42,7 @@ export default function AdminBlockPage() {
         });
       },
     });
-  }, [reset]);
+  }, [reset, watch]);
 
   useEffect(() => {
     setHasMounted(true);
