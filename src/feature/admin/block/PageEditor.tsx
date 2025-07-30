@@ -7,15 +7,17 @@ import BlockItem from "./BlockItem";
 import { Block } from "./BlockItem";
 import BlockDialog from "./BlockDialog";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import { useAutoSaveBlock } from "@/hooks/useAutoSaveBlock";
 
 export default function PageEditor() {
-  const { control } = useFormContext();
+  const { control, watch } = useFormContext();
   const { fields } = useFieldArray({
     control,
     name: "blocks",
   });
 
   const [openBlockDialog, setOpenBlockDialog] = useState(false);
+  useAutoSaveBlock(watch("page").id);
 
   return (
     <article className="pr-2 flex flex-col gap-4 pt-4 pl-10 pb-24 max-w-[900px] w-full mx-auto lg:max-w-none">

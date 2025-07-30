@@ -103,6 +103,9 @@ export default function BlockDialog({
 
   console.log(selectedType);
 
+  // TODO:
+  const handleAddBlock = () => {};
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
@@ -158,7 +161,7 @@ export default function BlockDialog({
           </RadioGroup>
         </div>
         <DialogFooter>
-          <Button onClick={() => {}} disabled={!selectedType}>
+          <Button onClick={handleAddBlock} disabled={!selectedType}>
             추가하기
           </Button>
         </DialogFooter>
