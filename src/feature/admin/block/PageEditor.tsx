@@ -12,6 +12,7 @@ import {
   DropResult,
 } from "@hello-pangea/dnd";
 import { useAutoSaveBlock } from "@/hooks/useAutoSaveBlock";
+import { BlockItemType } from "@/feature/admin/types";
 
 export default function PageEditor() {
   const { control, watch } = useFormContext();
@@ -88,7 +89,7 @@ export default function PageEditor() {
                       <div ref={provided.innerRef} {...provided.draggableProps}>
                         <BlockItem
                           index={index}
-                          block={block as BlockItem}
+                          block={block as BlockItemType}
                           dragHandleProps={provided.dragHandleProps ?? {}}
                         />
                       </div>
