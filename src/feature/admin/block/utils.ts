@@ -11,6 +11,7 @@ export function createDefaultBlock(type: BlockType): BlockDefault {
           content: "",
           align: "left",
           font_size: "base",
+          color: "#000000",
         },
       };
     case "image":

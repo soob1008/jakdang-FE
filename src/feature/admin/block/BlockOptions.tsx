@@ -8,9 +8,10 @@ import CalendarOption from "./calendar/CalendarOption";
 
 interface BlockOptionsProps {
   type: string;
+  index: number;
 }
 
-export default function BlockOptions({ type }: BlockOptionsProps) {
+export default function BlockOptions({ type, index }: BlockOptionsProps) {
   const [showOptions, setShowOptions] = useState(true);
 
   if (
@@ -40,11 +41,11 @@ export default function BlockOptions({ type }: BlockOptionsProps) {
       </div>
       {showOptions && (
         <div className="mt-2 border-t pt-4 space-y-6">
-          {type === "text" && <TextOption index={0} />}
-          {type === "image" && <ImageOption index={0} />}
+          {type === "text" && <TextOption index={index} />}
+          {type === "image" && <ImageOption index={index} />}
           {
             /* 기타 블록 옵션 추가 예정 */ type === "work" && (
-              <WorkOption index={0} />
+              <WorkOption index={index} />
             )
           }
           {type === "calendar" && <CalendarOption index={0} />}

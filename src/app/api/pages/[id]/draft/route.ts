@@ -31,6 +31,7 @@ export async function POST(
   }
 
   const type = parsed.data.type as BlockType;
+  // 기본값
   const newBlock = createDefaultBlock(type);
 
   // 기존 blocks_draft 조회
@@ -73,8 +74,7 @@ export async function POST(
 }
 
 const BlockUpdateSchema = z.object({
-  id: z.string(), // 수정할 블록의 id
-  blocks_draft: z.record(z.any()), // 수정할 데이터 (블록 전체)
+  blocks_draft: z.array(z.any()),
 });
 
 // 블럭 수정 API
@@ -85,8 +85,18 @@ export async function PUT(
   const supabase = await createSupabaseServerClient();
   const body = await req.json();
 
+  const parsed = BlockUpdateSchema.safeParse(body);
+
+  if (!parsed.success) {
+    return NextResponse.json(
+      { error: "Invalid blocks_draft format" },
+      { status: 400 }
+    );
+  }
+
+  const { blocks_draft } = parsed.data;
+
   const pageId = params?.id;
-  const { blocks_draft } = body;
 
   if (!pageId) {
     return NextResponse.json({ error: "Page ID is required" }, { status: 400 });

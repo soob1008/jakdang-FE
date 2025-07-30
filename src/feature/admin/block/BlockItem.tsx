@@ -70,7 +70,7 @@ export default function BlockItem({
           {block.type === "challenge" && <ChallengeBlock />}
           {block.type === "event" && <EventBlock />} */}
           {/* 기타 블록 추가 예정 */}
-          <BlockOptions type={block.type} />
+          <BlockOptions type={block.type} index={index} />
         </div>
       )}
     </section>
