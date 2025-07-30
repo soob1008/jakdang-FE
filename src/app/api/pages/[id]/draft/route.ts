@@ -13,10 +13,10 @@ const BlockCreateSchema = z.object({
 // 블럭 생성 API
 export async function POST(
   req: NextRequest,
-  { params }: { params: { id: string } }
-) {
+  { params }: { params: Promise<{ id: string }> } // params는 URL 파라미터로, 페이지 ID를 포함
+): Promise<NextResponse> {
   const supabase = await createSupabaseServerClient();
-  const pageId = params?.id;
+  const { id: pageId } = await params;
 
   if (!pageId) {
     return NextResponse.json({ error: "Page ID is required" }, { status: 400 });
@@ -80,7 +80,7 @@ const BlockUpdateSchema = z.object({
 // 블럭 수정 API
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } } // 이 id는 URL 파라미터지만, 사용하지 않고 body.id를 우선 사용
+  { params }: { params: Promise<{ id: string }> } // params는 URL 파라미터로, 페이지 ID를 포함
 ) {
   const supabase = await createSupabaseServerClient();
   const body = await req.json();
@@ -95,8 +95,7 @@ export async function PUT(
   }
 
   const { blocks_draft } = parsed.data;
-
-  const pageId = params?.id;
+  const { id: pageId } = await params;
 
   if (!pageId) {
     return NextResponse.json({ error: "Page ID is required" }, { status: 400 });
@@ -126,10 +125,10 @@ const BlockDeleteSchema = z.object({
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> } // params는 URL 파라미터로, 페이지 ID를 포함
 ) {
   const supabase = await createSupabaseServerClient();
-  const pageId = params.id;
+  const { id: pageId } = await params;
   const body = await req.json();
 
   const parsed = BlockDeleteSchema.safeParse(body);

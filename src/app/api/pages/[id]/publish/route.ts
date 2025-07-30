@@ -3,10 +3,10 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const supabase = await createSupabaseServerClient();
-  const { id: pageId } = params;
+  const { id: pageId } = await params;
 
   // 먼저 blocks_draft 값을 가져옵니다.
   const { data: page, error: fetchError } = await supabase
