@@ -8,85 +8,12 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { RadioGroup } from "@/components/ui/radio-group";
-import {
-  FileText,
-  ImageIcon,
-  Link2,
-  CalendarIcon,
-  Medal,
-  BookOpenText,
-  ListChecks,
-  Network,
-} from "lucide-react";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ReactNode, useState } from "react";
 import { cn } from "@/lib/utils";
-
-const blockList = [
-  {
-    category: "기본",
-    blocks: [
-      {
-        type: "text",
-        name: "텍스트",
-        description: "간단한 문장을 작성해요",
-        icon: FileText,
-      },
-      {
-        type: "image",
-        name: "이미지",
-        description: "이미지를 업로드하거나 링크를 연결해요",
-        icon: ImageIcon,
-      },
-      {
-        type: "link",
-        name: "링크",
-        description: "외부 링크를 연결해요",
-        icon: Link2,
-      },
-    ],
-  },
-  {
-    category: "정보",
-    blocks: [
-      {
-        type: "sns",
-        name: "SNS",
-        description: "SNS 링크를 연결해요",
-        icon: Network,
-      },
-      {
-        type: "calendar",
-        name: "일정",
-        description: "일정을 공유해요",
-        icon: CalendarIcon,
-      },
-      {
-        type: "event",
-        name: "이벤트",
-        description: "진행 중인 이벤트를 보여줘요",
-        icon: ListChecks,
-      },
-    ],
-  },
-  {
-    category: "콘텐츠",
-    blocks: [
-      {
-        type: "work",
-        name: "작품",
-        description: "대표 작품을 보여줘요",
-        icon: BookOpenText,
-      },
-      {
-        type: "challenge",
-        name: "챌린지",
-        description: "진행 중인 챌린지를 보여줘요",
-        icon: Medal,
-      },
-    ],
-  },
-];
+import { BLOCK_LIST } from "./const";
+import { createDefaultBlock } from "./utils";
+import { BlockType } from "../types";
 
 interface BlockSelectDialogProps {
   open: boolean;
@@ -99,12 +26,18 @@ export default function BlockDialog({
   onOpenChange,
   trigger,
 }: BlockSelectDialogProps) {
-  const [selectedType, setSelectedType] = useState<string>("");
+  const [selectedType, setSelectedType] = useState<BlockType | null>(null);
 
-  console.log(selectedType);
-
+  console.log("Selected block type:", selectedType);
   // TODO:
-  const handleAddBlock = () => {};
+  const handleAddBlock = () => {
+    if (selectedType) {
+      const block = createDefaultBlock(selectedType);
+      console.log("Adding block:", block);
+
+      const body = {};
+    }
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -117,11 +50,14 @@ export default function BlockDialog({
         <div className="max-h-120 overflow-y-auto">
           <RadioGroup
             value={selectedType}
-            onValueChange={setSelectedType}
+            onValueChange={(value) => {
+              console.log("Selected block type:", value);
+              setSelectedType(value);
+            }}
             className="space-y-6"
           >
-            {blockList.map((group) => (
-              <div key={group.category} className="space-y-3">
+            {BLOCK_LIST.map((group) => (
+              <div key={group.category}>
                 <h4 className="text-sm font-semibold text-muted-foreground">
                   {group.category}
                 </h4>
@@ -129,30 +65,27 @@ export default function BlockDialog({
                   {group.blocks.map((block) => {
                     const Icon = block.icon;
                     return (
-                      <div key={block.type}>
-                        <input
-                          name="block"
-                          type="radio"
+                      <label
+                        key={block.type}
+                        htmlFor={block.type}
+                        className={cn(
+                          "p-4 border h-32 rounded-md flex flex-col items-center gap-2 cursor-pointer transition",
+                          selectedType === block.type && "bg-secondary"
+                        )}
+                      >
+                        <RadioGroupItem
                           value={block.type}
-                          id={`block-${block.type}`}
-                          className="peer sr-only"
+                          id={block.type}
+                          className="sr-only"
                         />
-                        <label
-                          htmlFor={`block-${block.type}`}
-                          className={cn(
-                            "p-4 border h-32 rounded-md flex flex-col items-center gap-2 cursor-pointer transition",
-                            "peer-checked:bg-secondary"
-                          )}
-                        >
-                          <Icon className="w-6 h-6" />
-                          <span className="font-medium text-sm">
-                            {block.name}
-                          </span>
-                          <span className="text-xs text-muted-foreground text-center">
-                            {block.description}
-                          </span>
-                        </label>
-                      </div>
+                        <Icon className="w-6 h-6" />
+                        <span className="font-medium text-sm">
+                          {block.name}
+                        </span>
+                        <span className="text-xs text-muted-foreground text-center">
+                          {block.description}
+                        </span>
+                      </label>
                     );
                   })}
                 </div>

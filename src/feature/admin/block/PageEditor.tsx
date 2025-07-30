@@ -19,6 +19,8 @@ export default function PageEditor() {
   const [openBlockDialog, setOpenBlockDialog] = useState(false);
   useAutoSaveBlock(watch("page").id);
 
+  console.log("Current blocks:", watch());
+
   return (
     <article className="pr-2 flex flex-col gap-4 pt-4 pl-10 pb-24 max-w-[900px] w-full mx-auto lg:max-w-none">
       <div className="flex items-center justify-between pb-2">

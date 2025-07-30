@@ -7,8 +7,14 @@ export type BlockType =
   | "challenge" // 글쓰기챌린지
   | "event"; // 이벤트
 
+type Align = "left" | "center" | "right";
+
 export interface BlockDataText {
-  content: string;
+  title?: string;
+  text: string;
+  align: Align;
+  color?: string; // 글자색
+  font_size: "sm" | "base" | "lg" | "xl";
 }
 
 export interface BlockDataImage {
@@ -49,10 +55,14 @@ export type BlockData =
   | BlockDataChallenge
   | BlockDataEvent;
 
-export interface Block {
+export interface Block extends BlockDefault {
   id: string;
-  type: BlockType;
-  data: BlockData; // 블록의 데이터, 각 타입에 따라 다를 수 있음
   position: number;
   page_id: string; // 이 블록이 속한 페이지의 ID
+}
+
+export interface BlockDefault {
+  name: string;
+  type: BlockType;
+  data: BlockData; // 블록의 데이터, 각 타입에 따라 다를 수 있음
 }
