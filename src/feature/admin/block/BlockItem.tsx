@@ -14,6 +14,7 @@ import ChallengeBlock from "./challenge/ChallengeBlock";
 import EventBlock from "./event/EventBlock";
 import { Switch } from "@/components/ui/switch";
 import { Block } from "@/feature/admin/types";
+import { FormControl, FormField, FormItem } from "@/components/ui/form";
 
 interface BlockItemProps {
   index: number;
@@ -42,7 +43,21 @@ export default function BlockItem({
           </h4>
         </div>
         <div className="flex items-center gap-2">
-          <Switch checked={block?.is_active} />
+          <FormField
+            name={`blocks_draft.${index}.is_active`}
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Switch
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                    id={`blocks_draft.${index}.is_active`}
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+
           <Button
             type="button"
             variant="ghost"

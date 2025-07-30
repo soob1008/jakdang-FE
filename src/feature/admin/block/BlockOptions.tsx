@@ -12,7 +12,7 @@ interface BlockOptionsProps {
 }
 
 export default function BlockOptions({ type, index }: BlockOptionsProps) {
-  const [showOptions, setShowOptions] = useState(true);
+  const [showOptions, setShowOptions] = useState(false);
 
   if (
     type === "link" ||

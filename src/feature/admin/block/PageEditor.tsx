@@ -6,12 +6,17 @@ import { useFormContext, useFieldArray } from "react-hook-form";
 import BlockItem from "./BlockItem";
 import { Block } from "@/feature/admin/types";
 import BlockDialog from "./BlockDialog";
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  DropResult,
+} from "@hello-pangea/dnd";
 import { useAutoSaveBlock } from "@/hooks/useAutoSaveBlock";
 
 export default function PageEditor() {
   const { control, watch } = useFormContext();
-  const { fields } = useFieldArray({
+  const { fields, move, update } = useFieldArray({
     control,
     name: "blocks_draft",
   });
@@ -19,6 +24,26 @@ export default function PageEditor() {
   const [openBlockDialog, setOpenBlockDialog] = useState(false);
 
   useAutoSaveBlock(watch("id"));
+
+  const handleDragEnd = (result: DropResult) => {
+    const { source, destination } = result;
+
+    if (!destination) return; // 드롭 안한 경우 무시
+    if (source.index === destination.index) return; // 위치 변경 없음
+
+    // 순서 변경
+    move(source.index, destination.index);
+
+    // position 값 재정렬 + 1
+    const updatedBlocks = [...watch("blocks_draft")].map((block, index) => ({
+      ...block,
+      position: index + 1,
+    }));
+
+    updatedBlocks.forEach((block, idx) => {
+      update(idx, block);
+    });
+  };
 
   return (
     <article className="pr-2 flex flex-col gap-4 pt-4 pl-10 pb-24 max-w-[900px] w-full mx-auto lg:max-w-none">
@@ -45,7 +70,7 @@ export default function PageEditor() {
           추가된 블록이 없습니다. 블록을 추가해 주세요.
         </div>
       ) : (
-        <DragDropContext onDragEnd={() => {}}>
+        <DragDropContext onDragEnd={handleDragEnd}>
           <Droppable droppableId="blocks" type="BLOCK">
             {(provided) => (
               <div
