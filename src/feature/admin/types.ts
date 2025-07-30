@@ -1,3 +1,8 @@
+export interface Page {
+  id: string;
+  blocks_draft: Block[];
+}
+
 export type BlockType =
   | "text" // 글 - 문장/인용
   | "image" // 이미지
@@ -59,6 +64,7 @@ export interface Block extends BlockDefault {
   id: string;
   position: number;
   page_id: string; // 이 블록이 속한 페이지의 ID
+  is_active: boolean; // 블록 활성화 여부
 }
 
 export interface BlockDefault {

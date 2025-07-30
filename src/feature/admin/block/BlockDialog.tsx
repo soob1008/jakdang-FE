@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { BLOCK_LIST } from "./const";
 import { BlockType, Block } from "../types";
@@ -31,8 +31,12 @@ export default function BlockDialog({
   const { watch } = useFormContext();
   const [selectedType, setSelectedType] = useState<BlockType | null>(null);
 
-  console.log("Selected block type:", selectedType);
-  // TODO:
+  useEffect(() => {
+    if (!open) {
+      setSelectedType(null);
+    }
+  }, [open]);
+
   const handleAddBlock = async () => {
     if (!selectedType) {
       console.error("No block type selected");
@@ -50,9 +54,10 @@ export default function BlockDialog({
       {
         successMessage: "블록이 성공적으로 추가되었습니다.",
         errorMessage: "블록 추가에 실패했습니다.",
-        onSuccess: (response) => {
-          console.log("Block added:", response);
-          // 이후 상태 업데이트 등 추가 로직 작성
+        onSuccess: () => {
+          onOpenChange(false);
+          setSelectedType(null);
+          revalidatePath("/admin/compose");
         },
       }
     );

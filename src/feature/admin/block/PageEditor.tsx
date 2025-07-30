@@ -13,13 +13,11 @@ export default function PageEditor() {
   const { control, watch } = useFormContext();
   const { fields } = useFieldArray({
     control,
-    name: "blocks",
+    name: "page.blocks_draft",
   });
 
   const [openBlockDialog, setOpenBlockDialog] = useState(false);
   useAutoSaveBlock(watch("page").id);
-
-  console.log("Current blocks:", watch());
 
   return (
     <article className="pr-2 flex flex-col gap-4 pt-4 pl-10 pb-24 max-w-[900px] w-full mx-auto lg:max-w-none">
@@ -41,31 +39,41 @@ export default function PageEditor() {
         </div>
       </div>
 
-      <DragDropContext onDragEnd={() => {}}>
-        <Droppable droppableId="blocks" type="BLOCK">
-          {(provided) => (
-            <div
-              className="flex flex-col gap-4"
-              ref={provided.innerRef}
-              {...provided.droppableProps}
-            >
-              {fields.map((block, index) => (
-                <Draggable key={block.id} draggableId={block.id} index={index}>
-                  {(provided) => (
-                    <div ref={provided.innerRef} {...provided.draggableProps}>
-                      <BlockItem
-                        index={index}
-                        block={block as Block}
-                        dragHandleProps={provided.dragHandleProps ?? {}}
-                      />
-                    </div>
-                  )}
-                </Draggable>
-              ))}
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
+      {fields.length === 0 ? (
+        <div className="mt-10 text-center text-sm text-gray-500">
+          추가된 블록이 없습니다. 블록을 추가해 주세요.
+        </div>
+      ) : (
+        <DragDropContext onDragEnd={() => {}}>
+          <Droppable droppableId="blocks" type="BLOCK">
+            {(provided) => (
+              <div
+                className="flex flex-col gap-4"
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+              >
+                {fields.map((block, index) => (
+                  <Draggable
+                    key={block.id}
+                    draggableId={block.id}
+                    index={index}
+                  >
+                    {(provided) => (
+                      <div ref={provided.innerRef} {...provided.draggableProps}>
+                        <BlockItem
+                          index={index}
+                          block={block as Block}
+                          dragHandleProps={provided.dragHandleProps ?? {}}
+                        />
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext>
+      )}
     </article>
   );
 }

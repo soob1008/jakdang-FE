@@ -40,7 +40,11 @@ export async function POST(
     return NextResponse.json({ error }, { status: 500 });
   }
 
-  const updatedBlocks = [...(data?.blocks_draft ?? []), newBlock];
+  const newPosition = (data?.blocks_draft?.length ?? 0) + 1;
+  const updatedBlocks = [
+    ...(data?.blocks_draft ?? []),
+    { ...newBlock, position: newPosition, is_active: true },
+  ];
 
   // 업데이트
   const { error: updateError } = await supabase

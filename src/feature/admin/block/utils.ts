@@ -7,6 +7,7 @@ export function createDefaultBlock(type: BlockType): BlockDefault {
         type,
         name: "텍스트",
         data: {
+          title: "",
           text: "",
           align: "left",
           font_size: "base",
@@ -25,6 +26,7 @@ export function createDefaultBlock(type: BlockType): BlockDefault {
       return {
         type,
         name: "링크",
+
         data: {
           links: [],
         },

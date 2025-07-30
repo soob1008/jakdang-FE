@@ -13,6 +13,7 @@ export async function POST(
     .from("pages")
     .select("blocks_draft")
     .eq("id", pageId)
+    .order("position", { ascending: true })
     .single();
 
   if (fetchError) {
