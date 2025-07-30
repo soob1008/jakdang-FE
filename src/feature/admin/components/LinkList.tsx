@@ -7,7 +7,7 @@ import { Plus } from "lucide-react";
 import { AuthorLink } from "@/feature/user/type";
 import LinkItem from "@/feature/admin/components/LInkItem";
 import { LinkValues } from "@/feature/admin/dialog/LinkDialog";
-import { handleAction } from "@/feature/common/api/action";
+import { handleAction } from "@/lib/api/action";
 import { updateUserLinks, deleteUserLink } from "@/feature/user/api.server";
 import EmptyText from "@/components/ui/EmptyText";
 
