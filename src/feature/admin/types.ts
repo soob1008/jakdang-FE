@@ -10,13 +10,15 @@ export type BlockType =
   | "link" // 링크모음
   | "notice" // 공지/일정
   | "challenge" // 글쓰기챌린지
-  | "event"; // 이벤트
+  | "event" // 이벤트
+  | "sns" // SNS
+  | "calendar"; // 캘린더
 
 type Align = "left" | "center" | "right";
 
 export interface BlockDataText {
   title?: string;
-  text: string;
+  content: string;
   align: Align;
   color?: string; // 글자색
   font_size: "sm" | "base" | "lg" | "xl";

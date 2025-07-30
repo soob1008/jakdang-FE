@@ -8,7 +8,7 @@ export function createDefaultBlock(type: BlockType): BlockDefault {
         name: "텍스트",
         data: {
           title: "",
-          text: "",
+          content: "",
           align: "left",
           font_size: "base",
         },

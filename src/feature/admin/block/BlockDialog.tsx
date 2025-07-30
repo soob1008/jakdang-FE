@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Dialog,
   DialogTrigger,
@@ -16,6 +18,7 @@ import { BlockType, Block } from "../types";
 import { apiClient } from "@/lib/api/api.client";
 import { handleAction } from "@/lib/api/action";
 import { useFormContext } from "react-hook-form";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface BlockSelectDialogProps {
   open: boolean;
@@ -28,6 +31,8 @@ export default function BlockDialog({
   onOpenChange,
   trigger,
 }: BlockSelectDialogProps) {
+  const queryClient = useQueryClient();
+
   const { watch } = useFormContext();
   const [selectedType, setSelectedType] = useState<BlockType | null>(null);
 
@@ -46,7 +51,7 @@ export default function BlockDialog({
     await handleAction(
       () =>
         apiClient.post<Block, { type: BlockType }>(
-          `/api/pages/${watch("page").id}/draft`,
+          `/api/pages/${watch("id")}/draft`,
           {
             type: selectedType,
           }
@@ -57,7 +62,7 @@ export default function BlockDialog({
         onSuccess: () => {
           onOpenChange(false);
           setSelectedType(null);
-          revalidatePath("/admin/compose");
+          queryClient.invalidateQueries({ queryKey: ["admin-page"] });
         },
       }
     );

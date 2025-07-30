@@ -11,12 +11,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 
 export default function TextBlock({ index }: { index: number }) {
-  const namePrefix = `blocks.${index}.data`;
+  const namePrefix = `blocks_draft.${index}.data`;
 
   return (
     <div className="space-y-6">
       <FormField
-        name={`${namePrefix}.content`}
+        name={`${namePrefix}.title`}
         render={({ field }) => (
           <FormItem>
             <FormLabel>제목</FormLabel>

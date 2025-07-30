@@ -16,7 +16,11 @@ export async function POST(
   { params }: { params: { id: string } }
 ) {
   const supabase = await createSupabaseServerClient();
-  const pageId = params.id;
+  const pageId = params?.id;
+
+  if (!pageId) {
+    return NextResponse.json({ error: "Page ID is required" }, { status: 400 });
+  }
 
   // 요청 본문 파싱
   const body = await req.json();
@@ -70,49 +74,40 @@ export async function POST(
 
 const BlockUpdateSchema = z.object({
   id: z.string(), // 수정할 블록의 id
-  data: z.record(z.any()), // 수정할 데이터 (블록 전체)
+  blocks_draft: z.record(z.any()), // 수정할 데이터 (블록 전체)
 });
 
 // 블럭 수정 API
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { id: string } } // 이 id는 URL 파라미터지만, 사용하지 않고 body.id를 우선 사용
 ) {
   const supabase = await createSupabaseServerClient();
-  const pageId = params.id;
   const body = await req.json();
 
-  const parsed = BlockUpdateSchema.safeParse(body);
-  if (!parsed.success) {
-    return NextResponse.json({ error: "Invalid body" }, { status: 400 });
+  const pageId = params?.id;
+  const { blocks_draft } = body;
+
+  if (!pageId) {
+    return NextResponse.json({ error: "Page ID is required" }, { status: 400 });
   }
-
-  const { id, data: updatedBlock } = parsed.data;
-
-  const { data, error } = await supabase
-    .from("pages")
-    .select("blocks_draft")
-    .eq("id", pageId)
-    .single();
-
-  if (error || !data) {
-    return NextResponse.json({ error }, { status: 500 });
-  }
-
-  const newBlocks = (data.blocks_draft ?? []).map((block: Block) =>
-    block.id === id ? { ...block, ...updatedBlock } : block
-  );
 
   const { error: updateError } = await supabase
     .from("pages")
-    .update({ blocks_draft: newBlocks, updated_at: new Date().toISOString() })
+    .update({
+      blocks_draft,
+      updated_at: new Date().toISOString(),
+    })
     .eq("id", pageId);
 
   if (updateError) {
     return NextResponse.json({ error: "Update failed" }, { status: 500 });
   }
 
-  return NextResponse.json({ message: "Block updated", block: updatedBlock });
+  return NextResponse.json({
+    message: "Blocks updated successfully",
+    body,
+  });
 }
 
 const BlockDeleteSchema = z.object({

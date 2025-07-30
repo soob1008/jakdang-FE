@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useFormContext, useFieldArray } from "react-hook-form";
 import BlockItem from "./BlockItem";
-import { Block } from "./BlockItem";
+import { Block } from "@/feature/admin/types";
 import BlockDialog from "./BlockDialog";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { useAutoSaveBlock } from "@/hooks/useAutoSaveBlock";
@@ -13,11 +13,12 @@ export default function PageEditor() {
   const { control, watch } = useFormContext();
   const { fields } = useFieldArray({
     control,
-    name: "page.blocks_draft",
+    name: "blocks_draft",
   });
 
   const [openBlockDialog, setOpenBlockDialog] = useState(false);
-  useAutoSaveBlock(watch("page").id);
+
+  useAutoSaveBlock(watch("id"));
 
   return (
     <article className="pr-2 flex flex-col gap-4 pt-4 pl-10 pb-24 max-w-[900px] w-full mx-auto lg:max-w-none">

@@ -1,3 +1,5 @@
+"use client";
+
 export default function PagePreview() {
   return (
     <aside className="sticky top-10 h-fit px-4 flex flex-col items-center justify-center">

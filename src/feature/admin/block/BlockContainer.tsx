@@ -1,36 +1,47 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import PagePreview from "@/feature/admin/PagePreview";
 import PageEditor from "@/feature/admin/block/PageEditor";
 import { Page } from "@/feature/admin/types";
+import { apiClient } from "@/lib/api/api.client";
+import { useQuery } from "@tanstack/react-query";
 
-interface PageFormValues {
-  page: Page;
-}
 interface BlockContainerProps {
   page?: Page;
 }
 
 export default function BlockContainer({ page }: BlockContainerProps) {
-  const form = useForm<PageFormValues>({
-    //resolver: zodResolver(),
-    defaultValues: {
-      page,
-    },
-  });
-  const { watch } = form;
-
   const [hasMounted, setHasMounted] = useState(false);
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["admin-page"],
+    queryFn: () => apiClient.get<{ page: Page }>("/api/pages"),
+  });
+
+  const form = useForm({
+    //resolver: zodResolver(),
+    mode: "onChange",
+    defaultValues: data?.page ?? {},
+  });
+
+  const { watch, reset } = form;
 
   useEffect(() => {
     setHasMounted(true);
   }, []);
 
+  useEffect(() => {
+    if (!data) return;
+    reset(data.page);
+  }, [data, reset]);
+
+  if (isLoading) return <div>로딩 중...</div>;
+  if (error || !data) return <div>에러 발생</div>;
+
   if (!hasMounted) return null;
 
-  console.log("Current blocks:", watch("page"));
+  console.log("form Values", watch());
 
   return (
     <FormProvider {...form}>

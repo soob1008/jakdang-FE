@@ -10,13 +10,24 @@ export async function fetchServer<TResponse>(
   const headersList = await headers();
   const cookie = headersList.get("cookie") ?? "";
 
+  console.log("options", {
+    ...init,
+    headers: {
+      ...(init?.headers || {}),
+      cookie,
+    },
+    next: init?.next,
+    cache: init?.cache ?? undefined,
+  });
+
   const res = await fetch(`${baseUrl}${input}`, {
     ...init,
     headers: {
       ...(init?.headers || {}),
       cookie,
     },
-    cache: init?.cache ?? "no-store", // 인증 API는 보통 캐싱 안 함
+    next: init?.next,
+    cache: init?.cache ?? undefined,
   });
 
   if (!res.ok) {

@@ -13,22 +13,8 @@ import SNSBlock from "./sns/SNSBlock";
 import ChallengeBlock from "./challenge/ChallengeBlock";
 import EventBlock from "./event/EventBlock";
 import { Switch } from "@/components/ui/switch";
+import { Block } from "@/feature/admin/types";
 
-export interface Block {
-  id: string;
-  type:
-    | "text" // 글 - 문장/인용
-    | "image" // 이미지
-    | "work" // 작품
-    | "link" // 링크모음
-    | "calendar" // 일정
-    | "sns" // SNS
-    | "challenge" // 글쓰기챌린지
-    | "event"; // 이벤트
-  name?: string; // 블록 이름
-  data?: unknown; // 블록 데이터
-  layout?: string; // 레이아웃 (예: "grid", "list",
-}
 interface BlockItemProps {
   index: number;
   block: Block;
@@ -56,7 +42,7 @@ export default function BlockItem({
           </h4>
         </div>
         <div className="flex items-center gap-2">
-          <Switch />
+          <Switch checked={block?.is_active} />
           <Button
             type="button"
             variant="ghost"
@@ -76,13 +62,13 @@ export default function BlockItem({
       {isOpen && (
         <div className="px-4 py-6 space-y-2">
           {block.type === "text" && <TextBlock index={index} />}
-          {block.type === "image" && <ImageBlock index={index} />}
+          {/* {block.type === "image" && <ImageBlock index={index} />}
           {block.type === "work" && <WorkBlock />}
           {block.type === "link" && <LinkBlock index={index} />}
           {block.type === "calendar" && <CalendarBlock index={index} />}
           {block.type === "sns" && <SNSBlock index={index} />}
           {block.type === "challenge" && <ChallengeBlock />}
-          {block.type === "event" && <EventBlock />}
+          {block.type === "event" && <EventBlock />} */}
           {/* 기타 블록 추가 예정 */}
           <BlockOptions type={block.type} />
         </div>
