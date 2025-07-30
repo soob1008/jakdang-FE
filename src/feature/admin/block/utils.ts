@@ -4,6 +4,7 @@ export function createDefaultBlock(type: BlockType): BlockDefault {
   switch (type) {
     case "text":
       return {
+        block_id: crypto.randomUUID(),
         type,
         name: "텍스트",
         data: {
@@ -16,6 +17,7 @@ export function createDefaultBlock(type: BlockType): BlockDefault {
       };
     case "image":
       return {
+        id: crypto.randomUUID(),
         type,
         name: "이미지",
         data: {
@@ -25,9 +27,9 @@ export function createDefaultBlock(type: BlockType): BlockDefault {
       };
     case "link":
       return {
+        id: crypto.randomUUID(),
         type,
         name: "링크",
-
         data: {
           links: [],
         },

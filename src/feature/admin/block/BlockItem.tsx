@@ -1,20 +1,14 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { GripVertical, ChevronDown, ChevronUp } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useState } from "react";
-import TextBlock from "./text/TextBlock";
-import BlockOptions from "./BlockOptions";
-import ImageBlock from "./image/ImageBlock";
-import WorkBlock from "./work/WorkBlock";
-import LinkBlock from "./link/LInkBlock";
-import CalendarBlock from "./calendar/CalendarBlock";
-import SNSBlock from "./sns/SNSBlock";
-import ChallengeBlock from "./challenge/ChallengeBlock";
-import EventBlock from "./event/EventBlock";
 import { Switch } from "@/components/ui/switch";
+import { Button } from "@/components/ui/button";
 import { Block } from "@/feature/admin/types";
-import { FormControl, FormField, FormItem } from "@/components/ui/form";
+import { FormField, FormItem, FormControl } from "@/components/ui/form";
+import BlockOptions from "./BlockOptions";
+import TextBlock from "./text/TextBlock";
+// import 기타 블록들
 
 interface BlockItemProps {
   index: number;
@@ -27,7 +21,26 @@ export default function BlockItem({
   block,
   dragHandleProps,
 }: BlockItemProps) {
-  const [isOpen, setIsOpen] = useState(true);
+  const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
+
+  // ✅ mount 이후에 localStorage 값 반영
+  useEffect(() => {
+    const id = localStorage.getItem("selected-block-id");
+    setSelectedBlockId(
+      id !== null && id !== undefined && id !== "" ? id : null
+    );
+  }, []);
+
+  // ✅ 현재 블럭이 선택된 블럭인지 계산
+  const isOpen = selectedBlockId === block.block_id;
+
+  const handleToggle = () => {
+    const next = isOpen ? null : block.block_id;
+    localStorage.setItem("selected-block-id", next ?? "");
+    setSelectedBlockId(next ?? null);
+  };
+
+  console.log("BlockItem render", selectedBlockId, block);
 
   return (
     <section className="bg-white rounded-lg shadow-sm">
@@ -62,7 +75,7 @@ export default function BlockItem({
             type="button"
             variant="ghost"
             size="sm"
-            onClick={() => setIsOpen((prev) => !prev)}
+            onClick={handleToggle}
           >
             {isOpen ? (
               <ChevronUp className="w-4 h-4" />
@@ -77,14 +90,7 @@ export default function BlockItem({
       {isOpen && (
         <div className="px-4 py-6 space-y-2">
           {block.type === "text" && <TextBlock index={index} />}
-          {/* {block.type === "image" && <ImageBlock index={index} />}
-          {block.type === "work" && <WorkBlock />}
-          {block.type === "link" && <LinkBlock index={index} />}
-          {block.type === "calendar" && <CalendarBlock index={index} />}
-          {block.type === "sns" && <SNSBlock index={index} />}
-          {block.type === "challenge" && <ChallengeBlock />}
-          {block.type === "event" && <EventBlock />} */}
-          {/* 기타 블록 추가 예정 */}
+          {/* 다른 블록들도 필요 시 추가 */}
           <BlockOptions type={block.type} index={index} />
         </div>
       )}

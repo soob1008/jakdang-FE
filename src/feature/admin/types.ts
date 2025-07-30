@@ -63,13 +63,14 @@ export type BlockData =
   | BlockDataEvent;
 
 export interface Block extends BlockDefault {
-  id: string;
   position: number;
   page_id: string; // 이 블록이 속한 페이지의 ID
   is_active: boolean; // 블록 활성화 여부
 }
 
 export interface BlockDefault {
+  id?: string;
+  block_id?: string; // 블록 고유 ID
   name: string;
   type: BlockType;
   data: BlockData; // 블록의 데이터, 각 타입에 따라 다를 수 있음

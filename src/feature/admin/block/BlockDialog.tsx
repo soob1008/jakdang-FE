@@ -78,10 +78,9 @@ export default function BlockDialog({
         </DialogHeader>
         <div className="max-h-120 overflow-y-auto">
           <RadioGroup
-            value={selectedType}
-            onValueChange={(value) => {
-              console.log("Selected block type:", value);
-              setSelectedType(value);
+            value={selectedType || ""}
+            onValueChange={(value: BlockType) => {
+              setSelectedType(value || null);
             }}
             className="space-y-6"
           >

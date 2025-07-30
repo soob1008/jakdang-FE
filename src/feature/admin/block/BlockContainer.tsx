@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, use } from "react";
+import { useState, useEffect } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import PagePreview from "@/feature/admin/PagePreview";
 import PageEditor from "@/feature/admin/block/PageEditor";
@@ -8,11 +8,9 @@ import { Page } from "@/feature/admin/types";
 import { apiClient } from "@/lib/api/api.client";
 import { useQuery } from "@tanstack/react-query";
 
-interface BlockContainerProps {
-  page?: Page;
-}
+export const STORAGE_KEY = "selected-block-id";
 
-export default function BlockContainer({ page }: BlockContainerProps) {
+export default function BlockContainer() {
   const [hasMounted, setHasMounted] = useState(false);
   const { data, isLoading, error } = useQuery({
     queryKey: ["admin-page"],
@@ -20,7 +18,6 @@ export default function BlockContainer({ page }: BlockContainerProps) {
   });
 
   const form = useForm({
-    //resolver: zodResolver(),
     mode: "onChange",
     defaultValues: data?.page ?? {},
   });
