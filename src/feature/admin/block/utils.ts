@@ -4,7 +4,7 @@ export function createDefaultBlock(type: BlockType): BlockDefault {
   switch (type) {
     case "text":
       return {
-        block_id: crypto.randomUUID(),
+        id: crypto.randomUUID(),
         type,
         name: "텍스트",
         data: {

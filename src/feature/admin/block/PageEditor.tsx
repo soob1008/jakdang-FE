@@ -4,7 +4,6 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useFormContext, useFieldArray } from "react-hook-form";
 import BlockItem from "./BlockItem";
-import { Block } from "@/feature/admin/types";
 import BlockDialog from "./BlockDialog";
 import {
   DragDropContext,
@@ -19,6 +18,7 @@ export default function PageEditor() {
   const { fields, move, update } = useFieldArray({
     control,
     name: "blocks_draft",
+    keyName: "block_id",
   });
 
   const [openBlockDialog, setOpenBlockDialog] = useState(false);
@@ -80,15 +80,15 @@ export default function PageEditor() {
               >
                 {fields.map((block, index) => (
                   <Draggable
-                    key={block.id}
-                    draggableId={block.id}
+                    key={block.block_id}
+                    draggableId={block.block_id}
                     index={index}
                   >
                     {(provided) => (
                       <div ref={provided.innerRef} {...provided.draggableProps}>
                         <BlockItem
                           index={index}
-                          block={block as Block}
+                          block={block as BlockItem}
                           dragHandleProps={provided.dragHandleProps ?? {}}
                         />
                       </div>

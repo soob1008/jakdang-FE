@@ -4,15 +4,15 @@ import { useEffect, useState } from "react";
 import { GripVertical, ChevronDown, ChevronUp } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
-import { Block } from "@/feature/admin/types";
 import { FormField, FormItem, FormControl } from "@/components/ui/form";
 import BlockOptions from "./BlockOptions";
 import TextBlock from "./text/TextBlock";
+import { BlockItemType } from "@/feature/admin/types";
 // import 기타 블록들
 
 interface BlockItemProps {
   index: number;
-  block: Block;
+  block: BlockItemType;
   dragHandleProps?: React.HTMLAttributes<HTMLDivElement>;
 }
 
@@ -23,7 +23,7 @@ export default function BlockItem({
 }: BlockItemProps) {
   const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
 
-  // ✅ mount 이후에 localStorage 값 반영
+  // mount 이후에 localStorage 값 반영
   useEffect(() => {
     const id = localStorage.getItem("selected-block-id");
     setSelectedBlockId(
@@ -31,7 +31,7 @@ export default function BlockItem({
     );
   }, []);
 
-  // ✅ 현재 블럭이 선택된 블럭인지 계산
+  // 현재 블럭이 선택된 블럭인지 계산
   const isOpen = selectedBlockId === block.block_id;
 
   const handleToggle = () => {

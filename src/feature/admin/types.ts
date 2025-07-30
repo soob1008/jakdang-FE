@@ -69,9 +69,10 @@ export interface Block extends BlockDefault {
 }
 
 export interface BlockDefault {
-  id?: string;
-  block_id?: string; // 블록 고유 ID
+  id: string;
   name: string;
   type: BlockType;
   data: BlockData; // 블록의 데이터, 각 타입에 따라 다를 수 있음
 }
+
+export type BlockItemType = { block_id: string } & Block;
