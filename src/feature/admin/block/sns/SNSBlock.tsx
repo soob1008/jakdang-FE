@@ -22,13 +22,17 @@ import {
 } from "@hello-pangea/dnd";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
-const snsTypes = [
-  { id: "instagram", label: "Instagram" },
+const SNS_PLATFORMS = [
+  { id: "instagram", label: "Instagram" }, // 이미지 기반 홍보
+  { id: "brunch", label: "Brunch" }, // 글쓰기 플랫폼
   { id: "facebook", label: "Facebook" },
-  { id: "twitter", label: "Twitter" },
-  { id: "youtube", label: "YouTube" },
-  { id: "tiktok", label: "TikTok" },
-  { id: "blog", label: "Blog" },
+  { id: "velog", label: "Velog" }, // 기술/글 기반 블로그
+  { id: "tistory", label: "Tistory" }, // 자유 블로그
+  { id: "x", label: "X (Twitter)" }, // 짧은 글/홍보
+  { id: "youtube", label: "YouTube" }, // 영상 콘텐츠
+  { id: "naverBlog", label: "네이버 블로그" }, // 국내 대표 블로그
+  { id: "tiktok", label: "TikTok" }, // 감각적인 홍보 영상
+  { id: "personal", label: "개인 웹사이트" }, // 포트폴리오, 작가 페이지
   { id: "etc", label: "기타" },
 ];
 
@@ -98,9 +102,12 @@ export default function SNSBlock({ index }: { index: number }) {
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent>
-                                {snsTypes.map((sns) => (
-                                  <SelectItem key={sns.id} value={sns.id}>
-                                    {sns.label}
+                                {SNS_PLATFORMS.map((platform) => (
+                                  <SelectItem
+                                    key={platform.id}
+                                    value={platform.id}
+                                  >
+                                    {platform.label}
                                   </SelectItem>
                                 ))}
                               </SelectContent>
