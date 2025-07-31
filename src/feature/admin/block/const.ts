@@ -3,9 +3,7 @@ import {
   ImageIcon,
   Link2,
   CalendarIcon,
-  Medal,
   BookOpenText,
-  ListChecks,
   Network,
 } from "lucide-react";
 

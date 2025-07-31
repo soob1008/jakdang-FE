@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { Settings, LogOut, Blocks, Brush, Medal, Tickets } from "lucide-react";
+import { Settings, LogOut, Blocks, Brush } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
