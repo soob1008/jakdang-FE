@@ -35,14 +35,15 @@ export function createDefaultBlock(type: BlockType): BlockDefault {
           links: [],
         },
       };
-    // case "sns":
-    //   return {
-    //     type,
-    //     name: "SNS",
-    //     data: {
-    //       links: [],
-    //     },
-    //   };
+    case "sns":
+      return {
+        id: crypto.randomUUID(),
+        type,
+        name: "SNS",
+        data: {
+          sns_links: [],
+        },
+      };
     // case "calendar":
     //   return {
     //     type,

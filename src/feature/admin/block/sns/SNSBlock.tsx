@@ -33,11 +33,12 @@ const snsTypes = [
 ];
 
 export default function SNSBlock({ index }: { index: number }) {
-  const namePrefix = `blocks.${index}.data.items`;
+  const namePrefix = `blocks_draft.${index}.data.sns_links`;
   const { control } = useFormContext();
   const { fields, append, remove, move } = useFieldArray({
     control,
     name: namePrefix,
+    keyName: "block_id",
   });
 
   const handleDragEnd = (result: DropResult) => {
@@ -53,7 +54,7 @@ export default function SNSBlock({ index }: { index: number }) {
           type="button"
           variant="outline"
           size="sm"
-          onClick={() => append({ type: "instagram", url: "" })}
+          onClick={() => append({ platform: "", url: "" })}
         >
           + SNS 추가
         </Button>
@@ -68,7 +69,11 @@ export default function SNSBlock({ index }: { index: number }) {
               className="space-y-3"
             >
               {fields.map((field, i) => (
-                <Draggable key={field.id} draggableId={field.id} index={i}>
+                <Draggable
+                  key={field.block_id}
+                  draggableId={field.block_id}
+                  index={i}
+                >
                   {(provided) => (
                     <div
                       ref={provided.innerRef}
@@ -80,7 +85,7 @@ export default function SNSBlock({ index }: { index: number }) {
                       </div>
 
                       <FormField
-                        name={`${namePrefix}.${i}.type`}
+                        name={`${namePrefix}.${i}.platform`}
                         render={({ field }) => (
                           <FormItem className="w-1/5">
                             <Select
