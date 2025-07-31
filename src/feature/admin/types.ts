@@ -54,12 +54,16 @@ export interface BlockDataEvent {
   eventName: string;
   date: string;
 }
+export interface BlockDataSNS {
+  sns_links: { platform: string; url: string }[]; // SNS 링크
+}
 
 export type BlockData =
   | BlockDataText
   | BlockDataImage
   | BlockDataWork
   | BlockDataLink
+  | BlockDataSNS
   | BlockDataNotice
   | BlockDataChallenge
   | BlockDataEvent;
