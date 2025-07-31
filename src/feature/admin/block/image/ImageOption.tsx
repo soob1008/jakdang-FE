@@ -6,7 +6,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Rows2, Columns3 } from "lucide-react";
+import { Rows3, Columns3 } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 
 export default function ImageOption({ index }: { index: number }) {
@@ -32,24 +32,6 @@ export default function ImageOption({ index }: { index: number }) {
               >
                 <FormItem className="flex flex-col items-center gap-2">
                   <FormControl>
-                    <RadioGroupItem value="vertical" className="sr-only" />
-                  </FormControl>
-                  <button
-                    type="button"
-                    className={`w-16 h-16 border rounded-md flex flex-col items-center justify-center gap-1 ${
-                      field.value === "vertical"
-                        ? "border-ring bg-muted"
-                        : "border-border"
-                    }`}
-                    onClick={() => field.onChange("vertical")}
-                  >
-                    <Columns3 className="w-5 h-5" />
-                    <span className="text-xs">가로형</span>
-                  </button>
-                </FormItem>
-
-                <FormItem className="flex flex-col items-center gap-2">
-                  <FormControl>
                     <RadioGroupItem value="horizontal" className="sr-only" />
                   </FormControl>
                   <button
@@ -61,7 +43,25 @@ export default function ImageOption({ index }: { index: number }) {
                     }`}
                     onClick={() => field.onChange("horizontal")}
                   >
-                    <Rows2 className="w-5 h-5" />
+                    <Columns3 className="w-5 h-5" />
+                    <span className="text-xs">가로형</span>
+                  </button>
+                </FormItem>
+
+                <FormItem className="flex flex-col items-center gap-2">
+                  <FormControl>
+                    <RadioGroupItem value="vertical" className="sr-only" />
+                  </FormControl>
+                  <button
+                    type="button"
+                    className={`w-16 h-16 border rounded-md flex flex-col items-center justify-center gap-1 ${
+                      field.value === "vertical"
+                        ? "border-ring bg-muted"
+                        : "border-border"
+                    }`}
+                    onClick={() => field.onChange("vertical")}
+                  >
+                    <Rows3 className="w-5 h-5" />
                     <span className="text-xs">세로형</span>
                   </button>
                 </FormItem>
