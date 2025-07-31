@@ -20,6 +20,7 @@ export default function ImageBlock({ index }: { index: number }) {
   const { fields, append, remove, move } = useFieldArray({
     control,
     name: namePrefix,
+    keyName: "block_id",
   });
 
   const images = watch(namePrefix) || [];
@@ -74,7 +75,7 @@ export default function ImageBlock({ index }: { index: number }) {
 
   return (
     <div className="space-y-4">
-      <FormLabel>이미지 업로드 (최대 10장)</FormLabel>
+      <FormLabel>업로드 (최대 10장)</FormLabel>
       <DragDropContext onDragEnd={handleDragEnd}>
         <Droppable droppableId={`images-${namePrefix}`} type="IMAGE">
           {(provided) => (
@@ -84,10 +85,14 @@ export default function ImageBlock({ index }: { index: number }) {
               className="grid grid-cols-5 gap-4"
             >
               {fields.map((field, i) => (
-                <Draggable key={field.id} draggableId={field.id} index={i}>
+                <Draggable
+                  key={field.block_id}
+                  draggableId={field.block_id}
+                  index={i}
+                >
                   {(provided) => (
                     <div
-                      key={field.id}
+                      key={field.block_id}
                       className="flex flex-col"
                       ref={provided.innerRef}
                       {...provided.draggableProps}

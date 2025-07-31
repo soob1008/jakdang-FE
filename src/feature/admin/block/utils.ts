@@ -23,7 +23,7 @@ export function createDefaultBlock(type: BlockType): BlockDefault {
         data: {
           images: [],
           direction: "vertical",
-          columns: 1,
+          columns: "1", // 기본값은 1열
         },
       };
     case "link":

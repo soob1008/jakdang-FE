@@ -33,10 +33,10 @@ export default function BlockItem({
   }, []);
 
   // 현재 블럭이 선택된 블럭인지 계산
-  const isOpen = selectedBlockId === block.block_id;
+  const isOpen = selectedBlockId === block.id;
 
   const handleToggle = () => {
-    const next = isOpen ? null : block.block_id;
+    const next = isOpen ? null : block.id;
     localStorage.setItem("selected-block-id", next ?? "");
     setSelectedBlockId(next ?? null);
   };
