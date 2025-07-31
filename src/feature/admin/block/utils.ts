@@ -54,15 +54,16 @@ export function createDefaultBlock(type: BlockType): BlockDefault {
           layout: "grid",
         },
       };
-    // case "calendar":
-    //   return {
-    //     type,
-    //     name: "일정",
-    //     data: {
-    //       items: [],
-    //       displayMode: "list",
-    //     },
-    //   };
+    case "calendar":
+      return {
+        id: crypto.randomUUID(),
+        type,
+        name: "일정",
+        data: {
+          dates: [],
+          layout: "calendar",
+        },
+      };
     // case "event":
     //   return {
     //     id: nanoid(),

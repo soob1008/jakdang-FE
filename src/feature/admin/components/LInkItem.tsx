@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Switch } from "@/components/ui/switch";
 import { AuthorLink } from "@/feature/user/type";
-import { Trash, Pencil } from "lucide-react";
+import { Trash2, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   AlertDialog,
@@ -57,7 +57,7 @@ export default function LinkItem({
           >
             <AlertDialogTrigger asChild>
               <Button variant="ghost" size="icon">
-                <Trash className="w-4 h-4 text-muted-foreground hover:text-gray-900" />
+                <Trash2 className="w-4 h-4 text-muted-foreground hover:text-gray-900" />
               </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>

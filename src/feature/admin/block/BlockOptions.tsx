@@ -48,7 +48,7 @@ export default function BlockOptions({ type, index }: BlockOptionsProps) {
               <WorkOption index={index} />
             )
           }
-          {type === "calendar" && <CalendarOption index={0} />}
+          {type === "calendar" && <CalendarOption index={index} />}
         </div>
       )}
     </div>

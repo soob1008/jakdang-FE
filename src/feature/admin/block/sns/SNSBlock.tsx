@@ -135,7 +135,7 @@ export default function SNSBlock({ index }: { index: number }) {
                         variant="ghost"
                         onClick={() => remove(i)}
                       >
-                        <Trash2 className="w-4 h-4 text-destructive" />
+                        <Trash2 className="w-4 h-4" />
                       </Button>
                     </div>
                   )}

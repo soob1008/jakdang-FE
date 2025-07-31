@@ -12,6 +12,7 @@ import ImageBlock from "./image/ImageBlock";
 import LinkBlock from "./link/LInkBlock";
 import SNSBlock from "./sns/SNSBlock";
 import WorkBlock from "./work/WorkBlock";
+import CalendarBlock from "./calendar/CalendarBlock";
 // import 기타 블록들
 
 interface BlockItemProps {
@@ -98,6 +99,7 @@ export default function BlockItem({
           {block.type === "link" && <LinkBlock index={index} />}
           {block.type === "sns" && <SNSBlock index={index} />}
           {block.type === "work" && <WorkBlock index={index} />}
+          {block.type === "calendar" && <CalendarBlock index={index} />}
           {/* 다른 블록들도 필요 시 추가 */}
           <BlockOptions type={block.type} index={index} />
         </div>
