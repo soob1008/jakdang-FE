@@ -1,4 +1,4 @@
-import { useFieldArray, useFormContext, Controller } from "react-hook-form";
+import { useFieldArray, useFormContext } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -8,7 +8,7 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
-import { CalendarIcon, Plus, Trash2 } from "lucide-react";
+import { CalendarIcon, Plus, X } from "lucide-react";
 import {
   Popover,
   PopoverContent,
@@ -168,7 +168,7 @@ export default function CalendarBlock({ index }: { index: number }) {
               size="icon"
               onClick={() => remove(i)}
             >
-              <Trash2 className="w-4 h-4" />
+              <X className="w-4 h-4" />
             </Button>
           </div>
         );

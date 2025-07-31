@@ -13,7 +13,7 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { GripVertical, Trash2 } from "lucide-react";
+import { GripVertical, X } from "lucide-react";
 import {
   DragDropContext,
   Droppable,
@@ -135,7 +135,7 @@ export default function SNSBlock({ index }: { index: number }) {
                         variant="ghost"
                         onClick={() => remove(i)}
                       >
-                        <Trash2 className="w-4 h-4" />
+                        <X className="w-4 h-4" />
                       </Button>
                     </div>
                   )}
