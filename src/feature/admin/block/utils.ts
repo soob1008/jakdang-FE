@@ -21,8 +21,9 @@ export function createDefaultBlock(type: BlockType): BlockDefault {
         type,
         name: "이미지",
         data: {
-          url: "",
-          alt: "",
+          images: [],
+          direction: "vertical",
+          columns: "1", // 기본값은 1열
         },
       };
     case "link":

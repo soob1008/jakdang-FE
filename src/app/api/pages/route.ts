@@ -14,7 +14,7 @@ export async function GET() {
 
   const { data: page, error } = await supabase
     .from("pages")
-    .select("id, blocks_draft")
+    .select("id, blocks_draft, user_id")
     .eq("user_id", user.id)
     .single();
 

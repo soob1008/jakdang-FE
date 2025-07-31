@@ -8,6 +8,7 @@ import { FormField, FormItem, FormControl } from "@/components/ui/form";
 import BlockOptions from "./BlockOptions";
 import TextBlock from "./text/TextBlock";
 import { BlockItemType } from "@/feature/admin/types";
+import ImageBlock from "./image/ImageBlock";
 // import 기타 블록들
 
 interface BlockItemProps {
@@ -32,10 +33,10 @@ export default function BlockItem({
   }, []);
 
   // 현재 블럭이 선택된 블럭인지 계산
-  const isOpen = selectedBlockId === block.block_id;
+  const isOpen = selectedBlockId === block.id;
 
   const handleToggle = () => {
-    const next = isOpen ? null : block.block_id;
+    const next = isOpen ? null : block.id;
     localStorage.setItem("selected-block-id", next ?? "");
     setSelectedBlockId(next ?? null);
   };
@@ -90,6 +91,7 @@ export default function BlockItem({
       {isOpen && (
         <div className="px-4 py-6 space-y-2">
           {block.type === "text" && <TextBlock index={index} />}
+          {block.type === "image" && <ImageBlock index={index} />}
           {/* 다른 블록들도 필요 시 추가 */}
           <BlockOptions type={block.type} index={index} />
         </div>
