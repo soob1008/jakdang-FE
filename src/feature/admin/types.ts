@@ -25,8 +25,10 @@ export interface BlockDataText {
 }
 
 export interface BlockDataImage {
-  url: string;
-  alt?: string;
+  images: { url: string; alt?: string; position: number }[]; // 이미지 URL과 대체 텍스트
+  direction: "vertical" | "horizontal"; // 이미지 정렬 방향
+  columns?: number; // 이미지 열 수 (선택적)
+  link?: string;
 }
 
 export interface BlockDataWork {
