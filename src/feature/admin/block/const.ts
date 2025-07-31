@@ -48,12 +48,12 @@ export const BLOCK_LIST = [
         description: "일정을 공유해요",
         icon: CalendarIcon,
       },
-      {
-        type: "event",
-        name: "이벤트",
-        description: "진행 중인 이벤트를 보여줘요",
-        icon: ListChecks,
-      },
+      // {
+      //   type: "event",
+      //   name: "이벤트",
+      //   description: "진행 중인 이벤트를 보여줘요",
+      //   icon: ListChecks,
+      // },
     ],
   },
   {
@@ -65,12 +65,12 @@ export const BLOCK_LIST = [
         description: "대표 작품을 보여줘요",
         icon: BookOpenText,
       },
-      {
-        type: "challenge",
-        name: "챌린지",
-        description: "진행 중인 챌린지를 보여줘요",
-        icon: Medal,
-      },
+      // {
+      //   type: "challenge",
+      //   name: "챌린지",
+      //   description: "진행 중인 챌린지를 보여줘요",
+      //   icon: Medal,
+      // },
     ],
   },
 ];
