@@ -9,6 +9,7 @@ import BlockOptions from "./BlockOptions";
 import TextBlock from "./text/TextBlock";
 import { BlockItemType } from "@/feature/admin/types";
 import ImageBlock from "./image/ImageBlock";
+import LinkBlock from "./link/LInkBlock";
 // import 기타 블록들
 
 interface BlockItemProps {
@@ -92,6 +93,7 @@ export default function BlockItem({
         <div className="px-4 py-6 space-y-2">
           {block.type === "text" && <TextBlock index={index} />}
           {block.type === "image" && <ImageBlock index={index} />}
+          {block.type === "link" && <LinkBlock index={index} />}
           {/* 다른 블록들도 필요 시 추가 */}
           <BlockOptions type={block.type} index={index} />
         </div>
