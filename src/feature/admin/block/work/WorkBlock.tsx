@@ -28,7 +28,7 @@ import { ChangeEvent, useState } from "react";
 
 export default function WorkBlock({ index }: { index: number }) {
   const namePrefix = `blocks_draft.${index}.data.works`;
-  const { control, register, setValue, watch } = useFormContext();
+  const { control, register, watch } = useFormContext();
   const { fields, append, remove, move, update } = useFieldArray({
     control,
     name: namePrefix,
