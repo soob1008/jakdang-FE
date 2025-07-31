@@ -49,7 +49,6 @@ export default function BlockOptions({ type, index }: BlockOptionsProps) {
             )
           }
           {type === "calendar" && <CalendarOption index={0} />}
-          {/* {type === "link" && <LinkOption index={0} />} */}
         </div>
       )}
     </div>

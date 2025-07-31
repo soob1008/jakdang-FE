@@ -16,7 +16,7 @@ import { toast } from "sonner";
 
 export default function ImageBlock({ index }: { index: number }) {
   const namePrefix = `blocks_draft.${index}.data.images`;
-  const { control, register, watch, setValue } = useFormContext();
+  const { control, register, watch } = useFormContext();
   const { fields, append, remove, move } = useFieldArray({
     control,
     name: namePrefix,
@@ -45,7 +45,6 @@ export default function ImageBlock({ index }: { index: number }) {
           url: imagePath,
           alt: baseName,
           link: "",
-          position: fields.length,
         });
       },
     });
@@ -60,17 +59,6 @@ export default function ImageBlock({ index }: { index: number }) {
     const to = result.destination.index;
 
     move(from, to);
-
-    const reordered = [...images];
-    const movedItem = reordered.splice(from, 1)[0];
-    reordered.splice(to, 0, movedItem);
-
-    const updatedWithPosition = reordered.map((item, i) => ({
-      ...item,
-      position: i,
-    }));
-
-    setValue(namePrefix, updatedWithPosition);
   };
 
   return (

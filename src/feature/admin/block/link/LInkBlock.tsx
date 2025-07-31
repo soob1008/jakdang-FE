@@ -16,11 +16,12 @@ import {
 } from "@hello-pangea/dnd";
 
 export default function LinkBlock({ index }: { index: number }) {
-  const namePrefix = `blocks.${index}.data.links`;
+  const namePrefix = `blocks_draft.${index}.data.links`;
   const { control } = useFormContext();
   const { fields, append, remove, move } = useFieldArray({
     control,
     name: namePrefix,
+    keyName: "block_id",
   });
 
   const handleDragEnd = (result: DropResult) => {
@@ -36,7 +37,7 @@ export default function LinkBlock({ index }: { index: number }) {
           type="button"
           variant="outline"
           size="sm"
-          onClick={() => append({ title: "", url: "" })}
+          onClick={() => append({ label: "", url: "" })}
         >
           <Plus className="w-4 h-4 mr-1" /> 링크 추가하기
         </Button>
@@ -51,7 +52,11 @@ export default function LinkBlock({ index }: { index: number }) {
               className="space-y-4"
             >
               {fields.map((field, i) => (
-                <Draggable key={field.id} draggableId={field.id} index={i}>
+                <Draggable
+                  key={field.block_id}
+                  draggableId={field.block_id}
+                  index={i}
+                >
                   {(provided) => (
                     <div
                       ref={provided.innerRef}
@@ -64,7 +69,7 @@ export default function LinkBlock({ index }: { index: number }) {
 
                       <div className="w-full space-y-2">
                         <FormField
-                          name={`${namePrefix}.${i}.title`}
+                          name={`${namePrefix}.${i}.label`}
                           render={({ field }) => (
                             <FormItem>
                               <FormControl>
@@ -74,7 +79,6 @@ export default function LinkBlock({ index }: { index: number }) {
                             </FormItem>
                           )}
                         />
-
                         <FormField
                           name={`${namePrefix}.${i}.url`}
                           render={({ field }) => (
