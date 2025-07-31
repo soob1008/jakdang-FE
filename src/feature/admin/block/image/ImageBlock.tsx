@@ -16,7 +16,7 @@ import { toast } from "sonner";
 
 export default function ImageBlock({ index }: { index: number }) {
   const namePrefix = `blocks_draft.${index}.data.images`;
-  const { control, register, watch, setValue } = useFormContext();
+  const { control, register, watch } = useFormContext();
   const { fields, append, remove, move } = useFieldArray({
     control,
     name: namePrefix,
