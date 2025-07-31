@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/client";
 import { IMAGE_BUCKET_NAME } from "@/lib/const";
 
-type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
+type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
 
 interface RequestOptions<TBody = unknown> {
   method?: HttpMethod;
@@ -47,6 +47,12 @@ export const apiClient = {
     body?: TBody,
     headers?: HeadersInit
   ) => request<TResponse, TBody>(url, { method: "PUT", body, headers }),
+
+  patch: <TResponse, TBody = unknown>(
+    url: string,
+    body?: TBody,
+    headers?: HeadersInit
+  ) => request<TResponse, TBody>(url, { method: "PATCH", body, headers }),
 
   delete: <TResponse, TBody = unknown>(
     url: string,

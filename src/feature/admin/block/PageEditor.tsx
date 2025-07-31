@@ -12,11 +12,12 @@ import {
   DropResult,
 } from "@hello-pangea/dnd";
 import { useAutoSaveBlock } from "@/hooks/useAutoSaveBlock";
+
 import { BlockItemType } from "@/feature/admin/types";
 
 export default function PageEditor() {
   const { control, watch } = useFormContext();
-  const { fields, move, update } = useFieldArray({
+  const { fields, move, update, remove } = useFieldArray({
     control,
     name: "blocks_draft",
     keyName: "block_id",
@@ -44,6 +45,10 @@ export default function PageEditor() {
     updatedBlocks.forEach((block, idx) => {
       update(idx, block);
     });
+  };
+
+  const handleDeleteBlock = (index: number) => {
+    remove(index);
   };
 
   return (
@@ -91,6 +96,7 @@ export default function PageEditor() {
                           index={index}
                           block={block as BlockItemType}
                           dragHandleProps={provided.dragHandleProps ?? {}}
+                          onDelete={() => handleDeleteBlock(index)}
                         />
                       </div>
                     )}

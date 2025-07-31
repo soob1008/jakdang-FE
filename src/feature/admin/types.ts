@@ -68,6 +68,16 @@ export interface BlockDataSNS {
   sns_links: { platform: string; url: string }[]; // SNS 링크
 }
 
+export interface BlockDataCalendar {
+  dates: {
+    start_date: Date;
+    end_date: Date;
+    title: string;
+    description?: string;
+  }[]; // 일정 데이터
+  layout: "list" | "calendar"; // 캘린더 레이아웃 방식
+}
+
 export type BlockData =
   | BlockDataText
   | BlockDataImage
@@ -76,7 +86,8 @@ export type BlockData =
   | BlockDataSNS
   | BlockDataNotice
   | BlockDataChallenge
-  | BlockDataEvent;
+  | BlockDataEvent
+  | BlockDataCalendar;
 
 export interface Block extends BlockDefault {
   position: number;

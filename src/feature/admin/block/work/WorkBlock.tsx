@@ -4,7 +4,7 @@ import { useFormContext, useFieldArray, Controller } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import { Trash, Plus, GripVertical, Upload } from "lucide-react";
+import { X, Plus, GripVertical, Upload } from "lucide-react";
 import Image from "next/image";
 import {
   AlertDialog,
@@ -79,7 +79,12 @@ export default function WorkBlock({ index }: { index: number }) {
   return (
     <div className="space-y-4">
       <div className="flex justify-end">
-        <Button type="button" variant="outline" onClick={handleAddWork}>
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={handleAddWork}
+        >
           <Plus className="w-4 h-4 mr-2" />
           작품 추가
         </Button>
@@ -195,7 +200,7 @@ export default function WorkBlock({ index }: { index: number }) {
                         >
                           <AlertDialogTrigger asChild>
                             <Button type="button" variant="ghost" size="icon">
-                              <Trash className="w-4 h-4" />
+                              <X className="w-4 h-4" />
                             </Button>
                           </AlertDialogTrigger>
                           <AlertDialogContent>

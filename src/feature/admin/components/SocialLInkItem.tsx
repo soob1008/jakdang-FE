@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Pencil, Trash } from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { AuthorSNS } from "@/feature/user/type";
 import { Button } from "@/components/ui/button";
@@ -103,7 +103,7 @@ export default function SocialLinkItem({
             onOpenChange={setIsOpenDeleteAlert}
           >
             <AlertDialogTrigger>
-              <Trash className="w-4 h-4 text-muted-foreground hover:text-gray-900" />
+              <Trash2 className="w-4 h-4 text-muted-foreground hover:text-gray-900" />
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>

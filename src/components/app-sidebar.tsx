@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { Settings, LogOut, Blocks, Brush, Medal, Tickets } from "lucide-react";
+import { Settings, LogOut, Blocks, Brush } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -40,21 +40,21 @@ const MENUS = [
       },
     ],
   },
-  {
-    label: "활동",
-    items: [
-      {
-        label: "챌린지 관리",
-        href: "/admin/challenge",
-        icon: Medal,
-      },
-      {
-        label: "이벤트 관리",
-        href: "/admin/event",
-        icon: Tickets,
-      },
-    ],
-  },
+  // {
+  //   label: "활동",
+  //   items: [
+  //     {
+  //       label: "챌린지 관리",
+  //       href: "/admin/challenge",
+  //       icon: Medal,
+  //     },
+  //     {
+  //       label: "이벤트 관리",
+  //       href: "/admin/event",
+  //       icon: Tickets,
+  //     },
+  //   ],
+  // },
   {
     label: "설정",
     items: [

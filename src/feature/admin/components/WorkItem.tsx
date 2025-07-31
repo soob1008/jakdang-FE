@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
-import { Pencil, Trash } from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
 import { AuthorWork } from "@/feature/user/type";
 import {
   AlertDialog,
@@ -78,7 +78,7 @@ export default function WorkItem({
                 className="w-7 h-7 p-1 rounded-full"
                 aria-label="Delete Work"
               >
-                <Trash className="w-4 h-4" />
+                <Trash2 className="w-4 h-4" />
               </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
