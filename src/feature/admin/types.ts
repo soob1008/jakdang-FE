@@ -16,6 +16,16 @@ export type BlockType =
 
 type Align = "left" | "center" | "right";
 
+export interface WorkItem {
+  id: string;
+  title: string;
+  image_url?: string;
+  is_active: boolean;
+  is_representative: boolean;
+  description?: string;
+  url?: string;
+}
+
 export interface BlockDataText {
   title?: string;
   content: string;
@@ -32,8 +42,8 @@ export interface BlockDataImage {
 }
 
 export interface BlockDataWork {
-  title: string;
-  author: string;
+  works: WorkItem[];
+  layout: "grid" | "list"; // 작품 정렬 방식
 }
 
 export interface BlockDataLink {

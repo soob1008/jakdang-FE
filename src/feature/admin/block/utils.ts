@@ -44,6 +44,16 @@ export function createDefaultBlock(type: BlockType): BlockDefault {
           sns_links: [],
         },
       };
+    case "work":
+      return {
+        id: crypto.randomUUID(),
+        type,
+        name: "작품",
+        data: {
+          works: [],
+          layout: "grid",
+        },
+      };
     // case "calendar":
     //   return {
     //     type,
@@ -66,16 +76,7 @@ export function createDefaultBlock(type: BlockType): BlockDefault {
     //       registrationLink: "",
     //     },
     //   };
-    // case "work":
-    //   return {
-    //     id: nanoid(),
-    //     type,
-    //     name: "작품",
-    //     data: {
-    //       workIds: [],
-    //       layout: "grid",
-    //     },
-    //   };
+
     // case "challenge":
     //   return {
     //     id: nanoid(),
