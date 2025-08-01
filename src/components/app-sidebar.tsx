@@ -59,8 +59,8 @@ const MENUS = [
     label: "설정",
     items: [
       {
-        label: "Settings",
-        href: "/admin/settings",
+        label: "Setting",
+        href: "/admin/setting",
         icon: Settings,
       },
     ],
