@@ -12,7 +12,7 @@ export const STORAGE_KEY = "selected-block-id";
 
 export default function BlockContainer() {
   const [hasMounted, setHasMounted] = useState(false);
-  const { data, error } = useQuery({
+  const { data } = useQuery({
     queryKey: ["admin-page"],
     queryFn: () => apiClient.get<{ page: Page }>("/api/pages"),
   });

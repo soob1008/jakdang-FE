@@ -8,8 +8,6 @@ export default async function AdminSettingPage() {
     next: { revalidate: 60 },
   });
 
-  console.log("user:", user);
-
   return (
     <div className="space-y-6 m-auto px-4 lg:px-0 lg:w-[900px]">
       <h2 className="mb-6 text-lg font-bold">Setting</h2>
