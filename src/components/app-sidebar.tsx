@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { Settings, LogOut, Blocks, Brush } from "lucide-react";
+import { LogOut, ChevronDown } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -19,56 +19,22 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import Link from "next/link";
 import clsx from "clsx"; // tailwind class 병합용 라이브러리 (optional)
+import { createClient } from "@/lib/supabase/client";
+import { useRouter } from "next/navigation";
+import { MENUS } from "@/feature/admin/const";
 
 // 메뉴 구조
-const MENUS = [
-  {
-    label: "나의 공간",
-    items: [
-      {
-        label: "구성하기",
-        href: "/admin/compose",
-        icon: Blocks,
-      },
-      {
-        label: "꾸미기",
-        href: "/admin/design",
-        icon: Brush,
-      },
-    ],
-  },
-  // {
-  //   label: "활동",
-  //   items: [
-  //     {
-  //       label: "챌린지 관리",
-  //       href: "/admin/challenge",
-  //       icon: Medal,
-  //     },
-  //     {
-  //       label: "이벤트 관리",
-  //       href: "/admin/event",
-  //       icon: Tickets,
-  //     },
-  //   ],
-  // },
-  {
-    label: "설정",
-    items: [
-      {
-        label: "Settings",
-        href: "/admin/settings",
-        icon: Settings,
-      },
-    ],
-  },
-];
 
-export function AppSidebar() {
+interface AppSidebarProps {
+  email: string;
+}
+
+export function AppSidebar({ email }: AppSidebarProps) {
   const pathname = usePathname();
+  const supabase = createClient();
+  const router = useRouter();
 
   return (
     <Sidebar className="bg-white h-full border-none shadow-[4px_6px_10px_-2px_rgba(0,0,0,0.04)]">
@@ -98,7 +64,7 @@ export function AppSidebar() {
                     >
                       <SidebarMenuButton
                         asChild
-                        className="hover:bg-transparent hover:text-inherit"
+                        className="hover:bg-transparent hover:text-inherit active:bg-transparent"
                       >
                         <Link href={item.href}>
                           <item.icon className="mr-2 h-4 w-4" />
@@ -118,17 +84,34 @@ export function AppSidebar() {
       <SidebarFooter className="border-t p-3">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <button className="flex w-full items-center gap-2 rounded-md px-2 py-1 text-sm hover:bg-muted/30 transition">
-              <Avatar className="h-6 w-6">
-                <AvatarFallback>SU</AvatarFallback>
-              </Avatar>
-              <span className="text-sm font-medium">김수빈</span>
+            <button className="flex w-full items-center justify-between rounded-md px-3 py-2 text-sm hover:bg-muted/30 transition">
+              <div className="flex items-center gap-2">
+                {/* <Avatar className="h-6 w-6">
+                  <AvatarFallback>
+                    {email?.[0]?.toUpperCase() ?? "U"}
+                  </AvatarFallback>
+                </Avatar> */}
+                <span className="text-sm font-medium text-muted-foreground">
+                  {email}
+                </span>
+              </div>
+              <ChevronDown className="w-4 h-4 text-muted-foreground" />
             </button>
           </DropdownMenuTrigger>
+
           <DropdownMenuContent align="end" className="w-36">
             <DropdownMenuItem>
-              <LogOut className="mr-2 h-4 w-4" />
-              로그아웃
+              <button
+                type="button"
+                className="flex w-full items-center gap-2"
+                onClick={async () => {
+                  await supabase.auth.signOut();
+                  router.push("/auth/login");
+                }}
+              >
+                <LogOut className="mr-2 h-4 w-4" />
+                로그아웃
+              </button>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

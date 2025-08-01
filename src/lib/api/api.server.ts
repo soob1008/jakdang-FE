@@ -10,16 +10,6 @@ export async function fetchServer<TResponse>(
   const headersList = await headers();
   const cookie = headersList.get("cookie") ?? "";
 
-  console.log("options", {
-    ...init,
-    headers: {
-      ...(init?.headers || {}),
-      cookie,
-    },
-    next: init?.next,
-    cache: init?.cache ?? undefined,
-  });
-
   const res = await fetch(`${baseUrl}${input}`, {
     ...init,
     headers: {

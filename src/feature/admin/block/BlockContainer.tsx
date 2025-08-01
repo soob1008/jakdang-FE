@@ -12,7 +12,7 @@ export const STORAGE_KEY = "selected-block-id";
 
 export default function BlockContainer() {
   const [hasMounted, setHasMounted] = useState(false);
-  const { data, isLoading, error } = useQuery({
+  const { data } = useQuery({
     queryKey: ["admin-page"],
     queryFn: () => apiClient.get<{ page: Page }>("/api/pages"),
   });
@@ -33,8 +33,8 @@ export default function BlockContainer() {
     reset(data.page);
   }, [data, reset]);
 
-  if (isLoading) return <div>로딩 중...</div>;
-  if (error || !data) return <div>에러 발생</div>;
+  // if (isLoading) return <div>로딩 중...</div>;
+  //  if (error || !data) return <div>에러 발생</div>;
 
   if (!hasMounted) return null;
 
