@@ -1,23 +1,52 @@
-import { Button } from "@/components/ui/button";
+"use client";
 
-export default function AdminHeader() {
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import { MENUS } from "@/feature/admin/const";
+import { usePathname } from "next/navigation";
+
+interface AdminHeaderProps {
+  email: string;
+  slug?: string;
+}
+
+export default function AdminHeader({ email, slug }: AdminHeaderProps) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const menuLabel = getMenuLabelByPath(pathname);
+
   return (
     <header className="pt-14 pb-4 px-10 flex items-center justify-between border-b">
       {/* 왼쪽: 페이지 타이틀 */}
-      <div className="text-xl font-semibold font-gong">내 공간 관리</div>
+      <div className="text-xl font-semibold font-gong">{menuLabel}</div>
 
       {/* 오른쪽: 이메일 + 기능 버튼 */}
       <div className="flex items-center gap-4">
         {/* 이메일 표시 */}
-        <p className="text-xs font-medium text-muted-foreground">
-          1008sb354@gmail.com
-        </p>
+        <p className="text-xs font-medium text-muted-foreground">{email}</p>
 
         {/* 버튼 */}
-        <Button variant="secondary" size="sm">
+        <Button
+          variant="secondary"
+          size="sm"
+          onClick={() => {
+            router.push(`/@${slug}`);
+          }}
+        >
           페이지 이동
         </Button>
       </div>
     </header>
   );
+}
+
+function getMenuLabelByPath(pathname: string): string | null {
+  for (const group of MENUS) {
+    for (const item of group.items) {
+      if (item.href === pathname) {
+        return group.label;
+      }
+    }
+  }
+  return null;
 }

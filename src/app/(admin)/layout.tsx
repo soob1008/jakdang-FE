@@ -5,6 +5,8 @@ import { AppSidebar } from "@/components/app-sidebar";
 import AdminHeader from "@/feature/admin/header";
 import { redirect } from "next/navigation";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { fetchServer } from "@/lib/api/api.server";
+import { Author } from "@/feature/user/type";
 
 export const metadata: Metadata = {
   title: "작당 - 당신의 공간을 꾸며보세요.",
@@ -24,14 +26,22 @@ export default async function RootLayout({
     redirect("/auth/login");
   }
 
+  const {
+    user: userData,
+  }: {
+    user: Author;
+  } = await fetchServer("/api/user", {
+    next: { revalidate: 60 },
+  });
+
   return (
     <SidebarProvider>
       <div className="relative">
-        <AppSidebar />
+        <AppSidebar email={userData.email ?? ""} />
         <SidebarTrigger className="absolute top-1 right-[-34px]" />
       </div>
       <div className="flex flex-col gap-4 w-full bg-muted dark:bg-background">
-        <AdminHeader />
+        <AdminHeader email={userData.email ?? ""} slug={userData?.slug} />
         <div className=" flex-1">{children}</div>
       </div>
     </SidebarProvider>

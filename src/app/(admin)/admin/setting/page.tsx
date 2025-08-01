@@ -5,7 +5,7 @@ import { Author } from "@/feature/user/type";
 
 export default async function AdminSettingPage() {
   const { user }: { user: Author } = await fetchServer("/api/user", {
-    next: { revalidate: 60 },
+    next: { revalidate: 60, tags: ["user"] },
   });
 
   return (
