@@ -13,15 +13,29 @@ import {
   AlertDialogCancel,
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
+import { Author } from "@/feature/user/type";
+import { handleAction } from "@/lib/api/action";
+import { apiClient } from "@/lib/api/api.client";
 
-export default function MyInformation() {
+interface MyInformationProps {
+  user: Author;
+}
+
+export default function MyInformation({ user }: MyInformationProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [slug, setSlug] = useState("https://example.com");
+  const [slug, setSlug] = useState(user.slug || "");
 
-  const handleUpdateSlug = (newSlug: string) => {
-    // 여기에 슬러그 업데이트 로직을 추가하세요
-    console.log("슬러그가 업데이트되었습니다:", newSlug);
-    // 예: API 호출 등
+  const handleUpdateSlug = async (newSlug: string) => {
+    await handleAction(
+      () => apiClient.patch(`/api/user/slug`, { slug: newSlug }),
+      {
+        successMessage: "주소가 성공적으로 업데이트되었습니다.",
+        errorMessage: "주소 업데이트에 실패했습니다.",
+        onSuccess: () => {
+          setSlug(newSlug);
+        },
+      }
+    );
   };
 
   return (
@@ -29,7 +43,7 @@ export default function MyInformation() {
       <h3 className="text-lg font-bold mb-4">내 정보</h3>
       <div>
         <h4 className="text-sm text-gray-500">이메일</h4>
-        <p className="mt-2 font-semibold">user@example.com</p>
+        <p className="mt-2 font-semibold">{user.email}</p>
       </div>
       <div className="border-t pt-4">
         <div className="flex items-center justify-between">
@@ -56,10 +70,17 @@ export default function MyInformation() {
               </div>
 
               <AlertDialogFooter>
-                <AlertDialogCancel>취소</AlertDialogCancel>
-                <AlertDialogAction
+                <AlertDialogCancel
                   onClick={() => {
-                    handleUpdateSlug(slug);
+                    setIsOpen(false);
+                    setSlug(user.slug || "");
+                  }}
+                >
+                  취소
+                </AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={async () => {
+                    await handleUpdateSlug(slug);
                     setIsOpen(false);
                   }}
                 >
@@ -70,8 +91,7 @@ export default function MyInformation() {
           </AlertDialog>
         </div>
         <p className="mt-2 font-semibold">
-          <span>@</span>
-          soob108
+          {slug ? `https://jakdang.site/@${slug}` : "사용자 주소가 없습니다."}
         </p>
       </div>
     </div>
