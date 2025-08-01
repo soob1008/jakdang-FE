@@ -51,16 +51,16 @@ export default function AccountDelete() {
             <AlertDialogTitle>회원 탈퇴를 하시겠습니까?</AlertDialogTitle>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogAction
+            <AlertDialogCancel
               onClick={() => {
                 setIsOpenDeleteAlert(false);
               }}
             >
               취소
-            </AlertDialogAction>
-            <AlertDialogCancel onClick={handleDeleteAccount}>
-              탈퇴
             </AlertDialogCancel>
+            <AlertDialogAction onClick={handleDeleteAccount}>
+              탈퇴
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
