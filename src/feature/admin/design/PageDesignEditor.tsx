@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import ProfileDesign from "./ProfileDesign";
+
 import ThemeDesign from "./ThemeDesign";
 import WallPaperDesign from "./WallPaperDesign";
 
@@ -15,7 +15,6 @@ export default function PageDesignEditor() {
         </div>
       </div>
       <div className="space-y-6">
-        <ProfileDesign />
         <ThemeDesign />
         <WallPaperDesign />
       </div>
