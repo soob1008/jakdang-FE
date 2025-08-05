@@ -1,7 +1,7 @@
 "use client";
 import { useForm, FormProvider } from "react-hook-form";
 import PagePreview from "@/feature/admin/PagePreview";
-import PageDesignEditor from "@/feature/admin/PageDesignEditor";
+import PageDesignEditor from "@/feature/admin/design/PageDesignEditor";
 
 export default function AdminDesignPage() {
   const form = useForm({
