@@ -12,8 +12,8 @@ import {
   DropResult,
 } from "@hello-pangea/dnd";
 import { useAutoSaveBlock } from "@/hooks/useAutoSaveBlock";
-
 import { BlockItemType } from "@/feature/admin/types";
+import ProfileBlock from "./ProfileBlock";
 
 export default function PageEditor() {
   const { control, watch } = useFormContext();
@@ -70,7 +70,7 @@ export default function PageEditor() {
           </Button>
         </div>
       </div>
-
+      <ProfileBlock />
       {fields.length === 0 ? (
         <div className="mt-10 text-center text-sm text-gray-500">
           추가된 블록이 없습니다. 블록을 추가해 주세요.
