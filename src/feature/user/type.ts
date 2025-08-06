@@ -14,6 +14,14 @@ export interface Author {
   like_count?: number;
   tagline?: string;
   bio?: string;
+  profile_draft?: Profile;
+  profile_published?: Profile;
+}
+
+export interface Profile {
+  is_active: boolean;
+  avatar_url?: string;
+  headline?: string;
 }
 
 export interface AuthorTag {
