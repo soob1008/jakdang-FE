@@ -1,3 +1,5 @@
+import { FontSize, Align, Direction, Columns, Layout } from "@/feature/types";
+
 export interface Page {
   id: string;
   blocks_draft: Block[];
@@ -14,8 +16,6 @@ export type BlockType =
   | "sns" // SNS
   | "calendar"; // 캘린더
 
-type Align = "left" | "center" | "right";
-
 export interface WorkItem {
   id: string;
   title: string;
@@ -31,19 +31,19 @@ export interface BlockDataText {
   content: string;
   align: Align;
   color?: string; // 글자색
-  font_size: "sm" | "base" | "lg" | "xl";
+  font_size: FontSize;
 }
 
 export interface BlockDataImage {
   images: { url: string; alt?: string; position: number }[]; // 이미지 URL과 대체 텍스트
-  direction: "vertical" | "horizontal"; // 이미지 정렬 방향
-  columns?: "1" | "2"; // 이미지 열 수 (선택적)
+  direction: Direction; // 이미지 정렬 방향
+  columns?: Columns; // 이미지 열 수 (선택적)
   link?: string;
 }
 
 export interface BlockDataWork {
   works: WorkItem[];
-  layout: "grid" | "list"; // 작품 정렬 방식
+  layout: Layout; // 작품 정렬 방식
 }
 
 export interface BlockDataLink {

@@ -15,6 +15,8 @@ import { useAutoSaveBlock } from "@/hooks/useAutoSaveBlock";
 import { BlockItemType } from "@/feature/admin/types";
 import ProfileBlock from "./ProfileBlock";
 import { useAutoSaveProfile } from "@/hooks/useAutoSaveProfile";
+import { apiClient } from "@/lib/api/api.client";
+import { handleAction } from "@/lib/api/action";
 
 export default function PageEditor() {
   const { control, watch } = useFormContext();
@@ -53,6 +55,24 @@ export default function PageEditor() {
     remove(index);
   };
 
+  const handleSavePage = async () => {
+    const blocks = watch("blocks_draft");
+    const profile = watch("profile");
+
+    await handleAction(
+      () =>
+        apiClient.put(`/api/pages/${watch("id")}/publish`, {
+          blocks_draft: blocks,
+          profile_draft: profile,
+        }),
+      {
+        successMessage: "페이지가 저장되었습니다.",
+        errorMessage: "페이지 저장 실패",
+      }
+    );
+    setOpenBlockDialog(false);
+  };
+
   return (
     <article className="pr-2 flex flex-col gap-4 pt-4 pl-10 pb-24 max-w-[900px] w-full mx-auto lg:max-w-none">
       <div className="flex items-center justify-between pb-2">
@@ -67,7 +87,7 @@ export default function PageEditor() {
               </Button>
             }
           />
-          <Button type="button" className="w-fit">
+          <Button type="button" className="w-fit" onClick={handleSavePage}>
             저장하기
           </Button>
         </div>
