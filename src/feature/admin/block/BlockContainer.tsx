@@ -36,7 +36,7 @@ export default function BlockContainer() {
     },
   });
 
-  const { watch, reset } = form;
+  const { reset } = form;
 
   useEffect(() => {
     setHasMounted(true);
