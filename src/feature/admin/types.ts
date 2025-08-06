@@ -3,6 +3,7 @@ import { FontSize, Align, Direction, Columns, Layout } from "@/feature/types";
 export interface Page {
   id: string;
   blocks_draft: Block[];
+  blocks_published: Block[];
 }
 
 export type BlockType =

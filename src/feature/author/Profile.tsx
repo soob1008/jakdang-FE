@@ -11,7 +11,7 @@ import {
   AuthorWork,
 } from "@/feature/user/type";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { handleAction } from "../../lib/api/action";
+import { handleAction } from "@/lib/api/action";
 import { hasLikedAuthor, updateLikeAuthor } from "../viewer/api.server";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";

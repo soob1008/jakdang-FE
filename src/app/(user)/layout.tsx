@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "../globals.css";
-import { Header } from "@/components/layout/header";
+// import { Header } from "@/components/layout/header";
 import { Toaster } from "@/components/ui/sonner";
 import { ViewerProvider } from "@/feature/viewer/ViewerProvider";
 import Footer from "@/components/layout/footer";
@@ -16,8 +16,8 @@ export default function RootLayout({
   return (
     <>
       <ViewerProvider />
-      <Header />
-      <main className="min-h-screen pt-14 px-4 lg:px-6 bg-background">
+      {/* <Header /> */}
+      <main className="min-h-screen pt-8 px-4 lg:px-6 bg-background">
         <div className="max-w-3xl mx-auto w-full">{children}</div>
       </main>
       <Footer />

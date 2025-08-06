@@ -114,6 +114,7 @@ export default function TextOption({ index }: { index: number }) {
             <FormControl>
               <div className="flex gap-2">
                 {[
+                  { value: "xs", label: "가", size: "text-xs" },
                   { value: "sm", label: "가", size: "text-sm" },
                   { value: "base", label: "가", size: "text-base" },
                   { value: "lg", label: "가", size: "text-lg" },

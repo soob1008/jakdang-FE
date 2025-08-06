@@ -7,11 +7,12 @@ export type BlockType =
   | "challenge" // 글쓰기챌린지
   | "event" // 이벤트
   | "sns" // SNS
-  | "calendar"; // 캘린더
+  | "calendar" // 캘린더
+  | "blank"; // 여백
 
 export type Align = "left" | "center" | "right";
 
-export type FontSize = "sm" | "base" | "lg" | "xl";
+export type FontSize = "xs" | "sm" | "base" | "lg" | "xl" | "2xl";
 
 export type Direction = "vertical" | "horizontal";
 
