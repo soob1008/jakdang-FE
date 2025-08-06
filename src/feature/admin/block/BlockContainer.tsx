@@ -7,6 +7,7 @@ import PageEditor from "@/feature/admin/block/PageEditor";
 import { Page } from "@/feature/admin/types";
 import { apiClient } from "@/lib/api/api.client";
 import { useQuery } from "@tanstack/react-query";
+import { Author } from "@/feature/user/type";
 
 export const STORAGE_KEY = "selected-block-id";
 
@@ -16,10 +17,23 @@ export default function BlockContainer() {
     queryKey: ["admin-page"],
     queryFn: () => apiClient.get<{ page: Page }>("/api/pages"),
   });
+  const { data: userData } = useQuery({
+    queryKey: ["user"],
+    queryFn: () => apiClient.get<{ user: Author }>("/api/user"),
+  });
 
   const form = useForm({
     mode: "onChange",
-    defaultValues: data?.page ?? {},
+    defaultValues: {
+      id: "",
+      user_id: "",
+      blocks_draft: [] as Page["blocks_draft"],
+      profile: {
+        is_active: true,
+        avatar_url: "",
+        headline: "",
+      },
+    },
   });
 
   const { watch, reset } = form;
@@ -29,16 +43,24 @@ export default function BlockContainer() {
   }, []);
 
   useEffect(() => {
-    if (!data) return;
-    reset(data.page);
-  }, [data, reset]);
+    if (!data || !userData) return;
+
+    reset({
+      id: data.page.id ?? "",
+      user_id: userData.user.id ?? "",
+      blocks_draft: data.page.blocks_draft ?? [],
+      profile: userData.user.profile_draft ?? {
+        is_active: true,
+        avatar_url: "",
+        headline: "",
+      },
+    });
+  }, [data, userData, reset]);
 
   // if (isLoading) return <div>로딩 중...</div>;
   //  if (error || !data) return <div>에러 발생</div>;
 
   if (!hasMounted) return null;
-
-  console.log("form Values", watch());
 
   return (
     <FormProvider {...form}>

@@ -59,8 +59,6 @@ export default function BlockItem({
     setSelectedBlockId(next ?? null);
   };
 
-  console.log("BlockItem render", selectedBlockId, block);
-
   return (
     <section className="bg-white rounded-lg shadow-sm">
       {/* 헤더 영역 */}

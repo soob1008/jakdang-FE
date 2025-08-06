@@ -1,16 +1,16 @@
-import { useEffect, useRef } from "react";
+import { useRef, useEffect } from "react";
 import { useFormContext } from "react-hook-form";
-import { Block } from "@/feature/admin/types";
-import { debounce, isEqual } from "lodash";
+import { debounce } from "lodash";
 import { apiClient } from "@/lib/api/api.client";
+import type { Block } from "@/feature/admin/types";
 
 export function useAutoSaveBlock(pageId: string) {
   const { watch } = useFormContext();
-  const prevValueRef = useRef(null);
+  const prevJsonRef = useRef<string>("");
 
   useEffect(() => {
     if (!pageId) return;
-    // debounce 적용
+
     const debouncedSave = debounce(async (value: Block[]) => {
       try {
         await apiClient.put(`/api/pages/${pageId}/draft`, {
@@ -22,7 +22,9 @@ export function useAutoSaveBlock(pageId: string) {
     }, 2000);
 
     const subscription = watch((value) => {
-      if (!isEqual(prevValueRef.current, value.blocks_draft)) {
+      const currentJson = JSON.stringify(value.blocks_draft || []);
+      if (prevJsonRef.current !== currentJson) {
+        prevJsonRef.current = currentJson;
         debouncedSave(value.blocks_draft || []);
       }
     });
