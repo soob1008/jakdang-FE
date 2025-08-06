@@ -7,12 +7,12 @@ export async function PUT(
 ) {
   const supabase = await createSupabaseServerClient();
   const { id: pageId } = await params;
-  const { blocks_published, profile_published } = await req.json();
+  const { blocks_draft, profile_draft } = await req.json();
 
   // pages 테이블 업데이트 (blocks_published)
   const { error: pageError } = await supabase
     .from("pages")
-    .update({ blocks_published })
+    .update({ blocks_published: blocks_draft })
     .eq("id", pageId);
 
   if (pageError) {
@@ -28,7 +28,7 @@ export async function PUT(
 
   const { error: userError } = await supabase
     .from("users")
-    .update({ profile_published })
+    .update({ profile_published: profile_draft })
     .eq("id", pageData?.user_id);
 
   if (userError) {
