@@ -14,6 +14,7 @@ import {
 import { useAutoSaveBlock } from "@/hooks/useAutoSaveBlock";
 import { BlockItemType } from "@/feature/admin/types";
 import ProfileBlock from "./ProfileBlock";
+import { useAutoSaveProfile } from "@/hooks/useAutoSaveProfile";
 
 export default function PageEditor() {
   const { control, watch } = useFormContext();
@@ -26,6 +27,7 @@ export default function PageEditor() {
   const [openBlockDialog, setOpenBlockDialog] = useState(false);
 
   useAutoSaveBlock(watch("id"));
+  useAutoSaveProfile(watch("user_id"));
 
   const handleDragEnd = (result: DropResult) => {
     const { source, destination } = result;

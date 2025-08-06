@@ -1,11 +1,12 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useFormContext } from "react-hook-form";
 import { Block } from "@/feature/admin/types";
-import { debounce } from "lodash";
+import { debounce, isEqual } from "lodash";
 import { apiClient } from "@/lib/api/api.client";
 
 export function useAutoSaveBlock(pageId: string) {
   const { watch } = useFormContext();
+  const prevValueRef = useRef(null);
 
   useEffect(() => {
     if (!pageId) return;
@@ -21,7 +22,9 @@ export function useAutoSaveBlock(pageId: string) {
     }, 2000);
 
     const subscription = watch((value) => {
-      debouncedSave(value.blocks_draft || []);
+      if (!isEqual(prevValueRef.current, value.blocks_draft)) {
+        debouncedSave(value.blocks_draft || []);
+      }
     });
 
     return () => {

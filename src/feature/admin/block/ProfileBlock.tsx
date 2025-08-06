@@ -26,7 +26,7 @@ export default function ProfileBlock() {
       successMessage: "프로필 이미지가 업로드되었습니다.",
       errorMessage: "이미지 업로드 실패",
       onSuccess: ({ imagePath }) => {
-        setValue("profile.avatar_url", imagePath);
+        setValue("profile.profile_draft.avatar_url", imagePath);
       },
     });
   };
@@ -38,7 +38,7 @@ export default function ProfileBlock() {
         <h4 className="font-semibold">프로필</h4>
         <div className="flex items-center gap-2">
           <FormField
-            name={`profile.is_active`}
+            name={`profile.profile_draft.is_active`}
             control={control}
             render={({ field }) => (
               <FormItem>
@@ -105,7 +105,7 @@ export default function ProfileBlock() {
           <div>
             <label className="text-sm font-medium">대표 문구</label>
             <Input
-              {...register("profile.headline")}
+              {...register("profile.profile_draft.headline")}
               placeholder="대표 문구를 입력하세요"
               className="mt-2"
             />
