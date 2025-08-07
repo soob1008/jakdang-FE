@@ -66,8 +66,8 @@ export default function PageEditor() {
           profile_draft: profile,
         }),
       {
-        successMessage: "페이지가 저장되었습니다.",
-        errorMessage: "페이지 저장 실패",
+        successMessage: "내 공간에 반영되었습니다.",
+        errorMessage: "저장이 실패되었습니다. 다시 시도해 주세요.",
       }
     );
     setOpenBlockDialog(false);

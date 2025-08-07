@@ -190,7 +190,7 @@ export default function WorkBlock({ index }: { index: number }) {
                           <Textarea
                             {...register(`${path}.description`)}
                             placeholder="작품에 대한 내용이나 긴 설명을 적어주세요."
-                            className="text-sm"
+                            className="text-sm h-40 resize-none"
                           />
                           <Input
                             {...register(`${path}.url`)}
