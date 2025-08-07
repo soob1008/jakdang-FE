@@ -16,6 +16,7 @@ import { toast } from "sonner";
 import clsx from "clsx";
 
 export default function ImageBlock({ index }: { index: number }) {
+  const MAX_IMAGES_COUNT = 10; // 최대 이미지 개수
   const namePrefix = `blocks_draft.${index}.data.images`;
   const { control, register, watch } = useFormContext();
   const { fields, append, remove, move } = useFieldArray({
@@ -28,7 +29,7 @@ export default function ImageBlock({ index }: { index: number }) {
   const imageStyle = watch(`blocks_draft.${index}.data.style`) || "single";
 
   const handleUpload = async (e: ChangeEvent<HTMLInputElement>) => {
-    if (fields.length >= 10) return;
+    if (fields.length >= MAX_IMAGES_COUNT) return;
     if (imageStyle === "single" && fields.length > 0) {
       return;
     }
@@ -67,11 +68,12 @@ export default function ImageBlock({ index }: { index: number }) {
   };
 
   const isDisabled =
-    fields.length >= 10 || (imageStyle === "single" && fields.length >= 1);
+    fields.length >= MAX_IMAGES_COUNT ||
+    (imageStyle === "single" && fields.length >= 1);
 
   return (
     <div className="space-y-4">
-      <FormLabel>업로드 (최대 10장)</FormLabel>
+      <FormLabel>업로드 (최대 {MAX_IMAGES_COUNT}장)</FormLabel>
       <p className="text-sm text-muted-foreground">
         드래그 앤 드롭 하여 순서 변경 가능합니다.
         <br />

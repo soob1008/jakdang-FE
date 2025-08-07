@@ -132,7 +132,6 @@ export default function ImageOption({ index }: ImageOptionProps) {
 }
 
 interface ImageStyleButtonProps {
-  value: string;
   label: string;
   icon: React.ReactNode;
   selected: boolean;
