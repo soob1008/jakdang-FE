@@ -7,7 +7,7 @@ export default function Title({
 }) {
   return (
     <div className="mb-4">
-      <h2 className="text-xl font-gong font-medium">{title}</h2>
+      <h2 className="text-xl font-myungjo font-medium">{title}</h2>
       {description && (
         <p className="text-gray-600 text-sm mt-2">{description}</p>
       )}

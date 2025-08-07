@@ -18,7 +18,7 @@ export default function AdminHeader({ email, slug }: AdminHeaderProps) {
   return (
     <header className="pt-14 pb-4 px-10 flex items-center justify-between border-b">
       {/* 왼쪽: 페이지 타이틀 */}
-      <div className="text-xl font-semibold font-gong">{menuLabel}</div>
+      <div className="text-lg font-semibold font-myungjo">{menuLabel}</div>
 
       {/* 오른쪽: 이메일 + 기능 버튼 */}
       <div className="flex items-center gap-4">
@@ -28,12 +28,11 @@ export default function AdminHeader({ email, slug }: AdminHeaderProps) {
         {/* 버튼 */}
         <Button
           variant="secondary"
-          size="sm"
           onClick={() => {
             router.push(`/@${slug}`);
           }}
         >
-          페이지 이동
+          내 공간 보러가기
         </Button>
       </div>
     </header>

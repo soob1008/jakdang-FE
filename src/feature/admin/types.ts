@@ -66,7 +66,7 @@ export interface BlockDataEvent {
   date: string;
 }
 export interface BlockDataSNS {
-  sns_links: { platform: string; url: string }[]; // SNS 링크
+  sns_links: { platform: string; url: string; label: string }[]; // SNS 링크
 }
 
 export interface BlockDataCalendar {
