@@ -23,16 +23,16 @@ import {
 import { useFieldArray, useFormContext } from "react-hook-form";
 
 const SNS_PLATFORMS = [
-  { id: "instagram", label: "Instagram" }, // 이미지 기반 홍보
-  { id: "brunch", label: "Brunch" }, // 글쓰기 플랫폼
+  { id: "instagram", label: "Instagram" },
+  { id: "brunch", label: "Brunch" },
   { id: "facebook", label: "Facebook" },
-  { id: "velog", label: "Velog" }, // 기술/글 기반 블로그
-  { id: "tistory", label: "Tistory" }, // 자유 블로그
-  { id: "x", label: "X (Twitter)" }, // 짧은 글/홍보
-  { id: "youtube", label: "YouTube" }, // 영상 콘텐츠
-  { id: "naverBlog", label: "네이버 블로그" }, // 국내 대표 블로그
-  { id: "tiktok", label: "TikTok" }, // 감각적인 홍보 영상
-  { id: "personal", label: "개인 웹사이트" }, // 포트폴리오, 작가 페이지
+  { id: "velog", label: "Velog" },
+  { id: "tistory", label: "Tistory" },
+  { id: "x", label: "X (Twitter)" },
+  { id: "youtube", label: "YouTube" },
+  { id: "naverBlog", label: "네이버 블로그" },
+  { id: "tiktok", label: "TikTok" },
+  { id: "personal", label: "개인 웹사이트" },
   { id: "etc", label: "기타" },
 ];
 
@@ -58,7 +58,7 @@ export default function SNSBlock({ index }: { index: number }) {
           type="button"
           variant="outline"
           size="sm"
-          onClick={() => append({ platform: "", url: "" })}
+          onClick={() => append({ platform: "", url: "", label: "" })}
         >
           + SNS 추가
         </Button>
@@ -117,6 +117,20 @@ export default function SNSBlock({ index }: { index: number }) {
                         )}
                       />
 
+                      {/* 제목 필드 */}
+                      <FormField
+                        name={`${namePrefix}.${i}.label`}
+                        render={({ field }) => (
+                          <FormItem className="w-1/4">
+                            <FormControl>
+                              <Input placeholder="링크 제목" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      {/* URL 필드 */}
                       <FormField
                         name={`${namePrefix}.${i}.url`}
                         render={({ field }) => (
@@ -129,6 +143,7 @@ export default function SNSBlock({ index }: { index: number }) {
                         )}
                       />
 
+                      {/* 삭제 버튼 */}
                       <Button
                         type="button"
                         size="icon"
