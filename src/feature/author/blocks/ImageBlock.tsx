@@ -1,6 +1,11 @@
 import Image from "next/image";
 import clsx from "clsx";
 import { Block, BlockDataImage } from "@/feature/admin/types";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel";
 
 interface ImageBlockProps {
   block: Block;
@@ -9,7 +14,12 @@ interface ImageBlockProps {
 export default function ImageBlock({ block }: ImageBlockProps) {
   if (!block.is_active) return null;
 
-  const { images, direction, columns, link } = block.data as BlockDataImage;
+  const {
+    images,
+    style = "single",
+    display = "fill",
+    columns = 1,
+  } = block.data as BlockDataImage;
 
   if (!images || images.length === 0) {
     return (
@@ -19,56 +29,81 @@ export default function ImageBlock({ block }: ImageBlockProps) {
     );
   }
 
-  // 방향에 따른 flex 설정
-  const directionClass =
-    direction === "horizontal" ? "flex-row gap-4" : "flex-col gap-4";
+  const imageClass = display === "fill" ? "object-cover" : "object-contain";
 
-  // columns 값에 따라 grid 클래스 적용
-  const gridClass = columns
-    ? `grid grid-cols-${columns} gap-4`
-    : direction === "horizontal"
-    ? "flex gap-4"
-    : "flex flex-col gap-4";
-
-  // 이미지 렌더링
-  const renderImage = (img: (typeof images)[number], idx: number) => {
-    const imageElement = (
+  const renderImage = (
+    img: (typeof images)[number],
+    idx: number,
+    className?: string
+  ) => {
+    const content = (
       <div
         key={idx}
-        className="relative w-full h-64 rounded-lg overflow-hidden"
+        className={clsx(
+          "relative w-full h-64 rounded overflow-hidden",
+          className
+        )}
       >
         <Image
           src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${img.url}`}
           alt={img.alt || "이미지"}
           fill
-          className="object-contain"
+          className={clsx("transition-all", imageClass)}
         />
       </div>
     );
 
-    return link ? (
-      <a key={idx} href={link} target="_blank" rel="noopener noreferrer">
-        {imageElement}
+    return img.link ? (
+      <a
+        key={idx}
+        href={img.link}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="block"
+      >
+        {content}
       </a>
     ) : (
-      imageElement
+      content
     );
   };
 
-  // 이미지가 한 장이면 중앙 정렬
-  if (images.length === 1) {
+  if (style === "single") {
     return (
       <div className="flex justify-center">
-        <div className="w-full max-w-xl">{renderImage(images[0], 0)}</div>
+        <div className="w-full max-w-3xl">{renderImage(images[0], 0)}</div>
       </div>
     );
   }
 
-  return (
-    <div
-      className={clsx(images.length > 1 ? gridClass : "flex justify-center")}
-    >
-      {images.map((img, idx) => renderImage(img, idx))}
-    </div>
-  );
+  if (style === "grid") {
+    const colClass =
+      {
+        1: "grid-cols-1",
+        2: "grid-cols-2",
+        3: "grid-cols-3",
+      }[columns] || "grid-cols-1";
+
+    return (
+      <div className={clsx("grid gap-4", colClass)}>
+        {images.map((img, idx) => renderImage(img, idx))}
+      </div>
+    );
+  }
+
+  if (style === "carousel") {
+    return (
+      <Carousel className="w-full max-w-6xl mx-auto">
+        <CarouselContent>
+          {images.map((img, idx) => (
+            <CarouselItem key={idx} className="basis-1/2 md:basis-1/3">
+              {renderImage(img, idx, "h-64")}
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+      </Carousel>
+    );
+  }
+
+  return null;
 }

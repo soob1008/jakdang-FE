@@ -63,7 +63,7 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
   // }
 
   return (
-    <div className="flex flex-col gap-22 pt-2.5 pb-40">
+    <div className="flex flex-col gap-6 pt-2.5 pb-40">
       {/* <Profile user={user} /> */}
       <ProfileBlock user={user} />
       {blocks_published.map((block: Block) => {

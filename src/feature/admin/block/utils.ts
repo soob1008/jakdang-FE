@@ -24,7 +24,7 @@ export function createDefaultBlock(type: BlockType): BlockDefault {
           images: [],
           style: "single", // 기본값은 single
           columns: "1", // 기본값은 1열
-          display: "full",
+          display: "fill",
         },
       };
     case "link":

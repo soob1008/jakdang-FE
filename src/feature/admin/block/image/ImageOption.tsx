@@ -19,8 +19,6 @@ export default function ImageOption({ index }: ImageOptionProps) {
 
   const style: string = useWatch({ name: `${namePrefix}.style`, control });
 
-  console.log("ImageOption style:", style);
-
   return (
     <div className="space-y-6">
       {/* 스타일 선택 */}
@@ -110,11 +108,11 @@ export default function ImageOption({ index }: ImageOptionProps) {
                 className="flex gap-4"
               >
                 <ImageStyleButton
-                  value="full"
+                  value="fill"
                   label="이미지 채우기 (100%)"
                   icon={<Maximize className="w-5 h-5" />}
-                  selected={field.value === "full"}
-                  onClick={() => field.onChange("full")}
+                  selected={field.value === "fill"}
+                  onClick={() => field.onChange("fill")}
                 />
                 <ImageStyleButton
                   value="fit"
@@ -142,7 +140,6 @@ interface ImageStyleButtonProps {
 }
 
 function ImageStyleButton({
-  value,
   label,
   icon,
   selected,
