@@ -81,7 +81,7 @@ export default function CustomCalendar({
                 {format(day, "d")}
                 {isMarked && (
                   <span
-                    className={`absolute top-[-6px] left-1/2 -translate-x-1/2 w-1 h-1 md:w-1.3 md:h-1.3 rounded-full ${
+                    className={`absolute top-[-6px] left-1/2 -translate-x-1/2 w-1 h-1 md:w-1.5 md:h-1.5 rounded-full ${
                       isPast ? "bg-muted" : "bg-primary"
                     }`}
                   />
