@@ -159,3 +159,7 @@
 .font-myungjo {
   font-family: "BookkMyungjo-Bd", serif;
 }
+
+.text-xs-md {
+  font-size: 0.8125rem;
+}

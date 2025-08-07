@@ -23,6 +23,7 @@ export interface WorkItem {
   image_url?: string;
   is_active: boolean;
   is_representative: boolean;
+  short_description?: string;
   description?: string;
   url?: string;
 }

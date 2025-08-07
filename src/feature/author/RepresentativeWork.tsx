@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/carousel";
 import { AuthorProfile, AuthorWork } from "@/feature/user/type";
 import WorkItem from "./components/WorkItem";
-import WorkDialog from "./components/WorkDialog";
+import WorkDialog from "./blocks/work/WorkDialog";
 
 interface RepresentativeWorkProps {
   user: AuthorProfile;

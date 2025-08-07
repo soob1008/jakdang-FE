@@ -4,6 +4,7 @@ import { useFormContext, useFieldArray, Controller } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
 import { X, Plus, GripVertical, Upload } from "lucide-react";
 import Image from "next/image";
 import {
@@ -182,9 +183,14 @@ export default function WorkBlock({ index }: { index: number }) {
                             className="text-sm"
                           />
                           <Input
-                            {...register(`${path}.description`)}
-                            placeholder="설명"
+                            {...register(`${path}.short_description`)}
+                            placeholder="한줄 설명"
                             className="text-sm"
+                          />
+                          <Textarea
+                            {...register(`${path}.description`)}
+                            placeholder="작품에 대한 내용이나 긴 설명을 적어주세요."
+                            className="text-sm h-40 resize-none"
                           />
                           <Input
                             {...register(`${path}.url`)}
