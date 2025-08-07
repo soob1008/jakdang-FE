@@ -1,4 +1,11 @@
-import { FontSize, Align, Direction, Columns, Layout } from "@/feature/types";
+import {
+  FontSize,
+  Align,
+  Direction,
+  Columns,
+  Layout,
+  ImageStyle,
+} from "@/feature/types";
 
 export interface Page {
   id: string;
@@ -37,8 +44,9 @@ export interface BlockDataText {
 
 export interface BlockDataImage {
   images: { url: string; alt?: string; position: number }[]; // 이미지 URL과 대체 텍스트
-  direction: Direction; // 이미지 정렬 방향
+  style: ImageStyle;
   columns?: Columns; // 이미지 열 수 (선택적)
+  display: "full" | "fit";
   link?: string;
 }
 

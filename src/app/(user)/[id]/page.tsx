@@ -10,6 +10,7 @@ import { fetchServer } from "@/lib/api/api.server";
 import { Author } from "@/feature/user/type";
 import { Block, Page } from "@/feature/admin/types";
 import TextBlock from "@/feature/author/blocks/TextBlock";
+import ImageBlock from "@/feature/author/blocks/ImageBlock";
 
 interface AuthorPageProps {
   params: Promise<{ id: string }>;
@@ -68,6 +69,10 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
       {blocks_published.map((block: Block) => {
         if (block.type === "text") {
           return <TextBlock key={block.id} block={block} />;
+        }
+
+        if (block.type === "image") {
+          return <ImageBlock key={block.id} block={block} />;
         }
         return <div key={block.id}>블럭</div>;
       })}

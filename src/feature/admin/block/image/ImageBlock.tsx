@@ -13,6 +13,7 @@ import { ChangeEvent } from "react";
 import { uploadImage } from "@/lib/api/api.client";
 import { handleAction } from "@/lib/api/action";
 import { toast } from "sonner";
+import clsx from "clsx";
 
 export default function ImageBlock({ index }: { index: number }) {
   const namePrefix = `blocks_draft.${index}.data.images`;
@@ -24,9 +25,13 @@ export default function ImageBlock({ index }: { index: number }) {
   });
 
   const images = watch(namePrefix) || [];
+  const imageStyle = watch(`blocks_draft.${index}.data.style`) || "single";
 
   const handleUpload = async (e: ChangeEvent<HTMLInputElement>) => {
     if (fields.length >= 10) return;
+    if (imageStyle === "single" && fields.length > 0) {
+      return;
+    }
 
     const file: File | null = e.target.files?.[0] || null;
 
@@ -61,9 +66,19 @@ export default function ImageBlock({ index }: { index: number }) {
     move(from, to);
   };
 
+  const isDisabled =
+    fields.length >= 10 || (imageStyle === "single" && fields.length >= 1);
+
   return (
     <div className="space-y-4">
       <FormLabel>업로드 (최대 10장)</FormLabel>
+      <p className="text-sm text-muted-foreground">
+        드래그 앤 드롭 하여 순서 변경 가능합니다.
+        <br />
+        {imageStyle === "single"
+          ? "한 장의 이미지를 업로드합니다."
+          : "여러 장의 이미지를 업로드할 수 있습니다."}
+      </p>
       <DragDropContext onDragEnd={handleDragEnd}>
         <Droppable droppableId={`images-${namePrefix}`} type="IMAGE">
           {(provided) => (
@@ -122,21 +137,26 @@ export default function ImageBlock({ index }: { index: number }) {
               ))}
 
               {/* 추가 버튼 */}
-              {fields.length < 10 && (
-                <label
-                  htmlFor={`image-upload-${index}`}
-                  className="cursor-pointer flex items-center justify-center w-full aspect-square bg-muted rounded-md border border-dashed hover:bg-muted/70"
-                >
-                  <Plus className="w-6 h-6 text-muted-foreground" />
-                  <input
-                    id={`image-upload-${index}`}
-                    type="file"
-                    accept="image/*"
-                    onChange={handleUpload}
-                    hidden
-                  />
-                </label>
-              )}
+
+              <label
+                htmlFor={`image-upload-${index}`}
+                className={clsx(
+                  "cursor-pointer flex items-center justify-center w-full aspect-square rounded-md border border-dashed transition",
+                  isDisabled
+                    ? "bg-muted opacity-50 cursor-not-allowed"
+                    : "bg-muted hover:bg-muted/70"
+                )}
+              >
+                <Plus className="w-6 h-6 text-muted-foreground" />
+                <input
+                  id={`image-upload-${index}`}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleUpload}
+                  hidden
+                  disabled={isDisabled}
+                />
+              </label>
 
               {provided.placeholder}
             </div>

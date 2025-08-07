@@ -19,3 +19,5 @@ export type Direction = "vertical" | "horizontal";
 export type Columns = "1" | "2";
 
 export type Layout = "grid" | "list";
+
+export type ImageStyle = "single" | "grid" | "carousel";
