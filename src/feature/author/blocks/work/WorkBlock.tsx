@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { Block, WorkItem } from "@/feature/admin/types";
 import Image from "next/image";
-
 import WorkDialog from "@/feature/author/blocks/work/WorkDialog";
 
 interface WorkBlockProps {
