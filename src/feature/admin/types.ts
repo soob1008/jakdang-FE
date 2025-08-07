@@ -15,7 +15,8 @@ export type BlockType =
   | "challenge" // 글쓰기챌린지
   | "event" // 이벤트
   | "sns" // SNS
-  | "calendar"; // 캘린더
+  | "calendar"
+  | "blank"; // 여백
 
 export interface WorkItem {
   id: string;
@@ -80,6 +81,10 @@ export interface BlockDataCalendar {
   layout: "list" | "calendar"; // 캘린더 레이아웃 방식
 }
 
+export interface BlockDataBlank {
+  height: number; // 빈 블록의 높이
+}
+
 export type BlockData =
   | BlockDataText
   | BlockDataImage
@@ -89,7 +94,8 @@ export type BlockData =
   | BlockDataNotice
   | BlockDataChallenge
   | BlockDataEvent
-  | BlockDataCalendar;
+  | BlockDataCalendar
+  | BlockDataBlank;
 
 export interface Block extends BlockDefault {
   position: number;

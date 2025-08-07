@@ -18,7 +18,8 @@ export default function BlockOptions({ type, index }: BlockOptionsProps) {
     type === "link" ||
     type === "sns" ||
     type === "challenge" ||
-    type === "event"
+    type === "event" ||
+    type === "blank"
   )
     return null;
 

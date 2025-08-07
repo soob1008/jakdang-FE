@@ -5,11 +5,12 @@ import {
   CalendarIcon,
   BookOpenText,
   Network,
+  AlignVerticalSpaceAround,
 } from "lucide-react";
 
 export const BLOCK_LIST = [
   {
-    category: "기본",
+    category: "기본 구성",
     blocks: [
       {
         type: "text",
@@ -24,38 +25,43 @@ export const BLOCK_LIST = [
         icon: ImageIcon,
       },
       {
+        type: "blank",
+        name: "여백",
+        description: "블록 사이에 공간을 만들어요",
+        icon: AlignVerticalSpaceAround,
+      },
+    ],
+  },
+  {
+    category: "링크 연결",
+    blocks: [
+      {
         type: "link",
         name: "링크",
         description: "외부 링크를 연결해요",
         icon: Link2,
       },
-    ],
-  },
-  {
-    category: "정보",
-    blocks: [
       {
         type: "sns",
         name: "SNS",
         description: "SNS 링크를 연결해요",
         icon: Network,
       },
+    ],
+  },
+  {
+    category: "일정 공유",
+    blocks: [
       {
         type: "calendar",
         name: "일정",
         description: "일정을 공유해요",
         icon: CalendarIcon,
       },
-      // {
-      //   type: "event",
-      //   name: "이벤트",
-      //   description: "진행 중인 이벤트를 보여줘요",
-      //   icon: ListChecks,
-      // },
     ],
   },
   {
-    category: "콘텐츠",
+    category: "작품 소개",
     blocks: [
       {
         type: "work",
@@ -63,12 +69,6 @@ export const BLOCK_LIST = [
         description: "대표 작품을 보여줘요",
         icon: BookOpenText,
       },
-      // {
-      //   type: "challenge",
-      //   name: "챌린지",
-      //   description: "진행 중인 챌린지를 보여줘요",
-      //   icon: Medal,
-      // },
     ],
   },
 ];
