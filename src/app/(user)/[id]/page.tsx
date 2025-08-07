@@ -14,6 +14,7 @@ import ImageBlock from "@/feature/author/blocks/ImageBlock";
 import LinkBlock from "@/feature/author/blocks/LinkBlock";
 import SNSBlock from "@/feature/author/blocks/SNSBlock";
 import WorkBlock from "@/feature/author/blocks/work/WorkBlock";
+import CalendarBlock from "@/feature/author/blocks/CalendarBlock";
 
 interface AuthorPageProps {
   params: Promise<{ id: string }>;
@@ -88,6 +89,10 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
 
         if (block.type === "work") {
           return <WorkBlock key={block.id} block={block} />;
+        }
+
+        if (block.type === "calendar") {
+          return <CalendarBlock key={block.id} block={block} />;
         }
         return <div key={block.id}>블럭</div>;
       })}
