@@ -23,6 +23,7 @@ import {
   AlertDialogCancel,
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
+import BlankBlock from "./blank/BlankBlock";
 
 // import 기타 블록들
 
@@ -138,6 +139,7 @@ export default function BlockItem({
           {block.type === "sns" && <SNSBlock index={index} />}
           {block.type === "work" && <WorkBlock index={index} />}
           {block.type === "calendar" && <CalendarBlock index={index} />}
+          {block.type === "blank" && <BlankBlock index={index} />}
           {/* 다른 블록들도 필요 시 추가 */}
           <BlockOptions type={block.type} index={index} />
         </div>

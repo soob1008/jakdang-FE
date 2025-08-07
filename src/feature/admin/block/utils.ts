@@ -65,6 +65,15 @@ export function createDefaultBlock(type: BlockType): BlockDefault {
           layout: "calendar",
         },
       };
+    case "blank":
+      return {
+        id: crypto.randomUUID(),
+        type,
+        name: "여백",
+        data: {
+          height: 60, // 기본 높이 60px
+        },
+      };
     // case "event":
     //   return {
     //     id: nanoid(),

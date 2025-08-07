@@ -42,6 +42,8 @@ export default function BlockDialog({
     }
   }, [open]);
 
+  console.log("Selected Block Type:", selectedType);
+
   const handleAddBlock = async () => {
     if (!selectedType) {
       console.error("No block type selected");
@@ -71,12 +73,12 @@ export default function BlockDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className="max-w-2xl">
+      <DialogContent className="w-8/9 max-w-2xl sm:max-w-3xl ">
         <DialogHeader>
           <DialogTitle>블록 선택</DialogTitle>
           <DialogDescription>추가할 블록을 하나 선택하세요.</DialogDescription>
         </DialogHeader>
-        <div className="max-h-120 overflow-y-auto">
+        <div className="max-h-140 overflow-y-auto">
           <RadioGroup
             value={selectedType || ""}
             onValueChange={(value: BlockType) => {
@@ -86,7 +88,7 @@ export default function BlockDialog({
           >
             {BLOCK_LIST.map((group) => (
               <div key={group.category}>
-                <h4 className="text-sm font-semibold text-muted-foreground">
+                <h4 className="text-sm font-semibold text-muted-foreground mb-2">
                   {group.category}
                 </h4>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
