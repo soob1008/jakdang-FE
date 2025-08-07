@@ -37,21 +37,18 @@ export default function ImageOption({ index }: ImageOptionProps) {
                 className="flex flex-wrap gap-4"
               >
                 <ImageStyleButton
-                  value="single"
                   label="한 장"
                   icon={<Images className="w-5 h-5" />}
                   selected={field.value === "single"}
                   onClick={() => field.onChange("single")}
                 />
                 <ImageStyleButton
-                  value="grid"
                   label="그리드"
                   icon={<LayoutGrid className="w-5 h-5" />}
                   selected={field.value === "grid"}
                   onClick={() => field.onChange("grid")}
                 />
                 <ImageStyleButton
-                  value="carousel"
                   label="슬라이드"
                   icon={<Columns2 className="w-5 h-5" />}
                   selected={field.value === "carousel"}
@@ -80,7 +77,6 @@ export default function ImageOption({ index }: ImageOptionProps) {
                   {[1, 2, 3].map((col) => (
                     <ImageStyleButton
                       key={col}
-                      value={String(col)}
                       label={`${col}열`}
                       icon={<Columns2 className="w-5 h-5" />}
                       selected={field.value === String(col)}
@@ -108,14 +104,12 @@ export default function ImageOption({ index }: ImageOptionProps) {
                 className="flex gap-4"
               >
                 <ImageStyleButton
-                  value="fill"
                   label="이미지 채우기 (100%)"
                   icon={<Maximize className="w-5 h-5" />}
                   selected={field.value === "fill"}
                   onClick={() => field.onChange("fill")}
                 />
                 <ImageStyleButton
-                  value="fit"
                   label="비율 유지 맞춤"
                   icon={<Minimize className="w-5 h-5" />}
                   selected={field.value === "fit"}
