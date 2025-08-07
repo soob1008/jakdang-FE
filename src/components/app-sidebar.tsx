@@ -40,7 +40,7 @@ export function AppSidebar({ email }: AppSidebarProps) {
     <Sidebar className="bg-white h-full border-none shadow-[4px_6px_10px_-2px_rgba(0,0,0,0.04)]">
       <SidebarContent className="py-6 px-2">
         {/* 로고 */}
-        <SidebarGroupLabel className="flex justify-center mt-8 mb-10 font-bold font-gong text-2xl text-primary">
+        <SidebarGroupLabel className="flex justify-center mt-8 mb-10 font-bold font-myungjo text-2xl text-primary">
           작당
         </SidebarGroupLabel>
         {/* 반복되는 그룹 */}

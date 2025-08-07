@@ -35,7 +35,7 @@ export const MENUS = [
     label: "설정",
     items: [
       {
-        label: "Setting",
+        label: "설정",
         href: "/admin/setting",
         icon: Settings,
       },

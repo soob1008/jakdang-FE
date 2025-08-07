@@ -40,7 +40,7 @@ export default async function RootLayout({
         <AppSidebar email={userData.email ?? ""} />
         <SidebarTrigger className="absolute top-1 right-[-34px]" />
       </div>
-      <div className="flex flex-col gap-4 w-full bg-muted dark:bg-background">
+      <div className="flex flex-col gap-4 w-full bg-gray-50 dark:bg-background">
         <AdminHeader email={userData.email ?? ""} slug={userData?.slug} />
         <div className=" flex-1">{children}</div>
       </div>
