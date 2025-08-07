@@ -11,6 +11,7 @@ import { Author } from "@/feature/user/type";
 import { Block, Page } from "@/feature/admin/types";
 import TextBlock from "@/feature/author/blocks/TextBlock";
 import ImageBlock from "@/feature/author/blocks/ImageBlock";
+import LinkBlock from "@/feature/author/blocks/LinkBlock";
 
 interface AuthorPageProps {
   params: Promise<{ id: string }>;
@@ -73,6 +74,10 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
 
         if (block.type === "image") {
           return <ImageBlock key={block.id} block={block} />;
+        }
+
+        if (block.type === "link") {
+          return <LinkBlock key={block.id} block={block} />;
         }
         return <div key={block.id}>블럭</div>;
       })}

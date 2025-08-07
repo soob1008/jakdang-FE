@@ -8,8 +8,6 @@ interface TextBlockProps {
 export default function TextBlock({ block }: TextBlockProps) {
   if (!block.is_active) return null;
 
-  console.log("TextBlock:", block);
-
   const { title, content, align, font_size, color } =
     block.data as BlockDataText;
 
