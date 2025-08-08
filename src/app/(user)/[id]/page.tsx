@@ -40,7 +40,9 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
 
   return (
     <div className="flex flex-col gap-6 pt-2.5 pb-40">
-      <ProfileBlock user={user} />
+      {user.profile_published && (
+        <ProfileBlock profile={user.profile_published} />
+      )}
       {blocks_published.map((block: Block) => {
         if (block.type === "text") {
           return <TextBlock key={block.id} block={block} />;

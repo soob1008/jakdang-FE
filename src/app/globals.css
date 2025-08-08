@@ -163,3 +163,7 @@
 .text-xs-md {
   font-size: 0.8125rem;
 }
+
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}

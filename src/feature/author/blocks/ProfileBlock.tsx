@@ -1,12 +1,12 @@
 import Image from "next/image";
-import { Author } from "@/feature/user/type";
+import { Profile } from "@/feature/user/type";
 
 interface ProfileBlockProps {
-  user: Author;
+  profile: Profile;
 }
 
-export default function ProfileBlock({ user }: ProfileBlockProps) {
-  const { is_active, headline, avatar_url } = user.profile_published || {};
+export default function ProfileBlock({ profile }: ProfileBlockProps) {
+  const { is_active, headline, avatar_url } = profile || {};
 
   if (!is_active) return null; // 프로필 비활성화 시 표시 안 함
 
@@ -31,13 +31,13 @@ export default function ProfileBlock({ user }: ProfileBlockProps) {
       {/* 대표 문구 */}
       {headline && (
         <h2 className="mt-3.5 font-bold text-gray-900">
-          {user.display_name || "-"}
+          {profile.display_name || "-"}
         </h2>
       )}
 
       {/* 작가 소개 */}
       {headline && (
-        <p className="mt-1 text-xs text-gray-400 max-w-prose whitespace-pre-line">
+        <p className="mt-1 text-xs text-gray-600 max-w-prose whitespace-pre-line">
           {headline}
         </p>
       )}

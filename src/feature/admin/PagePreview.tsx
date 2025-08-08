@@ -1,27 +1,46 @@
 "use client";
 
+import { Block } from "@/feature/admin/types";
+import { useFormContext, useWatch } from "react-hook-form";
+import BlockPreview from "@/feature/admin/block/BlockPreview";
+
+import ProfileBlock from "../author/blocks/ProfileBlock";
+
 export default function PagePreview() {
+  const { watch, control } = useFormContext();
+
+  const blocks = useWatch({
+    name: "blocks_draft",
+    control,
+  });
+
+  const profile = watch("profile");
+
   return (
     <aside className="sticky top-10 h-fit px-4 flex flex-col items-center justify-center">
-      <article className="w-[280px] h-[560px] rounded-[2rem] border border-gray-200 shadow-[0_0_20px_rgba(0,0,0,0.08)] overflow-hidden bg-[#FDCDB0]">
-        <div className="flex flex-col items-center justify-center mt-12">
-          <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center text-gray-400 text-3xl">
-            👤
-          </div>
-          <div className="mt-2 font-bold text-black text-base">soob108</div>
-          <div className="text-sm text-black/60">test</div>
-        </div>
+      <section
+        aria-label="모바일 화면 미리보기"
+        className="w-[360px] h-[700px] overflow-y-scroll scrollbar-none rounded-[2rem] border border-gray-200 shadow-[0_0_20px_rgba(0,0,0,0.08)] bg-white"
+      >
+        <div
+          className="flex flex-col gap-6 origin-top scale-[0.9] pt-8"
+          style={{ height: "calc(100% / 0.9)" }} // scale 영향 상쇄
+        >
+          {profile.is_active && (
+            <article aria-label="프로필 블록">
+              <ProfileBlock profile={profile} />
+            </article>
+          )}
 
-        {/* SNS 카드 */}
-        <div className="mt-8 px-6">
-          <div className="flex items-center justify-between bg-[#FEE7D1] rounded-lg p-2 shadow-sm">
-            <div className="flex items-center gap-3">
-              <span className="text-sm font-medium text-black">Instagram</span>
-            </div>
-            <button className="text-gray-600">⋯</button>
+          <div className="flex flex-col gap-6 px-1 pb-16">
+            {blocks.map((block: Block, index: number) => (
+              <article key={index} aria-label={`콘텐츠 블록 ${index + 1}`}>
+                <BlockPreview block={block} />
+              </article>
+            ))}
           </div>
         </div>
-      </article>
+      </section>
     </aside>
   );
 }

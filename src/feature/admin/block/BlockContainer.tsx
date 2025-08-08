@@ -32,6 +32,7 @@ export default function BlockContainer() {
         is_active: true,
         avatar_url: "",
         headline: "",
+        display_name: userData?.user.display_name ?? "",
       },
     },
   });
@@ -53,6 +54,7 @@ export default function BlockContainer() {
         is_active: true,
         avatar_url: "",
         headline: "",
+        display_name: userData.user.display_name ?? "",
       },
     });
   }, [data, userData, reset]);

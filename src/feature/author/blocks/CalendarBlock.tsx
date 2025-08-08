@@ -49,7 +49,7 @@ export default function CalendarBlock({ block }: CalendarBlockProps) {
   if (!dates || dates.length === 0) return null;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-2">
       {layout === "calendar" && (
         <CustomCalendar
           className="w-full"
@@ -60,17 +60,17 @@ export default function CalendarBlock({ block }: CalendarBlockProps) {
         />
       )}
 
-      <div className="space-y-3">
+      <div className="space-y-2">
         {filteredDates.map((date, index) => (
-          <Card key={index}>
-            <CardContent className="py-4 space-y-1">
+          <Card key={index} className="rounded-sm">
+            <CardContent className="py-3 px-4 space-y-1">
               <h3 className="text-base font-semibold">{date.title}</h3>
               {date.description && (
                 <p className="text-sm text-muted-foreground">
                   {date.description}
                 </p>
               )}
-              <p className="text-sm text-muted-foreground">
+              <p className="text-xs text-muted-foreground">
                 {format(new Date(date.start_date), "yyyy.MM.dd")} ~{" "}
                 {format(new Date(date.end_date), "yyyy.MM.dd")}
               </p>
