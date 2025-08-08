@@ -55,20 +55,23 @@ export default function CalendarBlock({ index }: { index: number }) {
         return (
           <div
             key={field.block_id}
-            className="grid grid-cols-[auto_1fr_auto] gap-4 items-start"
+            className="
+              grid gap-3 md:gap-4 items-start
+              grid-cols-1 md:grid-cols-[auto_1fr_auto]
+            "
           >
             {/* 시작/종료일 선택 */}
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col sm:flex-row md:flex-col gap-2 sm:gap-3">
               {/* 시작일 */}
               <FormField
                 name={`${namePrefix}.${i}.start_date`}
                 render={() => (
-                  <FormItem className="w-[160px]">
+                  <FormItem className="w-full sm:w-[180px] md:w-[160px]">
                     <Popover>
                       <PopoverTrigger asChild>
                         <Button
                           variant="outline"
-                          className="justify-start text-left font-normal w-full"
+                          className="w-full justify-start text-left font-normal"
                         >
                           <CalendarIcon className="mr-2 h-4 w-4" />
                           {start ? (
@@ -98,12 +101,12 @@ export default function CalendarBlock({ index }: { index: number }) {
               <FormField
                 name={`${namePrefix}.${i}.end_date`}
                 render={() => (
-                  <FormItem className="w-[160px]]">
+                  <FormItem className="w-full sm:w-[180px] md:w-[160px]">
                     <Popover>
                       <PopoverTrigger asChild>
                         <Button
                           variant="outline"
-                          className="justify-start text-left font-normal w-full"
+                          className="w-full justify-start text-left font-normal"
                         >
                           <CalendarIcon className="mr-2 h-4 w-4" />
                           {end ? (
@@ -131,7 +134,7 @@ export default function CalendarBlock({ index }: { index: number }) {
             </div>
 
             {/* 제목 & 메모 */}
-            <div className="space-y-1">
+            <div className="space-y-2 md:space-y-3">
               <FormField
                 name={`${namePrefix}.${i}.title`}
                 render={({ field }) => (
@@ -150,8 +153,8 @@ export default function CalendarBlock({ index }: { index: number }) {
                     <FormControl>
                       <Textarea
                         placeholder="간단 메모"
-                        rows={1}
-                        className="resize-none"
+                        rows={2}
+                        className="resize-none md:h-20"
                         {...field}
                       />
                     </FormControl>
@@ -162,14 +165,17 @@ export default function CalendarBlock({ index }: { index: number }) {
             </div>
 
             {/* 삭제 버튼 */}
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              onClick={() => remove(i)}
-            >
-              <X className="w-4 h-4" />
-            </Button>
+            <div className="flex md:block justify-end">
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                onClick={() => remove(i)}
+                className="self-start"
+              >
+                <X className="w-4 h-4" />
+              </Button>
+            </div>
           </div>
         );
       })}

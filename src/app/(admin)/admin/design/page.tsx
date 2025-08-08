@@ -55,10 +55,12 @@ export default function AdminDesignPage() {
   return (
     <FormProvider {...form}>
       <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6 h-full">
-        <PageDesignEditor />
-
-        {/* 우측 프리뷰 */}
-        <PagePreview />
+        <div className="order-2 lg:order-1">
+          <PageDesignEditor />
+        </div>
+        <div className="order-1 lg:order-2">
+          <PagePreview />
+        </div>
       </div>
     </FormProvider>
   );

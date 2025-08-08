@@ -97,7 +97,7 @@ export default function WorkBlock({ index }: { index: number }) {
             <div
               ref={provided.innerRef}
               {...provided.droppableProps}
-              className="space-y-2"
+              className="space-y-3 md:space-y-4"
             >
               {fields.map((field, i) => {
                 const path = `${namePrefix}.${i}`;
@@ -112,18 +112,18 @@ export default function WorkBlock({ index }: { index: number }) {
                       <div
                         ref={provided.innerRef}
                         {...provided.draggableProps}
-                        className="relative flex gap-4 p-3 bg-white border rounded-md"
+                        className="relative flex flex-col md:flex-row gap-3 md:gap-4 p-3 md:p-4 bg-white border rounded-md"
                       >
                         {/* Drag handle */}
                         <div
                           {...provided.dragHandleProps}
-                          className="cursor-grab text-gray-400"
+                          className="cursor-grab text-gray-400 md:self-start"
                         >
                           <GripVertical className="w-4 h-4" />
                         </div>
 
-                        {/* 썸네일 이미지 + 업로드 */}
-                        <div className="relative w-16 h-16 flex-shrink-0 rounded overflow-hidden bg-white border">
+                        {/* 썸네일 + 업로드 */}
+                        <div className="relative w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 flex-shrink-0 rounded overflow-hidden bg-white border">
                           <Image
                             src={
                               works[i]?.image_url
@@ -135,7 +135,7 @@ export default function WorkBlock({ index }: { index: number }) {
                             fill
                             className="object-cover"
                           />
-                          <label className="absolute bottom-0 right-0 bg-white/80 hover:bg-white p-0.5 rounded cursor-pointer">
+                          <label className="absolute bottom-1 right-1 bg-white/80 hover:bg-white p-1 rounded cursor-pointer">
                             <Upload className="w-3 h-3" />
                             <input
                               type="file"
@@ -147,9 +147,9 @@ export default function WorkBlock({ index }: { index: number }) {
                         </div>
 
                         {/* 입력 필드들 */}
-                        <div className="flex flex-col flex-grow gap-1">
-                          {/* 대표작 / 공개 여부 */}
-                          <div className="flex gap-2">
+                        <div className="flex flex-col flex-grow gap-2 md:gap-3">
+                          {/* 상단 스위치들 */}
+                          <div className="flex flex-wrap items-center gap-3">
                             <div className="flex items-center gap-2 text-xs">
                               대표작
                               <Controller
@@ -177,35 +177,46 @@ export default function WorkBlock({ index }: { index: number }) {
                               />
                             </div>
                           </div>
-                          <Input
-                            {...register(`${path}.title`)}
-                            placeholder="제목"
-                            className="text-sm"
-                          />
-                          <Input
-                            {...register(`${path}.short_description`)}
-                            placeholder="한줄 설명"
-                            className="text-sm"
-                          />
+
+                          {/* 텍스트 입력: 반응형 그리드 */}
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-3">
+                            <Input
+                              {...register(`${path}.title`)}
+                              placeholder="제목"
+                              className="text-sm"
+                            />
+                            <Input
+                              {...register(`${path}.short_description`)}
+                              placeholder="한줄 설명"
+                              className="text-sm"
+                            />
+                            {/* md에서 2열 → URL/기타를 옆에 배치 */}
+                            <Input
+                              {...register(`${path}.url`)}
+                              placeholder="링크 주소"
+                              className="text-sm md:col-span-2"
+                            />
+                          </div>
+
                           <Textarea
                             {...register(`${path}.description`)}
                             placeholder="작품에 대한 내용이나 긴 설명을 적어주세요."
-                            className="text-sm h-40 resize-none"
-                          />
-                          <Input
-                            {...register(`${path}.url`)}
-                            placeholder="링크 주소"
-                            className="text-sm"
+                            className="text-sm h-28 md:h-32 lg:h-40 resize-none"
                           />
                         </div>
 
-                        {/* 삭제 버튼 */}
+                        {/* 삭제 버튼: 모바일에선 카드 우측 상단 고정, md 이상에선 우측 정렬 */}
                         <AlertDialog
                           open={isDeleteOpen}
                           onOpenChange={setIsDeleteOpen}
                         >
                           <AlertDialogTrigger asChild>
-                            <Button type="button" variant="ghost" size="icon">
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="icon"
+                              className="absolute top-2 right-2 md:static md:self-start md:ml-auto"
+                            >
                               <X className="w-4 h-4" />
                             </Button>
                           </AlertDialogTrigger>

@@ -19,7 +19,6 @@ export function useAutoSaveProfile(userId: string) {
     }, 2000);
 
     const subscription = watch(({ profile }) => {
-      console.log("watch profile:", profile);
       if (!isEqual(prevValueRef.current, profile)) {
         debouncedSave(profile || {});
         prevValueRef.current = profile;

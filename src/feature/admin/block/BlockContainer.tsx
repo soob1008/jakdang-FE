@@ -67,11 +67,12 @@ export default function BlockContainer() {
   return (
     <FormProvider {...form}>
       <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6 h-full">
-        {/* 좌측 콘텐츠 */}
-        <PageEditor />
-
-        {/* 우측 프리뷰 */}
-        <PagePreview />
+        <div className="order-2 lg:order-1">
+          <PageEditor />
+        </div>
+        <div className="order-1 lg:order-2">
+          <PagePreview />
+        </div>
       </div>
     </FormProvider>
   );
