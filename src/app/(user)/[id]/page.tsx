@@ -26,24 +26,24 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
       </div>
     );
   }
-  console.log("slug", slug);
 
-  const { user, page } = await fetchServer<{ user: Author; page: Page }>(
-    `/api/author/${slug}`
-  );
+  const { user: author, page } = await fetchServer<{
+    user: Author;
+    page: Page;
+  }>(`/api/author/${slug}`);
 
-  if (!user) {
+  const { user } = await fetchServer<{ user: Author }>(`/api/user`);
+
+  if (!author) {
     notFound();
   }
 
-  const { profile_published } = user;
+  const { profile_published } = author;
   const { blocks_published } = page || {};
-
-  console.log("데이터 나와라", user.profile_published, page);
 
   return (
     <div>
-      <AuthorHeader />
+      <AuthorHeader user={user} />
       <div className="flex flex-col gap-6 pt-2.5 pb-40">
         {profile_published && <ProfileBlock profile={profile_published} />}
         {blocks_published ? (
