@@ -22,6 +22,7 @@ export interface Profile {
   is_active: boolean;
   avatar_url?: string;
   headline?: string;
+  display_name?: string;
 }
 
 export interface AuthorTag {

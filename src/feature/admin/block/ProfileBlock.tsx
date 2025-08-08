@@ -13,7 +13,7 @@ import { useFormContext } from "react-hook-form";
 
 export default function ProfileBlock() {
   const { control, register, watch, setValue } = useFormContext();
-  const [isOpenProfile, setIsOpenProfile] = useState(true);
+  const [isOpenProfile, setIsOpenProfile] = useState(false);
   const profile = watch("profile") || {};
 
   const handleToggle = () => setIsOpenProfile((prev) => !prev);

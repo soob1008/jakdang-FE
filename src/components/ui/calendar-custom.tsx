@@ -39,7 +39,7 @@ export default function CustomCalendar({
 
   return (
     <div
-      className={`w-full p-4 border bg-white text-black dark:bg-muted dark:text-white ${className}`}
+      className={`w-full p-4 border bg-white rounded-sm text-black dark:bg-muted dark:text-white ${className}`}
     >
       {/* Month navigation */}
       <div className="flex justify-between items-center mb-4">
