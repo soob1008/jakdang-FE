@@ -16,7 +16,7 @@ export default function AdminHeader({ email, slug }: AdminHeaderProps) {
   const menuLabel = getMenuLabelByPath(pathname);
 
   return (
-    <header className="pt-14 pb-4 px-10 flex items-center justify-between border-b">
+    <header className="pt-10 px-4 pb-4 md:pt-14 md:px-10 flex items-center justify-between border-b">
       {/* 왼쪽: 페이지 타이틀 */}
       <div className="text-lg font-semibold font-myungjo">{menuLabel}</div>
 

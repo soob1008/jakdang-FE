@@ -87,7 +87,7 @@ export default function ImageBlock({ index }: { index: number }) {
             <div
               ref={provided.innerRef}
               {...provided.droppableProps}
-              className="grid grid-cols-5 gap-4"
+              className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4"
             >
               {fields.map((field, i) => (
                 <Draggable
