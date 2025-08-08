@@ -154,7 +154,7 @@ export default function CalendarBlock({ index }: { index: number }) {
                       <Textarea
                         placeholder="간단 메모"
                         rows={2}
-                        className="resize-none md:rows-3"
+                        className="resize-none md:h-20"
                         {...field}
                       />
                     </FormControl>
