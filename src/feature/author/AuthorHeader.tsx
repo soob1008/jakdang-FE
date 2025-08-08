@@ -1,0 +1,92 @@
+"use client";
+
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { User, LogIn, Link as LinkIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { Author } from "@/feature/user/type";
+import { createClient } from "@/lib/supabase/client";
+
+interface AuthorHeaderProps {
+  user: Author;
+}
+
+export default function AuthorHeader({ user }: AuthorHeaderProps) {
+  const router = useRouter();
+  const supabase = createClient();
+  const [open, setOpen] = useState(false);
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(window.location.href);
+    toast("링크가 복사되었습니다.");
+  };
+
+  const handleLogout = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.error("로그아웃 실패:", error.message);
+      toast.error("로그아웃 중 오류가 발생했습니다.");
+    } else {
+      toast.success("로그아웃 되었습니다.");
+      router.refresh();
+    }
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="fixed top-4 right-4 z-50 bg-primary text-white hover:bg-primary/90 rounded-full"
+        >
+          <User className="h-5 w-5" />
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[300px]">
+        <DialogHeader>
+          <DialogTitle>메뉴</DialogTitle>
+          <DialogDescription>원하는 작업을 선택하세요.</DialogDescription>
+        </DialogHeader>
+        <div className="flex flex-col gap-3 mt-4">
+          {user ? (
+            <>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  router.push(`/admin/compose`);
+                }}
+              >
+                <User className="mr-2 h-4 w-4" /> 마이페이지
+              </Button>
+              <Button variant="outline" onClick={handleLogout}>
+                <User className="mr-2 h-4 w-4" /> 로그아웃
+              </Button>
+            </>
+          ) : (
+            <Button
+              variant="outline"
+              onClick={() => {
+                router.push("/auth/login");
+              }}
+            >
+              <LogIn className="mr-2 h-4 w-4" /> 로그인
+            </Button>
+          )}
+          <Button variant="outline" onClick={handleCopyLink}>
+            <LinkIcon className="mr-2 h-4 w-4" /> 링크 복사
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
