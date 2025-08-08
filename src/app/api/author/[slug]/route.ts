@@ -4,8 +4,11 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
 
-export async function GET(_req: Request, ctx: { params: { slug: string } }) {
-  let { slug } = ctx.params;
+export async function GET(
+  _req: Request,
+  ctx: { params: Promise<{ slug: string }> }
+) {
+  let { slug } = await ctx.params;
   slug = decodeURIComponent(slug);
   slug = slug.startsWith("@") ? slug.slice(1) : slug;
 
