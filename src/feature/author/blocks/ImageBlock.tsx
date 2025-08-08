@@ -42,7 +42,6 @@ export default function ImageBlock({ block, isPreview }: ImageBlockProps) {
         // 컨테이너 쿼리 사용 시 부모에 container-type 필요
         className={clsx(
           "relative w-full overflow-hidden rounded min-h-40",
-          isPreview ? "container-type-inline" : "",
           // 기본 4:3 → md에서 16:9 (미디어쿼리)
           "aspect-[4/3] md:aspect-[16/9]",
           // 프리뷰 환경에선 컨테이너 쿼리도 추가로 대응
@@ -106,8 +105,7 @@ export default function ImageBlock({ block, isPreview }: ImageBlockProps) {
 
   if (style === "carousel") {
     return (
-      // 컨테이너 쿼리 쓰려면 container-type-inline 부여
-      <div className="container-type-inline">
+      <div style={{ containerType: "inline-size" }}>
         <Carousel className="w-full max-w-6xl mx-auto">
           <CarouselContent>
             {images.map((img, idx) => (

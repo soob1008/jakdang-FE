@@ -16,8 +16,6 @@ export default function PagePreview() {
 
   const profile = watch("profile");
 
-  console.log("prifile", profile);
-
   return (
     <aside className="sticky top-10 h-fit px-4 flex flex-col items-center justify-center">
       <section
