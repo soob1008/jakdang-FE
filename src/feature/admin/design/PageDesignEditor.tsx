@@ -23,8 +23,6 @@ export default function PageDesignEditor() {
     );
   };
 
-  console.log("Page Style:", watch("id"), watch("style_draft"));
-
   return (
     <article className="px-4 flex flex-col gap-4 pt-4 pb-24 max-w-[900px] w-full mx-auto md:pl-10 lg:max-w-none">
       <div className="flex items-center justify-between pb-2">

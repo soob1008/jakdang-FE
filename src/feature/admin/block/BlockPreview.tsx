@@ -6,8 +6,15 @@ import SNSBlock from "@/feature/author/blocks/SNSBlock";
 import WorkBlock from "@/feature/author/blocks/work/WorkBlock";
 import CalendarBlock from "@/feature/author/blocks/CalendarBlock";
 import BlankBlock from "@/feature/author/blocks/BlankBlock";
+import { PageStyle } from "@/feature/admin/types";
 
-export default function BlockPreview({ block }: { block: Block }) {
+export default function BlockPreview({
+  block,
+  style,
+}: {
+  block: Block;
+  style: PageStyle;
+}) {
   switch (block.type) {
     case "text":
       return <TextBlock block={block} />;
@@ -16,10 +23,10 @@ export default function BlockPreview({ block }: { block: Block }) {
       return <ImageBlock block={block} isPreview />;
 
     case "link":
-      return <LinkBlock block={block} />;
+      return <LinkBlock block={block} style={style} />;
 
     case "sns":
-      return <SNSBlock block={block} />;
+      return <SNSBlock block={block} style={style} />;
 
     case "work":
       return <WorkBlock block={block} isPreview />;
