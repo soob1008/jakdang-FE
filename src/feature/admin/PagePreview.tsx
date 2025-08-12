@@ -72,7 +72,7 @@ export default function PagePreview() {
   if (backgroundMode === "color") {
     bgStyle.backgroundColor = bgColor;
   } else if (backgroundMode === "image") {
-    bgStyle.backgroundImage = `url(${bgImage})`;
+    bgStyle.backgroundImage = `url(${process.env.NEXT_PUBLIC_IMAGE_URL}${bgImage})`;
     bgStyle.backgroundSize = "cover";
     bgStyle.backgroundPosition = "center";
   } else if (backgroundMode === "gradient") {

@@ -12,9 +12,17 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Page } from "@/feature/admin/types";
+import { handleAction } from "@/lib/api/action";
+import Image from "next/image";
+import { uploadImage } from "@/lib/api/api.client";
+import { toast } from "sonner";
 
 export default function PageCustomizer() {
-  const { register, watch, setValue } = useFormContext<Page>();
+  const { register, watch, setValue } = useFormContext<
+    {
+      user_id: string;
+    } & Page
+  >();
   const fileRef = useRef<HTMLInputElement | null>(null);
 
   const background_mode = watch("style_draft.background_mode") ?? "color";
@@ -24,15 +32,6 @@ export default function PageCustomizer() {
   const background_image_url = watch("style_draft.background_image_url") ?? "";
   const button_style = watch("style_draft.button_style") ?? "rounded";
 
-  const handlePickImage = (file?: File) => {
-    if (!file) return;
-    const url = URL.createObjectURL(file);
-    setValue("style_draft.background_image_url", url, {
-      shouldDirty: true,
-      shouldTouch: true,
-    });
-  };
-
   // 모드 전환 시 불필요 필드 초기화(옵션)
   const setBgMode = (mode: "color" | "image" | "gradient") => {
     setValue("style_draft.background_mode", mode, {
@@ -41,6 +40,23 @@ export default function PageCustomizer() {
     });
     if (mode === "color" || mode === "gradient") {
       setValue("style_draft.background_image_url", "");
+    }
+  };
+
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file: File | null = e.target.files?.[0] || null;
+
+    if (file) {
+      await handleAction(() => uploadImage(file, watch("user_id")), {
+        successMessage: "이미지가 성공적으로 업로드되었습니다.",
+        errorMessage: "이미지 업로드에 실패했습니다.",
+        onSuccess: ({ imagePath }) => {
+          setValue("style_draft.background_image_url", imagePath);
+        },
+      });
+    } else {
+      toast.error("이미지 파일을 선택해주세요.");
+      return;
     }
   };
 
@@ -159,15 +175,38 @@ export default function PageCustomizer() {
 
           {background_mode === "image" && (
             <div className="grid gap-2 pt-2">
-              <Label htmlFor="imgfile">이미지 업로드</Label>
-              <input
-                ref={fileRef}
-                id="imgfile"
-                type="file"
-                accept="image/*"
-                onChange={(e) => handlePickImage(e.target.files?.[0])}
-                className="text-sm"
-              />
+              <Label
+                htmlFor="imgfile"
+                className="inline-flex items-center gap-3 cursor-pointer select-none"
+              >
+                {/* 썸네일(작게) */}
+                <div className="relative w-28 h-30 rounded-md overflow-hidden border bg-muted/30">
+                  {background_image_url ? (
+                    <Image
+                      src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${background_image_url}`}
+                      width={112}
+                      height={64}
+                      alt="배경 미리보기"
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="grid place-items-center w-full h-full text-[11px] text-muted-foreground">
+                      이미지 선택 (클릭하여 업로드)
+                    </div>
+                  )}
+                </div>
+
+                {/* 실제 파일 입력은 숨김 */}
+                <input
+                  ref={fileRef}
+                  id="imgfile"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="sr-only"
+                />
+              </Label>
+
               {background_image_url && (
                 <div className="text-xs text-muted-foreground">
                   미리보기 적용됨
