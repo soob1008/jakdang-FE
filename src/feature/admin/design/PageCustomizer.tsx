@@ -218,9 +218,7 @@ export default function PageCustomizer() {
 
         {/* 버튼 스타일 */}
         <section className="space-y-3">
-          <h3 className="text-sm font-medium text-foreground/80">
-            버튼 스타일
-          </h3>
+          <h3 className="font-bold text-foreground/80">버튼 스타일</h3>
           <div className="flex gap-3">
             <Tile
               selected={button_style === "sharp"}

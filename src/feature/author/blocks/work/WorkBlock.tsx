@@ -43,7 +43,10 @@ export default function WorkBlock({ block, isPreview, style }: WorkBlockProps) {
               <button
                 key={`${work.id}-${work.title}-grid`}
                 onClick={() => handleClick(work)}
-                className="flex flex-col items-center gap-2 transition bg-card text-card-foreground"
+                className="flex flex-col items-center gap-2 transition text-card-foreground"
+                style={{
+                  ["--theme-color" as string]: "#222",
+                }}
               >
                 <div className="relative w-full h-40 overflow-hidden">
                   <Image
@@ -57,11 +60,15 @@ export default function WorkBlock({ block, isPreview, style }: WorkBlockProps) {
                     className="object-contain transition-transform hover:scale-105"
                   />
                 </div>
-                <span className="text-sm font-medium text-center">
+                <span
+                  className={`text-sm font-bold text-center text-[var(--theme-color)]`}
+                >
                   {work.title || "제목 없음"}
                 </span>
                 {work.short_description && (
-                  <span className="text-xs-md text-muted-foreground line-clamp-1">
+                  <span
+                    className={`text-xs-md line-clamp-1 text-[var(--theme-color)]`}
+                  >
                     {work.short_description}
                   </span>
                 )}
