@@ -42,9 +42,8 @@ export default function AuthorHeader({ user }: AuthorHeaderProps) {
         toast.info("이 브라우저는 공유를 지원하지 않아 링크를 복사했어요.");
       }
       setOpen(false);
-    } catch (e: any) {
-      // 유저가 공유 취소(AbortError)하면 조용히 무시
-      if (e?.name !== "AbortError") {
+    } catch (e: unknown) {
+      if ((e as Error)?.name !== "AbortError") {
         toast.error("공유 중 문제가 발생했어요. 링크를 대신 복사합니다.");
         handleCopyLink();
       }

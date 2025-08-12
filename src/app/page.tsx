@@ -26,7 +26,7 @@ export default async function Home() {
       <div className="w-full max-w-md mx-auto pb-10">
         {user ? (
           <LinkButton
-            href="/profile"
+            href="/admin/compose"
             label="내 공간 꾸미러 가기"
             className="mt-10"
           />
