@@ -17,7 +17,7 @@ import { Author } from "@/feature/user/type";
 import { createClient } from "@/lib/supabase/client";
 
 interface AuthorHeaderProps {
-  user: Author;
+  user?: Author;
 }
 
 export default function AuthorHeader({ user }: AuthorHeaderProps) {
