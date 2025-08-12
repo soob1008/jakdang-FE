@@ -33,11 +33,11 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
     page: Page;
   }>(`/api/author/${slug}`);
 
-  const { user } = await fetchServer<{ user: Author }>(`/api/user`);
-
   if (!author) {
     notFound();
   }
+
+  const { user } = await fetchServer<{ user: Author }>(`/api/user`);
 
   const { profile_published } = author;
   const { blocks_published, style_published } = page || {};
