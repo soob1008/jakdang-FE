@@ -26,7 +26,7 @@ export default function LinkBlock({ block, style }: LinkBlockProps) {
           type="button"
           variant="outline"
           size="2xl"
-          className="w-full rounded-none text-sm truncate border
+          className="w-full rounded-[var(--btn-radius)] text-sm truncate border
                      text-[var(--link-color)] border-[var(--link-color)]
                      hover:bg-[var(--link-hover-bg)]
                      focus-visible:ring-2 focus-visible:ring-[var(--link-color)]

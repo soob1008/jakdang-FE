@@ -41,18 +41,6 @@ function autoContrast(hex: string) {
   }
 }
 
-function contrastRatio(fgHex: string, bgHex: string) {
-  try {
-    const L1 = relativeLuminance(hexToRgb(fgHex));
-    const L2 = relativeLuminance(hexToRgb(bgHex));
-    const light = Math.max(L1, L2);
-    const dark = Math.min(L1, L2);
-    return (light + 0.05) / (dark + 0.05);
-  } catch {
-    return 1;
-  }
-}
-
 export default function SNSBlock({ block, style }: SNSBlockProps) {
   if (!block?.is_active) return null;
   const { sns_links = [] } = (block.data as BlockDataSNS) || {};
