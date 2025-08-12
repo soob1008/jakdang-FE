@@ -81,7 +81,7 @@ export default function AuthCallback() {
         // 최초 닉네임 설정이 되어있지 않으면 닉네임 설정 페이지로 이동
         router.replace("/set-slug");
       } else {
-        router.replace(`/profile/@${userData.slug}`);
+        router.replace(`/@${userData.slug}`);
       }
     };
 

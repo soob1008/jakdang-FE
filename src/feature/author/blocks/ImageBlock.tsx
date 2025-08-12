@@ -6,25 +6,35 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
+import { PageStyle } from "@/feature/admin/types";
 
 interface ImageBlockProps {
   block: Block;
+  style: PageStyle;
   isPreview?: boolean;
 }
 
-export default function ImageBlock({ block, isPreview }: ImageBlockProps) {
+export default function ImageBlock({
+  block,
+  isPreview,
+  style,
+}: ImageBlockProps) {
   if (!block.is_active) return null;
 
   const {
     images,
-    style = "single",
+    style: imageStyle = "single",
     display = "fill",
     columns = 1,
   } = block.data as BlockDataImage;
 
   if (!images || images.length === 0) {
     return (
-      <div className="flex items-center justify-center h-64 bg-gray-200 rounded-lg">
+      <div
+        className={`"flex items-center justify-center h-64 bg-gray-200 ${
+          style?.button_style === "sharp" ? "rounded-none" : "rounded-lg"
+        }`}
+      >
         <p className="text-gray-500">이미지가 없습니다.</p>
       </div>
     );
@@ -41,9 +51,10 @@ export default function ImageBlock({ block, isPreview }: ImageBlockProps) {
       <div
         // 컨테이너 쿼리 사용 시 부모에 container-type 필요
         className={clsx(
-          "relative w-full overflow-hidden rounded min-h-40",
+          "relative w-full overflow-hidden min-h-40",
           // 기본 4:3 → md에서 16:9 (미디어쿼리)
           "aspect-[4/3] md:aspect-[16/9]",
+          style?.button_style === "sharp" ? "rounded-none" : "rounded-lg",
           // 프리뷰 환경에선 컨테이너 쿼리도 추가로 대응
           isPreview ? "@md:aspect-[16/9]" : "",
           extraClass
@@ -76,7 +87,7 @@ export default function ImageBlock({ block, isPreview }: ImageBlockProps) {
     );
   };
 
-  if (style === "single") {
+  if (imageStyle === "single") {
     return (
       <div className="flex justify-center">
         <div className="w-full max-w-3xl">{renderImage(images[0], 0)}</div>
@@ -84,7 +95,7 @@ export default function ImageBlock({ block, isPreview }: ImageBlockProps) {
     );
   }
 
-  if (style === "grid") {
+  if (imageStyle === "grid") {
     // 데스크톱 기준 columns 값, 모바일/태블릿은 자동 축소
     const desktopCols =
       { 1: "lg:grid-cols-1", 2: "lg:grid-cols-2", 3: "lg:grid-cols-3" }[
@@ -103,7 +114,7 @@ export default function ImageBlock({ block, isPreview }: ImageBlockProps) {
     );
   }
 
-  if (style === "carousel") {
+  if (imageStyle === "carousel") {
     return (
       <div style={{ containerType: "inline-size" }}>
         <Carousel className="w-full max-w-6xl mx-auto">

@@ -17,9 +17,7 @@ export default function RootLayout({
     <>
       <ViewerProvider />
       {/* <Header /> */}
-      <main className="min-h-screen pt-8 px-4 lg:px-6 bg-background">
-        <div className="max-w-3xl mx-auto w-full pb-40">{children}</div>
-      </main>
+      <main>{children}</main>
       <Footer />
       <Toaster position="top-center" />
     </>

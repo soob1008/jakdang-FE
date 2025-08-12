@@ -10,7 +10,7 @@ import {
   DialogDescription,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { User, LogIn, Link as LinkIcon } from "lucide-react";
+import { User, LogIn, Link as LinkIcon, Share2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Author } from "@/feature/user/type";
@@ -28,6 +28,26 @@ export default function AuthorHeader({ user }: AuthorHeaderProps) {
   const handleCopyLink = () => {
     navigator.clipboard.writeText(window.location.href);
     toast("링크가 복사되었습니다.");
+  };
+
+  const handleShare = async () => {
+    const url = window.location.href;
+    const title = document?.title || "페이지 공유";
+    try {
+      if (navigator.share) {
+        await navigator.share({ title, url });
+        toast.success("공유했습니다.");
+      } else {
+        handleCopyLink();
+        toast.info("이 브라우저는 공유를 지원하지 않아 링크를 복사했어요.");
+      }
+      setOpen(false);
+    } catch (e: unknown) {
+      if ((e as Error)?.name !== "AbortError") {
+        toast.error("공유 중 문제가 발생했어요. 링크를 대신 복사합니다.");
+        handleCopyLink();
+      }
+    }
   };
 
   const handleLogout = async () => {
@@ -82,6 +102,13 @@ export default function AuthorHeader({ user }: AuthorHeaderProps) {
               <LogIn className="mr-2 h-4 w-4" /> 로그인
             </Button>
           )}
+
+          {/* 공유하기 */}
+          <Button variant="outline" onClick={handleShare}>
+            <Share2 className="mr-2 h-4 w-4" /> 공유하기
+          </Button>
+
+          {/* 링크 복사 */}
           <Button variant="outline" onClick={handleCopyLink}>
             <LinkIcon className="mr-2 h-4 w-4" /> 링크 복사
           </Button>

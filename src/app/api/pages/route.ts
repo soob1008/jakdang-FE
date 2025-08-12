@@ -14,7 +14,9 @@ export async function GET() {
 
   const { data: page, error } = await supabase
     .from("pages")
-    .select("id, blocks_draft, user_id, blocks_published")
+    .select(
+      "id, blocks_draft, user_id, blocks_published, style_draft, style_published"
+    )
     .eq("user_id", user.id)
     .single();
 
@@ -62,8 +64,10 @@ export async function POST(req: Request) {
       is_public: true,
       blocks: [],
       style: {
-        backgroundColor: "#ffffff",
-        textColor: "#000000",
+        theme_color: "#000000",
+        background_color: "#ffffff",
+        background_mode: "color",
+        button_style: "sharp",
       },
     })
     .select("*");

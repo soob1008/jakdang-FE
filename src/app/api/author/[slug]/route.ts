@@ -36,7 +36,7 @@ export async function GET(
   // 2) user.id로 pages 조회 (활성 1개만)
   const { data: pages, error: pagesError } = await supabase
     .from("pages")
-    .select(`id, user_id, blocks_published, updated_at`)
+    .select(`id, user_id, blocks_published, updated_at, style_published`)
     .eq("user_id", user.id)
     .order("updated_at", { ascending: false })
     .limit(1);

@@ -25,6 +25,8 @@ export default function AdminDesignPage() {
       id: "",
       user_id: "",
       blocks_draft: [] as Page["blocks_draft"],
+      style_draft: {},
+      style_published: {},
       profile: {
         is_active: true,
         avatar_url: "",
@@ -42,6 +44,8 @@ export default function AdminDesignPage() {
     reset({
       id: data.page.id ?? "",
       user_id: userData.user.id ?? "",
+      style_draft: data.page.style_draft ?? {},
+      style_published: data.page.style_published ?? {},
       blocks_draft: data.page.blocks_draft ?? [],
       profile: userData.user.profile_draft ?? {
         is_active: true,

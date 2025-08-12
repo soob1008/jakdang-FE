@@ -98,7 +98,7 @@ export default function SetUserNamePage() {
         }
 
         // 2. 페이지 이동
-        router.push("/profile");
+        router.push("/admin/compose");
       },
     });
 

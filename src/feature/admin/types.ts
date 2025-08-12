@@ -4,6 +4,18 @@ export interface Page {
   id: string;
   blocks_draft: Block[];
   blocks_published: Block[];
+  style_draft: PageStyle; // 페이지 스타일 설정
+  style_published: PageStyle; // 페이지 스타일 설정
+}
+
+export interface PageStyle {
+  theme_color: string; // 테마 색상
+  background_mode: "color" | "image" | "gradient"; // 배경 모드
+  background_color?: string; // 배경색
+  background_image_url?: string; // 배경 이미지 URL
+  gradient_start?: string; // 그라디언트 시작 색상
+  gradient_end?: string; // 그라디언트 끝 색상
+  button_style: "rounded" | "sharp"; // 버튼 스타일
 }
 
 export type BlockType =
