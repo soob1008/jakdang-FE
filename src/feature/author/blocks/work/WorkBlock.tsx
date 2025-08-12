@@ -1,16 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { Block, WorkItem } from "@/feature/admin/types";
+import { Block, PageStyle, WorkItem } from "@/feature/admin/types";
 import Image from "next/image";
 import WorkDialog from "@/feature/author/blocks/work/WorkDialog";
 
 interface WorkBlockProps {
   block: Block;
+  style: PageStyle;
   isPreview?: boolean;
 }
 
-export default function WorkBlock({ block, isPreview }: WorkBlockProps) {
+export default function WorkBlock({ block, isPreview, style }: WorkBlockProps) {
   const [selectedWork, setSelectedWork] = useState<WorkItem | null>(null);
 
   if (!block.is_active) return null;
@@ -76,7 +77,25 @@ export default function WorkBlock({ block, isPreview }: WorkBlockProps) {
               <button
                 key={`${work.id}-${work.title}-list`}
                 onClick={() => handleClick(work)}
-                className="flex items-center gap-4 p-3 border rounded-lg hover:bg-muted/60 transition bg-card text-card-foreground w-full text-left"
+                className={`flex items-center gap-4 p-3 border transition bg-card text-card-foreground w-full text-left
+                ${
+                  style?.button_style === "sharp"
+                    ? "rounded-none"
+                    : "rounded-lg"
+                }
+                border-[var(--br)]
+                hover:bg-[var(--hover)]
+                focus-visible:ring-2 focus-visible:ring-[var(--br)]
+              `}
+                style={
+                  {
+                    // 테마 보더 색
+                    ["--br" as string]: style?.theme_color || "#e5e7eb",
+                    // 테마색 12%만 섞은 hover 배경 (살짝 흐려짐)
+                    ["--hover" as string]:
+                      "color-mix(in srgb, var(--br) 20%, transparent)",
+                  } as React.CSSProperties
+                }
               >
                 <div className="relative w-16 h-16 rounded-md overflow-hidden flex-shrink-0">
                   <Image

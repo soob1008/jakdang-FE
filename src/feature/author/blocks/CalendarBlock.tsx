@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Block, BlockDataCalendar } from "@/feature/admin/types";
+import { Block, BlockDataCalendar, PageStyle } from "@/feature/admin/types";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   format,
@@ -15,9 +15,10 @@ import CustomCalendar from "@/components/ui/calendar-custom";
 
 interface CalendarBlockProps {
   block: Block;
+  style: PageStyle;
 }
 
-export default function CalendarBlock({ block }: CalendarBlockProps) {
+export default function CalendarBlock({ block, style }: CalendarBlockProps) {
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
   if (!block.is_active) return null;
@@ -52,7 +53,9 @@ export default function CalendarBlock({ block }: CalendarBlockProps) {
     <div className="space-y-2">
       {layout === "calendar" && (
         <CustomCalendar
-          className="w-full"
+          className={`w-full ${
+            style?.button_style === "sharp" ? "rounded-none" : "rounded-lg"
+          }`}
           markedDates={markedDates}
           currentMonth={currentMonth}
           setCurrentMonth={setCurrentMonth}
@@ -62,7 +65,12 @@ export default function CalendarBlock({ block }: CalendarBlockProps) {
 
       <div className="space-y-2">
         {filteredDates.map((date, index) => (
-          <Card key={index} className="rounded-sm">
+          <Card
+            key={index}
+            className={`${
+              style?.button_style === "sharp" ? "rounded-none" : "rounded-lg"
+            }`}
+          >
             <CardContent className="py-3 px-4 space-y-1">
               <h3 className="text-base font-semibold">{date.title}</h3>
               {date.description && (

@@ -20,7 +20,7 @@ export default function BlockPreview({
       return <TextBlock block={block} />;
 
     case "image":
-      return <ImageBlock block={block} isPreview />;
+      return <ImageBlock block={block} isPreview style={style} />;
 
     case "link":
       return <LinkBlock block={block} style={style} />;
@@ -29,10 +29,10 @@ export default function BlockPreview({
       return <SNSBlock block={block} style={style} />;
 
     case "work":
-      return <WorkBlock block={block} isPreview />;
+      return <WorkBlock block={block} isPreview style={style} />;
 
     case "calendar":
-      return <CalendarBlock block={block} />;
+      return <CalendarBlock block={block} style={style} />;
 
     case "blank":
       return <BlankBlock block={block} />;
