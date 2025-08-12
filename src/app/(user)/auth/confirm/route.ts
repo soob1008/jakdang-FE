@@ -5,6 +5,13 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { getUser, createUser } from "@/feature/user/api.server";
 
+const DEFAULT_STYLE = {
+  theme_color: "#222222",
+  background_mode: "color", // "color" | "image" | "gradient"
+  background_color: "#ffffff",
+  button_style: "rounded", // "rounded" | "sharp"
+} as const;
+
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const token_hash = searchParams.get("token_hash");
@@ -79,10 +86,10 @@ export async function GET(request: NextRequest) {
         is_published: false,
         theme_id: null,
         slug: finalUserData.slug,
-        style: JSON.stringify({
-          backgroundColor: "#ffffff",
-          pattern: null,
-        }),
+        style_draft: DEFAULT_STYLE,
+        style_published: DEFAULT_STYLE,
+        blocks_draft: [],
+        blocks_published: [],
       },
     ]);
 
