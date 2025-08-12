@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { useFormContext, useFieldArray } from "react-hook-form";
+import { useFormContext, useFieldArray, useWatch } from "react-hook-form";
 import BlockItem from "./BlockItem";
 import BlockDialog from "./BlockDialog";
 import {
@@ -17,6 +17,14 @@ import ProfileBlock from "./ProfileBlock";
 import { useAutoSaveProfile } from "@/hooks/useAutoSaveProfile";
 import { apiClient } from "@/lib/api/api.client";
 import { handleAction } from "@/lib/api/action";
+import { cn } from "@/lib/utils";
+
+// lightweight skeleton
+function Skel({ className = "" }: { className?: string }) {
+  return (
+    <div className={cn("animate-pulse bg-muted/30 rounded-md", className)} />
+  );
+}
 
 export default function PageEditor() {
   const { control, watch } = useFormContext();
@@ -31,24 +39,21 @@ export default function PageEditor() {
   useAutoSaveBlock(watch("id"));
   useAutoSaveProfile(watch("user_id"));
 
+  const blocksWatch = useWatch({ control, name: "blocks_draft" });
+  const isLoading = blocksWatch === undefined;
+
   const handleDragEnd = (result: DropResult) => {
     const { source, destination } = result;
-
-    if (!destination) return; // 드롭 안한 경우 무시
-    if (source.index === destination.index) return; // 위치 변경 없음
-
-    // 순서 변경
+    if (!destination) return;
+    if (source.index === destination.index) return;
     move(source.index, destination.index);
-
-    // position 값 재정렬 + 1
-    const updatedBlocks = [...watch("blocks_draft")].map((block, index) => ({
-      ...block,
-      position: index + 1,
-    }));
-
-    updatedBlocks.forEach((block, idx) => {
-      update(idx, block);
-    });
+    const updatedBlocks = [...watch("blocks_draft")].map(
+      (block: any, index: number) => ({
+        ...block,
+        position: index + 1,
+      })
+    );
+    updatedBlocks.forEach((block, idx) => update(idx, block));
   };
 
   const handleDeleteBlock = (index: number) => {
@@ -58,7 +63,6 @@ export default function PageEditor() {
   const handleSavePage = async () => {
     const blocks = watch("blocks_draft");
     const profile = watch("profile");
-
     await handleAction(
       () =>
         apiClient.put(`/api/pages/${watch("id")}/publish`, {
@@ -75,6 +79,7 @@ export default function PageEditor() {
 
   return (
     <article className="px-4 flex flex-col gap-4 pt-4 pb-24 max-w-[900px] w-full mx-auto md:pl-10 lg:max-w-none">
+      {/* Header */}
       <div className="flex items-center justify-between pb-2">
         <h2 className="font-bold">구성하기</h2>
         <div className="flex items-center gap-2">
@@ -82,22 +87,37 @@ export default function PageEditor() {
             open={openBlockDialog}
             onOpenChange={setOpenBlockDialog}
             trigger={
-              <Button type="button" className="w-fit" variant="outline">
+              <Button
+                type="button"
+                className="w-fit"
+                variant="outline"
+                disabled={isLoading}
+              >
                 블록 추가하기
               </Button>
             }
           />
-          <Button type="button" className="w-fit" onClick={handleSavePage}>
+          <Button
+            type="button"
+            className="w-fit"
+            onClick={handleSavePage}
+            disabled={isLoading}
+          >
             반영하기
           </Button>
         </div>
       </div>
-      <ProfileBlock />
-      {fields.length === 0 ? (
-        <div className="mt-10 text-center text-sm text-gray-500">
-          추가된 블록이 없습니다. 블록을 추가해 주세요.
+
+      {/* Profile skeleton */}
+      {isLoading ? (
+        <div className="grid gap-4">
+          <Skel className="h-28 rounded-xl" />
+          <Skel className="h-20" />
+          <Skel className="h-20" />
+          <Skel className="h-20" />
         </div>
       ) : (
+        // DnD List
         <DragDropContext onDragEnd={handleDragEnd}>
           <Droppable droppableId="blocks" type="BLOCK">
             {(provided) => (
@@ -106,6 +126,8 @@ export default function PageEditor() {
                 ref={provided.innerRef}
                 {...provided.droppableProps}
               >
+                {/* 프로필 편집 블록은 로딩 이후에 표시 */}
+                <ProfileBlock />
                 {fields.map((block, index) => (
                   <Draggable
                     key={block.block_id}
@@ -124,6 +146,7 @@ export default function PageEditor() {
                     )}
                   </Draggable>
                 ))}
+                {provided.placeholder}
               </div>
             )}
           </Droppable>
