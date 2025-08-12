@@ -12,8 +12,8 @@ import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createClient } from "@/lib/supabase/client";
-import Loading from "@/app/loading";
-import { handleAction } from "@/feature/common/api/action";
+import Loading from "@/components/loading";
+import { handleAction } from "@/lib/api/action";
 
 const schema = z.object({
   slug: z
@@ -98,7 +98,7 @@ export default function SetUserNamePage() {
         }
 
         // 2. 페이지 이동
-        router.push("/profile");
+        router.push("/admin/compose");
       },
     });
 

@@ -10,17 +10,17 @@ import { CalendarDays, ListOrdered } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 
 export default function CalendarOption({ index }: { index: number }) {
-  const namePrefix = `blocks.${index}.data.layout`;
+  const name = `blocks_draft.${index}.data.layout`;
   const { setValue, watch } = useFormContext();
-  const value = watch(namePrefix);
+  const value = watch(name);
 
   return (
     <div className="space-y-4">
       <FormField
-        name={namePrefix}
+        name={name}
         render={({ field }) => (
           <FormItem>
-            <FormLabel>캘린더 스타일</FormLabel>
+            <FormLabel>레이아웃</FormLabel>
             <FormControl>
               <RadioGroup
                 value={field.value}
@@ -33,7 +33,7 @@ export default function CalendarOption({ index }: { index: number }) {
                   </FormControl>
                   <button
                     type="button"
-                    onClick={() => setValue(namePrefix, "calendar")}
+                    onClick={() => setValue(name, "calendar")}
                     className={`w-16 h-16 border rounded-md flex flex-col items-center justify-center gap-1 ${
                       value === "calendar"
                         ? "border-ring bg-muted"
@@ -51,7 +51,7 @@ export default function CalendarOption({ index }: { index: number }) {
                   </FormControl>
                   <button
                     type="button"
-                    onClick={() => setValue(namePrefix, "list")}
+                    onClick={() => setValue(name, "list")}
                     className={`w-16 h-16 border rounded-md flex flex-col items-center justify-center gap-1 ${
                       value === "list"
                         ? "border-ring bg-muted"

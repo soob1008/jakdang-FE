@@ -1,8 +1,34 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/client";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
+
+export async function GET() {
+  const supabase = await createSupabaseServerClient();
+
+  const { data: userData } = await supabase.auth.getUser();
+
+  const user = userData?.user;
+
+  if (!user) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  }
+
+  const { data: page, error } = await supabase
+    .from("pages")
+    .select(
+      "id, blocks_draft, user_id, blocks_published, style_draft, style_published"
+    )
+    .eq("user_id", user.id)
+    .single();
+
+  if (error) {
+    return NextResponse.json({ message: "Page not found" }, { status: 404 });
+  }
+
+  return NextResponse.json({ page });
+}
 
 export async function POST(req: Request) {
-  const supabase = createClient();
+  const supabase = await createSupabaseServerClient();
 
   const { userId } = await req.json();
 
@@ -38,8 +64,10 @@ export async function POST(req: Request) {
       is_public: true,
       blocks: [],
       style: {
-        backgroundColor: "#ffffff",
-        textColor: "#000000",
+        theme_color: "#000000",
+        background_color: "#ffffff",
+        background_mode: "color",
+        button_style: "sharp",
       },
     })
     .select("*");

@@ -11,11 +11,11 @@ import { AlignLeft, AlignCenter, AlignRight } from "lucide-react";
 import { clsx } from "clsx";
 
 export default function TextOption({ index }: { index: number }) {
-  const namePrefix = `blocks.${index}.data`;
+  const namePrefix = `blocks_draft.${index}.data`;
 
   return (
     <>
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {/* 정렬 선택 (아이콘 기반) */}
         <FormField
           name={`${namePrefix}.align`}
@@ -24,6 +24,7 @@ export default function TextOption({ index }: { index: number }) {
               <FormLabel>정렬</FormLabel>
               <FormControl>
                 <RadioGroup
+                  name={`${namePrefix}.align`}
                   value={field.value}
                   onValueChange={field.onChange}
                   className="flex gap-4"
@@ -88,7 +89,7 @@ export default function TextOption({ index }: { index: number }) {
         />
         {/* 색상 선택 */}
         <FormField
-          name={`${namePrefix}.bgColor`}
+          name={`${namePrefix}.color`}
           render={({ field }) => (
             <FormItem>
               <FormLabel>색상</FormLabel>
@@ -106,13 +107,14 @@ export default function TextOption({ index }: { index: number }) {
       </div>
 
       <FormField
-        name={`${namePrefix}.fontSize`}
+        name={`${namePrefix}.font_size`}
         render={({ field }) => (
           <FormItem>
             <FormLabel>글자 크기</FormLabel>
             <FormControl>
               <div className="flex gap-2">
                 {[
+                  { value: "xs", label: "가", size: "text-xs" },
                   { value: "sm", label: "가", size: "text-sm" },
                   { value: "base", label: "가", size: "text-base" },
                   { value: "lg", label: "가", size: "text-lg" },

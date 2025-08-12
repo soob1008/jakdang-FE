@@ -2,66 +2,156 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { useFormContext, useFieldArray } from "react-hook-form";
+import { useFormContext, useFieldArray, useWatch } from "react-hook-form";
 import BlockItem from "./BlockItem";
-import { Block } from "./BlockItem";
 import BlockDialog from "./BlockDialog";
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  DropResult,
+} from "@hello-pangea/dnd";
+import { useAutoSaveBlock } from "@/hooks/useAutoSaveBlock";
+import { Block, BlockItemType } from "@/feature/admin/types";
+import ProfileBlock from "./ProfileBlock";
+import { useAutoSaveProfile } from "@/hooks/useAutoSaveProfile";
+import { apiClient } from "@/lib/api/api.client";
+import { handleAction } from "@/lib/api/action";
+import { cn } from "@/lib/utils";
+
+// lightweight skeleton
+function Skel({ className = "" }: { className?: string }) {
+  return (
+    <div className={cn("animate-pulse bg-muted/30 rounded-md", className)} />
+  );
+}
 
 export default function PageEditor() {
-  const { control } = useFormContext();
-  const { fields } = useFieldArray({
+  const { control, watch } = useFormContext();
+  const { fields, move, update, remove } = useFieldArray({
     control,
-    name: "blocks",
+    name: "blocks_draft",
+    keyName: "block_id",
   });
 
   const [openBlockDialog, setOpenBlockDialog] = useState(false);
 
+  useAutoSaveBlock(watch("id"));
+  useAutoSaveProfile(watch("user_id"));
+
+  const blocksWatch = useWatch({ control, name: "blocks_draft" });
+  const isLoading = blocksWatch === undefined;
+
+  const handleDragEnd = (result: DropResult) => {
+    const { source, destination } = result;
+    if (!destination) return;
+    if (source.index === destination.index) return;
+    move(source.index, destination.index);
+    const updatedBlocks = [...watch("blocks_draft")].map(
+      (block: Block, index: number) => ({
+        ...block,
+        position: index + 1,
+      })
+    );
+    updatedBlocks.forEach((block, idx) => update(idx, block));
+  };
+
+  const handleDeleteBlock = (index: number) => {
+    remove(index);
+  };
+
+  const handleSavePage = async () => {
+    const blocks = watch("blocks_draft");
+    const profile = watch("profile");
+    await handleAction(
+      () =>
+        apiClient.put(`/api/pages/${watch("id")}/publish`, {
+          blocks_draft: blocks,
+          profile_draft: profile,
+        }),
+      {
+        successMessage: "내 공간에 반영되었습니다.",
+        errorMessage: "저장이 실패되었습니다. 다시 시도해 주세요.",
+      }
+    );
+    setOpenBlockDialog(false);
+  };
+
   return (
-    <article className="pr-2 flex flex-col gap-4 pt-4 pl-10 pb-24 max-w-[900px] w-full mx-auto lg:max-w-none">
+    <article className="px-4 flex flex-col gap-4 pt-4 pb-24 max-w-[900px] w-full mx-auto md:pl-10 lg:max-w-none">
+      {/* Header */}
       <div className="flex items-center justify-between pb-2">
-        <h2 className="text-lg font-bold">구성하기</h2>
+        <h2 className="font-bold">구성하기</h2>
         <div className="flex items-center gap-2">
           <BlockDialog
             open={openBlockDialog}
             onOpenChange={setOpenBlockDialog}
             trigger={
-              <Button type="button" className="w-fit" variant="outline">
+              <Button
+                type="button"
+                className="w-fit"
+                variant="outline"
+                disabled={isLoading}
+              >
                 블록 추가하기
               </Button>
             }
           />
-          <Button type="button" className="w-fit">
-            저장하기
+          <Button
+            type="button"
+            className="w-fit"
+            onClick={handleSavePage}
+            disabled={isLoading}
+          >
+            반영하기
           </Button>
         </div>
       </div>
 
-      <DragDropContext onDragEnd={() => {}}>
-        <Droppable droppableId="blocks" type="BLOCK">
-          {(provided) => (
-            <div
-              className="flex flex-col gap-4"
-              ref={provided.innerRef}
-              {...provided.droppableProps}
-            >
-              {fields.map((block, index) => (
-                <Draggable key={block.id} draggableId={block.id} index={index}>
-                  {(provided) => (
-                    <div ref={provided.innerRef} {...provided.draggableProps}>
-                      <BlockItem
-                        index={index}
-                        block={block as Block}
-                        dragHandleProps={provided.dragHandleProps ?? {}}
-                      />
-                    </div>
-                  )}
-                </Draggable>
-              ))}
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
+      {/* Profile skeleton */}
+      {isLoading ? (
+        <div className="grid gap-4">
+          <Skel className="h-28 rounded-xl" />
+          <Skel className="h-20" />
+          <Skel className="h-20" />
+          <Skel className="h-20" />
+        </div>
+      ) : (
+        // DnD List
+        <DragDropContext onDragEnd={handleDragEnd}>
+          <Droppable droppableId="blocks" type="BLOCK">
+            {(provided) => (
+              <div
+                className="flex flex-col gap-4"
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+              >
+                {/* 프로필 편집 블록은 로딩 이후에 표시 */}
+                <ProfileBlock />
+                {fields.map((block, index) => (
+                  <Draggable
+                    key={block.block_id}
+                    draggableId={block.block_id}
+                    index={index}
+                  >
+                    {(provided) => (
+                      <div ref={provided.innerRef} {...provided.draggableProps}>
+                        <BlockItem
+                          index={index}
+                          block={block as BlockItemType}
+                          dragHandleProps={provided.dragHandleProps ?? {}}
+                          onDelete={() => handleDeleteBlock(index)}
+                        />
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext>
+      )}
     </article>
   );
 }

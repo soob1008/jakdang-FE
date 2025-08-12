@@ -98,5 +98,5 @@ export async function GET(request: NextRequest) {
   }
 
   // 5. 정상적으로 로그인 완료
-  return redirect(`/profile`);
+  return redirect(`/admin/compose`);
 }

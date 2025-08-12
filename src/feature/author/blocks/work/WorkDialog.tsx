@@ -13,32 +13,40 @@ export default function WorkDialog({
   onOpenChange,
   work,
 }: WorkDialogProps) {
+  const hasLink = Boolean(work?.url);
+  const isRepresentative = work?.is_representative;
+  const title = work?.title ?? "제목 없음";
+  const description = work?.description?.trim();
+
+  const handleSubmit = () => {
+    if (hasLink) {
+      window.open(work!.url, "_blank");
+    }
+  };
+
   return (
     <ResponsiveDialog
       trigger={undefined}
       open={open}
       onOpenChange={onOpenChange}
       title="작품 상세"
-      // isSubmit={false}
       submitText="작품 링크"
-      onSubmit={() => {
-        window.open(work?.url ?? "", "_blank");
-      }}
-      isSubmit={!!work?.url}
+      onSubmit={handleSubmit}
+      isSubmit={hasLink}
     >
       <div className="space-y-6">
         <div className="flex flex-col gap-1">
-          {work?.is_representative && (
+          {isRepresentative && (
             <Badge variant="primary-outline" className="text-xs">
               대표작
             </Badge>
           )}
-          <h2 className="text-xl font-semibold">{work?.title}</h2>
+          <h2 className="text-xl font-semibold">{title}</h2>
         </div>
 
-        {work?.description && (
+        {description && (
           <p className="text-sm text-gray-600 whitespace-pre-line">
-            {work?.description}
+            {description}
           </p>
         )}
       </div>

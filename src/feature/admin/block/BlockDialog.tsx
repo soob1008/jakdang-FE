@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Dialog,
   DialogTrigger,
@@ -8,85 +10,15 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { RadioGroup } from "@/components/ui/radio-group";
-import {
-  FileText,
-  ImageIcon,
-  Link2,
-  CalendarIcon,
-  Medal,
-  BookOpenText,
-  ListChecks,
-  Network,
-} from "lucide-react";
-import { ReactNode, useState } from "react";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { ReactNode, useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
-
-const blockList = [
-  {
-    category: "기본",
-    blocks: [
-      {
-        type: "text",
-        name: "텍스트",
-        description: "간단한 문장을 작성해요",
-        icon: FileText,
-      },
-      {
-        type: "image",
-        name: "이미지",
-        description: "이미지를 업로드하거나 링크를 연결해요",
-        icon: ImageIcon,
-      },
-      {
-        type: "link",
-        name: "링크",
-        description: "외부 링크를 연결해요",
-        icon: Link2,
-      },
-    ],
-  },
-  {
-    category: "정보",
-    blocks: [
-      {
-        type: "sns",
-        name: "SNS",
-        description: "SNS 링크를 연결해요",
-        icon: Network,
-      },
-      {
-        type: "calendar",
-        name: "일정",
-        description: "일정을 공유해요",
-        icon: CalendarIcon,
-      },
-      {
-        type: "event",
-        name: "이벤트",
-        description: "진행 중인 이벤트를 보여줘요",
-        icon: ListChecks,
-      },
-    ],
-  },
-  {
-    category: "콘텐츠",
-    blocks: [
-      {
-        type: "work",
-        name: "작품",
-        description: "대표 작품을 보여줘요",
-        icon: BookOpenText,
-      },
-      {
-        type: "challenge",
-        name: "챌린지",
-        description: "진행 중인 챌린지를 보여줘요",
-        icon: Medal,
-      },
-    ],
-  },
-];
+import { BLOCK_LIST } from "./const";
+import { BlockType, Block } from "../types";
+import { apiClient } from "@/lib/api/api.client";
+import { handleAction } from "@/lib/api/action";
+import { useFormContext } from "react-hook-form";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface BlockSelectDialogProps {
   open: boolean;
@@ -99,57 +31,91 @@ export default function BlockDialog({
   onOpenChange,
   trigger,
 }: BlockSelectDialogProps) {
-  const [selectedType, setSelectedType] = useState<string>("");
+  const queryClient = useQueryClient();
 
-  console.log(selectedType);
+  const { watch } = useFormContext();
+  const [selectedType, setSelectedType] = useState<BlockType | null>(null);
+
+  useEffect(() => {
+    if (!open) {
+      setSelectedType(null);
+    }
+  }, [open]);
+
+  console.log("Selected Block Type:", selectedType);
+
+  const handleAddBlock = async () => {
+    if (!selectedType) {
+      console.error("No block type selected");
+      return;
+    }
+
+    await handleAction(
+      () =>
+        apiClient.post<Block, { type: BlockType }>(
+          `/api/pages/${watch("id")}/draft`,
+          {
+            type: selectedType,
+          }
+        ),
+      {
+        successMessage: "블록이 성공적으로 추가되었습니다.",
+        errorMessage: "블록 추가에 실패했습니다.",
+        onSuccess: () => {
+          onOpenChange(false);
+          setSelectedType(null);
+          queryClient.invalidateQueries({ queryKey: ["admin-page"] });
+        },
+      }
+    );
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className="max-w-2xl">
+      <DialogContent className="w-8/9 max-w-2xl sm:max-w-3xl ">
         <DialogHeader>
           <DialogTitle>블록 선택</DialogTitle>
           <DialogDescription>추가할 블록을 하나 선택하세요.</DialogDescription>
         </DialogHeader>
-        <div className="max-h-120 overflow-y-auto">
+        <div className="max-h-140 overflow-y-auto">
           <RadioGroup
-            value={selectedType}
-            onValueChange={setSelectedType}
+            value={selectedType || ""}
+            onValueChange={(value: BlockType) => {
+              setSelectedType(value || null);
+            }}
             className="space-y-6"
           >
-            {blockList.map((group) => (
-              <div key={group.category} className="space-y-3">
-                <h4 className="text-sm font-semibold text-muted-foreground">
+            {BLOCK_LIST.map((group) => (
+              <div key={group.category}>
+                <h4 className="text-sm font-semibold text-muted-foreground mb-2">
                   {group.category}
                 </h4>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                   {group.blocks.map((block) => {
                     const Icon = block.icon;
                     return (
-                      <div key={block.type}>
-                        <input
-                          name="block"
-                          type="radio"
+                      <label
+                        key={block.type}
+                        htmlFor={block.type}
+                        className={cn(
+                          "p-4 border h-32 rounded-md flex flex-col items-center gap-2 cursor-pointer transition",
+                          selectedType === block.type && "bg-secondary"
+                        )}
+                      >
+                        <RadioGroupItem
                           value={block.type}
-                          id={`block-${block.type}`}
-                          className="peer sr-only"
+                          id={block.type}
+                          className="sr-only"
                         />
-                        <label
-                          htmlFor={`block-${block.type}`}
-                          className={cn(
-                            "p-4 border h-32 rounded-md flex flex-col items-center gap-2 cursor-pointer transition",
-                            "peer-checked:bg-secondary"
-                          )}
-                        >
-                          <Icon className="w-6 h-6" />
-                          <span className="font-medium text-sm">
-                            {block.name}
-                          </span>
-                          <span className="text-xs text-muted-foreground text-center">
-                            {block.description}
-                          </span>
-                        </label>
-                      </div>
+                        <Icon className="w-6 h-6" />
+                        <span className="font-medium text-sm">
+                          {block.name}
+                        </span>
+                        <span className="text-xs text-muted-foreground text-center">
+                          {block.description}
+                        </span>
+                      </label>
                     );
                   })}
                 </div>
@@ -158,7 +124,7 @@ export default function BlockDialog({
           </RadioGroup>
         </div>
         <DialogFooter>
-          <Button onClick={() => {}} disabled={!selectedType}>
+          <Button onClick={handleAddBlock} disabled={!selectedType}>
             추가하기
           </Button>
         </DialogFooter>

@@ -2,7 +2,7 @@
 import { useState } from "react";
 import WorkItem from "./components/WorkItem";
 import { AuthorProfile, AuthorWork } from "@/feature/user/type";
-import WorkDialog from "./components/WorkDialog";
+import WorkDialog from "./blocks/work/WorkDialog";
 
 interface WorkListProps {
   user: AuthorProfile;

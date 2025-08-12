@@ -18,8 +18,8 @@ import {
 } from "@/components/ui/form";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ResponsiveDialog } from "@/components/ui/ResponsiveDialog";
-import { uploadImage } from "@/feature/common/api/api.client";
-import { handleAction } from "@/feature/common/api/action";
+import { uploadImage } from "@/lib/api/api.client";
+import { handleAction } from "@/lib/api/action";
 import { toast } from "sonner";
 
 const schema = z.object({

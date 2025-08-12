@@ -1,46 +1,64 @@
 "use client";
 
-import { GripVertical, ChevronDown, ChevronUp } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useState } from "react";
-import TextBlock from "./text/TextBlock";
-import BlockOptions from "./BlockOptions";
-import ImageBlock from "./image/ImageBlock";
-import WorkBlock from "./work/WorkBlock";
-import LinkBlock from "./link/LInkBlock";
-import CalendarBlock from "./calendar/CalendarBlock";
-import SNSBlock from "./sns/SNSBlock";
-import ChallengeBlock from "./challenge/ChallengeBlock";
-import EventBlock from "./event/EventBlock";
+import { useEffect, useState } from "react";
+import { GripVertical, ChevronDown, ChevronUp, Trash } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
+import { Button } from "@/components/ui/button";
+import { FormField, FormItem, FormControl } from "@/components/ui/form";
+import BlockOptions from "./BlockOptions";
+import TextBlock from "./text/TextBlock";
+import { BlockItemType } from "@/feature/admin/types";
+import ImageBlock from "./image/ImageBlock";
+import LinkBlock from "./link/LInkBlock";
+import SNSBlock from "./sns/SNSBlock";
+import WorkBlock from "./work/WorkBlock";
+import CalendarBlock from "./calendar/CalendarBlock";
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from "@/components/ui/alert-dialog";
+import BlankBlock from "./blank/BlankBlock";
 
-export interface Block {
-  id: string;
-  type:
-    | "text" // 글 - 문장/인용
-    | "image" // 이미지
-    | "work" // 작품
-    | "link" // 링크모음
-    | "calendar" // 일정
-    | "sns" // SNS
-    | "challenge" // 글쓰기챌린지
-    | "event"; // 이벤트
-  name?: string; // 블록 이름
-  data?: unknown; // 블록 데이터
-  layout?: string; // 레이아웃 (예: "grid", "list",
-}
+// import 기타 블록들
+
 interface BlockItemProps {
   index: number;
-  block: Block;
+  block: BlockItemType;
   dragHandleProps?: React.HTMLAttributes<HTMLDivElement>;
+  onDelete: () => void;
 }
 
 export default function BlockItem({
   index,
   block,
   dragHandleProps,
+  onDelete,
 }: BlockItemProps) {
-  const [isOpen, setIsOpen] = useState(true);
+  const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+
+  // mount 이후에 localStorage 값 반영
+  useEffect(() => {
+    const id = localStorage.getItem("selected-block-id");
+    setSelectedBlockId(
+      id !== null && id !== undefined && id !== "" ? id : null
+    );
+  }, []);
+
+  // 현재 블럭이 선택된 블럭인지 계산
+  const isOpen = selectedBlockId === block.id;
+
+  const handleToggle = () => {
+    const next = isOpen ? null : block.id;
+    localStorage.setItem("selected-block-id", next ?? "");
+    setSelectedBlockId(next ?? null);
+  };
 
   return (
     <section className="bg-white rounded-lg shadow-sm">
@@ -56,12 +74,52 @@ export default function BlockItem({
           </h4>
         </div>
         <div className="flex items-center gap-2">
-          <Switch />
+          <FormField
+            name={`blocks_draft.${index}.is_active`}
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Switch
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                    id={`blocks_draft.${index}.is_active`}
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <AlertDialog
+            open={isDeleteDialogOpen}
+            onOpenChange={setIsDeleteDialogOpen}
+          >
+            <AlertDialogTrigger asChild>
+              <Button type="button" variant="ghost" size="sm">
+                <Trash className="w-4 h-4" />
+              </Button>
+            </AlertDialogTrigger>
+
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>정말 이 블럭을 삭제할까요?</AlertDialogTitle>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>취소</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={() => {
+                    onDelete();
+                  }}
+                >
+                  삭제
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+
           <Button
             type="button"
             variant="ghost"
             size="sm"
-            onClick={() => setIsOpen((prev) => !prev)}
+            onClick={handleToggle}
           >
             {isOpen ? (
               <ChevronUp className="w-4 h-4" />
@@ -77,14 +135,13 @@ export default function BlockItem({
         <div className="px-4 py-6 space-y-2">
           {block.type === "text" && <TextBlock index={index} />}
           {block.type === "image" && <ImageBlock index={index} />}
-          {block.type === "work" && <WorkBlock />}
           {block.type === "link" && <LinkBlock index={index} />}
-          {block.type === "calendar" && <CalendarBlock index={index} />}
           {block.type === "sns" && <SNSBlock index={index} />}
-          {block.type === "challenge" && <ChallengeBlock />}
-          {block.type === "event" && <EventBlock />}
-          {/* 기타 블록 추가 예정 */}
-          <BlockOptions type={block.type} />
+          {block.type === "work" && <WorkBlock index={index} />}
+          {block.type === "calendar" && <CalendarBlock index={index} />}
+          {block.type === "blank" && <BlankBlock index={index} />}
+          {/* 다른 블록들도 필요 시 추가 */}
+          <BlockOptions type={block.type} index={index} />
         </div>
       )}
     </section>

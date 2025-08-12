@@ -13,7 +13,7 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { GripVertical, Trash2 } from "lucide-react";
+import { GripVertical, X } from "lucide-react";
 import {
   DragDropContext,
   Droppable,
@@ -22,22 +22,27 @@ import {
 } from "@hello-pangea/dnd";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
-const snsTypes = [
+const SNS_PLATFORMS = [
   { id: "instagram", label: "Instagram" },
+  { id: "brunch", label: "Brunch" },
   { id: "facebook", label: "Facebook" },
-  { id: "twitter", label: "Twitter" },
+  { id: "velog", label: "Velog" },
+  { id: "tistory", label: "Tistory" },
+  { id: "x", label: "X (Twitter)" },
   { id: "youtube", label: "YouTube" },
+  { id: "naverBlog", label: "네이버 블로그" },
   { id: "tiktok", label: "TikTok" },
-  { id: "blog", label: "Blog" },
+  { id: "personal", label: "개인 웹사이트" },
   { id: "etc", label: "기타" },
 ];
 
 export default function SNSBlock({ index }: { index: number }) {
-  const namePrefix = `blocks.${index}.data.items`;
+  const namePrefix = `blocks_draft.${index}.data.sns_links`;
   const { control } = useFormContext();
   const { fields, append, remove, move } = useFieldArray({
     control,
     name: namePrefix,
+    keyName: "block_id",
   });
 
   const handleDragEnd = (result: DropResult) => {
@@ -53,7 +58,7 @@ export default function SNSBlock({ index }: { index: number }) {
           type="button"
           variant="outline"
           size="sm"
-          onClick={() => append({ type: "instagram", url: "" })}
+          onClick={() => append({ platform: "", url: "", label: "" })}
         >
           + SNS 추가
         </Button>
@@ -68,7 +73,11 @@ export default function SNSBlock({ index }: { index: number }) {
               className="space-y-3"
             >
               {fields.map((field, i) => (
-                <Draggable key={field.id} draggableId={field.id} index={i}>
+                <Draggable
+                  key={field.block_id}
+                  draggableId={field.block_id}
+                  index={i}
+                >
                   {(provided) => (
                     <div
                       ref={provided.innerRef}
@@ -80,7 +89,7 @@ export default function SNSBlock({ index }: { index: number }) {
                       </div>
 
                       <FormField
-                        name={`${namePrefix}.${i}.type`}
+                        name={`${namePrefix}.${i}.platform`}
                         render={({ field }) => (
                           <FormItem className="w-1/5">
                             <Select
@@ -93,9 +102,12 @@ export default function SNSBlock({ index }: { index: number }) {
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent>
-                                {snsTypes.map((sns) => (
-                                  <SelectItem key={sns.id} value={sns.id}>
-                                    {sns.label}
+                                {SNS_PLATFORMS.map((platform) => (
+                                  <SelectItem
+                                    key={platform.id}
+                                    value={platform.id}
+                                  >
+                                    {platform.label}
                                   </SelectItem>
                                 ))}
                               </SelectContent>
@@ -105,6 +117,20 @@ export default function SNSBlock({ index }: { index: number }) {
                         )}
                       />
 
+                      {/* 제목 필드 */}
+                      <FormField
+                        name={`${namePrefix}.${i}.label`}
+                        render={({ field }) => (
+                          <FormItem className="w-1/4">
+                            <FormControl>
+                              <Input placeholder="링크 제목" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      {/* URL 필드 */}
                       <FormField
                         name={`${namePrefix}.${i}.url`}
                         render={({ field }) => (
@@ -117,13 +143,14 @@ export default function SNSBlock({ index }: { index: number }) {
                         )}
                       />
 
+                      {/* 삭제 버튼 */}
                       <Button
                         type="button"
                         size="icon"
                         variant="ghost"
                         onClick={() => remove(i)}
                       >
-                        <Trash2 className="w-4 h-4 text-destructive" />
+                        <X className="w-4 h-4" />
                       </Button>
                     </div>
                   )}

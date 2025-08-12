@@ -7,10 +7,12 @@ export async function handleAction<T>(
     successMessage,
     errorMessage = "문제가 발생했습니다.",
     onSuccess,
+    onError,
   }: {
     successMessage?: string;
     errorMessage?: string;
     onSuccess?: (result: T) => void;
+    onError?: (error: unknown) => void;
   } = {}
 ): Promise<T | null> {
   try {
@@ -24,7 +26,33 @@ export async function handleAction<T>(
     return result;
   } catch (err: unknown) {
     console.error("handleAction error:", err);
-    toast.error(errorMessage);
+    if (errorMessage) {
+      toast.error(errorMessage);
+    }
+    onError?.(err);
+    return null;
+  }
+}
+
+// lib/api/handleServerAction.ts
+
+export async function handleServerAction<T>(
+  action: () => Promise<T>,
+  {
+    onSuccess,
+    onError,
+  }: {
+    onSuccess?: (result: T) => void;
+    onError?: (error: unknown) => void;
+  } = {}
+): Promise<T | null> {
+  try {
+    const result = await action();
+    onSuccess?.(result);
+    return result;
+  } catch (err) {
+    console.error("handleServerAction error:", err);
+    onError?.(err);
     return null;
   }
 }

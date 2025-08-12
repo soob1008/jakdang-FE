@@ -8,7 +8,7 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
-import { CalendarIcon, Plus, Trash2 } from "lucide-react";
+import { CalendarIcon, Plus, X } from "lucide-react";
 import {
   Popover,
   PopoverContent,
@@ -19,75 +19,122 @@ import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 
 export default function CalendarBlock({ index }: { index: number }) {
-  const namePrefix = `blocks.${index}.data.items`;
+  const namePrefix = `blocks_draft.${index}.data.dates`;
   const { control, setValue, watch } = useFormContext();
   const { fields, append, remove } = useFieldArray({
     control,
     name: namePrefix,
+    keyName: "block_id",
   });
 
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h4 className="font-semibold text-base">일정 설정</h4>
+        <div />
         <Button
           type="button"
           variant="outline"
           size="sm"
-          onClick={() => append({ title: "", memo: "", date: new Date() })}
+          onClick={() =>
+            append({
+              title: "",
+              memo: "",
+              start_date: null,
+              end_date: null,
+            })
+          }
         >
-          <Plus className="w-4 h-4 mr-1" /> 일정 추가하기
+          <Plus className="w-4 h-4 mr-1" /> 일정 추가
         </Button>
       </div>
 
       {fields.map((field, i) => {
-        const dateValue = watch(`${namePrefix}.${i}.date`);
-        return (
-          <div key={field.id} className="grid grid-cols-[auto_1fr_auto]  gap-2">
-            {/* 날짜 선택 */}
-            <FormField
-              name={`${namePrefix}.${i}.date`}
-              render={() => (
-                <FormItem className="w-fit">
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className="justify-start text-left font-normal min-w-[120px]"
-                      >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {dateValue ? (
-                          format(new Date(dateValue), "PPP", { locale: ko })
-                        ) : (
-                          <span>날짜 선택</span>
-                        )}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0">
-                      <Calendar
-                        mode="single"
-                        selected={new Date(dateValue)}
-                        onSelect={(date) => {
-                          setValue(`${namePrefix}.${i}.date`, date);
-                          //   setTimeout(() => {
-                          //     document
-                          //       .querySelector(
-                          //         `input[name='${namePrefix}.${i}.title']`
-                          //       )
+        const start = watch(`${namePrefix}.${i}.start_date`);
+        const end = watch(`${namePrefix}.${i}.end_date`);
 
-                          //   }, 50);
-                        }}
-                        initialFocus
-                        locale={ko}
-                      />
-                    </PopoverContent>
-                  </Popover>
-                </FormItem>
-              )}
-            />
+        return (
+          <div
+            key={field.block_id}
+            className="
+              grid gap-3 md:gap-4 items-start
+              grid-cols-1 md:grid-cols-[auto_1fr_auto]
+            "
+          >
+            {/* 시작/종료일 선택 */}
+            <div className="flex flex-col sm:flex-row md:flex-col gap-2 sm:gap-3">
+              {/* 시작일 */}
+              <FormField
+                name={`${namePrefix}.${i}.start_date`}
+                render={() => (
+                  <FormItem className="w-full sm:w-[180px] md:w-[160px]">
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          className="w-full justify-start text-left font-normal"
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {start ? (
+                            format(new Date(start), "PPP", { locale: ko })
+                          ) : (
+                            <span>시작일 선택</span>
+                          )}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0">
+                        <Calendar
+                          mode="single"
+                          selected={start ? new Date(start) : undefined}
+                          onSelect={(date) =>
+                            setValue(`${namePrefix}.${i}.start_date`, date)
+                          }
+                          initialFocus
+                          locale={ko}
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </FormItem>
+                )}
+              />
+
+              {/* 종료일 */}
+              <FormField
+                name={`${namePrefix}.${i}.end_date`}
+                render={() => (
+                  <FormItem className="w-full sm:w-[180px] md:w-[160px]">
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          className="w-full justify-start text-left font-normal"
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {end ? (
+                            format(new Date(end), "PPP", { locale: ko })
+                          ) : (
+                            <span>종료일 선택</span>
+                          )}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0">
+                        <Calendar
+                          mode="single"
+                          selected={end ? new Date(end) : undefined}
+                          onSelect={(date) =>
+                            setValue(`${namePrefix}.${i}.end_date`, date)
+                          }
+                          initialFocus
+                          locale={ko}
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </FormItem>
+                )}
+              />
+            </div>
 
             {/* 제목 & 메모 */}
-            <div className="space-y-1">
+            <div className="space-y-2 md:space-y-3">
               <FormField
                 name={`${namePrefix}.${i}.title`}
                 render={({ field }) => (
@@ -100,14 +147,14 @@ export default function CalendarBlock({ index }: { index: number }) {
                 )}
               />
               <FormField
-                name={`${namePrefix}.${i}.memo`}
+                name={`${namePrefix}.${i}.description`}
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
                       <Textarea
                         placeholder="간단 메모"
-                        rows={1}
-                        className="resize-none"
+                        rows={2}
+                        className="resize-none md:h-20"
                         {...field}
                       />
                     </FormControl>
@@ -118,14 +165,17 @@ export default function CalendarBlock({ index }: { index: number }) {
             </div>
 
             {/* 삭제 버튼 */}
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              onClick={() => remove(i)}
-            >
-              <Trash2 className="w-4 h-4 text-destructive" />
-            </Button>
+            <div className="flex md:block justify-end">
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                onClick={() => remove(i)}
+                className="self-start"
+              >
+                <X className="w-4 h-4" />
+              </Button>
+            </div>
           </div>
         );
       })}
