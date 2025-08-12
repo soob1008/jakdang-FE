@@ -12,7 +12,7 @@ import {
   DropResult,
 } from "@hello-pangea/dnd";
 import { useAutoSaveBlock } from "@/hooks/useAutoSaveBlock";
-import { BlockItemType } from "@/feature/admin/types";
+import { Block, BlockItemType } from "@/feature/admin/types";
 import ProfileBlock from "./ProfileBlock";
 import { useAutoSaveProfile } from "@/hooks/useAutoSaveProfile";
 import { apiClient } from "@/lib/api/api.client";
@@ -48,7 +48,7 @@ export default function PageEditor() {
     if (source.index === destination.index) return;
     move(source.index, destination.index);
     const updatedBlocks = [...watch("blocks_draft")].map(
-      (block: any, index: number) => ({
+      (block: Block, index: number) => ({
         ...block,
         position: index + 1,
       })
