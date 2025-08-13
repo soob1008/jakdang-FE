@@ -37,27 +37,35 @@ export default function WorkBlock({ block, isPreview, style }: WorkBlockProps) {
     <>
       {layout === "grid" ? (
         <div className={className}>
-          {works.map((work) => {
+          {works.map((work, index) => {
             if (!work.is_active) return null;
             return (
               <button
-                key={`${work.id}-${work.title}-grid`}
+                key={`${work.id || index}-grid`}
                 onClick={() => handleClick(work)}
                 className="flex flex-col items-center gap-2 transition text-card-foreground"
                 style={{
                   ["--theme-color" as string]: "#222",
                 }}
               >
-                <div className="relative w-full h-40 overflow-hidden">
+                <div
+                  className="relative w-full h-40 overflow-hidden rounded-[var(--btn-radius)]"
+                  style={{
+                    ["--btn-radius" as string]:
+                      style?.button_style === "sharp" ? "0" : "8px",
+                  }}
+                >
                   <Image
                     src={
                       work.image_url
                         ? `${cdn}${work.image_url}`
-                        : "/placeholder.png"
+                        : "/assets/basic_book.jpg"
                     }
                     alt={work.title || "작품 이미지"}
                     fill
-                    className="object-contain transition-transform hover:scale-105"
+                    className={`${
+                      work.image_url ? "object-contain" : "object-cover"
+                    } transition-transform hover:scale-105`}
                   />
                 </div>
                 <span
@@ -78,11 +86,11 @@ export default function WorkBlock({ block, isPreview, style }: WorkBlockProps) {
         </div>
       ) : (
         <div className="space-y-3">
-          {works.map((work) => {
+          {works.map((work, index) => {
             if (!work.is_active) return null;
             return (
               <button
-                key={`${work.id}-${work.title}-list`}
+                key={`${work.id || index}-list`}
                 onClick={() => handleClick(work)}
                 className={`flex items-center gap-4 p-3 border transition bg-card text-card-foreground w-full text-left
                 ${
@@ -93,6 +101,7 @@ export default function WorkBlock({ block, isPreview, style }: WorkBlockProps) {
                 border-[var(--br)]
                 hover:bg-[var(--hover)]
                 focus-visible:ring-2 focus-visible:ring-[var(--br)]
+                rounded-[var(--btn-radius)]
               `}
                 style={
                   {
@@ -101,6 +110,8 @@ export default function WorkBlock({ block, isPreview, style }: WorkBlockProps) {
                     // 테마색 12%만 섞은 hover 배경 (살짝 흐려짐)
                     ["--hover" as string]:
                       "color-mix(in srgb, var(--br) 20%, transparent)",
+                    ["--btn-radius" as string]:
+                      style?.button_style === "sharp" ? "0" : "8px",
                   } as React.CSSProperties
                 }
               >
@@ -109,7 +120,7 @@ export default function WorkBlock({ block, isPreview, style }: WorkBlockProps) {
                     src={
                       work.image_url
                         ? `${cdn}${work.image_url}`
-                        : "/placeholder.png"
+                        : "/assets/basic_book.jpg"
                     }
                     alt={work.title || "작품 이미지"}
                     fill

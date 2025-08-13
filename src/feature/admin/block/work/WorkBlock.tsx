@@ -1,12 +1,13 @@
 "use client";
 
+import { ChangeEvent, useState } from "react";
+import Image from "next/image";
 import { useFormContext, useFieldArray, Controller } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { X, Plus, GripVertical, Upload } from "lucide-react";
-import Image from "next/image";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -15,7 +16,6 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { handleAction } from "@/lib/api/action";
 import { uploadImage } from "@/lib/api/api.client";
@@ -25,24 +25,36 @@ import {
   Draggable,
   DropResult,
 } from "@hello-pangea/dnd";
-import { ChangeEvent, useState } from "react";
+
+type WorkItem = {
+  title: string;
+  short_description?: string;
+  description?: string;
+  url?: string;
+  image_url?: string;
+  is_active: boolean;
+  is_representative: boolean;
+};
 
 export default function WorkBlock({ index }: { index: number }) {
   const namePrefix = `blocks_draft.${index}.data.works`;
-  const { control, register, watch } = useFormContext();
-  const { fields, append, remove, move, update } = useFieldArray({
+  const { control, register, watch, setValue } = useFormContext();
+
+  const { fields, append, remove, move } = useFieldArray({
     control,
     name: namePrefix,
-    keyName: "block_id",
+    keyName: "_key",
   });
 
-  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const works: WorkItem[] = watch(namePrefix) || [];
 
-  const works = watch(namePrefix) || [];
+  const [deleteKey, setDeleteKey] = useState<string | null>(null);
+  const getIndexByKey = (key: string | null) =>
+    key ? fields.findIndex((f) => f._key === key) : -1;
 
   const handleImageUpload = async (
     e: ChangeEvent<HTMLInputElement>,
-    i: number
+    key: string
   ) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -51,10 +63,12 @@ export default function WorkBlock({ index }: { index: number }) {
       successMessage: "이미지 업로드 완료",
       errorMessage: "이미지 업로드 실패",
       onSuccess: ({ imagePath }) => {
-        update(i, {
-          ...works[i],
-          image_url: imagePath,
-        });
+        const idx = getIndexByKey(key);
+        if (idx > -1) {
+          setValue(`${namePrefix}.${idx}.image_url`, imagePath, {
+            shouldDirty: true,
+          });
+        }
       },
     });
 
@@ -64,12 +78,13 @@ export default function WorkBlock({ index }: { index: number }) {
   const handleAddWork = () => {
     append({
       title: "",
+      short_description: "",
       description: "",
       url: "",
       image_url: "",
       is_active: true,
       is_representative: false,
-    });
+    } as WorkItem);
   };
 
   const handleDragEnd = (result: DropResult) => {
@@ -79,6 +94,7 @@ export default function WorkBlock({ index }: { index: number }) {
 
   return (
     <div className="space-y-4">
+      {/* 상단 추가 버튼 */}
       <div className="flex justify-end">
         <Button
           type="button"
@@ -99,13 +115,13 @@ export default function WorkBlock({ index }: { index: number }) {
               {...provided.droppableProps}
               className="space-y-3 md:space-y-4"
             >
-              {fields.map((field, i) => {
+              {fields.map((field, i: number) => {
                 const path = `${namePrefix}.${i}`;
 
                 return (
                   <Draggable
-                    key={field.block_id}
-                    draggableId={field.block_id}
+                    key={field._key}
+                    draggableId={field._key}
                     index={i}
                   >
                     {(provided) => (
@@ -127,7 +143,7 @@ export default function WorkBlock({ index }: { index: number }) {
                           <Image
                             src={
                               works[i]?.image_url
-                                ? process.env.NEXT_PUBLIC_IMAGE_URL +
+                                ? (process.env.NEXT_PUBLIC_IMAGE_URL || "") +
                                   works[i].image_url
                                 : "/assets/basic_book.jpg"
                             }
@@ -141,7 +157,7 @@ export default function WorkBlock({ index }: { index: number }) {
                               type="file"
                               accept="image/*"
                               className="hidden"
-                              onChange={(e) => handleImageUpload(e, i)}
+                              onChange={(e) => handleImageUpload(e, field._key)} // ✅ key 기반
                             />
                           </label>
                         </div>
@@ -157,7 +173,7 @@ export default function WorkBlock({ index }: { index: number }) {
                                 name={`${path}.is_representative`}
                                 render={({ field }) => (
                                   <Switch
-                                    checked={field.value}
+                                    checked={!!field.value}
                                     onCheckedChange={field.onChange}
                                   />
                                 )}
@@ -170,7 +186,7 @@ export default function WorkBlock({ index }: { index: number }) {
                                 name={`${path}.is_active`}
                                 render={({ field }) => (
                                   <Switch
-                                    checked={field.value}
+                                    checked={!!field.value}
                                     onCheckedChange={field.onChange}
                                   />
                                 )}
@@ -190,7 +206,6 @@ export default function WorkBlock({ index }: { index: number }) {
                               placeholder="한줄 설명"
                               className="text-sm"
                             />
-                            {/* md에서 2열 → URL/기타를 옆에 배치 */}
                             <Input
                               {...register(`${path}.url`)}
                               placeholder="링크 주소"
@@ -205,35 +220,16 @@ export default function WorkBlock({ index }: { index: number }) {
                           />
                         </div>
 
-                        {/* 삭제 버튼: 모바일에선 카드 우측 상단 고정, md 이상에선 우측 정렬 */}
-                        <AlertDialog
-                          open={isDeleteOpen}
-                          onOpenChange={setIsDeleteOpen}
+                        {/* 삭제 버튼 → 다이얼로그는 전역 하나만 */}
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          className="absolute top-2 right-2 md:static md:self-start md:ml-auto"
+                          onClick={() => setDeleteKey(field._key)} // ✅ 클릭 시 삭제대상 key 저장
                         >
-                          <AlertDialogTrigger asChild>
-                            <Button
-                              type="button"
-                              variant="ghost"
-                              size="icon"
-                              className="absolute top-2 right-2 md:static md:self-start md:ml-auto"
-                            >
-                              <X className="w-4 h-4" />
-                            </Button>
-                          </AlertDialogTrigger>
-                          <AlertDialogContent>
-                            <AlertDialogHeader>
-                              <AlertDialogTitle>
-                                작품을 삭제할까요?
-                              </AlertDialogTitle>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                              <AlertDialogCancel>취소</AlertDialogCancel>
-                              <AlertDialogAction onClick={() => remove(i)}>
-                                삭제
-                              </AlertDialogAction>
-                            </AlertDialogFooter>
-                          </AlertDialogContent>
-                        </AlertDialog>
+                          <X className="w-4 h-4" />
+                        </Button>
                       </div>
                     )}
                   </Draggable>
@@ -244,6 +240,31 @@ export default function WorkBlock({ index }: { index: number }) {
           )}
         </Droppable>
       </DragDropContext>
+
+      {/* ✅ 전역 AlertDialog 하나만 사용 */}
+      <AlertDialog
+        open={!!deleteKey}
+        onOpenChange={(o) => !o && setDeleteKey(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>작품을 삭제할까요?</AlertDialogTitle>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>취소</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                const idx = getIndexByKey(deleteKey);
+
+                if (idx > -1) remove(idx);
+                setDeleteKey(null);
+              }}
+            >
+              삭제
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
