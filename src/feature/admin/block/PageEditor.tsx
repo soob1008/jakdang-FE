@@ -63,11 +63,13 @@ export default function PageEditor() {
   const handleSavePage = async () => {
     const blocks = watch("blocks_draft");
     const profile = watch("profile");
+    const style = watch("style_draft");
     await handleAction(
       () =>
         apiClient.put(`/api/pages/${watch("id")}/publish`, {
           blocks_draft: blocks,
           profile_draft: profile,
+          style_draft: style,
         }),
       {
         successMessage: "내 공간에 반영되었습니다.",
