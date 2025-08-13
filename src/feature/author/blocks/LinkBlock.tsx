@@ -35,6 +35,8 @@ export default function LinkBlock({ block, style }: LinkBlockProps) {
             ["--link-color" as string]: linkColor,
             ["--link-hover-bg" as string]:
               "color-mix(in srgb, var(--link-color) 20%, transparent)",
+            ["--btn-radius" as string]:
+              style?.button_style === "sharp" ? "0" : "8px",
           }}
           onClick={() => window.open(link.url, "_blank", "noopener,noreferrer")}
         >

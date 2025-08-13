@@ -35,6 +35,7 @@ export default function BlockDialog({
 
   const { watch } = useFormContext();
   const [selectedType, setSelectedType] = useState<BlockType | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (!open) {
@@ -42,13 +43,12 @@ export default function BlockDialog({
     }
   }, [open]);
 
-  console.log("Selected Block Type:", selectedType);
-
   const handleAddBlock = async () => {
     if (!selectedType) {
       console.error("No block type selected");
       return;
     }
+    setIsLoading(true);
 
     await handleAction(
       () =>
@@ -65,6 +65,7 @@ export default function BlockDialog({
           onOpenChange(false);
           setSelectedType(null);
           queryClient.invalidateQueries({ queryKey: ["admin-page"] });
+          setIsLoading(false);
         },
       }
     );
@@ -124,7 +125,10 @@ export default function BlockDialog({
           </RadioGroup>
         </div>
         <DialogFooter>
-          <Button onClick={handleAddBlock} disabled={!selectedType}>
+          <Button
+            onClick={handleAddBlock}
+            disabled={!selectedType || isLoading}
+          >
             추가하기
           </Button>
         </DialogFooter>

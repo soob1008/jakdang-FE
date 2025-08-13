@@ -7,12 +7,12 @@ export async function PUT(
 ) {
   const supabase = await createSupabaseServerClient();
   const { id: pageId } = await params;
-  const { blocks_draft, profile_draft } = await req.json();
+  const { blocks_draft, profile_draft, style_draft } = await req.json();
 
   // pages 테이블 업데이트 (blocks_published)
   const { error: pageError } = await supabase
     .from("pages")
-    .update({ blocks_published: blocks_draft })
+    .update({ blocks_published: blocks_draft, style_published: style_draft })
     .eq("id", pageId);
 
   if (pageError) {

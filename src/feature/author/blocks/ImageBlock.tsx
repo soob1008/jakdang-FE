@@ -29,15 +29,7 @@ export default function ImageBlock({
   } = block.data as BlockDataImage;
 
   if (!images || images.length === 0) {
-    return (
-      <div
-        className={`"flex items-center justify-center h-64 bg-gray-200 ${
-          style?.button_style === "sharp" ? "rounded-none" : "rounded-lg"
-        }`}
-      >
-        <p className="text-gray-500">이미지가 없습니다.</p>
-      </div>
-    );
+    return null;
   }
 
   const imageClass = display === "fill" ? "object-cover" : "object-contain";

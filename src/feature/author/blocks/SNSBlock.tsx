@@ -49,6 +49,8 @@ export default function SNSBlock({ block, style }: SNSBlockProps) {
   const theme = style?.theme_color ?? "#3b82f6";
   const fg = autoContrast(theme);
 
+  console.log("SNSBLOCK STYLE:", style);
+
   return (
     <div className="flex flex-col gap-2">
       {sns_links.map((sns) => (
@@ -56,18 +58,19 @@ export default function SNSBlock({ block, style }: SNSBlockProps) {
           key={`${sns.platform}-${sns.url}`}
           type="button"
           size="2xl"
-          // use default variant; override colors with CSS vars + arbitrary values
-          className="w-full rounded-[var(--btn-radius)] text-sm truncate border-0
+          className="w-full text-sm truncate border-0
                      bg-[var(--sns-color)] text-[var(--sns-fg)]
                      hover:bg-[var(--sns-hover)]
                      focus-visible:ring-2 focus-visible:ring-[var(--sns-color)]
-                     transition-colors"
+                     transition-colors rounded-[var(--btn-radius)]"
           style={{
             ["--sns-color" as string]: theme,
             ["--sns-fg" as string]: fg,
             // darken a touch on hover regardless of base tone
             ["--sns-hover" as string]:
               "color-mix(in srgb, var(--sns-color) 88%, #000)",
+            ["--btn-radius" as string]:
+              style?.button_style === "sharp" ? "0" : "8px",
           }}
           onClick={() => window.open(sns.url, "_blank", "noopener,noreferrer")}
         >
