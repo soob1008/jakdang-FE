@@ -77,6 +77,7 @@ export default function WorkBlock({ index }: { index: number }) {
 
   const handleAddWork = () => {
     append({
+      id: crypto.randomUUID(),
       title: "",
       short_description: "",
       description: "",

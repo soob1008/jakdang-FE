@@ -37,11 +37,13 @@ export default function WorkBlock({ block, isPreview, style }: WorkBlockProps) {
     <>
       {layout === "grid" ? (
         <div className={className}>
-          {works.map((work, index) => {
-            if (!work.is_active) return null;
+          {works.map((work) => {
+            console.log(work);
+            if (!work.is_active || !work.id) return null;
+
             return (
               <button
-                key={`${work.id || index}-grid`}
+                key={`${work.id}-grid`}
                 onClick={() => handleClick(work)}
                 className="flex flex-col items-center gap-2 transition text-card-foreground"
                 style={{
@@ -86,11 +88,11 @@ export default function WorkBlock({ block, isPreview, style }: WorkBlockProps) {
         </div>
       ) : (
         <div className="space-y-3">
-          {works.map((work, index) => {
-            if (!work.is_active) return null;
+          {works.map((work) => {
+            if (!work.is_active || !work.id) return null;
             return (
               <button
-                key={`${work.id || index}-list`}
+                key={`${work.id}-list`}
                 onClick={() => handleClick(work)}
                 className={`flex items-center gap-4 p-3 border transition bg-card text-card-foreground w-full text-left
                 ${
