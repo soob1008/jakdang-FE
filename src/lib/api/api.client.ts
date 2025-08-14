@@ -84,6 +84,5 @@ export async function uploadImage(file: File, userId: string) {
   // 상대 경로만 추출하여 리턴
   const imagePath = `/${data.path}`;
 
-  console.log("저장할 상대 경로:", imagePath);
   return { imagePath, error: null };
 }
