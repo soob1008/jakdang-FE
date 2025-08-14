@@ -35,13 +35,11 @@ export default function WorkBlock({ block, isPreview, style }: WorkBlockProps) {
     ? "@container grid grid-cols-2 @md:grid-cols-3 @lg:grid-cols-4 gap-y-4 @md:gap-y-8 gap-x-2 @md:gap-x-4"
     : "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-4 md:gap-y-8 gap-x-2 md:gap-x-4";
 
-  console.log("textColor:", textColor);
   return (
     <>
       {layout === "grid" ? (
         <div className={className}>
           {works.map((work) => {
-            console.log(work);
             if (!work.is_active || !work.id) return null;
 
             return (
