@@ -1,12 +1,11 @@
 import { useEffect, useRef } from "react";
 import { useFormContext } from "react-hook-form";
-import { debounce, isEqual } from "lodash";
+import { debounce } from "lodash";
 import { apiClient } from "@/lib/api/api.client";
 
 export function useAutoSaveProfile(userId: string) {
-  console.log("useAutoSaveProfile userId:", userId);
   const { watch } = useFormContext();
-  const prevValueRef = useRef(null);
+  const prevJsonRef = useRef("");
 
   useEffect(() => {
     if (!userId) return;
@@ -19,9 +18,11 @@ export function useAutoSaveProfile(userId: string) {
     }, 2000);
 
     const subscription = watch(({ profile }) => {
-      if (!isEqual(prevValueRef.current, profile)) {
+      const currentJson = JSON.stringify(profile || {});
+
+      if (prevJsonRef.current !== currentJson) {
+        prevJsonRef.current = currentJson;
         debouncedSave(profile || {});
-        prevValueRef.current = profile;
       }
     });
 
