@@ -11,7 +11,7 @@ export function createDefaultBlock(type: BlockType): BlockDefault {
           title: "",
           content: "",
           align: "left",
-          font_size: "base",
+          font_size: "md",
           color: "#000000",
         },
       };
