@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Block, PageStyle, WorkItem } from "@/feature/admin/types";
 import Image from "next/image";
 import WorkDialog from "@/feature/author/blocks/work/WorkDialog";
+import { autoContrast } from "@/lib/utils";
 
 interface WorkBlockProps {
   block: Block;
@@ -22,6 +23,7 @@ export default function WorkBlock({ block, isPreview, style }: WorkBlockProps) {
   };
 
   const cdn = process.env.NEXT_PUBLIC_IMAGE_URL || "";
+  const textColor = autoContrast(style.background_color || "#ffffff");
 
   if (!works || works.length === 0) return null;
 
@@ -33,6 +35,7 @@ export default function WorkBlock({ block, isPreview, style }: WorkBlockProps) {
     ? "@container grid grid-cols-2 @md:grid-cols-3 @lg:grid-cols-4 gap-y-4 @md:gap-y-8 gap-x-2 @md:gap-x-4"
     : "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-4 md:gap-y-8 gap-x-2 md:gap-x-4";
 
+  console.log("textColor:", textColor);
   return (
     <>
       {layout === "grid" ? (
@@ -48,6 +51,7 @@ export default function WorkBlock({ block, isPreview, style }: WorkBlockProps) {
                 className="flex flex-col items-center gap-2 transition text-card-foreground"
                 style={{
                   ["--theme-color" as string]: "#222",
+                  ["--text-color" as string]: textColor,
                 }}
               >
                 <div
@@ -71,13 +75,13 @@ export default function WorkBlock({ block, isPreview, style }: WorkBlockProps) {
                   />
                 </div>
                 <span
-                  className={`text-sm font-bold text-center text-[var(--theme-color)]`}
+                  className={`text-sm font-bold text-center text-[var(--text-color)]`}
                 >
                   {work.title || "제목 없음"}
                 </span>
                 {work.short_description && (
                   <span
-                    className={`text-xs-md line-clamp-1 text-[var(--theme-color)]`}
+                    className={`text-xs-md line-clamp-1 text-[var(--text-color)]`}
                   >
                     {work.short_description}
                   </span>
