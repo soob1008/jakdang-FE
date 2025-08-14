@@ -9,7 +9,7 @@ export default async function Home() {
   } = await supabase.auth.getUser();
 
   return (
-    <section className="flex flex-col justify-between min-h-[calc(100vh-3.5rem)] lg:justify-center">
+    <section className="flex flex-col justify-between min-h-[calc(100vh-3.5rem)] lg:justify-center px-4">
       <div className="flex flex-col items-center text-center pt-12 lg:pt-20">
         <Image
           src="/assets/mobile_web.svg"
