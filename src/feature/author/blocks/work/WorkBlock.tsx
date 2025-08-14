@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Block, PageStyle, WorkItem } from "@/feature/admin/types";
 import Image from "next/image";
 import WorkDialog from "@/feature/author/blocks/work/WorkDialog";
+import { autoContrast } from "@/lib/utils";
 
 interface WorkBlockProps {
   block: Block;
@@ -22,6 +23,7 @@ export default function WorkBlock({ block, isPreview, style }: WorkBlockProps) {
   };
 
   const cdn = process.env.NEXT_PUBLIC_IMAGE_URL || "";
+  const textColor = autoContrast(style.background_color || "#ffffff");
 
   if (!works || works.length === 0) return null;
 
@@ -33,41 +35,53 @@ export default function WorkBlock({ block, isPreview, style }: WorkBlockProps) {
     ? "@container grid grid-cols-2 @md:grid-cols-3 @lg:grid-cols-4 gap-y-4 @md:gap-y-8 gap-x-2 @md:gap-x-4"
     : "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-4 md:gap-y-8 gap-x-2 md:gap-x-4";
 
+  console.log("textColor:", textColor);
   return (
     <>
       {layout === "grid" ? (
         <div className={className}>
           {works.map((work) => {
-            if (!work.is_active) return null;
+            console.log(work);
+            if (!work.is_active || !work.id) return null;
+
             return (
               <button
-                key={`${work.id}-${work.title}-grid`}
+                key={`${work.id}-grid`}
                 onClick={() => handleClick(work)}
                 className="flex flex-col items-center gap-2 transition text-card-foreground"
                 style={{
                   ["--theme-color" as string]: "#222",
+                  ["--text-color" as string]: textColor,
                 }}
               >
-                <div className="relative w-full h-40 overflow-hidden">
+                <div
+                  className="relative w-full h-40 overflow-hidden rounded-[var(--btn-radius)]"
+                  style={{
+                    ["--btn-radius" as string]:
+                      style?.button_style === "sharp" ? "0" : "8px",
+                  }}
+                >
                   <Image
                     src={
                       work.image_url
                         ? `${cdn}${work.image_url}`
-                        : "/placeholder.png"
+                        : "/assets/basic_book.jpg"
                     }
                     alt={work.title || "작품 이미지"}
                     fill
-                    className="object-contain transition-transform hover:scale-105"
+                    className={`${
+                      work.image_url ? "object-contain" : "object-cover"
+                    } transition-transform hover:scale-105`}
                   />
                 </div>
                 <span
-                  className={`text-sm font-bold text-center text-[var(--theme-color)]`}
+                  className={`text-sm font-bold text-center text-[var(--text-color)]`}
                 >
                   {work.title || "제목 없음"}
                 </span>
                 {work.short_description && (
                   <span
-                    className={`text-xs-md line-clamp-1 text-[var(--theme-color)]`}
+                    className={`text-xs-md line-clamp-1 text-[var(--text-color)]`}
                   >
                     {work.short_description}
                   </span>
@@ -79,10 +93,10 @@ export default function WorkBlock({ block, isPreview, style }: WorkBlockProps) {
       ) : (
         <div className="space-y-3">
           {works.map((work) => {
-            if (!work.is_active) return null;
+            if (!work.is_active || !work.id) return null;
             return (
               <button
-                key={`${work.id}-${work.title}-list`}
+                key={`${work.id}-list`}
                 onClick={() => handleClick(work)}
                 className={`flex items-center gap-4 p-3 border transition bg-card text-card-foreground w-full text-left
                 ${
@@ -93,6 +107,7 @@ export default function WorkBlock({ block, isPreview, style }: WorkBlockProps) {
                 border-[var(--br)]
                 hover:bg-[var(--hover)]
                 focus-visible:ring-2 focus-visible:ring-[var(--br)]
+                rounded-[var(--btn-radius)]
               `}
                 style={
                   {
@@ -101,6 +116,8 @@ export default function WorkBlock({ block, isPreview, style }: WorkBlockProps) {
                     // 테마색 12%만 섞은 hover 배경 (살짝 흐려짐)
                     ["--hover" as string]:
                       "color-mix(in srgb, var(--br) 20%, transparent)",
+                    ["--btn-radius" as string]:
+                      style?.button_style === "sharp" ? "0" : "8px",
                   } as React.CSSProperties
                 }
               >
@@ -109,7 +126,7 @@ export default function WorkBlock({ block, isPreview, style }: WorkBlockProps) {
                     src={
                       work.image_url
                         ? `${cdn}${work.image_url}`
-                        : "/placeholder.png"
+                        : "/assets/basic_book.jpg"
                     }
                     alt={work.title || "작품 이미지"}
                     fill
