@@ -60,8 +60,6 @@ export default function PageCustomizer() {
     }
   };
 
-  console.log("Page Style:", watch("style_draft"));
-
   return (
     <div className="grid gap-6 w-full">
       <div className="space-y-6 p-4 rounded-xl border bg-card shadow-sm">
