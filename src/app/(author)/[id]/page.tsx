@@ -71,7 +71,7 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
   }
 
   return (
-    <div className="relative min-h-screen px-4 pb-40">
+    <div className="relative min-h-screen px-4 pb-30">
       <div className="fixed inset-0" style={wrapperStyle} />
       <div className="relative max-w-3xl mx-auto w-full pt-8">
         <AuthorHeader user={user} />
