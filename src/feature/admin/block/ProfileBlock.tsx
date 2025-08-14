@@ -75,17 +75,13 @@ export default function ProfileBlock() {
             <label className="text-sm font-medium">프로필 이미지</label>
             <div className="mt-2 flex items-center gap-4">
               <div className="relative w-20 h-20 rounded-full overflow-hidden bg-muted">
-                {profile.avatar_url ? (
+                {profile.avatar_url && (
                   <Image
                     src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${profile.avatar_url}`}
                     alt="프로필 이미지"
                     fill
                     className="object-cover"
                   />
-                ) : (
-                  <div className="flex items-center justify-center w-full h-full text-gray-400">
-                    No Image
-                  </div>
                 )}
               </div>
               <label className="cursor-pointer flex items-center gap-2 px-3 py-2 text-sm bg-muted rounded-md border border-dashed hover:bg-muted/70">
