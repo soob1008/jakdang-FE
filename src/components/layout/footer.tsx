@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="border-t bg-gray-50 py-10 text-sm text-gray-500">
+    <footer className="relative border-t bg-gray-50 py-10 text-sm text-gray-500 z-10">
       <div className="container mx-auto px-4 flex flex-col items-center gap-4 text-center">
         <p className="font-medium text-gray-600">당당한 작가들의 공간, 작당</p>
 
