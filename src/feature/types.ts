@@ -12,7 +12,7 @@ export type BlockType =
 
 export type Align = "left" | "center" | "right";
 
-export type FontSize = "xs" | "sm" | "base" | "lg" | "xl" | "2xl";
+export type FontSize = "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
 
 export type Direction = "vertical" | "horizontal";
 
