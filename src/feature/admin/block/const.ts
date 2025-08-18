@@ -8,8 +8,20 @@ import {
   AlignVerticalSpaceAround,
   User,
 } from "lucide-react";
+import { BlockType } from "../types";
 
-export const BLOCK_LIST = [
+interface BlockList {
+  category: string;
+  blocks: {
+    type: BlockType;
+    name: string;
+    description?: string;
+    icon?: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+    imageSrc?: string; // For template blocks
+  }[];
+}
+
+export const BLOCK_LIST: BlockList[] = [
   {
     category: "요소",
     blocks: [
@@ -64,6 +76,7 @@ export const BLOCK_LIST = [
         type: "profile",
         name: "프로필",
         icon: User,
+        imageSrc: "/assets/template/profile.jpg",
       },
     ],
   },
