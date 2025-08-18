@@ -106,10 +106,11 @@ export default function ImageBlock({ index }: { index: number }) {
                       {/* 이미지 영역 */}
                       <div className="relative w-full pt-[100%] bg-muted rounded-md overflow-hidden">
                         <Image
-                          src={
-                            `${process.env.NEXT_PUBLIC_IMAGE_URL}${images[i]?.url}` ||
-                            "https://via.placeholder.com/300"
-                          }
+                          src={`${
+                            images[i]?.url
+                              ? `${process.env.NEXT_PUBLIC_IMAGE_URL}${images[i]?.url}`
+                              : "/assets/basic_book.jpg"
+                          }`}
                           alt={images[i]?.alt || "image"}
                           fill
                           className="object-cover"

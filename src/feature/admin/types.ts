@@ -136,6 +136,7 @@ export interface BlockDefault {
 }
 
 export type TemplateType =
-  "profile" /* | "portfolio" | "magazine" | "visual" */;
+  | "profile"
+  | "magazine" /* | "portfolio" | "magazine" | "visual" */;
 
 export type BlockItemType = { block_id: string } & Block;

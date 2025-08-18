@@ -4,6 +4,7 @@ import {
   Block,
   TemplateType,
 } from "@/feature/admin/types";
+import { create } from "lodash";
 
 export function createDefaultBlock(type: BlockType): BlockDefault {
   switch (type) {
@@ -264,6 +265,147 @@ export function getTemplateBlocks(args: GetTemplateBlocksArgs): Block[] | null {
       ];
 
       // position, page_id 보정
+      return normalizeBlocks(blocks, pageId);
+    }
+    case "magazine": {
+      const blocks: Block[] = [
+        {
+          ...createDefaultBlock("text"),
+          is_active: true,
+          data: {
+            title: "WebZin. 01 - 매거진 제목",
+            content: "",
+            font_size: "lg",
+            align: "left",
+          },
+        } as Block,
+        {
+          ...createDefaultBlock("image"),
+          is_active: true,
+          data: {
+            style: "single",
+            display: "fill",
+            columns: "1",
+            images: [
+              {
+                position: 1,
+              },
+            ],
+          },
+        } as Block,
+        {
+          ...createDefaultBlock("text"),
+          is_active: true,
+          data: {
+            title: "",
+            content:
+              "매거진에 대한 간단한 소개나 설명을 여기에 입력하세요. 예를 들어, 이번 호의 주제나 특징 등을 간략하게 소개할 수 있습니다.",
+            font_size: "md",
+            align: "left",
+          },
+        } as Block,
+        {
+          ...createDefaultBlock("text"),
+          is_active: true,
+          data: {
+            title: "목차",
+            content: "- 매거진 목차1\n- 매거진 목차2\n- 매거진 목차3",
+            font_size: "md",
+            align: "left",
+          },
+        } as Block,
+        {
+          ...createDefaultBlock("work"),
+          is_active: true,
+          data: {
+            title: "",
+            works: [
+              {
+                id: `work-${crypto.randomUUID()}`,
+                title: "작품 제목1",
+                is_active: true,
+                is_representative: true,
+                short_description: "작품 간략 설명",
+                description: "작품 상세 설명을 여기에 입력하세요.",
+                url: "https://your-work-link.com",
+              },
+              {
+                id: `work-${crypto.randomUUID()}`,
+                title: "작품 제목2",
+                is_active: true,
+                is_representative: true,
+                short_description: "작품 간략 설명",
+                description: "작품 상세 설명을 여기에 입력하세요.",
+                url: "https://your-work-link.com",
+              },
+            ],
+            layout: "grid", // 카드 레이아웃
+          },
+        } as Block,
+        {
+          ...createDefaultBlock("text"),
+          is_active: true,
+          data: {
+            title: "매거진 글",
+            content: `매거진에 들어갈 내용을 구성해 내용을 넣으세요.`,
+            font_size: "md",
+            align: "left",
+          },
+        } as Block,
+        {
+          ...createDefaultBlock("image"),
+          is_active: true,
+          data: {
+            style: "carousel", // 이미지 슬라이드
+            display: "fill",
+            columns: "2",
+            images: [
+              {
+                position: 1,
+              },
+              {
+                position: 2,
+              },
+              {
+                position: 3,
+              },
+            ],
+          },
+        } as Block,
+        {
+          ...createDefaultBlock("text"),
+          is_active: true,
+          data: {
+            title: "매거진 글",
+            content: "매거진에 들어갈 내용을 구성해 내용을 넣으세요.",
+            font_size: "md",
+            align: "left",
+          },
+        } as Block,
+        {
+          ...createDefaultBlock("text"),
+          is_active: true,
+          data: {
+            title: "매거진 글",
+            content: "매거진에 들어갈 내용을 구성해 내용을 넣으세요.",
+            font_size: "md",
+            align: "left",
+          },
+        } as Block,
+        {
+          ...createDefaultBlock("link"),
+          is_active: true,
+          data: {
+            links: [
+              {
+                url: "https://your-magazine.com",
+                label: "전체 글 보러가기",
+              },
+            ],
+          },
+        } as Block,
+      ];
+
       return normalizeBlocks(blocks, pageId);
     }
 

@@ -39,7 +39,16 @@ export default function WorkBlock({ block, isPreview, style }: WorkBlockProps) {
 
   return (
     <div className="flex flex-col gap-4">
-      {title && <h3 className="font-bold text-lg">{title}</h3>}
+      {title && (
+        <h3
+          className="font-bold text-lg text-[var(--text-color)]"
+          style={{
+            ["--text-color" as string]: textColor,
+          }}
+        >
+          {title}
+        </h3>
+      )}
       {layout === "grid" ? (
         <div className={className}>
           {works.map((work) => {
