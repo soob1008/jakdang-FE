@@ -45,7 +45,6 @@ export default function BlockDialog({
 
   const handleAddBlock = async () => {
     if (!selectedType) {
-      console.error("No block type selected");
       return;
     }
     setIsLoading(true);
@@ -76,8 +75,21 @@ export default function BlockDialog({
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent className="w-8/9 max-w-2xl sm:max-w-3xl ">
         <DialogHeader>
-          <DialogTitle>블록 선택</DialogTitle>
-          <DialogDescription>추가할 블록을 하나 선택하세요.</DialogDescription>
+          <DialogTitle>페이지 구성 요소 선택</DialogTitle>
+          <DialogDescription>
+            두 가지 방식 중 하나를 선택하세요.
+            <br />
+            <strong>① 페이지 요소</strong>: 글·이미지·링크 같은 단일 요소를 하나
+            추가합니다.
+            <br />
+            <strong>② 템플릿</strong>: 프로필형·웹매거진형 등 미리 구성된
+            묶음으로 빠르게 시작합니다.
+            <br />
+            <span className="text-red-600 font-medium">
+              ※ 템플릿을 적용하면 현재 페이지의 구성 요소와 데이터가 모두
+              초기화됩니다.
+            </span>
+          </DialogDescription>
         </DialogHeader>
         <div className="max-h-140 overflow-y-auto">
           <RadioGroup
@@ -92,7 +104,7 @@ export default function BlockDialog({
                 <h4 className="text-sm font-semibold text-muted-foreground mb-2">
                   {group.category}
                 </h4>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                <div className="grid grid-cols-5 sm:grid-cols-5 gap-4">
                   {group.blocks.map((block) => {
                     const Icon = block.icon;
                     return (
@@ -100,7 +112,7 @@ export default function BlockDialog({
                         key={block.type}
                         htmlFor={block.type}
                         className={cn(
-                          "p-4 border h-32 rounded-md flex flex-col items-center gap-2 cursor-pointer transition",
+                          "p-4 border rounded-md flex flex-col items-center gap-2 cursor-pointer transition",
                           selectedType === block.type && "bg-secondary"
                         )}
                       >
@@ -113,9 +125,9 @@ export default function BlockDialog({
                         <span className="font-medium text-sm">
                           {block.name}
                         </span>
-                        <span className="text-xs text-muted-foreground text-center">
+                        {/* <span className="text-xs text-muted-foreground text-center">
                           {block.description}
-                        </span>
+                        </span> */}
                       </label>
                     );
                   })}
