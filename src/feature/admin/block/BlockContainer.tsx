@@ -27,6 +27,7 @@ export default function BlockContainer() {
     defaultValues: {
       id: "",
       user_id: "",
+      display_name: "",
       style_draft: {},
       style_published: {},
       blocks_draft: [] as Page["blocks_draft"],
@@ -51,6 +52,7 @@ export default function BlockContainer() {
     reset({
       id: data.page.id ?? "",
       user_id: userData.user.id ?? "",
+      display_name: userData.user.display_name ?? "",
       style_draft: data.page.style_draft ?? {},
       style_published: data.page.style_published ?? {},
       blocks_draft: data.page.blocks_draft ?? [],

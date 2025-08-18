@@ -39,7 +39,7 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
 
   const { user } = await fetchServer<{ user: Author }>(`/api/user`);
 
-  const { profile_published } = author;
+  const { profile_published, display_name } = author;
   const { blocks_published, style_published } = page || {};
 
   // ===== Background (color / gradient / image) =====
@@ -76,7 +76,12 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
       <div className="relative max-w-3xl mx-auto w-full pt-8">
         <AuthorHeader user={user} />
         <div className="flex flex-col gap-12 pt-2.5">
-          {profile_published && <ProfileBlock profile={profile_published} />}
+          {profile_published && (
+            <ProfileBlock
+              profile={profile_published}
+              displayName={display_name ?? ""}
+            />
+          )}
           {blocks_published ? (
             blocks_published.map((block: Block) => {
               if (block.type === "text") {
