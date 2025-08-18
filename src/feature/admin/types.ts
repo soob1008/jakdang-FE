@@ -57,6 +57,7 @@ export interface BlockDataImage {
 }
 
 export interface BlockDataWork {
+  title?: string;
   works: WorkItem[];
   layout: Layout; // 작품 정렬 방식
 }
@@ -132,5 +133,8 @@ export interface BlockDefault {
   type: BlockType;
   data: BlockData; // 블록의 데이터, 각 타입에 따라 다를 수 있음
 }
+
+export type TemplateType =
+  "profile" /* | "portfolio" | "magazine" | "visual" */;
 
 export type BlockItemType = { block_id: string } & Block;
