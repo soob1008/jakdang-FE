@@ -8,12 +8,12 @@ import {
   AlignVerticalSpaceAround,
   User,
 } from "lucide-react";
-import { BlockType } from "../types";
+import { BlockType, TemplateType } from "../types";
 
 interface BlockList {
   category: string;
   blocks: {
-    type: BlockType;
+    type: BlockType | TemplateType;
     name: string;
     description?: string;
     icon?: React.ComponentType<React.SVGProps<SVGSVGElement>>;
