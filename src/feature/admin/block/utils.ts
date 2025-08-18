@@ -4,7 +4,6 @@ import {
   Block,
   TemplateType,
 } from "@/feature/admin/types";
-import { create } from "lodash";
 
 export function createDefaultBlock(type: BlockType): BlockDefault {
   switch (type) {
