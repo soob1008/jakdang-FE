@@ -113,8 +113,8 @@ export default function BlockDialog({
                   <div
                     className={cn(
                       isTemplate
-                        ? "grid grid-cols-1 sm:grid-cols-2 gap-6"
-                        : "grid grid-cols-5 sm:grid-cols-5 gap-4"
+                        ? "grid grid-cols-1 sm:grid-cols-3 gap-6"
+                        : "grid grid-cols-2 sm:grid-cols-5 gap-4"
                     )}
                   >
                     {group.blocks.map((block) => {
