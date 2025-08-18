@@ -3,9 +3,13 @@ import { Profile } from "@/feature/user/type";
 
 interface ProfileBlockProps {
   profile: Profile;
+  displayName?: string;
 }
 
-export default function ProfileBlock({ profile }: ProfileBlockProps) {
+export default function ProfileBlock({
+  profile,
+  displayName,
+}: ProfileBlockProps) {
   const { is_active, headline, avatar_url } = profile || {};
 
   if (!is_active) return null; // 프로필 비활성화 시 표시 안 함
@@ -23,11 +27,10 @@ export default function ProfileBlock({ profile }: ProfileBlockProps) {
           />
         </div>
       )}
-      {/* 대표 문구 */}
-      {headline && (
-        <h2 className="mt-3.5 font-bold text-gray-900">
-          {profile.display_name || "-"}
-        </h2>
+
+      {/* 필명 */}
+      {displayName && (
+        <h2 className="mt-3.5 font-bold text-gray-900">{displayName || "-"}</h2>
       )}
 
       {/* 작가 소개 */}
