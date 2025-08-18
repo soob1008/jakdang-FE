@@ -25,6 +25,13 @@ import {
   Draggable,
   DropResult,
 } from "@hello-pangea/dnd";
+import {
+  FormField,
+  FormItem,
+  FormControl,
+  FormMessage,
+  FormLabel,
+} from "@/components/ui/form";
 
 type WorkItem = {
   title: string;
@@ -37,16 +44,18 @@ type WorkItem = {
 };
 
 export default function WorkBlock({ index }: { index: number }) {
-  const namePrefix = `blocks_draft.${index}.data.works`;
+  const namePrefix = `blocks_draft.${index}.data`;
+  const workNamePrefix = `${namePrefix}.works`;
+
   const { control, register, watch, setValue } = useFormContext();
 
   const { fields, append, remove, move } = useFieldArray({
     control,
-    name: namePrefix,
+    name: workNamePrefix,
     keyName: "_key",
   });
 
-  const works: WorkItem[] = watch(namePrefix) || [];
+  const works: WorkItem[] = watch(workNamePrefix) || [];
 
   const [deleteKey, setDeleteKey] = useState<string | null>(null);
   const getIndexByKey = (key: string | null) =>
@@ -65,7 +74,7 @@ export default function WorkBlock({ index }: { index: number }) {
       onSuccess: ({ imagePath }) => {
         const idx = getIndexByKey(key);
         if (idx > -1) {
-          setValue(`${namePrefix}.${idx}.image_url`, imagePath, {
+          setValue(`${workNamePrefix}.${idx}.image_url`, imagePath, {
             shouldDirty: true,
           });
         }
@@ -108,6 +117,21 @@ export default function WorkBlock({ index }: { index: number }) {
         </Button>
       </div>
 
+      <FormField
+        name={`${namePrefix}.title`}
+        render={({ field }) => (
+          <FormItem className="w-1/2">
+            <FormLabel className="text-sm font-semibold">
+              작품 블록 제목
+            </FormLabel>
+            <FormControl>
+              <Input placeholder="제목" {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
       <DragDropContext onDragEnd={handleDragEnd}>
         <Droppable droppableId="work-list" direction="vertical">
           {(provided) => (
@@ -117,7 +141,7 @@ export default function WorkBlock({ index }: { index: number }) {
               className="space-y-3 md:space-y-4"
             >
               {fields.map((field, i: number) => {
-                const path = `${namePrefix}.${i}`;
+                const path = `${workNamePrefix}.${i}`;
 
                 return (
                   <Draggable

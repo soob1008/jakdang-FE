@@ -46,7 +46,8 @@ export type SocialPlatform =
   | "brunch"
   | "medium"
   | "linkedin"
-  | "blog";
+  | "blog"
+  | "email";
 
 export interface AuthorLink {
   id: string;

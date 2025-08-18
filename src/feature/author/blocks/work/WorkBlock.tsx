@@ -1,7 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { Block, PageStyle, WorkItem } from "@/feature/admin/types";
+import {
+  Block,
+  PageStyle,
+  WorkItem,
+  BlockDataWork,
+} from "@/feature/admin/types";
 import Image from "next/image";
 import WorkDialog from "@/feature/author/blocks/work/WorkDialog";
 import { autoContrast } from "@/lib/utils";
@@ -17,10 +22,7 @@ export default function WorkBlock({ block, isPreview, style }: WorkBlockProps) {
 
   if (!block.is_active) return null;
 
-  const { works, layout } = block.data as {
-    works: WorkItem[];
-    layout: "grid" | "list";
-  };
+  const { works, layout, title } = block.data as BlockDataWork;
 
   const cdn = process.env.NEXT_PUBLIC_IMAGE_URL || "";
   const textColor = autoContrast(style.background_color || "#ffffff");
@@ -36,7 +38,8 @@ export default function WorkBlock({ block, isPreview, style }: WorkBlockProps) {
     : "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-4 md:gap-y-8 gap-x-2 md:gap-x-4";
 
   return (
-    <>
+    <div className="flex flex-col gap-4">
+      {title && <h3 className="font-bold text-lg">{title}</h3>}
       {layout === "grid" ? (
         <div className={className}>
           {works.map((work) => {
@@ -113,7 +116,7 @@ export default function WorkBlock({ block, isPreview, style }: WorkBlockProps) {
                     ["--br" as string]: style?.theme_color || "#e5e7eb",
                     // 테마색 12%만 섞은 hover 배경 (살짝 흐려짐)
                     ["--hover" as string]:
-                      "color-mix(in srgb, var(--br) 20%, transparent)",
+                      "color-mix(in srgb, var(--br) 5%, transparent)",
                     ["--btn-radius" as string]:
                       style?.button_style === "sharp" ? "0" : "8px",
                   } as React.CSSProperties
@@ -156,6 +159,6 @@ export default function WorkBlock({ block, isPreview, style }: WorkBlockProps) {
           work={selectedWork}
         />
       )}
-    </>
+    </div>
   );
 }

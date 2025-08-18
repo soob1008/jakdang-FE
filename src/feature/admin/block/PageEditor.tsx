@@ -82,7 +82,7 @@ export default function PageEditor() {
   return (
     <article className="px-4 flex flex-col gap-4 pt-4 pb-24 max-w-[900px] w-full mx-auto md:pl-10 lg:max-w-none">
       {/* Header */}
-      <div className="flex items-center justify-between pb-2">
+      <div className="flex items-center justify-between">
         <h2 className="font-bold">구성하기</h2>
         <div className="flex items-center gap-2">
           <BlockDialog
@@ -95,7 +95,7 @@ export default function PageEditor() {
                 variant="outline"
                 disabled={isLoading}
               >
-                블록 추가하기
+                요소 추가하기
               </Button>
             }
           />
@@ -109,6 +109,10 @@ export default function PageEditor() {
           </Button>
         </div>
       </div>
+      <p className="mb-6 text-sm text-muted-foreground">
+        원하는 요소를 골라서 페이지에 추가해보세요. 각각의 요소를 블록처럼 쌓아
+        올려 나만의 작가 페이지를 만들 수 있습니다.
+      </p>
 
       {/* Profile skeleton */}
       {isLoading ? (

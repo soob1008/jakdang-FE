@@ -113,7 +113,7 @@ export default function PagePreview() {
             </article>
           )}
 
-          <div className="flex flex-col gap-8 px-1 pb-16">
+          <div className="flex flex-col gap-12 px-1 pb-16">
             {blocks.map((block: Block, index: number) => (
               <article key={index} aria-label={`콘텐츠 블록 ${index + 1}`}>
                 <BlockPreview block={block} style={watch("style_draft")} />
