@@ -92,7 +92,7 @@ export default function BlockDialog({
             </span>
           </DialogDescription>
         </DialogHeader>
-        <div className="max-h-140 overflow-y-auto px-2 pb-10">
+        <div className="max-h-125 overflow-y-auto px-2 pb-10">
           <RadioGroup
             value={selectedType || ""}
             onValueChange={(value: BlockType) => {
