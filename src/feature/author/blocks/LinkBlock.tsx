@@ -16,7 +16,7 @@ export default function LinkBlock({ block, style }: LinkBlockProps) {
   const raw = (style?.theme_color ?? "#3b82f6").trim().toLowerCase();
   const isWhite = raw === "#fff" || raw === "#ffffff" || raw === "white";
   // 흰색일 때만 가독성을 위해 대체색 사용, 그 외에는 테마색 그대로
-  const linkColor = isWhite ? "#ccc" : style?.theme_color ?? "#3b82f6";
+  const linkColor = isWhite ? "#666" : style?.theme_color ?? "#3b82f6";
 
   return (
     <div className="flex flex-col gap-2">
@@ -33,8 +33,7 @@ export default function LinkBlock({ block, style }: LinkBlockProps) {
                      transition-colors hover:text-[var(--link-color)]"
           style={{
             ["--link-color" as string]: linkColor,
-            ["--link-hover-bg" as string]:
-              "color-mix(in srgb, var(--link-color) 5%, transparent)",
+            ["--link-hover-bg" as string]: "#f5f5f5",
             ["--btn-radius" as string]:
               style?.button_style === "sharp" ? "0" : "8px",
           }}

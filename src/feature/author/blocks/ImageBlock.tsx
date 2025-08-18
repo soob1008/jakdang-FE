@@ -53,7 +53,11 @@ export default function ImageBlock({
         )}
       >
         <Image
-          src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${img.url}`}
+          src={`${
+            img.url
+              ? `${process.env.NEXT_PUBLIC_IMAGE_URL}${img.url}`
+              : "/assets/basic_book.jpg"
+          }`}
           alt={img.alt || `이미지 ${idx + 1}`}
           fill
           className={clsx("transition-all", imageClass)}

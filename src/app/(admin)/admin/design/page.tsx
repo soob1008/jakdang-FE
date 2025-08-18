@@ -24,6 +24,7 @@ export default function AdminDesignPage() {
     defaultValues: {
       id: "",
       user_id: "",
+      display_name: "",
       blocks_draft: [] as Page["blocks_draft"],
       style_draft: {},
       style_published: {},
@@ -44,6 +45,7 @@ export default function AdminDesignPage() {
     reset({
       id: data.page.id ?? "",
       user_id: userData.user.id ?? "",
+      display_name: userData.user.display_name ?? "",
       style_draft: data.page.style_draft ?? {},
       style_published: data.page.style_published ?? {},
       blocks_draft: data.page.blocks_draft ?? [],

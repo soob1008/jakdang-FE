@@ -78,6 +78,12 @@ export const BLOCK_LIST: BlockList[] = [
         icon: User,
         imageSrc: "/assets/template/profile.jpg",
       },
+      {
+        type: "magazine",
+        name: "매거진",
+        icon: User,
+        imageSrc: "/assets/template/magazine.jpg",
+      },
     ],
   },
 ];
