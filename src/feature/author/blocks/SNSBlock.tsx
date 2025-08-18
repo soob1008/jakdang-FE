@@ -29,7 +29,7 @@ export default function SNSBlock({ block, style }: SNSBlockProps) {
       {sns_links.map((sns, index) => (
         <Link
           key={`${sns.platform}-${sns.url}-${index}`}
-          href={sns.url}
+          href={sns.platform === "email" ? `mailto:${sns.url}` : sns.url}
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -67,6 +67,8 @@ const getSNSIconPath = (platform: SNSPlatform) => {
       return "/assets/social/linkedin.webp";
     case "instagram":
       return "/assets/social/instagram.webp";
+    case "email":
+      return "/assets/social/mail.webp";
     default:
       return "";
   }

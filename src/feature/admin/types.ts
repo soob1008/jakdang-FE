@@ -93,7 +93,8 @@ export type SNSPlatform =
   | "medium"
   | "linkedin"
   | "threads"
-  | "blog";
+  | "blog"
+  | "email";
 
 export interface BlockDataCalendar {
   dates: {

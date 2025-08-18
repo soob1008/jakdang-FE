@@ -129,15 +129,24 @@ export function getTemplateBlocks(args: GetTemplateBlocksArgs): Block[] | null {
             sns_links: [
               {
                 platform: "instagram",
-                url: "https://instagram.com/yourhandle",
+                url: "",
                 label: "Instagram",
               },
               {
-                platform: "youtube",
-                url: "https://youtube.com/@yourchannel",
-                label: "YouTube",
+                platform: "threads",
+                url: "",
+                label: "Threads",
               },
-              { platform: "blog", url: "https://yourblog.com", label: "Blog" },
+              {
+                platform: "brunch",
+                url: "",
+                label: "Brunch",
+              },
+              {
+                platform: "email",
+                url: "",
+                label: "Email",
+              },
             ],
           },
         } as Block,
