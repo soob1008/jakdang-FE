@@ -24,16 +24,14 @@ import { useFieldArray, useFormContext } from "react-hook-form";
 
 const SNS_PLATFORMS = [
   { id: "instagram", label: "Instagram" },
-  { id: "brunch", label: "Brunch" },
   { id: "facebook", label: "Facebook" },
-  { id: "velog", label: "Velog" },
-  { id: "tistory", label: "Tistory" },
+  { id: "brunch", label: "Brunch" },
+  { id: "medium", label: "Medium" },
   { id: "x", label: "X (Twitter)" },
+  { id: "threads", label: "Threads" },
   { id: "youtube", label: "YouTube" },
-  { id: "naverBlog", label: "네이버 블로그" },
-  { id: "tiktok", label: "TikTok" },
-  { id: "personal", label: "개인 웹사이트" },
-  { id: "etc", label: "기타" },
+  { id: "blog", label: "블로그" },
+  { id: "linkedin", label: "LinkedIn" },
 ];
 
 export default function SNSBlock({ index }: { index: number }) {
@@ -112,19 +110,6 @@ export default function SNSBlock({ index }: { index: number }) {
                                 ))}
                               </SelectContent>
                             </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      {/* 제목 필드 */}
-                      <FormField
-                        name={`${namePrefix}.${i}.label`}
-                        render={({ field }) => (
-                          <FormItem className="w-1/4">
-                            <FormControl>
-                              <Input placeholder="링크 제목" {...field} />
-                            </FormControl>
                             <FormMessage />
                           </FormItem>
                         )}
