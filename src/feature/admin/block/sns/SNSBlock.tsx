@@ -32,11 +32,12 @@ const SNS_PLATFORMS = [
   { id: "youtube", label: "YouTube" },
   { id: "blog", label: "블로그" },
   { id: "linkedin", label: "LinkedIn" },
+  { id: "email", label: "Email" },
 ];
 
 export default function SNSBlock({ index }: { index: number }) {
   const namePrefix = `blocks_draft.${index}.data.sns_links`;
-  const { control } = useFormContext();
+  const { control, watch } = useFormContext();
   const { fields, append, remove, move } = useFieldArray({
     control,
     name: namePrefix,
@@ -121,7 +122,15 @@ export default function SNSBlock({ index }: { index: number }) {
                         render={({ field }) => (
                           <FormItem className="flex-1">
                             <FormControl>
-                              <Input placeholder="https://..." {...field} />
+                              <Input
+                                placeholder={`${
+                                  watch(`${namePrefix}.${i}.platform`) ===
+                                  "email"
+                                    ? "이메일 입력"
+                                    : "https://..."
+                                }`}
+                                {...field}
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>

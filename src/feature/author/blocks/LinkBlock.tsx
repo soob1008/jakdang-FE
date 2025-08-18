@@ -34,7 +34,7 @@ export default function LinkBlock({ block, style }: LinkBlockProps) {
           style={{
             ["--link-color" as string]: linkColor,
             ["--link-hover-bg" as string]:
-              "color-mix(in srgb, var(--link-color) 20%, transparent)",
+              "color-mix(in srgb, var(--link-color) 5%, transparent)",
             ["--btn-radius" as string]:
               style?.button_style === "sharp" ? "0" : "8px",
           }}

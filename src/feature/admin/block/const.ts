@@ -6,11 +6,24 @@ import {
   BookOpenText,
   Network,
   AlignVerticalSpaceAround,
+  User,
 } from "lucide-react";
+import { BlockType, TemplateType } from "../types";
 
-export const BLOCK_LIST = [
+interface BlockList {
+  category: string;
+  blocks: {
+    type: BlockType | TemplateType;
+    name: string;
+    description?: string;
+    icon?: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+    imageSrc?: string; // For template blocks
+  }[];
+}
+
+export const BLOCK_LIST: BlockList[] = [
   {
-    category: "기본 구성",
+    category: "요소",
     blocks: [
       {
         type: "text",
@@ -30,11 +43,6 @@ export const BLOCK_LIST = [
         description: "블록 사이에 공간을 만들어요",
         icon: AlignVerticalSpaceAround,
       },
-    ],
-  },
-  {
-    category: "링크 연결",
-    blocks: [
       {
         type: "link",
         name: "링크",
@@ -47,27 +55,28 @@ export const BLOCK_LIST = [
         description: "SNS 링크를 연결해요",
         icon: Network,
       },
-    ],
-  },
-  {
-    category: "일정 공유",
-    blocks: [
       {
         type: "calendar",
         name: "일정",
         description: "일정을 공유해요",
         icon: CalendarIcon,
       },
-    ],
-  },
-  {
-    category: "작품 소개",
-    blocks: [
       {
         type: "work",
         name: "작품",
         description: "대표 작품을 보여줘요",
         icon: BookOpenText,
+      },
+    ],
+  },
+  {
+    category: "템플릿",
+    blocks: [
+      {
+        type: "profile",
+        name: "프로필",
+        icon: User,
+        imageSrc: "/assets/template/profile.jpg",
       },
     ],
   },

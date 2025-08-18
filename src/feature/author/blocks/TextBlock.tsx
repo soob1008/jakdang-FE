@@ -23,12 +23,12 @@ export default function TextBlock({ block }: TextBlockProps) {
 
   // 제목 폰트 크기 매핑 (본문보다 2단계 이상 크게)
   const titleFontMap: Record<string, string> = {
-    xs: "text-lg", // extra small → xl
-    sm: "text-xl", // small → 2xl
-    md: "text-2xl", // medium → 3xl
-    lg: "text-3xl", // large → 4xl
-    xl: "text-4xl", // xl → 5xl
-    "2xl": "text-5xl", // 2xl → 6xl
+    xs: "text-base", // extra small → xl
+    sm: "text-lg", // small → 2xl
+    md: "text-xl", // medium → 3xl
+    lg: "text-2xl", // large → 4xl
+    xl: "text-3xl", // xl → 5xl
+    "2xl": "text-4xl", // 2xl → 6xl
   };
 
   const contentFontSize = contentFontMap[font_size] || "text-base";

@@ -3,6 +3,8 @@ import { z } from "zod";
 import { NextRequest, NextResponse } from "next/server";
 import { createDefaultBlock } from "@/feature/admin/block/utils";
 import { Block, BlockType } from "@/feature/admin/types";
+import { getTemplateBlocks } from "@/feature/admin/block/utils";
+import { TemplateType } from "@/feature/admin/types";
 
 // 요청 본문에서 type만 받음
 const BlockCreateSchema = z.object({
@@ -30,10 +32,49 @@ export async function POST(
   }
 
   const type = parsed.data.type as BlockType;
-  // 기본값
+
+  /**
+   * 1) 템플릿 적용 시나리오
+   * - type이 템플릿 키(예: "profile")로 들어오면 템플릿 블록 묶음을 생성
+   * - 기존 blocks_draft 전부 덮어쓰기
+   */
+  const templateBlocks = getTemplateBlocks({
+    template: type as TemplateType,
+    pageId,
+  });
+
+  if (templateBlocks && templateBlocks.length > 0) {
+    const { error: overwriteError } = await supabase
+      .from("pages")
+      .update({
+        blocks_draft: templateBlocks,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", pageId);
+
+    if (overwriteError) {
+      return NextResponse.json(
+        { error: "Failed to apply template" },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json(
+      {
+        message:
+          "Template applied: existing blocks were replaced with the selected template.",
+        replaced: true,
+        blocks: templateBlocks,
+      },
+      { status: 200 }
+    );
+  }
+
+  /**
+   * 2) 일반 단일 블록 추가 시나리오
+   */
   const newBlock = createDefaultBlock(type);
 
-  // 기존 blocks_draft 조회
   const { data, error } = await supabase
     .from("pages")
     .select("blocks_draft")
@@ -44,13 +85,14 @@ export async function POST(
     return NextResponse.json({ error }, { status: 500 });
   }
 
-  const newPosition = (data?.blocks_draft?.length ?? 0) + 1;
+  const current = Array.isArray(data?.blocks_draft) ? data!.blocks_draft : [];
+  const newPosition = current.length + 1;
+
   const updatedBlocks = [
-    ...(data?.blocks_draft ?? []),
+    ...current,
     { ...newBlock, position: newPosition, is_active: true },
   ];
 
-  // 업데이트
   const { error: updateError } = await supabase
     .from("pages")
     .update({

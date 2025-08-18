@@ -75,7 +75,7 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
       <div className="fixed inset-0" style={wrapperStyle} />
       <div className="relative max-w-3xl mx-auto w-full pt-8">
         <AuthorHeader user={user} />
-        <div className="flex flex-col gap-8 pt-2.5">
+        <div className="flex flex-col gap-12 pt-2.5">
           {profile_published && <ProfileBlock profile={profile_published} />}
           {blocks_published ? (
             blocks_published.map((block: Block) => {
