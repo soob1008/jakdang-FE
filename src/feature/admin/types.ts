@@ -83,6 +83,17 @@ export interface BlockDataSNS {
   sns_links: { platform: string; url: string; label: string }[]; // SNS 링크
 }
 
+export type SNSPlatform =
+  | "instagram"
+  | "facebook"
+  | "x"
+  | "youtube"
+  | "brunch"
+  | "medium"
+  | "linkedin"
+  | "threads"
+  | "blog";
+
 export interface BlockDataCalendar {
   dates: {
     start_date: Date;
