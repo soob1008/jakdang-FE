@@ -43,7 +43,7 @@ type WorkItem = {
   is_representative: boolean;
 };
 
-export default function WorkBlock({ index }: { index: number }) {
+export default function WorkBlockEdit({ index }: { index: number }) {
   const namePrefix = `blocks_draft.${index}.data`;
   const workNamePrefix = `${namePrefix}.works`;
 

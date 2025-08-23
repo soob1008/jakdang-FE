@@ -35,7 +35,7 @@ const SNS_PLATFORMS = [
   { id: "email", label: "Email" },
 ];
 
-export default function SNSBlock({ index }: { index: number }) {
+export default function SNSBlockEdit({ index }: { index: number }) {
   const namePrefix = `blocks_draft.${index}.data.sns_links`;
   const { control, watch } = useFormContext();
   const { fields, append, remove, move } = useFieldArray({

@@ -15,7 +15,7 @@ import {
   DropResult,
 } from "@hello-pangea/dnd";
 
-export default function LinkBlock({ index }: { index: number }) {
+export default function LinkBlockEdit({ index }: { index: number }) {
   const namePrefix = `blocks_draft.${index}.data.links`;
   const { control } = useFormContext();
   const { fields, append, remove, move } = useFieldArray({

@@ -28,7 +28,8 @@ export type BlockType =
   | "event" // 이벤트
   | "sns" // SNS
   | "calendar"
-  | "blank"; // 여백
+  | "blank"
+  | "book"; // 여백
 
 export interface WorkItem {
   id: string;

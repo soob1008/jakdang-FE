@@ -24,7 +24,7 @@ interface ChallengeItem {
   link: string;
 }
 
-export default function ChallengeBlock() {
+export default function ChallengeBlockEdit() {
   const [challenge, setChallenge] = useState<ChallengeItem | null>(null);
 
   useEffect(() => {

@@ -18,7 +18,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 
-export default function CalendarBlock({ index }: { index: number }) {
+export default function CalendarBlockEdit({ index }: { index: number }) {
   const namePrefix = `blocks_draft.${index}.data.dates`;
   const { control, setValue, watch } = useFormContext();
   const { fields, append, remove } = useFieldArray({

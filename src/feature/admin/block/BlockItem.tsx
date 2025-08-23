@@ -6,13 +6,13 @@ import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { FormField, FormItem, FormControl } from "@/components/ui/form";
 import BlockOptions from "./BlockOptions";
-import TextBlock from "./text/TextBlock";
+import TextBlockEdit from "./text/TextBlockEdit";
 import { BlockItemType } from "@/feature/admin/types";
-import ImageBlock from "./image/ImageBlock";
-import LinkBlock from "./link/LInkBlock";
-import SNSBlock from "./sns/SNSBlock";
-import WorkBlock from "./work/WorkBlock";
-import CalendarBlock from "./calendar/CalendarBlock";
+import ImageBlockEdit from "./image/ImageBlockEdit";
+import LinkBlockEdit from "./link/LInkBlockEdit";
+import SNSBlockEdit from "./sns/SNSBlockEdit";
+import WorkBlockEdit from "./work/WorkBlockEdit";
+import CalendarBlockEdit from "./calendar/CalendarBlockEdit";
 import {
   AlertDialog,
   AlertDialogTrigger,
@@ -23,7 +23,7 @@ import {
   AlertDialogCancel,
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
-import BlankBlock from "./blank/BlankBlock";
+import BlankBlockEdit from "./blank/BlankBlockEdit";
 
 // import 기타 블록들
 
@@ -133,13 +133,13 @@ export default function BlockItem({
       {/* 내용 영역 */}
       {isOpen && (
         <div className="px-4 py-6 space-y-2">
-          {block.type === "text" && <TextBlock index={index} />}
-          {block.type === "image" && <ImageBlock index={index} />}
-          {block.type === "link" && <LinkBlock index={index} />}
-          {block.type === "sns" && <SNSBlock index={index} />}
-          {block.type === "work" && <WorkBlock index={index} />}
-          {block.type === "calendar" && <CalendarBlock index={index} />}
-          {block.type === "blank" && <BlankBlock index={index} />}
+          {block.type === "text" && <TextBlockEdit index={index} />}
+          {block.type === "image" && <ImageBlockEdit index={index} />}
+          {block.type === "link" && <LinkBlockEdit index={index} />}
+          {block.type === "sns" && <SNSBlockEdit index={index} />}
+          {block.type === "work" && <WorkBlockEdit index={index} />}
+          {block.type === "calendar" && <CalendarBlockEdit index={index} />}
+          {block.type === "blank" && <BlankBlockEdit index={index} />}
           {/* 다른 블록들도 필요 시 추가 */}
           <BlockOptions type={block.type} index={index} />
         </div>
