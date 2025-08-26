@@ -18,6 +18,11 @@ const nextConfig: NextConfig = {
         port: "",
         pathname: "/storage/v1/object/public/jakdang-images/**",
       },
+      {
+        protocol: "https",
+        hostname: "search1.kakaocdn.net",
+        pathname: "/thumb/**",
+      },
     ],
   },
 };

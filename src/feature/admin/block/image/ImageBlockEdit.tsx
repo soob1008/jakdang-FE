@@ -15,7 +15,7 @@ import { handleAction } from "@/lib/api/action";
 import { toast } from "sonner";
 import clsx from "clsx";
 
-export default function ImageBlock({ index }: { index: number }) {
+export default function ImageBlockEdit({ index }: { index: number }) {
   const MAX_IMAGES_COUNT = 10; // 최대 이미지 개수
   const namePrefix = `blocks_draft.${index}.data.images`;
   const { control, register, watch } = useFormContext();

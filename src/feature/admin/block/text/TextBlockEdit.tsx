@@ -10,7 +10,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 
-export default function TextBlock({ index }: { index: number }) {
+export default function TextBlockEdit({ index }: { index: number }) {
   const namePrefix = `blocks_draft.${index}.data`;
 
   return (

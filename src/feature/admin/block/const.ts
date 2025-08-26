@@ -7,6 +7,7 @@ import {
   Network,
   AlignVerticalSpaceAround,
   User,
+  LayoutList,
 } from "lucide-react";
 import { BlockType, TemplateType } from "../types";
 
@@ -17,7 +18,7 @@ interface BlockList {
     name: string;
     description?: string;
     icon?: React.ComponentType<React.SVGProps<SVGSVGElement>>;
-    imageSrc?: string; // For template blocks
+    imageSrc?: string;
   }[];
 }
 
@@ -63,8 +64,14 @@ export const BLOCK_LIST: BlockList[] = [
       },
       {
         type: "work",
-        name: "작품",
+        name: "리스트",
         description: "대표 작품을 보여줘요",
+        icon: LayoutList,
+      },
+      {
+        type: "book",
+        name: "책",
+        description: "",
         icon: BookOpenText,
       },
     ],
