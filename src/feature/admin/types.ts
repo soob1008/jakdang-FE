@@ -28,7 +28,8 @@ export type BlockType =
   | "event" // 이벤트
   | "sns" // SNS
   | "calendar"
-  | "blank"; // 여백
+  | "blank"
+  | "book"; // 여백
 
 export interface WorkItem {
   id: string;
@@ -84,6 +85,36 @@ export interface BlockDataSNS {
   sns_links: { platform: string; url: string; label: string }[]; // SNS 링크
 }
 
+export type SearchBookList = {
+  title: string;
+  category?: string; // TODO: 카테고리 정의 필요.
+  author: string;
+  isbn?: string;
+  publish_date?: string;
+  page_size?: number;
+  size?: string;
+  publisher: string;
+  thumbnail: string;
+};
+
+export type Book = {
+  title: string;
+  category?: string; // TODO: 카테고리 정의 필요.
+  author: string;
+  isbn?: string;
+  publish_date?: string;
+  page_size?: number;
+  size?: string;
+  publisher: string;
+};
+
+export interface BlockDataBook {
+  mode: "search" | "manual";
+  search: Book;
+  manual: Book;
+  thumbnail: string;
+}
+
 export type SNSPlatform =
   | "instagram"
   | "facebook"
@@ -120,7 +151,8 @@ export type BlockData =
   | BlockDataChallenge
   | BlockDataEvent
   | BlockDataCalendar
-  | BlockDataBlank;
+  | BlockDataBlank
+  | BlockDataBook;
 
 export interface Block extends BlockDefault {
   position: number;

@@ -2,7 +2,7 @@
 
 import { useFormContext } from "react-hook-form";
 
-export default function BlankBlock({ index }: { index: number }) {
+export default function BlankBlockEdit({ index }: { index: number }) {
   const { watch, setValue } = useFormContext();
   const namePrefix = `blocks_draft.${index}.data`;
   const height = watch(`${namePrefix}.height`) ?? 80; // fallback
