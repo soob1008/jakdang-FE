@@ -12,6 +12,7 @@ import BlankBlock from "@/feature/author/blocks/BlankBlock";
 import AuthorHeader from "@/feature/author/AuthorHeader";
 import { notFound } from "next/navigation";
 import React from "react";
+import BookBlock from "@/feature/author/blocks/BookBlock";
 
 interface AuthorPageProps {
   params: Promise<{ id: string }>;
@@ -134,6 +135,10 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
               }
               if (block.type === "blank") {
                 return <BlankBlock key={block.id} block={block} />;
+              }
+
+              if (block.type === "book") {
+                return <BookBlock key={block.id} block={block} />;
               }
               return <div key={block.id}>블럭</div>;
             })

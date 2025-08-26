@@ -6,6 +6,7 @@ import SNSBlock from "@/feature/author/blocks/SNSBlock";
 import WorkBlock from "@/feature/author/blocks/work/WorkBlock";
 import CalendarBlock from "@/feature/author/blocks/CalendarBlock";
 import BlankBlock from "@/feature/author/blocks/BlankBlock";
+import BookBlock from "@/feature/author/blocks/BookBlock";
 import { PageStyle } from "@/feature/admin/types";
 
 export default function BlockPreview({
@@ -37,6 +38,8 @@ export default function BlockPreview({
     case "blank":
       return <BlankBlock block={block} />;
 
+    case "book":
+      return <BookBlock block={block} />;
     default:
       return null;
   }

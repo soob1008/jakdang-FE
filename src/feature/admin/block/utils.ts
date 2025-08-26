@@ -79,6 +79,27 @@ export function createDefaultBlock(type: BlockType): BlockDefault {
           height: 60, // 기본 높이 60px
         },
       };
+    case "book":
+      return {
+        id: crypto.randomUUID(),
+        type,
+        name: "책",
+        data: {
+          mode: "search",
+          search: {
+            title: "",
+            author: "",
+            publisher: "",
+            thumbnail: "",
+          },
+          manual: {
+            title: "",
+            author: "",
+            publisher: "",
+            thumbnail: "",
+          },
+        },
+      };
     // case "event":
     //   return {
     //     id: nanoid(),

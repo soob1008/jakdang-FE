@@ -85,6 +85,24 @@ export interface BlockDataSNS {
   sns_links: { platform: string; url: string; label: string }[]; // SNS 링크
 }
 
+export type Book = {
+  title: string;
+  category?: string; // TODO: 카테고리 정의 필요.
+  author: string;
+  isbn?: string;
+  publish_date?: string;
+  page_size?: number;
+  size?: string;
+  publisher: string;
+  thumbnail: string;
+};
+
+export interface BlockDataBook {
+  mode: "search" | "manual";
+  search: Book;
+  manual: Book;
+}
+
 export type SNSPlatform =
   | "instagram"
   | "facebook"
@@ -121,7 +139,8 @@ export type BlockData =
   | BlockDataChallenge
   | BlockDataEvent
   | BlockDataCalendar
-  | BlockDataBlank;
+  | BlockDataBlank
+  | BlockDataBook;
 
 export interface Block extends BlockDefault {
   position: number;

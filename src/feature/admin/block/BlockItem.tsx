@@ -24,6 +24,7 @@ import {
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
 import BlankBlockEdit from "./blank/BlankBlockEdit";
+import BookBlockEdit from "./book/BookBlockEdit";
 
 // import 기타 블록들
 
@@ -140,6 +141,7 @@ export default function BlockItem({
           {block.type === "work" && <WorkBlockEdit index={index} />}
           {block.type === "calendar" && <CalendarBlockEdit index={index} />}
           {block.type === "blank" && <BlankBlockEdit index={index} />}
+          {block.type === "book" && <BookBlockEdit index={index} />}
           {/* 다른 블록들도 필요 시 추가 */}
           <BlockOptions type={block.type} index={index} />
         </div>
