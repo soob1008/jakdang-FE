@@ -1,4 +1,4 @@
-import { Block } from "@/feature/admin/types";
+import { Block, BlockDataBook } from "@/feature/admin/types";
 import Image from "next/image";
 import { format } from "date-fns";
 
@@ -7,11 +7,12 @@ interface BookBlockProps {
 }
 
 export default function BookBlock({ block }: BookBlockProps) {
-  const { mode, search, manual, thumbnail } = block.data;
+  if (block.is_active === false) return null;
+
+  const { mode, search, manual, thumbnail } = block.data as BlockDataBook;
   const book = mode === "search" ? search : manual;
 
   if (!book) return null;
-  console.log("BookBlock render", block);
 
   return (
     <div>

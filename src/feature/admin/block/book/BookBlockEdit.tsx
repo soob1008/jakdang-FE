@@ -17,7 +17,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import Image from "next/image";
-import { Book } from "@/feature/admin/types";
+import { SearchBookList } from "@/feature/admin/types";
 import { ChangeEvent } from "react";
 import { uploadImage } from "@/lib/api/api.client";
 import { handleAction } from "@/lib/api/action";
@@ -53,7 +53,7 @@ export default function BookBlockEdit({ index }: { index: number }) {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<Book[]>([]);
+  const [results, setResults] = useState<SearchBookList[]>([]);
   const [open, setOpen] = useState(false);
   const [selectedIsbn, setSelectedIsbn] = useState<string | null>(null);
 
@@ -77,14 +77,18 @@ export default function BookBlockEdit({ index }: { index: number }) {
 
       const data = await res.json();
 
-      const books: Book[] = data.documents.map((doc: BookDocument) => ({
-        title: doc.title,
-        author: doc.authors?.join(", ") || "알 수 없음",
-        publisher: doc.publisher || "알 수 없음",
-        publish_date: doc.datetime ? doc.datetime.split("T")[0] : "알 수 없음",
-        isbn: doc.isbn?.split(" ")[0] || `no-isbn-${Math.random()}`,
-        thumbnail: doc.thumbnail || "",
-      }));
+      const books: SearchBookList[] = data.documents.map(
+        (doc: BookDocument) => ({
+          title: doc.title,
+          author: doc.authors?.join(", ") || "알 수 없음",
+          publisher: doc.publisher || "알 수 없음",
+          publish_date: doc.datetime
+            ? doc.datetime.split("T")[0]
+            : "알 수 없음",
+          isbn: doc.isbn?.split(" ")[0] || `no-isbn-${Math.random()}`,
+          thumbnail: doc.thumbnail || "",
+        })
+      );
 
       setResults(books);
       setPage(pageNum);
@@ -226,7 +230,7 @@ export default function BookBlockEdit({ index }: { index: number }) {
                   onValueChange={setSelectedIsbn}
                   className="space-y-2"
                 >
-                  {results.map((book: Book) => (
+                  {results.map((book: SearchBookList) => (
                     <Card
                       key={book.isbn}
                       className={`cursor-pointer ${

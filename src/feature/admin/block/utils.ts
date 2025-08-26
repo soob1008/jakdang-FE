@@ -85,18 +85,17 @@ export function createDefaultBlock(type: BlockType): BlockDefault {
         type,
         name: "책",
         data: {
+          thumbnail: "",
           mode: "search",
           search: {
             title: "",
             author: "",
             publisher: "",
-            thumbnail: "",
           },
           manual: {
             title: "",
             author: "",
             publisher: "",
-            thumbnail: "",
           },
         },
       };

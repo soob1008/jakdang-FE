@@ -13,6 +13,8 @@ import AuthorHeader from "@/feature/author/AuthorHeader";
 import { notFound } from "next/navigation";
 import React from "react";
 import BookBlock from "@/feature/author/blocks/BookBlock";
+import Link from "next/link";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 interface AuthorPageProps {
   params: Promise<{ id: string }>;
@@ -20,6 +22,11 @@ interface AuthorPageProps {
 
 export default async function AuthorPage({ params }: AuthorPageProps) {
   const { id: slug } = await params;
+
+  const supabase = await createSupabaseServerClient();
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
 
   if (!slug) {
     return (
@@ -74,6 +81,13 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
   return (
     <div className="relative min-h-screen px-4 pb-30">
       <div className="fixed inset-0" style={wrapperStyle} />
+      {!session && (
+        <div className="fixed bottom-14 left-1/2 transform -translate-x-1/2 z-11 w-[80%] px-6 py-3 rounded-full text-sm bg-white shadow-lg text-center">
+          <Link href="/auth/login" className="text-sm font-medium">
+            지금 바로 나만의 작가 페이지를 무료로 시작하세요.
+          </Link>
+        </div>
+      )}
       <div className="relative max-w-3xl mx-auto w-full pt-8">
         <AuthorHeader user={user} />
         <div className="flex flex-col gap-12 pt-2.5">

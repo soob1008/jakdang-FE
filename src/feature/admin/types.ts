@@ -85,7 +85,7 @@ export interface BlockDataSNS {
   sns_links: { platform: string; url: string; label: string }[]; // SNS 링크
 }
 
-export type Book = {
+export type SearchBookList = {
   title: string;
   category?: string; // TODO: 카테고리 정의 필요.
   author: string;
@@ -97,10 +97,22 @@ export type Book = {
   thumbnail: string;
 };
 
+export type Book = {
+  title: string;
+  category?: string; // TODO: 카테고리 정의 필요.
+  author: string;
+  isbn?: string;
+  publish_date?: string;
+  page_size?: number;
+  size?: string;
+  publisher: string;
+};
+
 export interface BlockDataBook {
   mode: "search" | "manual";
   search: Book;
   manual: Book;
+  thumbnail: string;
 }
 
 export type SNSPlatform =
