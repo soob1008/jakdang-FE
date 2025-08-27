@@ -13,11 +13,7 @@ export function createDefaultBlock(type: BlockType): BlockDefault {
         type,
         name: "텍스트",
         data: {
-          title: "",
           content: "",
-          align: "left",
-          font_size: "md",
-          color: "#000000",
         },
       };
     case "image":
@@ -176,11 +172,7 @@ export function getTemplateBlocks(args: GetTemplateBlocksArgs): Block[] | null {
           ...createDefaultBlock("text"),
           is_active: true,
           data: {
-            title: "소개",
-            content:
-              "저는 일상에서 영감을 받아 글과 이미지를 통해 작은 순간들을 기록합니다. 다양한 주제에 대해 이야기하며, 여러분과 소통하고 싶습니다.",
-            font_size: "md",
-            align: "left",
+            content: "",
           },
         } as Block,
 
@@ -188,11 +180,7 @@ export function getTemplateBlocks(args: GetTemplateBlocksArgs): Block[] | null {
           ...createDefaultBlock("text"),
           is_active: true,
           data: {
-            title: "작업 주제 / 관심사",
-            content:
-              "관심사: 영화, 여행, 뜨개질\n요즘 쓰는 것: 단편 산문, 짧은 소설, 인터뷰 기록",
-            font_size: "md",
-            align: "left",
+            content: "",
           },
         } as Block,
 
@@ -292,10 +280,7 @@ export function getTemplateBlocks(args: GetTemplateBlocksArgs): Block[] | null {
           ...createDefaultBlock("text"),
           is_active: true,
           data: {
-            title: "WebZin. 01 - 매거진 제목",
             content: "",
-            font_size: "lg",
-            align: "left",
           },
         } as Block,
         {
@@ -316,21 +301,14 @@ export function getTemplateBlocks(args: GetTemplateBlocksArgs): Block[] | null {
           ...createDefaultBlock("text"),
           is_active: true,
           data: {
-            title: "",
-            content:
-              "매거진에 대한 간단한 소개나 설명을 여기에 입력하세요. 예를 들어, 이번 호의 주제나 특징 등을 간략하게 소개할 수 있습니다.",
-            font_size: "md",
-            align: "left",
+            content: "",
           },
         } as Block,
         {
           ...createDefaultBlock("text"),
           is_active: true,
           data: {
-            title: "목차",
-            content: "- 매거진 목차1\n- 매거진 목차2\n- 매거진 목차3",
-            font_size: "md",
-            align: "left",
+            content: "",
           },
         } as Block,
         {
@@ -365,10 +343,7 @@ export function getTemplateBlocks(args: GetTemplateBlocksArgs): Block[] | null {
           ...createDefaultBlock("text"),
           is_active: true,
           data: {
-            title: "매거진 글",
-            content: `매거진에 들어갈 내용을 구성해 내용을 넣으세요.`,
-            font_size: "md",
-            align: "left",
+            content: "",
           },
         } as Block,
         {
@@ -395,20 +370,14 @@ export function getTemplateBlocks(args: GetTemplateBlocksArgs): Block[] | null {
           ...createDefaultBlock("text"),
           is_active: true,
           data: {
-            title: "매거진 글",
-            content: "매거진에 들어갈 내용을 구성해 내용을 넣으세요.",
-            font_size: "md",
-            align: "left",
+            content: "",
           },
         } as Block,
         {
           ...createDefaultBlock("text"),
           is_active: true,
           data: {
-            title: "매거진 글",
-            content: "매거진에 들어갈 내용을 구성해 내용을 넣으세요.",
-            font_size: "md",
-            align: "left",
+            content: "",
           },
         } as Block,
         {
