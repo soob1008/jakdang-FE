@@ -23,13 +23,13 @@ interface AuthorPageProps {
 }
 
 type MetadataProps = {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 };
 
 export async function generateMetadata({
   params,
 }: MetadataProps): Promise<Metadata> {
-  const { id: slug } = params;
+  const { id: slug } = await params;
 
   const { user: author, page } = await fetchServer<{
     user: Author;
