@@ -58,11 +58,19 @@ export async function generateMetadata({
 
   const title = bookInfo?.title ?? null;
   const description = bookInfo?.description ?? null;
+  const bookAuthor = bookInfo?.author ?? null;
+  const publisher = bookInfo?.publisher ?? null;
 
   return {
     title: book
       ? `${title || "책"} - ${author?.display_name || "작가"}님의 작가 페이지`
       : `${author?.display_name || "작가"}님의 작가 페이지`,
+    keywords: [
+      title || "책",
+      author?.display_name || "작가",
+      bookAuthor || "저자",
+      publisher || "출판사",
+    ],
     description:
       description ||
       `${author?.display_name || "작가"}님의 작품과 소식을 만나보세요.`,
