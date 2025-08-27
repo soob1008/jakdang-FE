@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     siteName: "작당",
     images: [
       {
-        url: "https://jakdang.site/og-image.png",
+        url: "https://jakdang.site/og-jakdang.jpg",
         width: 1200,
         height: 630,
         alt: "작당 - 작가를 위한 페이지 빌더",
@@ -49,12 +49,12 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "작당 - 작가를 위한 페이지 빌더",
     description: "작가들이 자신만의 페이지를 쉽게 만들 수 있는 웹 빌더 서비스",
-    images: ["https://jakdang.site/og-image.png"],
+    images: ["https://jakdang.site/og-jakdang.jpg"],
   },
   icons: {
     icon: "/favicon.ico",
-    shortcut: "/favicon-16x16.png",
-    apple: "/apple-touch-icon.png",
+    shortcut: "/favicon.ico",
+    apple: "/favicon.ico",
   },
   manifest: "/site.webmanifest",
 };
@@ -64,7 +64,15 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="ko">
-      <head>
+      <body className={`${Pretendard.className}`}>
+        <Providers>
+          <main>{children}</main>
+          {/* <Footer /> */}
+          <Toaster position="top-center" />
+        </Providers>
+        <Suspense fallback={null}>
+          <GoogleAnalyticsTracker />
+        </Suspense>
         {/* GA4 스크립트 */}
         {GA_TRACKING_ID && (
           <>
@@ -81,20 +89,15 @@ export default function RootLayout({
                   page_path: window.location.pathname,
                   send_page_view: false,
                 });
+                window.gtag("event", "page_view", {
+                page_path: url,
+                page_location: window.location.href,   // 전체 URL
+                page_referrer: document.referrer,      // 어디서 들어왔는지
+              });
               `}
             </Script>
           </>
         )}
-      </head>
-      <body className={`${Pretendard.className}`}>
-        <Providers>
-          <main>{children}</main>
-          {/* <Footer /> */}
-          <Toaster position="top-center" />
-        </Providers>
-        <Suspense fallback={null}>
-          <GoogleAnalyticsTracker />
-        </Suspense>
       </body>
     </html>
   );

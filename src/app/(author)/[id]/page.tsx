@@ -74,7 +74,7 @@ export async function generateMetadata({
       images: thumbnail
         ? `${process.env.NEXT_PUBLIC_IMAGE_URL}${thumbnail}`
         : `${process.env.NEXT_PUBLIC_IMAGE_URL}${
-            author?.profile_published?.avatar_url || "/default.png"
+            author?.profile_published?.avatar_url || "/og-jakdang.jpg"
           }`,
     },
   };
