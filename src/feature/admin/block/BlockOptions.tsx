@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import TextOption from "./text/TextOption";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import ImageOption from "./image/ImageOption";
 import WorkOption from "./work/WorkOption";
@@ -20,7 +19,8 @@ export default function BlockOptions({ type, index }: BlockOptionsProps) {
     type === "challenge" ||
     type === "event" ||
     type === "blank" ||
-    type === "book"
+    type === "book" ||
+    type === "text"
   )
     return null;
 
@@ -43,7 +43,6 @@ export default function BlockOptions({ type, index }: BlockOptionsProps) {
       </div>
       {showOptions && (
         <div className="mt-2 border-t pt-4 space-y-6">
-          {type === "text" && <TextOption index={index} />}
           {type === "image" && <ImageOption index={index} />}
           {
             /* 기타 블록 옵션 추가 예정 */ type === "work" && (

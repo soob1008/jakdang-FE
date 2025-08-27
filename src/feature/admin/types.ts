@@ -1,4 +1,4 @@
-import { FontSize, Align, Columns, Layout, ImageStyle } from "@/feature/types";
+import { Columns, Layout, ImageStyle } from "@/feature/types";
 
 export interface Page {
   id: string;
@@ -43,11 +43,7 @@ export interface WorkItem {
 }
 
 export interface BlockDataText {
-  title?: string;
   content: string;
-  align: Align;
-  color?: string; // 글자색
-  font_size: FontSize;
 }
 
 export interface BlockDataImage {
