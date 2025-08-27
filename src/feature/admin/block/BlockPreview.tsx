@@ -39,7 +39,7 @@ export default function BlockPreview({
       return <BlankBlock block={block} />;
 
     case "book":
-      return <BookBlock block={block} />;
+      return <BookBlock block={block} style={style} />;
     default:
       return null;
   }

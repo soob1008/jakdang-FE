@@ -1,16 +1,19 @@
-import { Block, BlockDataBook } from "@/feature/admin/types";
+import { Block, BlockDataBook, PageStyle } from "@/feature/admin/types";
 import Image from "next/image";
 import { format } from "date-fns";
+import { autoContrast } from "@/lib/utils";
 
 interface BookBlockProps {
   block: Block;
+  style: PageStyle;
 }
 
-export default function BookBlock({ block }: BookBlockProps) {
+export default function BookBlock({ block, style }: BookBlockProps) {
   if (block.is_active === false) return null;
 
   const { mode, search, manual, thumbnail } = block.data as BlockDataBook;
   const book = mode === "search" ? search : manual;
+  const textColor = autoContrast(style?.background_color || "#ffffff");
 
   if (!book) return null;
 
@@ -35,22 +38,23 @@ export default function BookBlock({ block }: BookBlockProps) {
       </div>
 
       {/* 책 정보 */}
-      <div className="flex-1 mt-6">
-        <h2 className="font-bold text-xl">{book.title}</h2>
+      <div
+        className={`flex-1 mt-6 text-[var(--text-color)]`}
+        style={{
+          ["--text-color" as string]: textColor,
+        }}
+      >
+        <h2 className="font-bold text-xl ">{book.title}</h2>
         <div className="flex flex-col gap-2 mt-2">
           {/* 저자 & 출판사 */}
           {(book.author || book.publisher) && (
             <div className="flex items-center">
-              {book.author && (
-                <p className="text-sm text-gray-700">저자 : {book.author}</p>
-              )}
+              {book.author && <p className="text-sm ">저자 : {book.author}</p>}
               {book.author && book.publisher && (
                 <span className="block mx-2">|</span>
               )}
               {book.publisher && (
-                <p className="text-sm text-gray-700">
-                  출판사 : {book.publisher}
-                </p>
+                <p className="text-sm ">출판사 : {book.publisher}</p>
               )}
             </div>
           )}
@@ -59,16 +63,14 @@ export default function BookBlock({ block }: BookBlockProps) {
           {(book.publish_date || book.isbn) && (
             <div className="flex items-center">
               {book.publish_date && (
-                <p className="text-sm text-gray-700">
+                <p className="text-sm ">
                   발행일 : {format(new Date(book.publish_date), "yyyy-MM-dd")}
                 </p>
               )}
               {book.isbn && book.publish_date && (
                 <span className="block mx-2">|</span>
               )}
-              {book.isbn && (
-                <p className="text-sm text-gray-700">ISBN : {book.isbn}</p>
-              )}
+              {book.isbn && <p className="text-sm ">ISBN : {book.isbn}</p>}
             </div>
           )}
         </div>
