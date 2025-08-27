@@ -15,9 +15,36 @@ import React from "react";
 import BookBlock from "@/feature/author/blocks/BookBlock";
 import Link from "next/link";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { Metadata } from "next";
 
 interface AuthorPageProps {
   params: Promise<{ id: string }>;
+}
+
+type MetadataProps = {
+  params: { id: string };
+};
+
+export async function generatieMetadata({ params }: MetadataProps) {
+  const { id: slug } = params;
+  const { user: author } = await fetchServer<{
+    user: Author;
+    page: Page;
+  }>(`/api/author/${slug}`);
+
+  return {
+    title: `${author?.display_name || "작가"}님의 작가 페이지`,
+    description: `${
+      author?.display_name || "작가"
+    }님의 작품과 소식을 만나보세요.`,
+    openGraph: {
+      title: `${author?.display_name || "작가"}님의 작가 페이지`,
+      description: `${
+        author?.display_name || "작가"
+      }님의 작품과 소식을 만나보세요.`,
+      images: `${process.env.NEXT_PUBLIC_IMAGE_URL}${author?.profile_published?.avatar_url}`,
+    },
+  };
 }
 
 export default async function AuthorPage({ params }: AuthorPageProps) {
@@ -83,7 +110,10 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
       <div className="fixed inset-0" style={wrapperStyle} />
       {!session && (
         <div className="fixed bottom-14 left-1/2 transform -translate-x-1/2 z-11 w-[80%] px-6 py-3 rounded-full text-sm bg-white shadow-lg text-center">
-          <Link href="/auth/login" className="text-sm font-medium">
+          <Link
+            href="/auth/login"
+            className="text-sm font-medium whitespace-nowrap"
+          >
             지금 바로 나만의 작가 페이지를 무료로 시작하세요.
           </Link>
         </div>

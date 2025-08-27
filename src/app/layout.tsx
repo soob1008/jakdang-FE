@@ -27,8 +27,36 @@ const Pretendard = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "작당 - 당신의 창작을 위한 공간",
-  description: "작가를 위한 포트폴리오 생성 서비스",
+  title: "작당 - 작가를 위한 페이지 빌더",
+  description: "작가들이 자신만의 페이지를 쉽게 만들 수 있는 웹 빌더 서비스",
+  openGraph: {
+    title: "작당 - 작가를 위한 페이지 빌더",
+    description: "작가들이 자신만의 페이지를 쉽게 만들 수 있는 웹 빌더 서비스",
+    url: "https://jakdang.site",
+    siteName: "작당",
+    images: [
+      {
+        url: "https://jakdang.site/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "작당 - 작가를 위한 페이지 빌더",
+      },
+    ],
+    locale: "ko_KR",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "작당 - 작가를 위한 페이지 빌더",
+    description: "작가들이 자신만의 페이지를 쉽게 만들 수 있는 웹 빌더 서비스",
+    images: ["https://jakdang.site/og-image.png"],
+  },
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon-16x16.png",
+    apple: "/apple-touch-icon.png",
+  },
+  manifest: "/site.webmanifest",
 };
 
 export default function RootLayout({

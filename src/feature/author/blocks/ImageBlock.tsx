@@ -100,10 +100,7 @@ export default function ImageBlock({
 
     return (
       <div
-        className={clsx(
-          "grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3",
-          desktopCols
-        )}
+        className={clsx("grid gap-4 grid-cols-2 md:grid-cols-3", desktopCols)}
       >
         {images.map((img, idx) => renderImage(img, idx))}
       </div>
