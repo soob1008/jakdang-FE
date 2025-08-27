@@ -29,6 +29,15 @@ const Pretendard = localFont({
 export const metadata: Metadata = {
   title: "작당 - 작가를 위한 페이지 빌더",
   description: "작가들이 자신만의 페이지를 쉽게 만들 수 있는 웹 빌더 서비스",
+  keywords: [
+    "작가",
+    "포트폴리오",
+    "페이지 빌더",
+    "웹 빌더",
+    "창작",
+    "작품",
+    "글쓰기",
+  ],
   openGraph: {
     title: "작당 - 작가를 위한 페이지 빌더",
     description: "작가들이 자신만의 페이지를 쉽게 만들 수 있는 웹 빌더 서비스",
@@ -89,11 +98,6 @@ export default function RootLayout({
                   page_path: window.location.pathname,
                   send_page_view: false,
                 });
-                window.gtag("event", "page_view", {
-                page_path: url,
-                page_location: window.location.href,   // 전체 URL
-                page_referrer: document.referrer,      // 어디서 들어왔는지
-              });
               `}
             </Script>
           </>
