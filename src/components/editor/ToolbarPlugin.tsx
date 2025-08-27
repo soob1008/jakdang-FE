@@ -55,10 +55,12 @@ export function ToolbarPlugin() {
             if (styles) {
               const sizeMatch = styles.match(/font-size:\s*([^;]+)/);
               const familyMatch = styles.match(/font-family:\s*([^;]+)/);
+              const colorMatch = styles.match(/color:\s*([^;]+)/);
 
               if (sizeMatch) setFontSize(sizeMatch[1]);
               if (familyMatch)
                 setFontFamily(familyMatch[1].replace(/['"]/g, ""));
+              if (colorMatch) setColor(colorMatch[1]);
             }
           }
         }
