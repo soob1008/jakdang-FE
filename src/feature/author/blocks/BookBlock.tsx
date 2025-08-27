@@ -45,7 +45,7 @@ export default function BookBlock({ block, style }: BookBlockProps) {
         }}
       >
         <h2 className="font-bold text-xl ">{book.title}</h2>
-        <div className="flex flex-col gap-2 mt-2">
+        <div className="flex flex-col gap-1 mt-2">
           {/* 저자 & 출판사 */}
           {(book.author || book.publisher) && (
             <div className="flex items-center">

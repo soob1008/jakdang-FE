@@ -16,6 +16,7 @@ import BookBlock from "@/feature/author/blocks/BookBlock";
 import Link from "next/link";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { Metadata } from "next";
+import { BlockDataBook } from "@/feature/admin/types";
 
 interface AuthorPageProps {
   params: Promise<{ id: string }>;
@@ -25,24 +26,56 @@ type MetadataProps = {
   params: { id: string };
 };
 
-export async function generatieMetadata({ params }: MetadataProps) {
+export async function generateMetadata({
+  params,
+}: MetadataProps): Promise<Metadata> {
   const { id: slug } = params;
-  const { user: author } = await fetchServer<{
+
+  const { user: author, page } = await fetchServer<{
     user: Author;
     page: Page;
   }>(`/api/author/${slug}`);
 
+  const blocks = page?.blocks_published || [];
+  const book = blocks.find((block) => block.type === "book");
+  const { mode, search, manual, thumbnail } = book?.data as BlockDataBook;
+
+  type BookInfo = {
+    title?: string;
+    author?: string;
+    publisher?: string;
+    description?: string;
+    thumbnail?: string;
+  };
+
+  let bookInfo: BookInfo | null = null;
+
+  if (mode === "search") {
+    bookInfo = search as BookInfo;
+  } else if (mode === "manual") {
+    bookInfo = manual as BookInfo;
+  }
+
+  const title = bookInfo?.title ?? null;
+  const description = bookInfo?.description ?? null;
+
   return {
-    title: `${author?.display_name || "작가"}님의 작가 페이지`,
-    description: `${
-      author?.display_name || "작가"
-    }님의 작품과 소식을 만나보세요.`,
+    title: book
+      ? `${title || "책"} - ${author?.display_name || "작가"}님의 작가 페이지`
+      : `${author?.display_name || "작가"}님의 작가 페이지`,
+    description:
+      description ||
+      `${author?.display_name || "작가"}님의 작품과 소식을 만나보세요.`,
     openGraph: {
-      title: `${author?.display_name || "작가"}님의 작가 페이지`,
-      description: `${
-        author?.display_name || "작가"
-      }님의 작품과 소식을 만나보세요.`,
-      images: `${process.env.NEXT_PUBLIC_IMAGE_URL}${author?.profile_published?.avatar_url}`,
+      title: title || `${author?.display_name || "작가"}님의 작가 페이지`,
+      description:
+        description ||
+        `${author?.display_name || "작가"}님의 작품과 소식을 만나보세요.`,
+      images: thumbnail
+        ? `${process.env.NEXT_PUBLIC_IMAGE_URL}${thumbnail}`
+        : `${process.env.NEXT_PUBLIC_IMAGE_URL}${
+            author?.profile_published?.avatar_url || "/default.png"
+          }`,
     },
   };
 }
