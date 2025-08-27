@@ -16,8 +16,6 @@ export default function PagePreview() {
   const profile = watch("profile");
   const displayName = watch("display_name") as string;
 
-  console.log(displayName);
-
   // style draft (live)
   const style = useWatch({ name: "style_draft", control }) as
     | {

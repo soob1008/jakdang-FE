@@ -152,7 +152,13 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
               }
 
               if (block.type === "book") {
-                return <BookBlock key={block.id} block={block} />;
+                return (
+                  <BookBlock
+                    key={block.id}
+                    block={block}
+                    style={style_published}
+                  />
+                );
               }
               return <div key={block.id}>블럭</div>;
             })
