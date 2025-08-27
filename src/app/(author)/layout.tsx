@@ -3,7 +3,7 @@ import "../globals.css";
 // import { Header } from "@/components/layout/header";
 import { Toaster } from "@/components/ui/sonner";
 import { ViewerProvider } from "@/feature/viewer/ViewerProvider";
-import Footer from "@/components/layout/footer";
+// import Footer from "@/components/layout/footer";
 
 export const metadata: Metadata = {
   title: "작당 - 당신의 창작을 위한 공간",
@@ -18,7 +18,7 @@ export default function RootLayout({
       <ViewerProvider />
       {/* <Header /> */}
       <main>{children}</main>
-      <Footer />
+      {/* <Footer /> */}
       <Toaster position="top-center" />
     </>
   );
