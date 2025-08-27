@@ -98,11 +98,6 @@ export default function RootLayout({
                   page_path: window.location.pathname,
                   send_page_view: false,
                 });
-                window.gtag("event", "page_view", {
-                page_path: url,
-                page_location: window.location.href,   // 전체 URL
-                page_referrer: document.referrer,      // 어디서 들어왔는지
-              });
               `}
             </Script>
           </>
