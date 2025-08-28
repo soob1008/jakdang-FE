@@ -65,7 +65,10 @@ export const metadata: Metadata = {
     shortcut: "/favicon.ico",
     apple: "/favicon.ico",
   },
-  manifest: "/site.webmanifest",
+  manifest: "/manifest.json",
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SEARCH_CONSOLE_KEY || "",
+  },
 };
 
 export default function RootLayout({
