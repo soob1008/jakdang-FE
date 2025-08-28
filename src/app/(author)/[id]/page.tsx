@@ -38,7 +38,8 @@ export async function generateMetadata({
 
   const blocks = page?.blocks_published || [];
   const book = blocks.find((block) => block.type === "book");
-  const { mode, search, manual, thumbnail } = book?.data as BlockDataBook;
+  const { mode, search, manual, thumbnail } =
+    (book?.data as BlockDataBook) || {};
 
   type BookInfo = {
     title?: string;
