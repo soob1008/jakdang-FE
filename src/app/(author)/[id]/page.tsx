@@ -155,7 +155,7 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
             href="/auth/login"
             className="text-sm font-medium whitespace-nowrap"
           >
-            지금 바로 나만의 작가 페이지를 무료로 시작하세요.
+            나만의 작가 페이지를 무료로 시작하세요.
           </Link>
         </div>
       )}
