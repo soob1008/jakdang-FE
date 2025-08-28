@@ -188,8 +188,8 @@ export default function PageCustomizer() {
                       className="absolute inset-0 w-full h-full object-cover"
                     />
                   ) : (
-                    <div className="grid place-items-center w-full h-full text-[11px] text-muted-foreground">
-                      이미지 선택 (클릭하여 업로드)
+                    <div className="flex items-center justify-center text-center w-full h-full text-[11px] text-muted-foreground flex-wrap">
+                      이미지 선택 <br /> (클릭하여 업로드)
                     </div>
                   )}
                 </div>

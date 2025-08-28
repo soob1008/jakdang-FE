@@ -21,7 +21,7 @@ export default function BookBlock({ block, style }: BookBlockProps) {
     <div>
       {/* 썸네일 */}
       <div className="flex items-center justify-center">
-        <div className="w-1/3 aspect-[2/3] border relative bg-gray-100 rounded overflow-hidden">
+        <div className="flex items-center justify-center w-1/3 aspect-[2/3] border relative bg-gray-100 rounded overflow-hidden">
           {thumbnail ? (
             <Image
               src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${thumbnail}`}
@@ -30,9 +30,7 @@ export default function BookBlock({ block, style }: BookBlockProps) {
               className="object-cover"
             />
           ) : (
-            <div className="flex items-center justify-center text-xs text-gray-400">
-              No Image
-            </div>
+            <div className="text-xs text-gray-400">No Image</div>
           )}
         </div>
       </div>
