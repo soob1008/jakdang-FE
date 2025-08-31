@@ -65,7 +65,6 @@ export const metadata: Metadata = {
     shortcut: "/favicon.ico",
     apple: "/favicon.ico",
   },
-  manifest: "/manifest.json",
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_SEARCH_CONSOLE_KEY || "",
   },
