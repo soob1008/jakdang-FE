@@ -23,6 +23,7 @@ export interface Profile {
   avatar_url?: string;
   headline?: string;
   display_name?: string;
+  text_color?: string;
 }
 
 export interface AuthorTag {

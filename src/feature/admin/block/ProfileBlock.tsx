@@ -66,7 +66,6 @@ export default function ProfileBlock() {
           </Button>
         </div>
       </div>
-
       {/* 내용 */}
       {isOpenProfile && (
         <div className="p-3 space-y-4">
@@ -96,7 +95,10 @@ export default function ProfileBlock() {
               </label>
             </div>
           </div>
-
+          <p className="mt-2 text-xs text-muted-foreground">
+            *필명은 <strong>설정 &gt; 필명 </strong> 메뉴에서 변경할 수 있으며,
+            프로필에 함께 표시됩니다.
+          </p>
           {/* 대표 문구 */}
           <div>
             <label className="text-sm font-medium">대표 문구</label>
@@ -104,6 +106,41 @@ export default function ProfileBlock() {
               {...register("profile.headline")}
               placeholder="대표 문구를 입력하세요"
               className="mt-2"
+            />
+          </div>
+
+          {/* 텍스트 컬러 */}
+          <div>
+            <label className="text-sm font-medium">텍스트 컬러</label>
+            <FormField
+              name="profile.text_color"
+              control={control}
+              render={({ field }) => {
+                const value = field.value || "#111111";
+                return (
+                  <FormItem>
+                    <div className="mt-2 flex items-center gap-3">
+                      {/* 컬러 피커 */}
+                      <input
+                        type="color"
+                        value={value}
+                        onChange={(e) => field.onChange(e.target.value)}
+                        className="h-9 w-9 cursor-pointer rounded-md border p-0"
+                        aria-label="텍스트 컬러 선택"
+                      />
+                      {/* HEX 입력 */}
+                      <FormControl>
+                        <Input
+                          value={value}
+                          onChange={(e) => field.onChange(e.target.value)}
+                          placeholder="#111111"
+                          className="w-28"
+                        />
+                      </FormControl>
+                    </div>
+                  </FormItem>
+                );
+              }}
             />
           </div>
         </div>
