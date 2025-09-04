@@ -10,7 +10,7 @@ export default function ProfileBlock({
   profile,
   displayName,
 }: ProfileBlockProps) {
-  const { is_active, headline, avatar_url } = profile || {};
+  const { is_active, headline, avatar_url, text_color } = profile || {};
 
   if (!is_active) return null; // 프로필 비활성화 시 표시 안 함
 
@@ -30,12 +30,24 @@ export default function ProfileBlock({
 
       {/* 필명 */}
       {displayName && (
-        <h2 className="mt-3.5 font-bold text-gray-900">{displayName || "-"}</h2>
+        <h2
+          className="mt-3.5 font-bold text-[var(--text-color)]"
+          style={{
+            ["--text-color" as string]: text_color || "#111111",
+          }}
+        >
+          {displayName || "-"}
+        </h2>
       )}
 
       {/* 작가 소개 */}
       {headline && (
-        <p className="mt-1 text-xs text-gray-600 max-w-prose whitespace-pre-line">
+        <p
+          className="mt-1 text-xs text-[var(--text-color)] max-w-prose whitespace-pre-line"
+          style={{
+            ["--text-color" as string]: text_color || "#111111",
+          }}
+        >
           {headline}
         </p>
       )}

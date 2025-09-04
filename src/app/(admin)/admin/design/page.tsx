@@ -33,6 +33,7 @@ export default function AdminDesignPage() {
         avatar_url: "",
         headline: "",
         display_name: userData?.user.display_name ?? "",
+        text_color: "",
       },
     },
   });
@@ -54,6 +55,7 @@ export default function AdminDesignPage() {
         avatar_url: "",
         headline: "",
         display_name: userData.user.display_name ?? "",
+        text_color: "#111111",
       },
     });
   }, [data, userData, reset]);
