@@ -174,14 +174,10 @@ export default function BookBlockEdit({ index }: { index: number }) {
           </p>
         </div>
         {/* 이미지 미리보기 */}
-        {(uploadedThumbnail || book?.thumbnail) && (
+        {uploadedThumbnail && (
           <div className="mt-3 w-32 aspect-[2/3] relative border rounded overflow-hidden">
             <Image
-              src={
-                uploadedThumbnail
-                  ? `${process.env.NEXT_PUBLIC_IMAGE_URL}${uploadedThumbnail}`
-                  : book.thumbnail
-              }
+              src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${uploadedThumbnail}`}
               alt="미리보기"
               fill
               className="object-cover"
