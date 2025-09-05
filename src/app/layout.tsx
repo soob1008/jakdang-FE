@@ -75,15 +75,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="ko">
-      <body className={`${Pretendard.className}`}>
-        <Providers>
-          <main>{children}</main>
-          {/* <Footer /> */}
-          <Toaster position="top-center" />
-        </Providers>
-        <Suspense fallback={null}>
-          <GoogleAnalyticsTracker />
-        </Suspense>
+      <head>
         {/* GA4 스크립트 */}
         {GA_TRACKING_ID && (
           <>
@@ -104,6 +96,16 @@ export default function RootLayout({
             </Script>
           </>
         )}
+      </head>
+      <body className={`${Pretendard.className}`}>
+        <Providers>
+          <main>{children}</main>
+          {/* <Footer /> */}
+          <Toaster position="top-center" />
+        </Providers>
+        <Suspense fallback={null}>
+          <GoogleAnalyticsTracker />
+        </Suspense>
       </body>
     </html>
   );
