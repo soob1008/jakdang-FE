@@ -8,15 +8,15 @@ import {
   DialogTitle,
   DialogDescription,
   DialogFooter,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+} from "@/shared/ui/dialog";
+import { Button } from "@/shared/ui/button";
+import { RadioGroup, RadioGroupItem } from "@/shared/ui/radio-group";
 import { ReactNode, useEffect, useState } from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/shared/lib/utils";
 import { BLOCK_LIST } from "./const";
 import { BlockType, Block } from "../types";
-import { apiClient } from "@/lib/api/api.client";
-import { handleAction } from "@/lib/api/action";
+import { apiClient } from "@/shared/lib/api/api.client";
+import { handleAction } from "@/shared/lib/api/action";
 import { useFormContext } from "react-hook-form";
 import { useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";

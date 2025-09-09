@@ -5,7 +5,7 @@ import ProfileTags from "@/feature/admin/components/ProfileTags";
 import SocialLinks from "@/feature/admin/components/SocialLinks";
 import WorkList from "@/feature/admin/components/WorkList";
 import LinkList from "@/feature/admin/components/LinkList";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { createSupabaseServerClient } from "@/shared/lib/supabase/server";
 import { redirect } from "next/navigation";
 import {
   getUser,

@@ -1,4 +1,4 @@
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { createSupabaseServerClient } from "@/shared/lib/supabase/server";
 import { z } from "zod";
 import { NextRequest, NextResponse } from "next/server";
 import { createDefaultBlock } from "@/feature/admin/block/utils";

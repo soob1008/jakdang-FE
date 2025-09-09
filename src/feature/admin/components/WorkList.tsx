@@ -8,14 +8,14 @@ import {
 } from "@hello-pangea/dnd";
 import { useState } from "react";
 import { Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 import { WorkDialog } from "@/feature/admin/dialog/WorkDialog";
 import { AuthorWork } from "@/feature/user/type";
 import WorkItem from "@/feature/admin/components/WorkItem";
-import { handleAction } from "@/lib/api/action";
+import { handleAction } from "@/shared/lib/api/action";
 import { updateUserWorks, deleteUserWork } from "@/feature/user/api.server";
 import { WorkValues } from "@/feature/admin/dialog/WorkDialog";
-import EmptyText from "@/components/ui/EmptyText";
+import EmptyText from "@/shared/ui/EmptyText";
 
 interface WorkListProps {
   userId: string;

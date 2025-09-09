@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn } from "@/shared/lib/utils";
 import { useFormContext } from "react-hook-form";
 interface ThemeOptionProps {
   id: string;

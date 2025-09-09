@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { GripVertical, ChevronDown, ChevronUp, Trash } from "lucide-react";
-import { Switch } from "@/components/ui/switch";
-import { Button } from "@/components/ui/button";
-import { FormField, FormItem, FormControl } from "@/components/ui/form";
+import { Switch } from "@/shared/ui/switch";
+import { Button } from "@/shared/ui/button";
+import { FormField, FormItem, FormControl } from "@/shared/ui/form";
 import BlockOptions from "./BlockOptions";
 import TextBlockEdit from "./text/TextBlockEdit";
 import { BlockItemType } from "@/feature/admin/types";
@@ -22,7 +22,7 @@ import {
   AlertDialogFooter,
   AlertDialogCancel,
   AlertDialogAction,
-} from "@/components/ui/alert-dialog";
+} from "@/shared/ui/alert-dialog";
 import BlankBlockEdit from "./blank/BlankBlockEdit";
 import BookBlockEdit from "./book/BookBlockEdit";
 

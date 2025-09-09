@@ -5,7 +5,7 @@ import { useFormContext, useWatch } from "react-hook-form";
 import BlockPreview from "@/feature/admin/block/BlockPreview";
 import ProfileBlock from "../author/blocks/ProfileBlock";
 import React from "react";
-import { autoContrast } from "@/lib/utils";
+import { autoContrast } from "@/shared/lib/utils";
 
 export default function PagePreview() {
   const { watch, control } = useFormContext();

@@ -1,7 +1,7 @@
 import { Block, BlockDataBook, PageStyle } from "@/feature/admin/types";
 import Image from "next/image";
 import { format } from "date-fns";
-import { autoContrast } from "@/lib/utils";
+import { autoContrast } from "@/shared/lib/utils";
 
 interface BookBlockProps {
   block: Block;

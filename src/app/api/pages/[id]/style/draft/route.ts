@@ -1,6 +1,6 @@
 // pages/api/save-style-draft.ts
 import { NextResponse } from "next/server";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { createSupabaseServerClient } from "@/shared/lib/supabase/server";
 
 /**
  * POST /api/save-style-draft

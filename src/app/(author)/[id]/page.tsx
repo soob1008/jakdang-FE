@@ -14,7 +14,7 @@ import { notFound } from "next/navigation";
 import React from "react";
 import BookBlock from "@/feature/author/blocks/BookBlock";
 import Link from "next/link";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { createSupabaseServerClient } from "@/shared/lib/supabase/server";
 import { Metadata } from "next";
 import { BlockDataBook } from "@/feature/admin/types";
 

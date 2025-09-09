@@ -5,8 +5,8 @@ import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/shared/ui/input";
+import { Textarea } from "@/shared/ui/textarea";
 import { ImageIcon } from "lucide-react";
 import {
   Form,
@@ -15,11 +15,11 @@ import {
   FormLabel,
   FormControl,
   FormMessage,
-} from "@/components/ui/form";
-import { Checkbox } from "@/components/ui/checkbox";
-import { ResponsiveDialog } from "@/components/ui/ResponsiveDialog";
-import { uploadImage } from "@/lib/api/api.client";
-import { handleAction } from "@/lib/api/action";
+} from "@/shared/ui/form";
+import { Checkbox } from "@/shared/ui/checkbox";
+import { ResponsiveDialog } from "@/shared/ui/ResponsiveDialog";
+import { uploadImage } from "@/shared/lib/api/api.client";
+import { handleAction } from "@/shared/lib/api/action";
 import { toast } from "sonner";
 
 const schema = z.object({

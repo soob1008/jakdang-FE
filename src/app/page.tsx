@@ -1,6 +1,6 @@
 import Image from "next/image";
-import { LinkButton } from "@/components/ui/link-button";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { LinkButton } from "@/shared/ui/link-button";
+import { createSupabaseServerClient } from "@/shared/lib/supabase/server";
 
 export default async function Home() {
   const supabase = await createSupabaseServerClient();

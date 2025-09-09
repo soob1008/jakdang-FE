@@ -1,14 +1,14 @@
 "use client";
 
 import { useState, ChangeEvent } from "react";
-import { FormField, FormItem, FormControl } from "@/components/ui/form";
-import { Switch } from "@/components/ui/switch";
-import { Button } from "@/components/ui/button";
+import { FormField, FormItem, FormControl } from "@/shared/ui/form";
+import { Switch } from "@/shared/ui/switch";
+import { Button } from "@/shared/ui/button";
 import { ChevronUp, ChevronDown, Upload } from "lucide-react";
 import Image from "next/image";
-import { Input } from "@/components/ui/input";
-import { uploadImage } from "@/lib/api/api.client";
-import { handleAction } from "@/lib/api/action";
+import { Input } from "@/shared/ui/input";
+import { uploadImage } from "@/shared/lib/api/api.client";
+import { handleAction } from "@/shared/lib/api/action";
 import { useFormContext } from "react-hook-form";
 
 export default function ProfileBlock() {

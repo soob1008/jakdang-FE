@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Input } from "@/shared/ui/input";
+import { Button } from "@/shared/ui/button";
 import {
   AlertDialog,
   AlertDialogTrigger,
@@ -12,10 +12,10 @@ import {
   AlertDialogFooter,
   AlertDialogCancel,
   AlertDialogAction,
-} from "@/components/ui/alert-dialog";
+} from "@/shared/ui/alert-dialog";
 import { Author } from "@/feature/user/type";
-import { handleAction } from "@/lib/api/action";
-import { apiClient } from "@/lib/api/api.client";
+import { handleAction } from "@/shared/lib/api/action";
+import { apiClient } from "@/shared/lib/api/api.client";
 import { Settings } from "lucide-react";
 import { revalidateUserInfo } from "../action";
 

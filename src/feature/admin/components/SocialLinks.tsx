@@ -1,12 +1,12 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 import { Plus } from "lucide-react";
 import SocialDialog from "@/feature/admin/dialog/SocialDialog";
 import { useState } from "react";
 import { AuthorSNS } from "@/feature/user/type";
 import SocialLinkItem from "@/feature/admin/components/SocialLInkItem";
-import EmptyText from "@/components/ui/EmptyText";
+import EmptyText from "@/shared/ui/EmptyText";
 
 interface SocialLinksProps {
   userId: string;

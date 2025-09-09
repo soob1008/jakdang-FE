@@ -1,5 +1,5 @@
 import { ProfileDialog } from "@/feature/admin/dialog/ProfileDialog";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Author } from "@/feature/user/type";
 
 interface AuthorInfoProps {

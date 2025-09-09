@@ -6,8 +6,8 @@ import {
   FormLabel,
   FormControl,
   FormMessage,
-} from "@/components/ui/form";
-import LexicalEditor from "@/components/editor/LexicalEditor";
+} from "@/shared/ui/form";
+import LexicalEditor from "@/shared/components/editor/LexicalEditor";
 
 export default function TextBlockEdit({ index }: { index: number }) {
   const namePrefix = `blocks_draft.${index}.data`;

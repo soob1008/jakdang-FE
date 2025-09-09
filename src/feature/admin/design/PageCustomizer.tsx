@@ -1,20 +1,20 @@
 "use client";
 
 import { useRef } from "react";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
+import { Label } from "@/shared/ui/label";
+import { Input } from "@/shared/ui/input";
+import { cn } from "@/shared/lib/utils";
 import { useFormContext } from "react-hook-form";
 import {
   FormItem,
   FormLabel,
   FormControl,
   FormMessage,
-} from "@/components/ui/form";
+} from "@/shared/ui/form";
 import { Page } from "@/feature/admin/types";
-import { handleAction } from "@/lib/api/action";
+import { handleAction } from "@/shared/lib/api/action";
 import Image from "next/image";
-import { uploadImage } from "@/lib/api/api.client";
+import { uploadImage } from "@/shared/lib/api/api.client";
 import { toast } from "sonner";
 
 export default function PageCustomizer() {
