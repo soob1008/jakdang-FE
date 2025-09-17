@@ -14,7 +14,7 @@ import { User, LogIn, Link as LinkIcon, Share2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Author } from "@/feature/user/type";
-import { createClient } from "@/lib/supabase/client";
+import { createClient } from "@/shared/lib/supabase/client";
 
 interface AuthorHeaderProps {
   user?: Author;

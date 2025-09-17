@@ -1,5 +1,5 @@
 import ProfileBlock from "@/feature/author/blocks/ProfileBlock";
-import { fetchServer } from "@/lib/api/api.server";
+import { fetchServer } from "@/shared/lib/api/api.server";
 import { Author } from "@/feature/user/type";
 import { Block, Page } from "@/feature/admin/types";
 import TextBlock from "@/feature/author/blocks/TextBlock";

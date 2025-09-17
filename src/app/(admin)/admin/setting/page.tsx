@@ -1,6 +1,6 @@
 import MyInformation from "@/feature/admin/setting/MyInformation";
 import AccountDelete from "@/feature/admin/setting/AccountDelete";
-import { fetchServer } from "@/lib/api/api.server";
+import { fetchServer } from "@/shared/lib/api/api.server";
 import { Author } from "@/feature/user/type";
 
 export default async function AdminSettingPage() {

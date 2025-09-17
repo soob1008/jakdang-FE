@@ -11,9 +11,9 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createClient } from "@/lib/supabase/client";
-import Loading from "@/components/loading";
-import { handleAction } from "@/lib/api/action";
+import { createClient } from "@/shared/lib/supabase/client";
+import Loading from "@/shared/components/loading";
+import { handleAction } from "@/shared/lib/api/action";
 
 const schema = z.object({
   slug: z
