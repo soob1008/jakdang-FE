@@ -12,10 +12,10 @@ import {
   FormLabel,
   FormControl,
   FormMessage,
-} from "@/components/ui/form";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { ResponsiveDialog } from "@/components/ui/ResponsiveDialog";
+} from "@/shared/ui/form";
+import { Button } from "@/shared/ui/button";
+import { Textarea } from "@/shared/ui/textarea";
+import { ResponsiveDialog } from "@/shared/ui/ResponsiveDialog";
 import { updateUser } from "@/feature/user/api.server";
 import { toast } from "sonner";
 

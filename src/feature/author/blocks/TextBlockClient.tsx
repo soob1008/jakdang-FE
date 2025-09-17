@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import DOMPurify from "dompurify";
-import { lexicalJsonToHtml } from "@/lib/editor/lexical";
+import { lexicalJsonToHtml } from "@/shared/lib/editor/lexical";
 
 export default function TextBlockClient({ content }: { content: string }) {
   const [html, setHtml] = useState("");

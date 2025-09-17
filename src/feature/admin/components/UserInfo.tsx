@@ -1,5 +1,5 @@
 "use client";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 import { Author } from "@/feature/user/type";
 
 interface UserInfoProps {

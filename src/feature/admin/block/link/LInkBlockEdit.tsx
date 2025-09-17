@@ -1,12 +1,12 @@
 import { useFieldArray, useFormContext } from "react-hook-form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Input } from "@/shared/ui/input";
+import { Button } from "@/shared/ui/button";
 import {
   FormField,
   FormItem,
   FormControl,
   FormMessage,
-} from "@/components/ui/form";
+} from "@/shared/ui/form";
 import { GripVertical, Plus, Trash2 } from "lucide-react";
 import {
   DragDropContext,

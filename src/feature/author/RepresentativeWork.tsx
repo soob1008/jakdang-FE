@@ -6,7 +6,7 @@ import {
   CarouselItem,
   CarouselPrevious,
   CarouselNext,
-} from "@/components/ui/carousel";
+} from "@/shared/ui/carousel";
 import { AuthorProfile, AuthorWork } from "@/feature/user/type";
 import WorkItem from "./components/WorkItem";
 import WorkDialog from "./blocks/work/WorkDialog";

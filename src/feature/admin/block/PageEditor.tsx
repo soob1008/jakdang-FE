@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 import { useFormContext, useFieldArray, useWatch } from "react-hook-form";
 import BlockItem from "./BlockItem";
 import BlockDialog from "./BlockDialog";
@@ -11,13 +11,13 @@ import {
   Draggable,
   DropResult,
 } from "@hello-pangea/dnd";
-import { useAutoSaveBlock } from "@/hooks/useAutoSaveBlock";
+import { useAutoSaveBlock } from "@/shared/hooks/useAutoSaveBlock";
 import { Block, BlockItemType } from "@/feature/admin/types";
 import ProfileBlock from "./ProfileBlock";
-import { useAutoSaveProfile } from "@/hooks/useAutoSaveProfile";
-import { apiClient } from "@/lib/api/api.client";
-import { handleAction } from "@/lib/api/action";
-import { cn } from "@/lib/utils";
+import { useAutoSaveProfile } from "@/shared/hooks/useAutoSaveProfile";
+import { apiClient } from "@/shared/lib/api/api.client";
+import { handleAction } from "@/shared/lib/api/action";
+import { cn } from "@/shared/lib/utils";
 
 // lightweight skeleton
 function Skel({ className = "" }: { className?: string }) {

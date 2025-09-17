@@ -3,10 +3,10 @@
 import { ChangeEvent, useState } from "react";
 import Image from "next/image";
 import { useFormContext, useFieldArray, Controller } from "react-hook-form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
-import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/shared/ui/input";
+import { Button } from "@/shared/ui/button";
+import { Switch } from "@/shared/ui/switch";
+import { Textarea } from "@/shared/ui/textarea";
 import { X, Plus, GripVertical, Upload } from "lucide-react";
 import {
   AlertDialog,
@@ -16,9 +16,9 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { handleAction } from "@/lib/api/action";
-import { uploadImage } from "@/lib/api/api.client";
+} from "@/shared/ui/alert-dialog";
+import { handleAction } from "@/shared/lib/api/action";
+import { uploadImage } from "@/shared/lib/api/api.client";
 import {
   DragDropContext,
   Droppable,
@@ -31,7 +31,7 @@ import {
   FormControl,
   FormMessage,
   FormLabel,
-} from "@/components/ui/form";
+} from "@/shared/ui/form";
 
 type WorkItem = {
   title: string;

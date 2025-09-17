@@ -1,5 +1,5 @@
 import ProfileBlock from "@/feature/author/blocks/ProfileBlock";
-import { fetchServer } from "@/lib/api/api.server";
+import { fetchServer } from "@/shared/lib/api/api.server";
 import { Author } from "@/feature/user/type";
 import { Block, Page } from "@/feature/admin/types";
 import TextBlock from "@/feature/author/blocks/TextBlock";
@@ -14,7 +14,7 @@ import { notFound } from "next/navigation";
 import React from "react";
 import BookBlock from "@/feature/author/blocks/BookBlock";
 import Link from "next/link";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { createSupabaseServerClient } from "@/shared/lib/supabase/server";
 import { Metadata } from "next";
 import { BlockDataBook } from "@/feature/admin/types";
 

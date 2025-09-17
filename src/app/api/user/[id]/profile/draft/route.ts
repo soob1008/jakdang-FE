@@ -1,4 +1,4 @@
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { createSupabaseServerClient } from "@/shared/lib/supabase/server";
 import { NextRequest } from "next/server";
 
 export async function PUT(

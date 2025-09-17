@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import "@/app/globals.css";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/app-sidebar";
+import { SidebarProvider, SidebarTrigger } from "@/shared/ui/sidebar";
 import AdminHeader from "@/feature/admin/header";
+import { AppSidebar } from "@/shared/components/app-sidebar";
 import { redirect } from "next/navigation";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { fetchServer } from "@/lib/api/api.server";
+import { createSupabaseServerClient } from "@/shared/lib/supabase/server";
+import { fetchServer } from "@/shared/lib/api/api.server";
 import { Author } from "@/feature/user/type";
 
 export const metadata: Metadata = {

@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Input } from "@/shared/ui/input";
+import { Button } from "@/shared/ui/button";
 import { useForm } from "react-hook-form";
 import clsx from "clsx";
 import { loginWithMagicLink } from "@/feature/user/api.client";
@@ -14,7 +14,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+} from "@/shared/ui/alert-dialog";
 
 type LoginFormValues = {
   email: string;

@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Input } from "@/shared/ui/input";
+import { Button } from "@/shared/ui/button";
 import clsx from "clsx";
 import { duplicateCheck } from "@/feature/user/api.client";
 import { updateUserSlug } from "@/feature/user/api.server";
@@ -11,9 +11,9 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createClient } from "@/lib/supabase/client";
-import Loading from "@/components/loading";
-import { handleAction } from "@/lib/api/action";
+import { createClient } from "@/shared/lib/supabase/client";
+import Loading from "@/shared/components/loading";
+import { handleAction } from "@/shared/lib/api/action";
 
 const schema = z.object({
   slug: z

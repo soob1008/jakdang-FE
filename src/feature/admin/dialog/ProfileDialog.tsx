@@ -13,16 +13,16 @@ import {
   FormLabel,
   FormControl,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { ResponsiveDialog } from "@/components/ui/ResponsiveDialog";
+} from "@/shared/ui/form";
+import { Input } from "@/shared/ui/input";
+import { Button } from "@/shared/ui/button";
+import { ResponsiveDialog } from "@/shared/ui/ResponsiveDialog";
 import { Author } from "@/feature/user/type";
 import { updateUser } from "@/feature/user/api.server";
 import { toast } from "sonner";
-import { uploadImage } from "@/lib/api/api.client";
-import { handleAction } from "@/lib/api/action";
-import { Textarea } from "@/components/ui/textarea";
+import { uploadImage } from "@/shared/lib/api/api.client";
+import { handleAction } from "@/shared/lib/api/action";
+import { Textarea } from "@/shared/ui/textarea";
 
 const schema = z.object({
   display_name: z.string().min(1, "필명을 입력해주세요."),

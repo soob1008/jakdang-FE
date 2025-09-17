@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Switch } from "@/components/ui/switch";
+import { Switch } from "@/shared/ui/switch";
 import { AuthorLink } from "@/feature/user/type";
 import { Trash2, Pencil } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,7 +12,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+} from "@/shared/ui/alert-dialog";
 
 interface LinkItemProps {
   link: AuthorLink;

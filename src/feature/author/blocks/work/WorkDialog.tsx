@@ -1,5 +1,5 @@
-import { ResponsiveDialog } from "@/components/ui/ResponsiveDialog";
-import { Badge } from "@/components/ui/badge";
+import { ResponsiveDialog } from "@/shared/ui/ResponsiveDialog";
+import { Badge } from "@/shared/ui/badge";
 import { AuthorWork } from "@/feature/user/type";
 
 interface WorkDialogProps {

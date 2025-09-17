@@ -10,12 +10,12 @@ import {
   AuthorLink,
   AuthorWork,
 } from "@/feature/user/type";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { handleAction } from "@/lib/api/action";
+import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
+import { handleAction } from "@/shared/lib/api/action";
 import { hasLikedAuthor, updateLikeAuthor } from "../viewer/api.server";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 import { toast } from "sonner";
-import { event } from "@/lib/ga/gtag";
+import { event } from "@/shared/lib/ga/gtag";
 
 interface ProfileProps {
   user: Author & {

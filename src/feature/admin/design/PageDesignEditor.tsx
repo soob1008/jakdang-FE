@@ -1,11 +1,11 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 import PageCustomizer from "./PageCustomizer";
 import { useFormContext } from "react-hook-form";
-import { apiClient } from "@/lib/api/api.client";
-import { handleAction } from "@/lib/api/action";
-import { useAutoSaveStyle } from "@/hooks/useAutoSaveStyle";
+import { apiClient } from "@/shared/lib/api/api.client";
+import { handleAction } from "@/shared/lib/api/action";
+import { useAutoSaveStyle } from "@/shared/hooks/useAutoSaveStyle";
 
 export default function PageDesignEditor() {
   const { watch } = useFormContext();

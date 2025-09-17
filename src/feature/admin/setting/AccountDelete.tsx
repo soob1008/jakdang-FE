@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 import {
   AlertDialog,
   AlertDialogTrigger,
@@ -11,9 +11,9 @@ import {
   AlertDialogFooter,
   AlertDialogCancel,
   AlertDialogAction,
-} from "@/components/ui/alert-dialog";
-import { handleAction } from "@/lib/api/action";
-import { apiClient } from "@/lib/api/api.client";
+} from "@/shared/ui/alert-dialog";
+import { handleAction } from "@/shared/lib/api/action";
+import { apiClient } from "@/shared/lib/api/api.client";
 import { useRouter } from "next/navigation";
 
 export default function AccountDelete() {

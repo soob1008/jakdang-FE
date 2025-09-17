@@ -1,7 +1,7 @@
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "@/shared/ui/badge";
 import AuthorTagDialog from "@/feature/admin/dialog/TagsDialog";
 import { AuthorTag } from "@/feature/user/type";
-import EmpltyText from "@/components/ui/EmptyText";
+import EmpltyText from "@/shared/ui/EmptyText";
 
 interface ProfileTagsProps {
   userId: string;

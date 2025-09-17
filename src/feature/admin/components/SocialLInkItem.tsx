@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Pencil, Trash2 } from "lucide-react";
-import { Switch } from "@/components/ui/switch";
+import { Switch } from "@/shared/ui/switch";
 import { AuthorSNS } from "@/feature/user/type";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,9 +12,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+} from "@/shared/ui/alert-dialog";
 import { deleteUserSNS, updateUserSNS } from "@/feature/user/api.server";
-import { handleAction } from "@/lib/api/action";
+import { handleAction } from "@/shared/lib/api/action";
 import Image from "next/image";
 
 interface SocialLinkItemProps {
