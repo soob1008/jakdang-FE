@@ -2,7 +2,7 @@ import { useRef, useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 import { debounce } from "lodash";
 import { apiClient } from "@/shared/lib/api/api.client";
-import type { Block } from "@/feature/admin/types";
+import type { Block } from "@/entities/block/model/types";
 
 export function useAutoSaveBlock(pageId: string) {
   const { watch } = useFormContext();

@@ -1,3 +1,10 @@
+export interface AuthorProfile extends Author {
+  user_tags: AuthorTag[];
+  sns: AuthorSNS[];
+  user_links: AuthorLink[];
+  user_works: AuthorWork[];
+}
+
 export interface Author {
   id: string;
   email: string;
@@ -17,4 +24,45 @@ export interface Profile {
   headline?: string;
   display_name?: string;
   text_color?: string;
+}
+
+export interface AuthorTag {
+  id: string;
+  tag: string;
+}
+
+export interface AuthorSNS {
+  id: string;
+  platform: SocialPlatform;
+  url: string;
+  is_active: boolean;
+}
+
+export type SocialPlatform =
+  | "instagram"
+  | "facebook"
+  | "threads"
+  | "youtube"
+  | "x"
+  | "brunch"
+  | "medium"
+  | "linkedin"
+  | "blog"
+  | "email";
+
+export interface AuthorLink {
+  id: string;
+  title: string;
+  url: string;
+  is_active: boolean;
+}
+
+export interface AuthorWork {
+  id: string;
+  title: string;
+  description?: string;
+  image_url?: string;
+  url?: string;
+  is_representative: boolean;
+  is_active: boolean;
 }

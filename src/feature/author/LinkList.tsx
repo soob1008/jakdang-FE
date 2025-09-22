@@ -1,6 +1,6 @@
 "use client";
 
-import { AuthorLink } from "@/feature/user/type";
+import { AuthorLink } from "@/entities/author/model/types";
 import { EllipsisVertical } from "lucide-react";
 import { toast } from "sonner";
 

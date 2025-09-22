@@ -17,7 +17,7 @@ import {
 import { Button } from "@/shared/ui/button";
 import { Calendar } from "@/shared/ui/calendar";
 import Image from "next/image";
-import { SearchBookList } from "@/feature/admin/types";
+import { SearchBookList } from "@/entities/block/model/types";
 import { ChangeEvent } from "react";
 import { uploadImage } from "@/shared/lib/api/api.client";
 import { handleAction } from "@/shared/lib/api/action";

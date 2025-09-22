@@ -3,7 +3,7 @@ import { type NextRequest } from "next/server";
 
 import { createSupabaseServerClient } from "@/shared/lib/supabase/server";
 import { redirect } from "next/navigation";
-import { getUser, createUser } from "@/feature/user/api.server";
+import { getUser, createUser } from "@/entities/author/lib/repository";
 
 const DEFAULT_STYLE = {
   theme_color: "#222222",

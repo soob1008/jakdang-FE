@@ -4,11 +4,14 @@ import { useState } from "react";
 import { LinkDialog } from "@/feature/admin/dialog/LinkDialog";
 import { Button } from "@/shared/ui/button";
 import { Plus } from "lucide-react";
-import { AuthorLink } from "@/feature/user/type";
+import { AuthorLink } from "@/entities/author/model/types";
 import LinkItem from "@/feature/admin/components/LInkItem";
 import { LinkValues } from "@/feature/admin/dialog/LinkDialog";
 import { handleAction } from "@/shared/lib/api/action";
-import { updateUserLinks, deleteUserLink } from "@/feature/user/api.server";
+import {
+  updateUserLinks,
+  deleteUserLink,
+} from "@/entities/author/lib/repository";
 import EmptyText from "@/shared/ui/EmptyText";
 
 interface LinkListProps {

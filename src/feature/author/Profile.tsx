@@ -9,7 +9,7 @@ import {
   AuthorSNS,
   AuthorLink,
   AuthorWork,
-} from "@/feature/user/type";
+} from "@/entities/author/model/types";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { handleAction } from "@/shared/lib/api/action";
 import { hasLikedAuthor, updateLikeAuthor } from "../viewer/api.server";

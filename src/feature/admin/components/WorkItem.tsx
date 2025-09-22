@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Badge } from "@/shared/ui/badge";
 import { Switch } from "@/shared/ui/switch";
 import { Pencil, Trash2 } from "lucide-react";
-import { AuthorWork } from "@/feature/user/type";
+import { AuthorWork } from "@/entities/author/model/types";
 import {
   AlertDialog,
   AlertDialogAction,

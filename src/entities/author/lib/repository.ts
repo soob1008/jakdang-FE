@@ -2,7 +2,7 @@
 
 import { createSupabaseServerClient } from "@/shared/lib/supabase/server";
 import { revalidatePath } from "next/cache";
-import { AuthorTag } from "@/feature/user/type";
+import { AuthorTag } from "@/entities/author/model/types";
 
 /* 
   사용자 정보 조회 함수

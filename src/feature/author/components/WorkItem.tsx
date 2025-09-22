@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Image from "next/image";
-import { AuthorWork } from "@/feature/user/type";
+import { AuthorWork } from "@/entities/author/model/types";
 import { Skeleton } from "@/shared/ui/skeleton";
 
 interface WorkItemProps {

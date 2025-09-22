@@ -12,7 +12,7 @@ import {
   DropResult,
 } from "@hello-pangea/dnd";
 import { useAutoSaveBlock } from "@/shared/hooks/useAutoSaveBlock";
-import { Block, BlockItemType } from "@/feature/admin/types";
+import { Block, BlockItemType } from "@/entities/block/model/types";
 import ProfileBlock from "./ProfileBlock";
 import { useAutoSaveProfile } from "@/shared/hooks/useAutoSaveProfile";
 import { apiClient } from "@/shared/lib/api/api.client";

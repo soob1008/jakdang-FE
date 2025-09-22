@@ -3,7 +3,7 @@ import {
   BlockType,
   Block,
   TemplateType,
-} from "@/feature/admin/types";
+} from "@/entities/block/model/types";
 
 export function createDefaultBlock(type: BlockType): BlockDefault {
   switch (type) {

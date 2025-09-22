@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Button } from "@/shared/ui/button";
-import { Block, PageStyle, BlockDataLink } from "@/feature/admin/types";
+import { Block, PageStyle, BlockDataLink } from "@/entities/block/model/types";
 
 interface LinkBlockProps {
   block: Block;

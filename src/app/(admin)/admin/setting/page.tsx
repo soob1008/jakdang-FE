@@ -1,7 +1,7 @@
 import MyInformation from "@/feature/admin/setting/MyInformation";
 import AccountDelete from "@/feature/admin/setting/AccountDelete";
 import { fetchServer } from "@/shared/lib/api/api.server";
-import { Author } from "@/feature/user/type";
+import { Author } from "@/entities/author/model/types";
 
 export default async function AdminSettingPage() {
   const { user }: { user: Author } = await fetchServer("/api/user", {

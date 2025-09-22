@@ -16,8 +16,8 @@ import { Input } from "@/shared/ui/input";
 import { Button } from "@/shared/ui/button";
 import { ResponsiveDialog } from "@/shared/ui/ResponsiveDialog";
 import { Badge } from "@/shared/ui/badge";
-import { AuthorTag } from "@/feature/user/type";
-import { updateUserTags } from "@/feature/user/api.server";
+import { AuthorTag } from "@/entities/author/model/types";
+import { updateUserTags } from "@/entities/author/lib/repository";
 import { toast } from "sonner";
 
 const schema = z.object({

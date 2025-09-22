@@ -1,7 +1,7 @@
 import ProfileBlock from "@/feature/author/blocks/ProfileBlock";
 import { fetchServer } from "@/shared/lib/api/api.server";
-import { Author } from "@/feature/user/type";
-import { Block, Page } from "@/feature/admin/types";
+import { Author } from "@/entities/author/model/types";
+import { Block, Page } from "@/entities/block/model/types";
 import TextBlock from "@/feature/author/blocks/TextBlock";
 import ImageBlock from "@/feature/author/blocks/ImageBlock";
 import LinkBlock from "@/feature/author/blocks/LinkBlock";
@@ -16,7 +16,7 @@ import BookBlock from "@/feature/author/blocks/BookBlock";
 import Link from "next/link";
 import { createSupabaseServerClient } from "@/shared/lib/supabase/server";
 import { Metadata } from "next";
-import { BlockDataBook } from "@/feature/admin/types";
+import { BlockDataBook } from "@/entities/block/model/types";
 
 interface AuthorPageProps {
   params: Promise<{ id: string }>;

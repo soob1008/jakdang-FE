@@ -4,10 +4,10 @@ import { useEffect } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import PagePreview from "@/feature/admin/PagePreview";
 import PageDesignEditor from "@/feature/admin/design/PageDesignEditor";
-import { Page } from "@/feature/admin/types";
+import { Page } from "@/entities/block/model/types";
 import { apiClient } from "@/shared/lib/api/api.client";
 import { useQuery } from "@tanstack/react-query";
-import { Author } from "@/feature/user/type";
+import { Author } from "@/entities/author/model/types";
 
 export default function AdminDesignPage() {
   const { data } = useQuery({

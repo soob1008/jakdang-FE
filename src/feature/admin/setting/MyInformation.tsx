@@ -13,7 +13,7 @@ import {
   AlertDialogCancel,
   AlertDialogAction,
 } from "@/shared/ui/alert-dialog";
-import { Author } from "@/feature/user/type";
+import { Author } from "@/entities/author/model/types";
 import { handleAction } from "@/shared/lib/api/action";
 import { apiClient } from "@/shared/lib/api/api.client";
 import { Settings } from "lucide-react";
