@@ -25,7 +25,7 @@ import {
 } from "@/shared/lib/const";
 import { ResponsiveDialog } from "@/shared/ui/ResponsiveDialog";
 import { toast } from "sonner";
-import { updateUserSNS } from "@/feature/user/api.server";
+import { updateUserSNS } from "@/entities/author/lib/repository";
 
 const schema = z.object({
   platform: z.enum(SOCIAL_PLATFORM_KEYS as [string, ...string[]]),

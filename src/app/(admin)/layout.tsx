@@ -6,7 +6,7 @@ import { AppSidebar } from "@/shared/components/app-sidebar";
 import { redirect } from "next/navigation";
 import { createSupabaseServerClient } from "@/shared/lib/supabase/server";
 import { fetchServer } from "@/shared/lib/api/api.server";
-import { Author } from "@/feature/user/type";
+import { Author } from "@/entities/author/model/types";
 
 export const metadata: Metadata = {
   title: "작당 - 당신의 공간을 꾸며보세요.",

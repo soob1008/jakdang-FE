@@ -10,10 +10,13 @@ import { useState } from "react";
 import { Plus } from "lucide-react";
 import { Button } from "@/shared/ui/button";
 import { WorkDialog } from "@/feature/admin/dialog/WorkDialog";
-import { AuthorWork } from "@/feature/user/type";
+import { AuthorWork } from "@/entities/author/model/types";
 import WorkItem from "@/feature/admin/components/WorkItem";
 import { handleAction } from "@/shared/lib/api/action";
-import { updateUserWorks, deleteUserWork } from "@/feature/user/api.server";
+import {
+  updateUserWorks,
+  deleteUserWork,
+} from "@/entities/author/lib/repository";
 import { WorkValues } from "@/feature/admin/dialog/WorkDialog";
 import EmptyText from "@/shared/ui/EmptyText";
 

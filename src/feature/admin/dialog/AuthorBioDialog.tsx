@@ -16,7 +16,7 @@ import {
 import { Button } from "@/shared/ui/button";
 import { Textarea } from "@/shared/ui/textarea";
 import { ResponsiveDialog } from "@/shared/ui/ResponsiveDialog";
-import { updateUser } from "@/feature/user/api.server";
+import { updateUser } from "@/entities/author/lib/repository";
 import { toast } from "sonner";
 
 const schema = z.object({

@@ -2,9 +2,9 @@
 
 import React from "react";
 import Link from "next/link";
-import { Block, BlockDataSNS, PageStyle } from "@/feature/admin/types";
+import { Block, BlockDataSNS, PageStyle } from "@/entities/block/model/types";
 import Image from "next/image";
-import { SNSPlatform } from "@/feature/admin/types";
+import { SNSPlatform } from "@/entities/block/model/types";
 
 interface SNSBlockProps {
   block: Block;

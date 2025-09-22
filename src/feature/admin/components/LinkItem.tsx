@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Switch } from "@/shared/ui/switch";
-import { AuthorLink } from "@/feature/user/type";
+import { AuthorLink } from "@/entities/author/model/types";
 import { Trash2, Pencil } from "lucide-react";
 import { Button } from "@/shared/ui/button";
 import {

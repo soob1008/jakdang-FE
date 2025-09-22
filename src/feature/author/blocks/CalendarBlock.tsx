@@ -1,7 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { Block, BlockDataCalendar, PageStyle } from "@/feature/admin/types";
+import {
+  Block,
+  BlockDataCalendar,
+  PageStyle,
+} from "@/entities/block/model/types";
 import { Card, CardContent } from "@/shared/ui/card";
 import {
   format,

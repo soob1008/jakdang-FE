@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/shared/ui/button";
-import { Author } from "@/feature/user/type";
+import { Author } from "@/entities/author/model/types";
 
 interface UserInfoProps {
   author: Author;

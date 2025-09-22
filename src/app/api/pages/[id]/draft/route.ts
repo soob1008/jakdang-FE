@@ -2,9 +2,9 @@ import { createSupabaseServerClient } from "@/shared/lib/supabase/server";
 import { z } from "zod";
 import { NextRequest, NextResponse } from "next/server";
 import { createDefaultBlock } from "@/feature/admin/block/utils";
-import { Block, BlockType } from "@/feature/admin/types";
+import { Block, BlockType } from "@/entities/block/model/types";
 import { getTemplateBlocks } from "@/feature/admin/block/utils";
-import { TemplateType } from "@/feature/admin/types";
+import { TemplateType } from "@/entities/block/model/types";
 
 // 요청 본문에서 type만 받음
 const BlockCreateSchema = z.object({

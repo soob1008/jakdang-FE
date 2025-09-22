@@ -14,7 +14,7 @@ import { RadioGroup, RadioGroupItem } from "@/shared/ui/radio-group";
 import { ReactNode, useEffect, useState } from "react";
 import { cn } from "@/shared/lib/utils";
 import { BLOCK_LIST } from "./const";
-import { BlockType, Block } from "../types";
+import { BlockType, Block } from "@/entities/block/model/types";
 import { apiClient } from "@/shared/lib/api/api.client";
 import { handleAction } from "@/shared/lib/api/action";
 import { useFormContext } from "react-hook-form";

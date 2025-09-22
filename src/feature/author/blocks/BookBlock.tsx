@@ -1,4 +1,4 @@
-import { Block, BlockDataBook, PageStyle } from "@/feature/admin/types";
+import { Block, BlockDataBook, PageStyle } from "@/entities/block/model/types";
 import Image from "next/image";
 import { format } from "date-fns";
 import { autoContrast } from "@/shared/lib/utils";

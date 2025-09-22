@@ -1,4 +1,4 @@
-import { Block, BlockDataBlank } from "@/feature/admin/types";
+import { Block, BlockDataBlank } from "@/entities/block/model/types";
 
 interface BlankBlockProps {
   block: Block;

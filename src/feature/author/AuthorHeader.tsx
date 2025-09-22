@@ -13,7 +13,7 @@ import {
 import { User, LogIn, Link as LinkIcon, Share2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { Author } from "@/feature/user/type";
+import { Author } from "@/entities/author/model/types";
 import { createClient } from "@/shared/lib/supabase/client";
 
 interface AuthorHeaderProps {

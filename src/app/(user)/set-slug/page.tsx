@@ -6,7 +6,7 @@ import { Input } from "@/shared/ui/input";
 import { Button } from "@/shared/ui/button";
 import clsx from "clsx";
 import { duplicateCheck } from "@/feature/user/api.client";
-import { updateUserSlug } from "@/feature/user/api.server";
+import { updateUserSlug } from "@/entities/author/lib/repository";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { z } from "zod";

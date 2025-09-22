@@ -1,6 +1,6 @@
 import { Badge } from "@/shared/ui/badge";
 import AuthorTagDialog from "@/feature/admin/dialog/TagsDialog";
-import { AuthorTag } from "@/feature/user/type";
+import { AuthorTag } from "@/entities/author/model/types";
 import EmpltyText from "@/shared/ui/EmptyText";
 
 interface ProfileTagsProps {

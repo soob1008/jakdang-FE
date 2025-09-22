@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import WorkItem from "./components/WorkItem";
-import { AuthorProfile, AuthorWork } from "@/feature/user/type";
+import { AuthorProfile, AuthorWork } from "@/entities/author/model/types";
 import WorkDialog from "./blocks/work/WorkDialog";
 
 interface WorkListProps {

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Pencil, Trash2 } from "lucide-react";
 import { Switch } from "@/shared/ui/switch";
-import { AuthorSNS } from "@/feature/user/type";
+import { AuthorSNS } from "@/entities/author/model/types";
 import { Button } from "@/shared/ui/button";
 import {
   AlertDialog,
@@ -13,7 +13,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/shared/ui/alert-dialog";
-import { deleteUserSNS, updateUserSNS } from "@/feature/user/api.server";
+import { deleteUserSNS, updateUserSNS } from "@/entities/author/lib/repository";
 import { handleAction } from "@/shared/lib/api/action";
 import Image from "next/image";
 
