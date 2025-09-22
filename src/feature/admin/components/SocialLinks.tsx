@@ -5,7 +5,7 @@ import { Plus } from "lucide-react";
 import SocialDialog from "@/feature/admin/dialog/SocialDialog";
 import { useState } from "react";
 import { AuthorSNS } from "@/entities/author/model/types";
-import SocialLinkItem from "@/feature/admin/components/SocialLInkItem";
+import SocialLinkItem from "@/feature/admin/components/SocialLinkItem";
 import EmptyText from "@/shared/ui/EmptyText";
 
 interface SocialLinksProps {
