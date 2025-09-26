@@ -1,8 +1,11 @@
+"use server";
+
 // lib/api/serverFetch.ts
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export async function fetchServer<TResponse>(
   input: string,
@@ -35,4 +38,27 @@ export async function fetchServer<TResponse>(
   }
 
   return res.json();
+}
+
+export async function fetchAPI<TResponse>(
+  input: string,
+  init?: RequestInit
+): Promise<TResponse> {
+  const res = await fetch(`${API_URL}${input}`, {
+    ...init,
+    headers: {
+      ...(init?.headers || {}),
+      "Content-Type": "application/json",
+    },
+    cache: init?.cache ?? "no-store", // 캐싱 방지
+  });
+
+  if (!res.ok) {
+    if (res.status === 401) throw new Error("Unauthorized access");
+    if (res.status === 404) notFound();
+    if (res.status === 500) throw new Error("Internal server error");
+    throw new Error(`Unexpected error: ${res.status}`);
+  }
+
+  return res.json() as Promise<TResponse>;
 }

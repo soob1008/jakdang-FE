@@ -5,7 +5,6 @@ import { Input } from "@/shared/ui/input";
 import { Button } from "@/shared/ui/button";
 import { useForm } from "react-hook-form";
 import clsx from "clsx";
-import { loginWithMagicLink } from "@/feature/user/api.client";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -15,6 +14,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/shared/ui/alert-dialog";
+import { fetchAPI } from "@/shared/lib/api/api.server";
 
 type LoginFormValues = {
   email: string;
@@ -31,14 +31,19 @@ export function LoginForm() {
 
   const [isSent, setIsSent] = useState(false);
 
-  const onSubmit = (data: LoginFormValues) => {
-    console.log("이메일 제출됨:", data.email);
-    loginWithMagicLink(data.email).then((error) => {
-      if (!error) {
-        // 성공 처리
+  const onSubmit = async (data: LoginFormValues) => {
+    try {
+      const response = await fetchAPI<{ message: string }>("/auth/login", {
+        method: "POST",
+        body: JSON.stringify(data),
+      });
+
+      if (response.message) {
         setIsSent(true);
       }
-    });
+    } catch (error) {
+      console.error("Error logging in:", error);
+    }
   };
 
   return (
