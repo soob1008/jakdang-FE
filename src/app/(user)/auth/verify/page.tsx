@@ -1,10 +1,11 @@
-// app/auth/verify/page.tsx (Server Component)
 import VerifyPageClient from "@/feature/auth/components/TokenVerifyClient";
+import { SearchParams } from "@/shared/type/route";
 
-export default function VerifyPage({
+export default async function VerifyPage({
   searchParams,
 }: {
-  searchParams: { token?: string };
+  searchParams: Promise<SearchParams>;
 }) {
-  return <VerifyPageClient token={searchParams.token} />;
+  const token = (await searchParams)?.token as string | undefined;
+  return <VerifyPageClient token={token} />;
 }
