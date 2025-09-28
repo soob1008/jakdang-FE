@@ -46,6 +46,7 @@ export async function fetchAPI<TResponse>(
 ): Promise<TResponse> {
   const res = await fetch(`${API_URL}${input}`, {
     ...init,
+    method: init?.method || "GET",
     headers: {
       "Content-Type": "application/json",
       ...(init?.headers || {}),
