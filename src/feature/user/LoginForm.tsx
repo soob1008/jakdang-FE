@@ -15,6 +15,7 @@ import {
   AlertDialogTitle,
 } from "@/shared/ui/alert-dialog";
 import { fetchAPI } from "@/shared/lib/api/api.server";
+import { toast } from "sonner";
 
 type LoginFormValues = {
   email: string;
@@ -35,14 +36,18 @@ export function LoginForm() {
     try {
       const response = await fetchAPI<{ message: string }>("/auth/login", {
         method: "POST",
-        body: JSON.stringify(data),
+        body: JSON.stringify({ email: data.email }),
       });
 
       if (response.message) {
         setIsSent(true);
       }
-    } catch (error) {
-      console.error("Error logging in:", error);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("로그인 링크 전송에 실패했어요.");
+      }
     }
   };
 

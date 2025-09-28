@@ -47,18 +47,22 @@ export async function fetchAPI<TResponse>(
   const res = await fetch(`${API_URL}${input}`, {
     ...init,
     headers: {
-      ...(init?.headers || {}),
       "Content-Type": "application/json",
+      ...(init?.headers || {}),
     },
-    cache: init?.cache ?? "no-store", // 캐싱 방지
   });
 
-  if (!res.ok) {
-    if (res.status === 401) throw new Error("Unauthorized access");
-    if (res.status === 404) notFound();
-    if (res.status === 500) throw new Error("Internal server error");
-    throw new Error(`Unexpected error: ${res.status}`);
+  let data = null;
+  try {
+    data = await res.json();
+  } catch {
+    data = null;
   }
 
-  return res.json() as Promise<TResponse>;
+  if (!res.ok) {
+    const message = data?.error || data?.message || "알 수 없는 오류";
+    throw new Error(message);
+  }
+
+  return data as TResponse;
 }
