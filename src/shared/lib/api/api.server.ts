@@ -40,16 +40,21 @@ export async function fetchServer<TResponse>(
   return res.json();
 }
 
-export async function fetchAPI<TResponse>(
+export async function fetchServerAPI<TResponse>(
   input: string,
   init?: RequestInit
 ): Promise<TResponse> {
+  const headersList = await headers();
+  const cookie = headersList.get("cookie") ?? "";
+
   const res = await fetch(`${API_URL}${input}`, {
     ...init,
     method: init?.method || "GET",
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
       ...(init?.headers || {}),
+      cookie,
     },
   });
 

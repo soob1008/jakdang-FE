@@ -14,7 +14,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/shared/ui/alert-dialog";
-import { fetchAPI } from "@/shared/lib/api/api.server";
+import { fetchServerAPI } from "@/shared/lib/api/api.server";
 import { toast } from "sonner";
 
 type LoginFormValues = {
@@ -34,10 +34,13 @@ export function LoginForm() {
 
   const onSubmit = async (data: LoginFormValues) => {
     try {
-      const response = await fetchAPI<{ message: string }>("/auth/login", {
-        method: "POST",
-        body: JSON.stringify({ email: data.email }),
-      });
+      const response = await fetchServerAPI<{ message: string }>(
+        "/auth/login",
+        {
+          method: "POST",
+          body: JSON.stringify({ email: data.email }),
+        }
+      );
 
       if (response.message) {
         setIsSent(true);
