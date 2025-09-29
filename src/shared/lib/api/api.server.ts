@@ -46,6 +46,10 @@ export async function fetchServerAPI<TResponse>(
 ): Promise<TResponse> {
   const headersList = await headers();
   const cookie = headersList.get("cookie") ?? "";
+  const csrfToken = cookie
+    .split(";")
+    .find((c) => c.trim().startsWith("csrftoken="))
+    ?.split("=")[1];
 
   const res = await fetch(`${API_URL}${input}`, {
     ...init,
@@ -55,6 +59,7 @@ export async function fetchServerAPI<TResponse>(
       "Content-Type": "application/json",
       ...(init?.headers || {}),
       cookie,
+      "X-CSRFToken": csrfToken || "",
     },
   });
 
@@ -63,6 +68,10 @@ export async function fetchServerAPI<TResponse>(
     data = await res.json();
   } catch {
     data = null;
+  }
+
+  if (res.status === 403) {
+    throw new Error("AUTH_EXPIRED");
   }
 
   if (!res.ok) {

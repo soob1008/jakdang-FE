@@ -1,6 +1,16 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export function middleware() {
+export function middleware(request: NextRequest) {
+  const session = request.cookies.get("sessionid")?.value;
+
+  if (!session && request.nextUrl.pathname.startsWith("/admin")) {
+    return NextResponse.redirect(new URL("/auth/login", request.url));
+  }
+
+  if (session && request.nextUrl.pathname.startsWith("/auth")) {
+    return NextResponse.redirect(new URL("/admin/compose", request.url));
+  }
+
   return NextResponse.next();
 }
 

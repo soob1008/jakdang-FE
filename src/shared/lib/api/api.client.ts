@@ -2,6 +2,7 @@
 
 import { createClient } from "@/shared/lib/supabase/client";
 import { IMAGE_BUCKET_NAME } from "@/shared/lib/const";
+import { getCookie } from "@/shared/lib/utils";
 
 type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
 
@@ -22,17 +23,19 @@ async function request<TResponse, TBody = unknown>(
     credentials: "include",
     headers: {
       "Content-Type": "application/json",
+      "X-CSRFToken": getCookie("csrftoken") || "",
       ...headers,
     },
     body: body ? JSON.stringify(body) : undefined,
   });
 
-  if (res.status === 403) {
-    throw new Error("AUTH_EXPIRED");
-  }
-
   if (!res.ok) {
     const errorData = await res.json().catch(() => ({}));
+
+    if (res.status === 403) {
+      throw new Error("AUTH_EXPIRED");
+    }
+
     throw new Error(errorData.message || "API 요청 실패");
   }
 
