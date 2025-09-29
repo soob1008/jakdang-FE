@@ -86,3 +86,34 @@ export async function uploadImage(file: File, userId: string) {
 
   return { imagePath, error: null };
 }
+
+export async function fetchClientAPI<TResponse>(
+  input: string,
+  init?: RequestInit
+): Promise<TResponse> {
+  const res = await fetch(`/api${input}`, {
+    ...init,
+    method: init?.method || "GET",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+      ...(init?.headers || {}),
+    },
+  });
+
+  let data = null;
+  try {
+    data = await res.json();
+  } catch {
+    data = null;
+  }
+
+  console.log("set-cookie", res.headers.get("Set-Cookie"));
+
+  if (!res.ok) {
+    const message = data?.error || data?.message || "알 수 없는 오류";
+    throw new Error(message);
+  }
+
+  return data as TResponse;
+}

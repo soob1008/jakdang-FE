@@ -19,8 +19,10 @@ export default function BlockContainer() {
   });
   const { data: userData } = useQuery({
     queryKey: ["user"],
-    queryFn: () => apiClient.get<{ user: Author }>("/api/user"),
+    queryFn: () => apiClient.get<{ user: Author }>("/api/user/me"),
   });
+
+  console.log("user:", userData);
 
   const form = useForm({
     mode: "onChange",
