@@ -19,6 +19,9 @@ export default function VerifyPageClient({ token }: { token?: string }) {
           ),
         {
           errorMessage: "로그인에 실패했습니다. 다시 확인해주세요.",
+          onError: () => {
+            router.push("/auth/login");
+          },
           onSuccess: (res) => {
             router.push(res.is_new_user ? "/set-slug" : "/admin/compose");
           },
