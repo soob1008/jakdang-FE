@@ -14,8 +14,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/shared/ui/alert-dialog";
-import { fetchServerAPI } from "@/shared/lib/api/api.server";
-import { toast } from "sonner";
+import { apiClient } from "@/shared/lib/api/api.client";
+import { handleAction } from "@/shared/lib/api/action";
 
 type LoginFormValues = {
   email: string;
@@ -33,25 +33,18 @@ export function LoginForm() {
   const [isSent, setIsSent] = useState(false);
 
   const onSubmit = async (data: LoginFormValues) => {
-    try {
-      const response = await fetchServerAPI<{ message: string }>(
-        "/auth/login",
-        {
-          method: "POST",
-          body: JSON.stringify({ email: data.email }),
-        }
-      );
-
-      if (response.message) {
-        setIsSent(true);
+    await handleAction(
+      () =>
+        apiClient.post<unknown, { email: string }>(`/auth/login`, {
+          email: data.email,
+        }),
+      {
+        errorMessage: "로그인 링크 전송에 실패했습니다.",
+        onSuccess: () => {
+          setIsSent(true);
+        },
       }
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-      } else {
-        toast.error("로그인 링크 전송에 실패했어요.");
-      }
-    }
+    );
   };
 
   return (

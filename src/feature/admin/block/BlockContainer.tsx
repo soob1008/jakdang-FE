@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { useForm, FormProvider } from "react-hook-form";
-import PagePreview from "@/feature/admin/PagePreview";
-import PageEditor from "@/feature/admin/block/PageEditor";
+// import PagePreview from "@/feature/admin/PagePreview";
+// import PageEditor from "@/feature/admin/block/PageEditor";
 import { Page } from "@/entities/block/model/types";
 import { apiClient } from "@/shared/lib/api/api.client";
 import { useQuery } from "@tanstack/react-query";
@@ -13,16 +13,17 @@ export const STORAGE_KEY = "selected-block-id";
 
 export default function BlockContainer() {
   const [hasMounted, setHasMounted] = useState(false);
-  const { data } = useQuery({
-    queryKey: ["admin-page"],
-    queryFn: () => apiClient.get<{ page: Page }>("/api/pages"),
-  });
+
+  // const { data } = useQuery({
+  //   queryKey: ["admin-page"],
+  //   queryFn: () => apiClient.get<{ page: Page }>("/api/pages"),
+  // });
   const { data: userData } = useQuery({
     queryKey: ["user"],
-    queryFn: () => apiClient.get<{ user: Author }>("/api/user/me"),
+    queryFn: () => apiClient.get<Author>("/users/me"),
   });
 
-  console.log("user:", userData);
+  console.log(userData);
 
   const form = useForm({
     mode: "onChange",
@@ -37,35 +38,35 @@ export default function BlockContainer() {
         is_active: true,
         avatar_url: "",
         headline: "",
-        display_name: userData?.user.display_name ?? "",
+        display_name: userData?.display_name ?? "",
       },
     },
   });
 
-  const { reset } = form;
+  // const { reset } = form;
 
   useEffect(() => {
     setHasMounted(true);
   }, []);
 
-  useEffect(() => {
-    if (!data || !userData) return;
+  // useEffect(() => {
+  //   if (!data || !userData) return;
 
-    reset({
-      id: data.page.id ?? "",
-      user_id: userData.user.id ?? "",
-      display_name: userData.user.display_name ?? "",
-      style_draft: data.page.style_draft ?? {},
-      style_published: data.page.style_published ?? {},
-      blocks_draft: data.page.blocks_draft ?? [],
-      profile: userData.user.profile_draft ?? {
-        is_active: true,
-        avatar_url: "",
-        headline: "",
-        display_name: userData.user.display_name ?? "",
-      },
-    });
-  }, [data, userData, reset]);
+  //   reset({
+  //     id: data.page.id ?? "",
+  //     user_id: userData.user.id ?? "",
+  //     display_name: userData.user.display_name ?? "",
+  //     style_draft: data.page.style_draft ?? {},
+  //     style_published: data.page.style_published ?? {},
+  //     blocks_draft: data.page.blocks_draft ?? [],
+  //     profile: userData.user.profile_draft ?? {
+  //       is_active: true,
+  //       avatar_url: "",
+  //       headline: "",
+  //       display_name: userData.user.display_name ?? "",
+  //     },
+  //   });
+  // }, [data, userData, reset]);
 
   // if (isLoading) return <div>로딩 중...</div>;
   //  if (error || !data) return <div>에러 발생</div>;
@@ -75,12 +76,12 @@ export default function BlockContainer() {
   return (
     <FormProvider {...form}>
       <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6 h-full">
-        <div className="order-2 lg:order-1">
+        {/* <div className="order-2 lg:order-1">
           <PageEditor />
         </div>
         <div className="order-1 lg:order-2">
           <PagePreview />
-        </div>
+        </div> */}
       </div>
     </FormProvider>
   );

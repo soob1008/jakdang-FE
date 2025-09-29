@@ -15,7 +15,12 @@ export const metadata: Metadata = {
 export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const user = await fetchServerAPI<Author>("/users/me");
+  let user: Author | null = null;
+  try {
+    user = await fetchServerAPI<Author>("/users/me");
+  } catch {
+    redirect("/auth/login");
+  }
 
   if (!user) return redirect("/auth/login");
 

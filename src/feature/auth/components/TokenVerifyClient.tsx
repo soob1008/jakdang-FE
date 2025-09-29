@@ -2,7 +2,8 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { fetchClientAPI } from "@/shared/lib/api/api.client";
+import { handleAction } from "@/shared/lib/api/action";
+import { apiClient } from "@/shared/lib/api/api.client";
 
 export default function VerifyPageClient({ token }: { token?: string }) {
   const router = useRouter();
@@ -11,18 +12,18 @@ export default function VerifyPageClient({ token }: { token?: string }) {
     if (!token) return;
 
     const verifyToken = async () => {
-      try {
-        const res = await fetchClientAPI<{
-          user: string;
-          is_new_user: boolean;
-        }>(`/auth/verify?token=${token}`);
-
-        if (res.user) {
-          router.push(res.is_new_user ? "/auth/set-slug" : "/admin/compose");
+      await handleAction(
+        () =>
+          apiClient.get<{ is_new_user: boolean }>(
+            `/auth/verify?token=${token}`
+          ),
+        {
+          errorMessage: "로그인에 실패했습니다. 다시 확인해주세요.",
+          onSuccess: (res) => {
+            router.push(res.is_new_user ? "/set-slug" : "/admin/compose");
+          },
         }
-      } catch (err) {
-        console.error(err);
-      }
+      );
     };
 
     verifyToken();
