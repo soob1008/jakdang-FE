@@ -2,7 +2,6 @@
 
 import { createClient } from "@/shared/lib/supabase/client";
 import { IMAGE_BUCKET_NAME } from "@/shared/lib/const";
-import { getCookie } from "../utils";
 
 type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
 
@@ -29,7 +28,7 @@ async function request<TResponse, TBody = unknown>(
   });
 
   if (res.status === 403) {
-    await logout();
+    throw new Error("AUTH_EXPIRED");
   }
 
   if (!res.ok) {
@@ -95,19 +94,19 @@ export async function uploadImage(file: File, userId: string) {
   return { imagePath, error: null };
 }
 
-export async function logout() {
-  await fetch("/api/auth/logout", {
-    method: "POST",
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-      "X-CSRFToken": getCookie("csrftoken") || "",
-    },
-  });
-  window.dispatchEvent(new Event("session-expired"));
-  throw new Error("세션이 만료되었습니다. 다시 로그인 해주세요.");
-  location.href = "/auth/login";
-}
+// export async function logout() {
+//   await fetch("/api/auth/logout", {
+//     method: "POST",
+//     credentials: "include",
+//     headers: {
+//       "Content-Type": "application/json",
+//       "X-CSRFToken": getCookie("csrftoken") || "",
+//     },
+//   });
+//   window.dispatchEvent(new Event("session-expired"));
+//   throw new Error("세션이 만료되었습니다. 다시 로그인 해주세요.");
+//   location.href = "/auth/login";
+// }
 
 // export async function fetchClientAPI<TResponse>(
 //   input: string,
