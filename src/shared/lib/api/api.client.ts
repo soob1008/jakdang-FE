@@ -28,10 +28,6 @@ async function request<TResponse, TBody = unknown>(
     body: body ? JSON.stringify(body) : undefined,
   });
 
-  if (res.status === 403) {
-    await logout();
-  }
-
   if (!res.ok) {
     const errorData = await res.json().catch(() => ({}));
     throw new Error(errorData.message || "API 요청 실패");
