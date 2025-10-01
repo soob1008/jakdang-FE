@@ -38,7 +38,7 @@ export function AuthorPageBlocks({ author, page }: AuthorPageBlocksProps) {
   );
 }
 
-function renderBlock(block: Block, style?: PageStyle) {
+function renderBlock(block: Block, style: PageStyle) {
   switch (block.type) {
     case "text":
       return <TextBlock key={block.id} block={block} />;
