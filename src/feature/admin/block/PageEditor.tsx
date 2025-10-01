@@ -58,9 +58,9 @@ export default function PageEditor() {
 
   // published 하는 함수
   const handleSavePage = async () => {
-    const blocks = watch("blocks_draft");
-    const profile = watch("profile");
-    const style = watch("style_draft");
+    // const blocks = watch("blocks_draft");
+    // const profile = watch("profile");
+    // const style = watch("style_draft");
 
     // await handleAction(
     //   () =>
