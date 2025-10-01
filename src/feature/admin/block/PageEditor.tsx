@@ -11,14 +11,10 @@ import {
   Draggable,
   DropResult,
 } from "@hello-pangea/dnd";
-import { useAutoSaveBlock } from "@/shared/hooks/useAutoSaveBlock";
 import { Block, BlockItemType } from "@/entities/page/model/types";
 import ProfileBlock from "./ProfileBlock";
-import { useAutoSaveProfile } from "@/shared/hooks/useAutoSaveProfile";
-import { apiClient } from "@/shared/lib/api/api.client";
-import { handleAction } from "@/shared/lib/api/action";
 import { cn } from "@/shared/lib/utils";
-import useUpdatePage from "@/feature/page/hooks/useUpdatePage";
+import useAutoSaveBlocks from "@/feature/page/hooks/useAutoSaveBlocks";
 
 function Skel({ className = "" }: { className?: string }) {
   return (
@@ -34,11 +30,9 @@ export default function PageEditor() {
     keyName: "block_id",
   });
 
-  const { mutateAsync: updatePage } = useUpdatePage();
-
   const [openBlockDialog, setOpenBlockDialog] = useState(false);
 
-  // useAutoSaveBlock(watch("id"));
+  useAutoSaveBlocks(watch("id"));
   // useAutoSaveProfile(watch("user_id"));
 
   const blocksWatch = useWatch({ control, name: "blocks_draft" });
