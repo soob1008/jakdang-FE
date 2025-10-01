@@ -63,6 +63,8 @@ export async function fetchServerAPI<TResponse>(
     },
   });
 
+  console.log("response", res);
+
   let data = null;
   try {
     data = await res.json();

@@ -1,24 +1,27 @@
-import { useRef, useEffect } from "react";
-import { useFormContext } from "react-hook-form";
-import { debounce } from "lodash";
+import { useMutation } from "@tanstack/react-query";
 import { apiClient } from "@/shared/lib/api/api.client";
-import type { Block } from "@/entities/block/model/types";
+import type { Page, Block } from "@/entities/page/model/types";
+import { useFormContext } from "react-hook-form";
+import { useRef, useEffect } from "react";
+import { debounce } from "lodash";
 
-export function useAutoSaveBlock(pageId: string) {
+export default function useAutoSaveBlocks(pageId: string) {
   const { watch } = useFormContext();
   const prevJsonRef = useRef<string>("");
+
+  const mutation = useMutation({
+    mutationFn: (blocks: Block[]) =>
+      apiClient.patch<Page>(`/pages/${pageId}/blocks/draft`, {
+        blocks_draft: blocks,
+      }),
+  });
 
   useEffect(() => {
     if (!pageId) return;
 
-    const debouncedSave = debounce(async (value: Block[]) => {
-      try {
-        await apiClient.put(`/api/pages/${pageId}/draft`, {
-          blocks_draft: value,
-        });
-      } catch (error) {
-        console.error("Error during auto-save:", error);
-      }
+    console.log(pageId, watch());
+    const debouncedSave = debounce((blocks: Block[]) => {
+      mutation.mutate(blocks);
     }, 2000);
 
     const subscription = watch((value) => {

@@ -1,8 +1,8 @@
 import Image from "next/image";
 import clsx from "clsx";
-import { Block, BlockDataImage } from "@/entities/block/model/types";
+import { Block, BlockDataImage } from "@/entities/page/model/types";
 import { Carousel, CarouselContent, CarouselItem } from "@/shared/ui/carousel";
-import { PageStyle } from "@/entities/block/model/types";
+import { PageStyle } from "@/entities/page/model/types";
 
 interface ImageBlockProps {
   block: Block;

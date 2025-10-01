@@ -11,7 +11,7 @@ import {
   FormControl,
   FormMessage,
 } from "@/shared/ui/form";
-import { Page } from "@/entities/block/model/types";
+import { Page } from "@/entities/page/model/types";
 import { handleAction } from "@/shared/lib/api/action";
 import Image from "next/image";
 import { uploadImage } from "@/shared/lib/api/api.client";

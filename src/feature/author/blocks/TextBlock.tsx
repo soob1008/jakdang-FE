@@ -1,4 +1,4 @@
-import { Block, BlockDataText } from "@/entities/block/model/types";
+import { Block, BlockDataText } from "@/entities/page/model/types";
 import TextBlockClient from "./TextBlockClient";
 
 interface TextBlockProps {
