@@ -5,7 +5,7 @@ import {
   Block,
   BlockDataCalendar,
   PageStyle,
-} from "@/entities/block/model/types";
+} from "@/entities/page/model/types";
 import { Card, CardContent } from "@/shared/ui/card";
 import {
   format,

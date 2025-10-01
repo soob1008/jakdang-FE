@@ -14,12 +14,10 @@ import { RadioGroup, RadioGroupItem } from "@/shared/ui/radio-group";
 import { ReactNode, useEffect, useState } from "react";
 import { cn } from "@/shared/lib/utils";
 import { BLOCK_LIST } from "./const";
-import { BlockType, Block } from "@/entities/block/model/types";
-import { apiClient } from "@/shared/lib/api/api.client";
-import { handleAction } from "@/shared/lib/api/action";
+import { BlockType } from "@/entities/page/model/types";
 import { useFormContext } from "react-hook-form";
-import { useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
+import useAddBlock from "@/feature/page/hooks/useAddBlock";
 
 interface BlockSelectDialogProps {
   open: boolean;
@@ -32,7 +30,7 @@ export default function BlockDialog({
   onOpenChange,
   trigger,
 }: BlockSelectDialogProps) {
-  const queryClient = useQueryClient();
+  const { mutateAsync: addBlock } = useAddBlock();
 
   const { watch } = useFormContext();
   const [selectedType, setSelectedType] = useState<BlockType | null>(null);
@@ -48,27 +46,23 @@ export default function BlockDialog({
     if (!selectedType) {
       return;
     }
-    setIsLoading(true);
 
-    await handleAction(
-      () =>
-        apiClient.post<Block, { type: BlockType }>(
-          `/api/pages/${watch("id")}/draft`,
-          {
-            type: selectedType,
-          }
-        ),
-      {
-        successMessage: "블록이 성공적으로 추가되었습니다.",
-        errorMessage: "블록 추가에 실패했습니다.",
-        onSuccess: () => {
-          onOpenChange(false);
-          setSelectedType(null);
-          queryClient.invalidateQueries({ queryKey: ["admin-page"] });
-          setIsLoading(false);
-        },
-      }
-    );
+    const pageId = watch("id");
+    if (!pageId) {
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+
+      await addBlock({
+        pageId,
+        type: selectedType,
+      });
+    } finally {
+      setIsLoading(false);
+      onOpenChange(false);
+    }
   };
 
   return (

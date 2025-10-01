@@ -1,6 +1,6 @@
 "use client";
 
-import { Block } from "@/entities/block/model/types";
+import { Block } from "@/entities/page/model/types";
 import { useFormContext, useWatch } from "react-hook-form";
 import BlockPreview from "@/feature/admin/block/BlockPreview";
 import ProfileBlock from "../author/blocks/ProfileBlock";

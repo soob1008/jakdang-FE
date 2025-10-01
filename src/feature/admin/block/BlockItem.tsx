@@ -7,7 +7,7 @@ import { Button } from "@/shared/ui/button";
 import { FormField, FormItem, FormControl } from "@/shared/ui/form";
 import BlockOptions from "./BlockOptions";
 import TextBlockEdit from "./text/TextBlockEdit";
-import { BlockItemType } from "@/entities/block/model/types";
+import { BlockItemType } from "@/entities/page/model/types";
 import ImageBlockEdit from "./image/ImageBlockEdit";
 import LinkBlockEdit from "./link/LinkBlockEdit";
 import SNSBlockEdit from "./sns/SNSBlockEdit";
