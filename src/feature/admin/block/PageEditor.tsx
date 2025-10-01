@@ -15,6 +15,7 @@ import { Block, BlockItemType } from "@/entities/page/model/types";
 import ProfileBlock from "./ProfileBlock";
 import { cn } from "@/shared/lib/utils";
 import useAutoSaveBlocks from "@/feature/page/hooks/useAutoSaveBlocks";
+import useUpdateBlockPublished from "@/feature/page/hooks/useUpdateBlockPublished";
 
 function Skel({ className = "" }: { className?: string }) {
   return (
@@ -31,6 +32,7 @@ export default function PageEditor() {
   });
 
   const [openBlockDialog, setOpenBlockDialog] = useState(false);
+  const { mutateAsync: updateBlockPublished } = useUpdateBlockPublished();
 
   useAutoSaveBlocks(watch("id"));
   // useAutoSaveProfile(watch("user_id"));
@@ -61,19 +63,15 @@ export default function PageEditor() {
     // const blocks = watch("blocks_draft");
     // const profile = watch("profile");
     // const style = watch("style_draft");
+    const pageId = watch("id");
+    if (!pageId) {
+      return;
+    }
 
-    // await handleAction(
-    //   () =>
-    //     apiClient.put(`/api/pages/${watch("id")}/publish`, {
-    //       blocks_draft: blocks,
-    //       profile_draft: profile,
-    //       style_draft: style,
-    //     }),
-    //   {
-    //     successMessage: "내 공간에 반영되었습니다.",
-    //     errorMessage: "저장이 실패되었습니다. 다시 시도해 주세요.",
-    //   }
-    // );
+    await updateBlockPublished({
+      pageId,
+    });
+
     setOpenBlockDialog(false);
   };
 
