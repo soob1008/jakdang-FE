@@ -4,25 +4,29 @@ import type { Page, Block } from "@/entities/page/model/types";
 import { useFormContext } from "react-hook-form";
 import { useRef, useEffect } from "react";
 import { debounce } from "lodash";
+import { useMemo } from "react";
 
 export default function useAutoSaveBlocks(pageId: string) {
   const { watch } = useFormContext();
   const prevJsonRef = useRef<string>("");
 
-  const mutation = useMutation({
+  const { mutate } = useMutation({
     mutationFn: (blocks: Block[]) =>
       apiClient.patch<Page>(`/pages/${pageId}/blocks/draft`, {
         blocks_draft: blocks,
       }),
   });
 
+  const debouncedSave = useMemo(
+    () =>
+      debounce((blocks: Block[]) => {
+        mutate(blocks);
+      }, 2000),
+    [mutate]
+  );
+
   useEffect(() => {
     if (!pageId) return;
-
-    console.log(pageId, watch());
-    const debouncedSave = debounce((blocks: Block[]) => {
-      mutation.mutate(blocks);
-    }, 2000);
 
     const subscription = watch((value) => {
       const currentJson = JSON.stringify(value.blocks_draft || []);
@@ -36,5 +40,5 @@ export default function useAutoSaveBlocks(pageId: string) {
       subscription.unsubscribe();
       debouncedSave.cancel();
     };
-  }, [watch, pageId]);
+  }, [watch, pageId, debouncedSave]);
 }

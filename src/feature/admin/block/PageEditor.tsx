@@ -15,6 +15,7 @@ import { Block, BlockItemType } from "@/entities/page/model/types";
 import ProfileBlock from "./ProfileBlock";
 import { cn } from "@/shared/lib/utils";
 import useAutoSaveBlocks from "@/feature/page/hooks/useAutoSaveBlocks";
+import useAutoSaveProfile from "@/feature/page/hooks/useAutoSaveProfile";
 import useUpdateBlockPublished from "@/feature/page/hooks/useUpdateBlockPublished";
 
 function Skel({ className = "" }: { className?: string }) {
@@ -34,11 +35,12 @@ export default function PageEditor() {
   const [openBlockDialog, setOpenBlockDialog] = useState(false);
   const { mutateAsync: updateBlockPublished } = useUpdateBlockPublished();
 
-  useAutoSaveBlocks(watch("id"));
-  // useAutoSaveProfile(watch("user_id"));
-
   const blocksWatch = useWatch({ control, name: "blocks_draft" });
+  const profileWatch = useWatch({ control, name: "profile" });
   const isLoading = blocksWatch === undefined;
+
+  useAutoSaveBlocks(watch("id"));
+  useAutoSaveProfile(profileWatch);
 
   const handleDragEnd = (result: DropResult) => {
     const { source, destination } = result;
@@ -60,9 +62,6 @@ export default function PageEditor() {
 
   // published 하는 함수
   const handleSavePage = async () => {
-    // const blocks = watch("blocks_draft");
-    // const profile = watch("profile");
-    // const style = watch("style_draft");
     const pageId = watch("id");
     if (!pageId) {
       return;
