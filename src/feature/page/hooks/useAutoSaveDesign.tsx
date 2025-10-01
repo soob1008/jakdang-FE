@@ -1,26 +1,26 @@
 import { useMutation } from "@tanstack/react-query";
 import { apiClient } from "@/shared/lib/api/api.client";
-import type { Page, Block } from "@/entities/page/model/types";
+import type { PageStyle } from "@/entities/page/model/types";
 import { useFormContext } from "react-hook-form";
 import { useRef, useEffect } from "react";
 import { debounce } from "lodash";
 import { useMemo } from "react";
 
-export default function useAutoSaveBlocks(pageId: string) {
+export default function useAutoSaveDesign(pageId: string) {
   const { watch } = useFormContext();
   const prevJsonRef = useRef<string>("");
 
   const { mutate } = useMutation({
-    mutationFn: (blocks: Block[]) =>
-      apiClient.patch<Page>(`/pages/${pageId}/draft`, {
-        blocks_draft: blocks,
+    mutationFn: (style: PageStyle) =>
+      apiClient.patch<PageStyle>(`/pages/${pageId}/draft`, {
+        style_draft: style,
       }),
   });
 
   const debouncedSave = useMemo(
     () =>
-      debounce((blocks: Block[]) => {
-        mutate(blocks);
+      debounce((style: PageStyle) => {
+        mutate(style);
       }, 2000),
     [mutate]
   );
@@ -29,10 +29,10 @@ export default function useAutoSaveBlocks(pageId: string) {
     if (!pageId) return;
 
     const subscription = watch((value) => {
-      const currentJson = JSON.stringify(value.blocks_draft || []);
+      const currentJson = JSON.stringify(value.style_draft || []);
       if (prevJsonRef.current !== currentJson) {
         prevJsonRef.current = currentJson;
-        debouncedSave(value.blocks_draft || []);
+        debouncedSave(value.style_draft || []);
       }
     });
 

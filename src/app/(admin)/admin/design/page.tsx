@@ -5,19 +5,12 @@ import { useForm, FormProvider } from "react-hook-form";
 import PagePreview from "@/feature/admin/PagePreview";
 import PageDesignEditor from "@/feature/admin/design/PageDesignEditor";
 import { Page } from "@/entities/page/model/types";
-import { apiClient } from "@/shared/lib/api/api.client";
-import { useQuery } from "@tanstack/react-query";
-import { Author } from "@/entities/author/model/types";
+import useUser from "@/feature/auth/hooks/useUser";
+import usePage from "@/feature/page/hooks/usePage";
 
 export default function AdminDesignPage() {
-  const { data } = useQuery({
-    queryKey: ["admin-page"],
-    queryFn: () => apiClient.get<{ page: Page }>("/api/pages"),
-  });
-  const { data: userData } = useQuery({
-    queryKey: ["user"],
-    queryFn: () => apiClient.get<{ user: Author }>("/api/user"),
-  });
+  const { data: user } = useUser();
+  const { data: page } = usePage();
 
   const form = useForm({
     mode: "onChange",
@@ -32,7 +25,7 @@ export default function AdminDesignPage() {
         is_active: true,
         avatar_url: "",
         headline: "",
-        display_name: userData?.user.display_name ?? "",
+        display_name: user?.display_name ?? "",
         text_color: "",
       },
     },
@@ -41,24 +34,24 @@ export default function AdminDesignPage() {
   const { reset } = form;
 
   useEffect(() => {
-    if (!data || !userData) return;
+    if (!page || !user) return;
 
     reset({
-      id: data.page.id ?? "",
-      user_id: userData.user.id ?? "",
-      display_name: userData.user.display_name ?? "",
-      style_draft: data.page.style_draft ?? {},
-      style_published: data.page.style_published ?? {},
-      blocks_draft: data.page.blocks_draft ?? [],
-      profile: userData.user.profile_draft ?? {
+      id: page.id ?? "",
+      user_id: user.id ?? "",
+      display_name: user.display_name ?? "",
+      style_draft: page.style_draft ?? {},
+      style_published: page.style_published ?? {},
+      blocks_draft: page.blocks_draft ?? [],
+      profile: user.profile_draft ?? {
         is_active: true,
         avatar_url: "",
         headline: "",
-        display_name: userData.user.display_name ?? "",
+        display_name: user.display_name ?? "",
         text_color: "#111111",
       },
     });
-  }, [data, userData, reset]);
+  }, [page, user, reset]);
 
   return (
     <FormProvider {...form}>
