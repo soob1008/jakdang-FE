@@ -16,7 +16,7 @@ import ProfileBlock from "./ProfileBlock";
 import { cn } from "@/shared/lib/utils";
 import useAutoSaveBlocks from "@/feature/page/hooks/useAutoSaveBlocks";
 import useAutoSaveProfile from "@/feature/page/hooks/useAutoSaveProfile";
-import useUpdateBlockPublished from "@/feature/page/hooks/useUpdateBlockPublished";
+import useUpdatePublished from "@/feature/page/hooks/useUpdatePublished";
 
 function Skel({ className = "" }: { className?: string }) {
   return (
@@ -33,7 +33,7 @@ export default function PageEditor() {
   });
 
   const [openBlockDialog, setOpenBlockDialog] = useState(false);
-  const { mutateAsync: updateBlockPublished } = useUpdateBlockPublished();
+  const { mutateAsync: updateBlockPublished } = useUpdatePublished();
 
   const blocksWatch = useWatch({ control, name: "blocks_draft" });
   const profileWatch = useWatch({ control, name: "profile" });

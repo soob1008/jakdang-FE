@@ -6,7 +6,7 @@ import { toast } from "sonner";
 export default function useUpdateBlockPublished() {
   return useMutation({
     mutationFn: ({ pageId }: { pageId: string }) =>
-      apiClient.patch<Block>(`/pages/${pageId}/blocks/published`),
+      apiClient.patch<Block>(`/pages/${pageId}/published`),
     onSuccess: () => {
       toast.success("성공적으로 반영되었습니다.");
     },

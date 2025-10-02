@@ -1,68 +1,16 @@
 "use client";
 
-import { useEffect } from "react";
-import { useForm, FormProvider } from "react-hook-form";
+import { FormProvider } from "react-hook-form";
 import PagePreview from "@/feature/admin/PagePreview";
 import PageDesignEditor from "@/feature/admin/design/PageDesignEditor";
-import { Page } from "@/entities/page/model/types";
-import { apiClient } from "@/shared/lib/api/api.client";
-import { useQuery } from "@tanstack/react-query";
-import { Author } from "@/entities/author/model/types";
+import { useAdminDesignForm } from "@/feature/admin/design/hooks/useAdminDesignForm";
 
 export default function AdminDesignPage() {
-  const { data } = useQuery({
-    queryKey: ["admin-page"],
-    queryFn: () => apiClient.get<{ page: Page }>("/api/pages"),
-  });
-  const { data: userData } = useQuery({
-    queryKey: ["user"],
-    queryFn: () => apiClient.get<{ user: Author }>("/api/user"),
-  });
-
-  const form = useForm({
-    mode: "onChange",
-    defaultValues: {
-      id: "",
-      user_id: "",
-      display_name: "",
-      blocks_draft: [] as Page["blocks_draft"],
-      style_draft: {},
-      style_published: {},
-      profile: {
-        is_active: true,
-        avatar_url: "",
-        headline: "",
-        display_name: userData?.user.display_name ?? "",
-        text_color: "",
-      },
-    },
-  });
-
-  const { reset } = form;
-
-  useEffect(() => {
-    if (!data || !userData) return;
-
-    reset({
-      id: data.page.id ?? "",
-      user_id: userData.user.id ?? "",
-      display_name: userData.user.display_name ?? "",
-      style_draft: data.page.style_draft ?? {},
-      style_published: data.page.style_published ?? {},
-      blocks_draft: data.page.blocks_draft ?? [],
-      profile: userData.user.profile_draft ?? {
-        is_active: true,
-        avatar_url: "",
-        headline: "",
-        display_name: userData.user.display_name ?? "",
-        text_color: "#111111",
-      },
-    });
-  }, [data, userData, reset]);
+  const { form } = useAdminDesignForm();
 
   return (
     <FormProvider {...form}>
-      <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6 h-full">
+      <div className="grid h-full grid-cols-1 gap-6 lg:grid-cols-[2fr_1fr]">
         <div className="order-2 lg:order-1">
           <PageDesignEditor />
         </div>
