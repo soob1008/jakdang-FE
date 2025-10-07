@@ -1,24 +1,27 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiClient } from "@/shared/lib/api/api.client";
-import { Block } from "@/entities/page/model/types";
+import { Block, BlockType, TemplateType } from "@/entities/page/model/types";
 import { toast } from "sonner";
 
 type AddBlockArgs = {
   pageId: string;
-  type: Block["type"];
+  type?: BlockType;
+  template?: TemplateType;
 };
 
 export default function useAddBlock() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ pageId, type }: AddBlockArgs) =>
+    mutationFn: async ({ pageId, type, template }: AddBlockArgs) =>
       apiClient.post<Block>(`/pages/${pageId}/blocks`, {
         type,
+        template,
       }),
-    onSuccess: (newBlock) => {
+    onSuccess: async (newBlock) => {
       toast.success("블록이 성공적으로 추가되었습니다.");
-      queryClient.invalidateQueries({ queryKey: ["page"] });
+      await queryClient.invalidateQueries({ queryKey: ["page"] });
+      await queryClient.invalidateQueries({ queryKey: ["user"] });
       return newBlock;
     },
     onError: (error: Error) => {

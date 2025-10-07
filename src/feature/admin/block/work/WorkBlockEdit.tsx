@@ -125,7 +125,7 @@ export default function WorkBlockEdit({ index }: { index: number }) {
               작품 블록 제목
             </FormLabel>
             <FormControl>
-              <Input placeholder="제목" {...field} />
+              <Input placeholder="제목" {...field} value={field.value ?? ""} />
             </FormControl>
             <FormMessage />
           </FormItem>
