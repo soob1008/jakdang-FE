@@ -33,7 +33,6 @@ const schema = z.object({
 export type WorkValues = z.infer<typeof schema>;
 
 interface WorkDialogProps {
-  userId: string;
   mode?: "create" | "edit";
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
@@ -44,7 +43,6 @@ interface WorkDialogProps {
 export function WorkDialog({
   mode = "create",
   open,
-  userId,
   onOpenChange,
   defaultValues,
   onSubmitSuccess,
@@ -83,7 +81,7 @@ export function WorkDialog({
     const file: File | null = e.target.files?.[0] || null;
 
     if (file) {
-      await handleAction(() => uploadImage(file, userId), {
+      await handleAction(() => uploadImage(file), {
         successMessage: "이미지가 성공적으로 업로드되었습니다.",
         errorMessage: "이미지 업로드에 실패했습니다.",
         onSuccess: ({ imagePath }) => {

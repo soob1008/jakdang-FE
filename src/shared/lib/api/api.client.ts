@@ -1,7 +1,7 @@
 "use client";
 
-import { createClient } from "@/shared/lib/supabase/client";
-import { IMAGE_BUCKET_NAME } from "@/shared/lib/const";
+// import { createClient } from "@/shared/lib/supabase/client";
+// import { IMAGE_BUCKET_NAME } from "@/shared/lib/const";
 import { getCookie } from "@/shared/lib/utils";
 
 type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
@@ -71,30 +71,21 @@ export const apiClient = {
   ) => request<TResponse, TBody>(url, { method: "DELETE", body, headers }),
 };
 
-export async function uploadImage(file: File, userId: string) {
-  const supabase = createClient();
+export async function uploadImage(file: File) {
+  const formData = new FormData();
+  formData.append("file", file);
 
-  const fileExt = file.name.split(".").pop()?.toLowerCase();
-  const filePath = `/${userId}/${Date.now()}/${fileExt || "image"}`;
+  const res = await fetch("/api/media/upload/image", {
+    method: "POST",
+    body: formData,
+    headers: {
+      "X-CSRFToken": getCookie("csrftoken") || "",
+    },
+    credentials: "include",
+  });
 
-  // 이미지 업로드
-  const { data, error } = await supabase.storage
-    .from(IMAGE_BUCKET_NAME)
-    .upload(filePath, file, {
-      cacheControl: "3600",
-      upsert: true,
-    });
-
-  console.log("업로드 결과:", data, error);
-  if (error) {
-    console.error("이미지 업로드 실패:", error);
-    return { error };
-  }
-
-  // 상대 경로만 추출하여 리턴
-  const imagePath = `/${data.path}`;
-
-  return { imagePath, error: null };
+  const data = await res.json();
+  return { imagePath: data.path };
 }
 
 // export async function logout() {
