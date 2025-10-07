@@ -157,7 +157,6 @@ export default function WorkList({ userId, works }: WorkListProps) {
       )}
 
       <WorkDialog
-        userId={userId}
         mode={disalogState.mode}
         open={disalogState.open}
         onOpenChange={(open) => setDialogState((prev) => ({ ...prev, open }))}

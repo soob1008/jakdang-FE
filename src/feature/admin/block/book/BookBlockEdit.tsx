@@ -110,7 +110,7 @@ export default function BookBlockEdit({ index }: { index: number }) {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    await handleAction(() => uploadImage(file, watch("user_id")), {
+    await handleAction(() => uploadImage(file), {
       successMessage: "책 이미지가 업로드되었습니다.",
       errorMessage: "이미지 업로드 실패",
       onSuccess: ({ imagePath }) => {
