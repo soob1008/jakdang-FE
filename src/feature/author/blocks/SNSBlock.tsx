@@ -26,23 +26,27 @@ export default function SNSBlock({ block, style }: SNSBlockProps) {
           style?.button_style === "sharp" ? "0px" : "8px",
       }}
     >
-      {sns_links.map((sns, index) => (
-        <Link
-          key={`${sns.platform}-${sns.url}-${index}`}
-          href={sns.platform === "email" ? `mailto:${sns.url}` : sns.url}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            key={`${sns.platform}-${sns.url}`}
-            src={getSNSIconPath(sns.platform as SNSPlatform)}
-            width={32}
-            height={32}
-            alt={sns.label || sns.platform}
-            className="w-6.5 h-6.5 object-contain transition-transform hover:scale-110"
-          />
-        </Link>
-      ))}
+      {sns_links.map((sns, index) => {
+        if (!sns.platform) return null;
+
+        return (
+          <Link
+            key={`${sns.platform}-${sns.url}-${index}`}
+            href={sns.platform === "email" ? `mailto:${sns.url}` : sns.url}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Image
+              key={`${sns.platform}-${sns.url}`}
+              src={getSNSIconPath(sns.platform as SNSPlatform)}
+              width={32}
+              height={32}
+              alt={sns.label || sns.platform}
+              className="w-6.5 h-6.5 object-contain transition-transform hover:scale-110"
+            />
+          </Link>
+        );
+      })}
     </div>
   );
 }

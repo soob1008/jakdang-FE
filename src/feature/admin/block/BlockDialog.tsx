@@ -14,7 +14,7 @@ import { RadioGroup, RadioGroupItem } from "@/shared/ui/radio-group";
 import { ReactNode, useEffect, useState } from "react";
 import { cn } from "@/shared/lib/utils";
 import { BLOCK_LIST } from "./const";
-import { BlockType } from "@/entities/page/model/types";
+import { BlockType, TemplateType } from "@/entities/page/model/types";
 import { useFormContext } from "react-hook-form";
 import Image from "next/image";
 import useAddBlock from "@/feature/page/hooks/useAddBlock";
@@ -31,34 +31,33 @@ export default function BlockDialog({
   trigger,
 }: BlockSelectDialogProps) {
   const { mutateAsync: addBlock } = useAddBlock();
-
   const { watch } = useFormContext();
-  const [selectedType, setSelectedType] = useState<BlockType | null>(null);
+
+  const [selectedType, setSelectedType] = useState<{
+    type: string;
+    isTemplate: boolean;
+  } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
+  // 다이얼로그 닫힐 때 선택 초기화
   useEffect(() => {
-    if (!open) {
-      setSelectedType(null);
-    }
+    if (!open) setSelectedType(null);
   }, [open]);
 
   const handleAddBlock = async () => {
-    if (!selectedType) {
-      return;
-    }
+    if (!selectedType) return;
 
     const pageId = watch("id");
-    if (!pageId) {
-      return;
-    }
+    if (!pageId) return;
 
     try {
       setIsLoading(true);
 
-      await addBlock({
-        pageId,
-        type: selectedType,
-      });
+      const payload = selectedType.isTemplate
+        ? { pageId, template: selectedType.type as TemplateType }
+        : { pageId, type: selectedType.type as BlockType };
+
+      await addBlock(payload);
     } finally {
       setIsLoading(false);
       onOpenChange(false);
@@ -68,7 +67,7 @@ export default function BlockDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className="w-8/9 max-w-2xl sm:max-w-3xl ">
+      <DialogContent className="w-8/9 max-w-2xl sm:max-w-3xl">
         <DialogHeader>
           <DialogTitle>페이지 구성 요소 선택</DialogTitle>
           <DialogDescription>
@@ -86,11 +85,23 @@ export default function BlockDialog({
             </span>
           </DialogDescription>
         </DialogHeader>
+
         <div className="max-h-125 overflow-y-auto px-2 pb-10">
           <RadioGroup
-            value={selectedType || ""}
-            onValueChange={(value: BlockType) => {
-              setSelectedType(value || null);
+            value={selectedType?.type ?? ""}
+            onValueChange={(value: string) => {
+              const found = BLOCK_LIST.flatMap((g) => g.blocks).find(
+                (b) => b.type === value
+              );
+              if (found) {
+                setSelectedType({
+                  type: found.type,
+                  isTemplate:
+                    BLOCK_LIST.find(
+                      (g) => g.category === "템플릿"
+                    )?.blocks.includes(found) ?? false,
+                });
+              }
             }}
             className="space-y-6"
           >
@@ -103,7 +114,6 @@ export default function BlockDialog({
                     {group.category}
                   </h4>
 
-                  {/* 템플릿은 1~2열 큰 카드, 요소는 5열 그리드 유지 */}
                   <div
                     className={cn(
                       isTemplate
@@ -112,9 +122,9 @@ export default function BlockDialog({
                     )}
                   >
                     {group.blocks.map((block) => {
-                      const isSelected = selectedType === block.type;
-                      const isTemplateCard = isTemplate;
+                      const isSelected = selectedType?.type === block.type;
                       const Icon = block.icon;
+                      const isTemplateCard = isTemplate;
 
                       return (
                         <label
@@ -123,7 +133,7 @@ export default function BlockDialog({
                           className={cn(
                             "relative cursor-pointer rounded-lg border overflow-hidden transition focus-within:ring-2",
                             isTemplateCard
-                              ? "p-0" // 템플릿 카드: 이미지가 꽉 차게
+                              ? "p-0"
                               : "p-3 flex flex-col items-center gap-2",
                             isSelected
                               ? "ring-2 ring-primary"
@@ -138,7 +148,6 @@ export default function BlockDialog({
 
                           {isTemplateCard ? (
                             <>
-                              {/* 큰 미리보기 이미지 */}
                               <div className="relative w-full">
                                 <Image
                                   src={
@@ -148,27 +157,20 @@ export default function BlockDialog({
                                   alt={`${block.name} 미리보기`}
                                   width={1600}
                                   height={1000}
-                                  // 이미지가 화면을 꽉 채우도록
                                   className="w-full aspect-[16/10] object-contain block transition-transform duration-300 will-change-transform hover:scale-[1.02]"
                                   priority
                                 />
-                                {/* 상단 그라데이션 + 타이틀 */}
-                                <div className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-black/50 to-transparent"></div>
-                                {/* 선택 체크 배지 */}
                                 {isSelected && (
                                   <div className="absolute top-2 right-2 bg-primary text-primary-foreground text-xs px-2 py-1 rounded-md shadow">
                                     선택됨
                                   </div>
                                 )}
                               </div>
-
-                              {/* 하단 바: 미리보기/선택 가이드 (옵션) */}
                               <p className="py-2 text-sm font-medium text-center">
                                 {block.name}
                               </p>
                             </>
                           ) : (
-                            // 요소 카드 (아이콘+텍스트)
                             <>
                               {Icon && <Icon className="w-6 h-6" />}
                               <span className="font-medium text-sm text-center">
@@ -185,12 +187,13 @@ export default function BlockDialog({
             })}
           </RadioGroup>
         </div>
+
         <DialogFooter>
           <Button
             onClick={handleAddBlock}
             disabled={!selectedType || isLoading}
           >
-            추가하기
+            {selectedType?.isTemplate ? "템플릿 추가하기" : "요소 추가하기"}
           </Button>
         </DialogFooter>
       </DialogContent>
