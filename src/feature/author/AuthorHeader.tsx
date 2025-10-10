@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/shared/ui/button";
 import {
   Dialog,
@@ -15,15 +15,21 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Author } from "@/entities/author/model/types";
 import { createClient } from "@/shared/lib/supabase/client";
+import { getSessionUser } from "@/feature/page/server/getSessionUser";
 
-interface AuthorHeaderProps {
-  user?: Author;
-}
-
-export default function AuthorHeader({ user }: AuthorHeaderProps) {
+export default function AuthorHeader() {
   const router = useRouter();
   const supabase = createClient();
   const [open, setOpen] = useState(false);
+  const [user, setUser] = useState<Author | null>(null);
+
+  useEffect(() => {
+    (async () => {
+      const sessionUser = await getSessionUser();
+
+      setUser(sessionUser);
+    })();
+  }, []);
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(window.location.href);
