@@ -24,11 +24,11 @@ export default function AuthorHeader() {
   const [user, setUser] = useState<Author | null>(null);
 
   useEffect(() => {
-    (async () => {
+    const fetchSessionUser = async () => {
       const sessionUser = await getSessionUser();
-
       setUser(sessionUser);
-    })();
+    };
+    fetchSessionUser();
   }, []);
 
   const handleCopyLink = () => {
