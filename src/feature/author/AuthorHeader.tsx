@@ -14,12 +14,13 @@ import { User, LogIn, Link as LinkIcon, Share2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Author } from "@/entities/author/model/types";
-import { createClient } from "@/shared/lib/supabase/client";
 import { getSessionUser } from "@/feature/page/server/getSessionUser";
+import { useLogout } from "@/feature/auth/hooks/useLogout";
 
 export default function AuthorHeader() {
+  const { mutate: logout } = useLogout();
+
   const router = useRouter();
-  const supabase = createClient();
   const [open, setOpen] = useState(false);
   const [user, setUser] = useState<Author | null>(null);
 
@@ -56,17 +57,6 @@ export default function AuthorHeader() {
     }
   };
 
-  const handleLogout = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      console.error("로그아웃 실패:", error.message);
-      toast.error("로그아웃 중 오류가 발생했습니다.");
-    } else {
-      toast.success("로그아웃 되었습니다.");
-      router.refresh();
-    }
-  };
-
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -94,7 +84,7 @@ export default function AuthorHeader() {
               >
                 <User className="mr-2 h-4 w-4" /> 마이페이지
               </Button>
-              <Button variant="outline" onClick={handleLogout}>
+              <Button variant="outline" onClick={() => logout()}>
                 <User className="mr-2 h-4 w-4" /> 로그아웃
               </Button>
             </>

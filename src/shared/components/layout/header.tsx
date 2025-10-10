@@ -1,18 +1,15 @@
 import Link from "next/link";
-import { createSupabaseServerClient } from "@/shared/lib/supabase/server";
 import { User } from "lucide-react";
 import Logout from "@/feature/admin/Logout";
+import { getSessionUser } from "@/feature/page/server/getSessionUser";
 
 async function Header() {
-  const supabase = await createSupabaseServerClient();
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
+  const user = await getSessionUser();
 
   return (
     <header className="fixed top-0 left-0 right-0 z-10 flex items-center justify-between h-14 px-4 lg:px-6 bg-white border-b border-gray-200">
       <Logo />
-      {session ? (
+      {user ? (
         <div className="flex items-center gap-4">
           <Link
             href="/admin/compose"
