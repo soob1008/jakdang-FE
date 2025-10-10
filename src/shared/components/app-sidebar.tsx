@@ -78,7 +78,6 @@ export function AppSidebar({ email }: AppSidebarProps) {
         ))}
       </SidebarContent>
 
-      {/* TODO: 로그아웃 처리 */}
       <SidebarFooter className="border-t p-3">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
