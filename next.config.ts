@@ -1,6 +1,6 @@
 import type { NextConfig } from "next";
 
-const isProd = process.env.NODE_ENV === "production";
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const nextConfig: NextConfig = {
   webpack(config) {
@@ -30,9 +30,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/api/:path*",
-        destination: isProd
-          ? "https://your-django-service.onrender.com/api/:path*"
-          : "http://localhost:8000/api/:path*",
+        destination: `${API_URL}/api/:path*`,
       },
     ];
   },
