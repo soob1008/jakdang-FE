@@ -52,6 +52,7 @@ export async function fetchServerAPI<TResponse>(
     ?.split("=")[1];
 
   const res = await fetch(`${API_URL}/api${input}`, {
+
     ...init,
     method: init?.method || "GET",
     credentials: "include",
