@@ -51,7 +51,7 @@ export async function fetchServerAPI<TResponse>(
     .find((c) => c.trim().startsWith("csrftoken="))
     ?.split("=")[1];
 
-  const res = await fetch(`${API_URL}${input}`, {
+  const res = await fetch(`${API_URL}/api/${input}`, {
     ...init,
     method: init?.method || "GET",
     credentials: "include",
