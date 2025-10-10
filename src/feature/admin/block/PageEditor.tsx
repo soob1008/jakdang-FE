@@ -11,15 +11,13 @@ import {
   Draggable,
   DropResult,
 } from "@hello-pangea/dnd";
-import { useAutoSaveBlock } from "@/shared/hooks/useAutoSaveBlock";
-import { Block, BlockItemType } from "@/entities/block/model/types";
+import { Block, BlockItemType } from "@/entities/page/model/types";
 import ProfileBlock from "./ProfileBlock";
-import { useAutoSaveProfile } from "@/shared/hooks/useAutoSaveProfile";
-import { apiClient } from "@/shared/lib/api/api.client";
-import { handleAction } from "@/shared/lib/api/action";
 import { cn } from "@/shared/lib/utils";
+import useAutoSaveBlocks from "@/feature/page/hooks/useAutoSaveBlocks";
+import useAutoSaveProfile from "@/feature/page/hooks/useAutoSaveProfile";
+import useUpdatePublished from "@/feature/page/hooks/useUpdatePublished";
 
-// lightweight skeleton
 function Skel({ className = "" }: { className?: string }) {
   return (
     <div className={cn("animate-pulse bg-muted/30 rounded-md", className)} />
@@ -35,12 +33,14 @@ export default function PageEditor() {
   });
 
   const [openBlockDialog, setOpenBlockDialog] = useState(false);
-
-  useAutoSaveBlock(watch("id"));
-  useAutoSaveProfile(watch("user_id"));
+  const { mutateAsync: updateBlockPublished } = useUpdatePublished();
 
   const blocksWatch = useWatch({ control, name: "blocks_draft" });
+  const profileWatch = useWatch({ control, name: "profile" });
   const isLoading = blocksWatch === undefined;
+
+  useAutoSaveBlocks(watch("id"));
+  useAutoSaveProfile(profileWatch);
 
   const handleDragEnd = (result: DropResult) => {
     const { source, destination } = result;
@@ -60,22 +60,17 @@ export default function PageEditor() {
     remove(index);
   };
 
+  // published 하는 함수
   const handleSavePage = async () => {
-    const blocks = watch("blocks_draft");
-    const profile = watch("profile");
-    const style = watch("style_draft");
-    await handleAction(
-      () =>
-        apiClient.put(`/api/pages/${watch("id")}/publish`, {
-          blocks_draft: blocks,
-          profile_draft: profile,
-          style_draft: style,
-        }),
-      {
-        successMessage: "내 공간에 반영되었습니다.",
-        errorMessage: "저장이 실패되었습니다. 다시 시도해 주세요.",
-      }
-    );
+    const pageId = watch("id");
+    if (!pageId) {
+      return;
+    }
+
+    await updateBlockPublished({
+      pageId,
+    });
+
     setOpenBlockDialog(false);
   };
 

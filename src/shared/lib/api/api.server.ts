@@ -1,8 +1,11 @@
+"use server";
+
 // lib/api/serverFetch.ts
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export async function fetchServer<TResponse>(
   input: string,
@@ -35,4 +38,46 @@ export async function fetchServer<TResponse>(
   }
 
   return res.json();
+}
+
+export async function fetchServerAPI<TResponse>(
+  input: string,
+  init?: RequestInit
+): Promise<TResponse> {
+  const headersList = await headers();
+  const cookie = headersList.get("cookie") ?? "";
+  const csrfToken = cookie
+    .split(";")
+    .find((c) => c.trim().startsWith("csrftoken="))
+    ?.split("=")[1];
+
+  const res = await fetch(`${API_URL}${input}`, {
+    ...init,
+    method: init?.method || "GET",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+      ...(init?.headers || {}),
+      cookie,
+      "X-CSRFToken": csrfToken || "",
+    },
+  });
+
+  let data = null;
+  try {
+    data = await res.json();
+  } catch {
+    data = null;
+  }
+
+  if (res.status === 403) {
+    throw new Error("AUTH_EXPIRED");
+  }
+
+  if (!res.ok) {
+    const message = data?.error || data?.message || "알 수 없는 오류";
+    throw new Error(message);
+  }
+
+  return data as TResponse;
 }

@@ -95,6 +95,7 @@ export type Book = {
   title: string;
   category?: string; // TODO: 카테고리 정의 필요.
   author: string;
+  description?: string;
   isbn?: string;
   publish_date?: string;
   page_size?: number;

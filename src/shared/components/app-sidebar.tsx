@@ -21,9 +21,8 @@ import {
 } from "@/shared/ui/dropdown-menu";
 import Link from "next/link";
 import clsx from "clsx"; // tailwind class 병합용 라이브러리 (optional)
-import { createClient } from "@/shared/lib/supabase/client";
-import { useRouter } from "next/navigation";
 import { MENUS } from "@/feature/admin/const";
+import { useLogout } from "@/feature/auth/hooks/useLogout";
 
 // 메뉴 구조
 
@@ -33,8 +32,7 @@ interface AppSidebarProps {
 
 export function AppSidebar({ email }: AppSidebarProps) {
   const pathname = usePathname();
-  const supabase = createClient();
-  const router = useRouter();
+  const { mutate: logout } = useLogout();
 
   return (
     <Sidebar className="bg-white h-full border-none shadow-[4px_6px_10px_-2px_rgba(0,0,0,0.04)]">
@@ -104,10 +102,7 @@ export function AppSidebar({ email }: AppSidebarProps) {
               <button
                 type="button"
                 className="flex w-full items-center gap-2"
-                onClick={async () => {
-                  await supabase.auth.signOut();
-                  router.push("/auth/login");
-                }}
+                onClick={() => logout()}
               >
                 <LogOut className="mr-2 h-4 w-4" />
                 로그아웃

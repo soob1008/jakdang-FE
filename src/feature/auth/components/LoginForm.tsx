@@ -5,7 +5,6 @@ import { Input } from "@/shared/ui/input";
 import { Button } from "@/shared/ui/button";
 import { useForm } from "react-hook-form";
 import clsx from "clsx";
-import { loginWithMagicLink } from "@/feature/user/api.client";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -15,6 +14,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/shared/ui/alert-dialog";
+import { apiClient } from "@/shared/lib/api/api.client";
+import { handleAction } from "@/shared/lib/api/action";
 
 type LoginFormValues = {
   email: string;
@@ -31,14 +32,19 @@ export function LoginForm() {
 
   const [isSent, setIsSent] = useState(false);
 
-  const onSubmit = (data: LoginFormValues) => {
-    console.log("이메일 제출됨:", data.email);
-    loginWithMagicLink(data.email).then((error) => {
-      if (!error) {
-        // 성공 처리
-        setIsSent(true);
+  const onSubmit = async (data: LoginFormValues) => {
+    await handleAction(
+      () =>
+        apiClient.post<unknown, { email: string }>(`/auth/login`, {
+          email: data.email,
+        }),
+      {
+        errorMessage: "로그인 링크 전송에 실패했습니다.",
+        onSuccess: () => {
+          setIsSent(true);
+        },
       }
-    });
+    );
   };
 
   return (

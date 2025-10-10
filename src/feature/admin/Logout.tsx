@@ -1,30 +1,15 @@
 "use client";
 
-import { createClient } from "@/shared/lib/supabase/client";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
+import { useLogout } from "../auth/hooks/useLogout";
 
 export default function Logout() {
-  const router = useRouter();
-
-  const handleLogout = async () => {
-    const supabase = createClient();
-    const { error } = await supabase.auth.signOut();
-
-    if (error) {
-      toast.error(`로그아웃에 실패했습니다: ${error.message}`);
-      return;
-    }
-
-    router.push("/auth/login");
-    router.refresh();
-  };
+  const { mutate: logout } = useLogout();
 
   return (
     <button
       type="button"
       className="text-sm font-medium text-gray-700 hover:text-primary transition-colors"
-      onClick={handleLogout}
+      onClick={() => logout()}
     >
       로그아웃
     </button>

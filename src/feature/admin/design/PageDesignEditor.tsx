@@ -3,32 +3,25 @@
 import { Button } from "@/shared/ui/button";
 import PageCustomizer from "./PageCustomizer";
 import { useFormContext } from "react-hook-form";
-import { apiClient } from "@/shared/lib/api/api.client";
-import { handleAction } from "@/shared/lib/api/action";
-import { useAutoSaveStyle } from "@/shared/hooks/useAutoSaveStyle";
+import useAutoSaveDesign from "@/feature/page/hooks/useAutoSaveDesign";
+import useUpdatePublished from "@/feature/page/hooks/useUpdatePublished";
 
 export default function PageDesignEditor() {
   const { watch } = useFormContext();
+  const pageId = watch("id");
 
-  useAutoSaveStyle(watch("id"));
+  const { mutateAsync: updateBlockPublished } = useUpdatePublished();
+
+  useAutoSaveDesign(pageId);
 
   const handleSavePage = async () => {
-    const blocks = watch("blocks_draft");
-    const profile = watch("profile");
-    const style = watch("style_draft");
+    if (!pageId) {
+      return;
+    }
 
-    await handleAction(
-      () =>
-        apiClient.put(`/api/pages/${watch("id")}/publish`, {
-          blocks_draft: blocks,
-          profile_draft: profile,
-          style_draft: style,
-        }),
-      {
-        successMessage: "내 공간에 반영되었습니다.",
-        errorMessage: "저장이 실패되었습니다. 다시 시도해 주세요.",
-      }
-    );
+    await updateBlockPublished({
+      pageId,
+    });
   };
 
   return (

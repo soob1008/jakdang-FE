@@ -1,19 +1,14 @@
 "use client";
 
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Input } from "@/shared/ui/input";
 import { Button } from "@/shared/ui/button";
 import clsx from "clsx";
-import { duplicateCheck } from "@/feature/user/api.client";
-import { updateUserSlug } from "@/entities/author/lib/repository";
-import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createClient } from "@/shared/lib/supabase/client";
-import Loading from "@/shared/components/loading";
 import { handleAction } from "@/shared/lib/api/action";
+import { apiClient } from "@/shared/lib/api/api.client";
 
 const schema = z.object({
   slug: z
@@ -27,7 +22,6 @@ type FormValues = z.infer<typeof schema>;
 
 export default function SetUserNamePage() {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
 
   const {
     register,
@@ -43,66 +37,22 @@ export default function SetUserNamePage() {
   const username = watch("slug");
 
   const onSubmit = async (data: FormValues) => {
-    const slug = data.slug.trim().toLowerCase(); // 소문자 정규화
-    // 사용자 인증 세션 가져오기
-    const supabase = createClient();
-
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (!user) {
-      toast.error("사용자 정보를 가져올 수 없습니다.");
-      router.push("/auth/login");
-      return;
-    }
-
-    const userId = user?.id;
-
-    if (!userId) {
-      toast.error("사용자 정보를 확인할 수 없습니다.");
-      router.push("/auth/login");
-      return;
-    }
-
-    // // 주소 중복 확인 및 저장 로직
-    const { exists } = await duplicateCheck(userId, slug);
-
-    // // 중복된 슬러그가 있는 경우
-    if (exists) {
-      setError("slug", {
-        type: "manual",
-        message: "이미 사용 중인 주소입니다.",
-      });
-      return;
-    }
-
-    setIsLoading(true);
-
-    // 유저 주소 업데이트
-    await handleAction(async () => await updateUserSlug(userId, slug), {
-      successMessage: "주소가 성공적으로 설정되었습니다.",
-      errorMessage: "주소 설정에 실패했습니다. 다시 시도해주세요.",
-      onSuccess: async () => {
-        // 1. 페이지의 slug도 같이 업데이트
-        const supabase = createClient(); // 클라이언트에서 사용할 수 있는 Supabase 인스턴스
-
-        const { error } = await supabase
-          .from("pages")
-          .update({ slug }) // users.slug와 동일하게 설정
-          .eq("user_id", userId);
-
-        if (error) {
-          console.error("페이지 slug 업데이트 실패:", error.message);
-          // 선택사항: 사용자에게 알림 띄우기
-        }
-
-        // 2. 페이지 이동
-        router.push("/admin/compose");
-      },
-    });
-
-    setIsLoading(false);
+    await handleAction(
+      () => apiClient.patch("/users/me", { slug: data.slug }),
+      {
+        successMessage: "주소가 성공적으로 설정되었습니다.",
+        errorMessage: "주소 설정에 실패했습니다. 다시 시도해주세요.",
+        onError: (error: unknown) => {
+          setError("slug", {
+            type: "manual",
+            message: (error as Error).message || "이미 사용 중인 주소입니다.",
+          });
+        },
+        onSuccess: () => {
+          router.push("/admin/compose");
+        },
+      }
+    );
   };
 
   const hasError = Boolean(errors.slug);
@@ -110,7 +60,7 @@ export default function SetUserNamePage() {
 
   return (
     <section className="pt-8" aria-labelledby="username-heading">
-      {isLoading && <Loading />}
+      {/* {isLoading && <Loading />} */}
       <header>
         <h2 id="slug-heading" className="text-2xl lg:text-3xl font-bold">
           작가 주소 만들기

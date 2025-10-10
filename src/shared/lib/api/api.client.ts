@@ -1,5 +1,8 @@
-import { createClient } from "@/shared/lib/supabase/client";
-import { IMAGE_BUCKET_NAME } from "@/shared/lib/const";
+"use client";
+
+// import { createClient } from "@/shared/lib/supabase/client";
+// import { IMAGE_BUCKET_NAME } from "@/shared/lib/const";
+import { getCookie } from "@/shared/lib/utils";
 
 type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
 
@@ -15,10 +18,12 @@ async function request<TResponse, TBody = unknown>(
 ): Promise<TResponse> {
   const { body, headers = {}, method = "GET" } = options;
 
-  const res = await fetch(url, {
+  const res = await fetch(`/api${url}`, {
     method,
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
+      "X-CSRFToken": getCookie("csrftoken") || "",
       ...headers,
     },
     body: body ? JSON.stringify(body) : undefined,
@@ -26,6 +31,11 @@ async function request<TResponse, TBody = unknown>(
 
   if (!res.ok) {
     const errorData = await res.json().catch(() => ({}));
+
+    if (res.status === 403) {
+      throw new Error("AUTH_EXPIRED");
+    }
+
     throw new Error(errorData.message || "API 요청 실패");
   }
 
@@ -61,28 +71,69 @@ export const apiClient = {
   ) => request<TResponse, TBody>(url, { method: "DELETE", body, headers }),
 };
 
-export async function uploadImage(file: File, userId: string) {
-  const supabase = createClient();
+export async function uploadImage(file: File) {
+  const formData = new FormData();
+  formData.append("file", file);
 
-  const fileExt = file.name.split(".").pop()?.toLowerCase();
-  const filePath = `/${userId}/${Date.now()}/${fileExt || "image"}`;
+  const res = await fetch("/api/media/upload/image", {
+    method: "POST",
+    body: formData,
+    headers: {
+      "X-CSRFToken": getCookie("csrftoken") || "",
+    },
+    credentials: "include",
+  });
 
-  // 이미지 업로드
-  const { data, error } = await supabase.storage
-    .from(IMAGE_BUCKET_NAME)
-    .upload(filePath, file, {
-      cacheControl: "3600",
-      upsert: true,
-    });
-
-  console.log("업로드 결과:", data, error);
-  if (error) {
-    console.error("이미지 업로드 실패:", error);
-    return { error };
-  }
-
-  // 상대 경로만 추출하여 리턴
-  const imagePath = `/${data.path}`;
-
-  return { imagePath, error: null };
+  const data = await res.json();
+  return { imagePath: data.path };
 }
+
+// export async function logout() {
+//   await fetch("/api/auth/logout", {
+//     method: "POST",
+//     credentials: "include",
+//     headers: {
+//       "Content-Type": "application/json",
+//       "X-CSRFToken": getCookie("csrftoken") || "",
+//     },
+//   });
+//   window.dispatchEvent(new Event("session-expired"));
+//   throw new Error("세션이 만료되었습니다. 다시 로그인 해주세요.");
+//   location.href = "/auth/login";
+// }
+
+// export async function fetchClientAPI<TResponse>(
+//   input: string,
+//   init?: RequestInit
+// ): Promise<TResponse> {
+//   const res = await fetch(`/api${input}`, {
+//     ...init,
+//     method: init?.method || "GET",
+//     credentials: "include",
+//     headers: {
+//       "Content-Type": "application/json",
+//       ...(init?.headers || {}),
+//     },
+//   });
+
+//   let data = null;
+//   try {
+//     data = await res.json();
+//   } catch {
+//     data = null;
+//   }
+
+//   if (res.status === 403) {
+//     await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
+
+//     window.dispatchEvent(new Event("session-expired"));
+//     throw new Error("세션이 만료되었습니다. 다시 로그인 해주세요.");
+//   }
+
+//   if (!res.ok) {
+//     const message = data?.error || data?.message || "알 수 없는 오류";
+//     throw new Error(message);
+//   }
+
+//   return data as TResponse;
+// }

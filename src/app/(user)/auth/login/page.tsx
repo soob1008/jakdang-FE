@@ -1,6 +1,6 @@
-import { LoginForm } from "@/feature/user/LoginForm";
+import { LoginForm } from "@/feature/auth/components/LoginForm";
 
-export default function LoginPage() {
+export default async function LoginPage() {
   return (
     <section aria-labelledby="login-heading" className="pt-8">
       <header>

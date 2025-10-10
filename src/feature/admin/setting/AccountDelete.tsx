@@ -12,23 +12,20 @@ import {
   AlertDialogCancel,
   AlertDialogAction,
 } from "@/shared/ui/alert-dialog";
-import { handleAction } from "@/shared/lib/api/action";
-import { apiClient } from "@/shared/lib/api/api.client";
-import { useRouter } from "next/navigation";
+import { useDeleteUser } from "@/feature/auth/hooks/useDeleteUser";
+import { toast } from "sonner";
 
 export default function AccountDelete() {
-  const router = useRouter();
+  const { mutateAsync: deleteUser, isPending } = useDeleteUser();
   const [isOpenDeleteAlert, setIsOpenDeleteAlert] = useState(false);
 
   const handleDeleteAccount = async () => {
-    await handleAction(() => apiClient.delete("/api/user"), {
-      successMessage: "회원 탈퇴가 완료되었습니다.",
-      errorMessage: "회원 탈퇴에 실패했습니다.",
-      onSuccess: () => {
-        setIsOpenDeleteAlert(false);
-        router.push("/"); // Redirect to home page after deletion
-      },
-    });
+    try {
+      await deleteUser();
+      setIsOpenDeleteAlert(false);
+    } catch {
+      toast.error("탈퇴 실패. 다시 시도해주세요.");
+    }
   };
 
   return (
@@ -48,18 +45,17 @@ export default function AccountDelete() {
 
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>회원 탈퇴를 하시겠습니까?</AlertDialogTitle>
+            <AlertDialogTitle>정말 탈퇴하시겠습니까?</AlertDialogTitle>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel
-              onClick={() => {
-                setIsOpenDeleteAlert(false);
-              }}
-            >
+            <AlertDialogCancel onClick={() => setIsOpenDeleteAlert(false)}>
               취소
             </AlertDialogCancel>
-            <AlertDialogAction onClick={handleDeleteAccount}>
-              탈퇴
+            <AlertDialogAction
+              onClick={handleDeleteAccount}
+              disabled={isPending}
+            >
+              {isPending ? "탈퇴 중..." : "탈퇴"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
