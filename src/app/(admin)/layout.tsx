@@ -3,7 +3,6 @@ import "@/app/globals.css";
 import { SidebarProvider, SidebarTrigger } from "@/shared/ui/sidebar";
 import AdminHeader from "@/feature/admin/header";
 import { AppSidebar } from "@/shared/components/app-sidebar";
-import { redirect } from "next/navigation";
 import { Author } from "@/entities/author/model/types";
 import { fetchServerAPI } from "@/shared/lib/api/api.server";
 
@@ -15,14 +14,7 @@ export const metadata: Metadata = {
 export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  let user: Author | null = null;
-  try {
-    user = await fetchServerAPI<Author>("/users/me");
-  } catch {
-    redirect("/auth/login");
-  }
-
-  if (!user) return redirect("/auth/login");
+  const user = await fetchServerAPI<Author>("/users/me");
 
   return (
     <SidebarProvider>

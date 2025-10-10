@@ -1,6 +1,11 @@
 import { LoginForm } from "@/feature/auth/components/LoginForm";
+import { Author } from "@/entities/author/model/types";
+import { fetchServerAPI } from "@/shared/lib/api/api.server";
 
-export default function LoginPage() {
+export default async function LoginPage() {
+  const user = await fetchServerAPI<Author>("/users/me").catch(() => null);
+
+  console.log("user", user);
   return (
     <section aria-labelledby="login-heading" className="pt-8">
       <header>
