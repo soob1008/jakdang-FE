@@ -1,6 +1,6 @@
 "use server";
 
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { createSupabaseServerClient } from "@/shared/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 
 export async function hasLikedAuthor(authorId: string, viewerId: string) {

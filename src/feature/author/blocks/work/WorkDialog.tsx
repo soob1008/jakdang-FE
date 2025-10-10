@@ -1,6 +1,6 @@
-import { ResponsiveDialog } from "@/components/ui/ResponsiveDialog";
-import { Badge } from "@/components/ui/badge";
-import { AuthorWork } from "@/feature/user/type";
+import { ResponsiveDialog } from "@/shared/ui/ResponsiveDialog";
+import { Badge } from "@/shared/ui/badge";
+import { AuthorWork } from "@/entities/author/model/types";
 
 interface WorkDialogProps {
   open?: boolean;

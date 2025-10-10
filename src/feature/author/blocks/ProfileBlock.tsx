@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Profile } from "@/feature/user/type";
+import { Profile } from "@/entities/author/model/types";
 
 interface ProfileBlockProps {
   profile: Profile;

@@ -10,19 +10,22 @@ import {
   FormLabel,
   FormControl,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+} from "@/shared/ui/form";
+import { Input } from "@/shared/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { SOCIAL_PLATFORMS_OPTIONS, SOCIAL_PLATFORM_KEYS } from "@/lib/const";
-import { ResponsiveDialog } from "@/components/ui/ResponsiveDialog";
+} from "@/shared/ui/select";
+import {
+  SOCIAL_PLATFORMS_OPTIONS,
+  SOCIAL_PLATFORM_KEYS,
+} from "@/shared/lib/const";
+import { ResponsiveDialog } from "@/shared/ui/ResponsiveDialog";
 import { toast } from "sonner";
-import { updateUserSNS } from "@/feature/user/api.server";
+import { updateUserSNS } from "@/entities/author/lib/repository";
 
 const schema = z.object({
   platform: z.enum(SOCIAL_PLATFORM_KEYS as [string, ...string[]]),

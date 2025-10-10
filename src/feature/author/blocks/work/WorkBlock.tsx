@@ -6,10 +6,10 @@ import {
   PageStyle,
   WorkItem,
   BlockDataWork,
-} from "@/feature/admin/types";
+} from "@/entities/page/model/types";
 import Image from "next/image";
 import WorkDialog from "@/feature/author/blocks/work/WorkDialog";
-import { autoContrast } from "@/lib/utils";
+import { autoContrast } from "@/shared/lib/utils";
 
 interface WorkBlockProps {
   block: Block;

@@ -1,6 +1,6 @@
 import { useFormContext, useFieldArray } from "react-hook-form";
-import { Input } from "@/components/ui/input";
-import { FormLabel } from "@/components/ui/form";
+import { Input } from "@/shared/ui/input";
+import { FormLabel } from "@/shared/ui/form";
 import { Plus, Trash } from "lucide-react";
 import Image from "next/image";
 import {
@@ -10,8 +10,8 @@ import {
   DropResult,
 } from "@hello-pangea/dnd";
 import { ChangeEvent } from "react";
-import { uploadImage } from "@/lib/api/api.client";
-import { handleAction } from "@/lib/api/action";
+import { uploadImage } from "@/shared/lib/api/api.client";
+import { handleAction } from "@/shared/lib/api/action";
 import { toast } from "sonner";
 import clsx from "clsx";
 
@@ -41,7 +41,7 @@ export default function ImageBlockEdit({ index }: { index: number }) {
       return;
     }
 
-    await handleAction(() => uploadImage(file, watch("user_id")), {
+    await handleAction(() => uploadImage(file), {
       successMessage: "이미지가 성공적으로 업로드되었습니다.",
       errorMessage: "이미지 업로드에 실패했습니다.",
       onSuccess: ({ imagePath }) => {

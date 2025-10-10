@@ -9,7 +9,7 @@ import {
   User,
   LayoutList,
 } from "lucide-react";
-import { BlockType, TemplateType } from "../types";
+import { BlockType, TemplateType } from "@/entities/page/model/types";
 
 interface BlockList {
   category: string;

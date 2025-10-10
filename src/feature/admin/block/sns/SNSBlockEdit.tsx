@@ -3,16 +3,16 @@ import {
   FormItem,
   FormControl,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+} from "@/shared/ui/form";
+import { Input } from "@/shared/ui/input";
 import {
   Select,
   SelectTrigger,
   SelectValue,
   SelectContent,
   SelectItem,
-} from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
+} from "@/shared/ui/select";
+import { Button } from "@/shared/ui/button";
 import { GripVertical, X } from "lucide-react";
 import {
   DragDropContext,

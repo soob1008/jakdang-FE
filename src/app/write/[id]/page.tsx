@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 import { Copy, ExternalLink } from "lucide-react";
 // import { toast } from "sonner";
 

@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import "../globals.css";
 // import { Header } from "@/components/layout/header";
-import { Toaster } from "@/components/ui/sonner";
+import { Toaster } from "@/shared/ui/sonner";
 import { ViewerProvider } from "@/feature/viewer/ViewerProvider";
-import Footer from "@/components/layout/footer";
-import { Header } from "@/components/layout/header";
+import Footer from "@/shared/components/layout/footer";
+import { Header } from "@/shared/components/layout/header";
 
 export const metadata: Metadata = {
   title: "작당 - 당신의 창작을 위한 공간",

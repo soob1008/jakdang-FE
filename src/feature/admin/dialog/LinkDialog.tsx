@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/shared/ui/input";
 import {
   Form,
   FormField,
@@ -12,8 +12,8 @@ import {
   FormLabel,
   FormControl,
   FormMessage,
-} from "@/components/ui/form";
-import { ResponsiveDialog } from "@/components/ui/ResponsiveDialog";
+} from "@/shared/ui/form";
+import { ResponsiveDialog } from "@/shared/ui/ResponsiveDialog";
 
 const linkSchema = z.object({
   title: z.string().min(1, { message: "링크 제목을 입력해주세요." }),

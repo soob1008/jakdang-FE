@@ -1,4 +1,4 @@
-import EmptyText from "@/components/ui/EmptyText";
+import EmptyText from "@/shared/ui/EmptyText";
 import { AuthorBioDialog } from "@/feature/admin/dialog/AuthorBioDialog";
 
 interface AuthorBioProps {

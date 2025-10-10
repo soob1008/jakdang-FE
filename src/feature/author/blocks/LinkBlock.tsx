@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import { Button } from "@/components/ui/button";
-import { Block, PageStyle, BlockDataLink } from "@/feature/admin/types";
+import { Button } from "@/shared/ui/button";
+import { Block, PageStyle, BlockDataLink } from "@/entities/page/model/types";
 
 interface LinkBlockProps {
   block: Block;

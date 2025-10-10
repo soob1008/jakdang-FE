@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
+import { Button } from "@/shared/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -9,21 +9,27 @@ import {
   DialogTitle,
   DialogDescription,
   DialogTrigger,
-} from "@/components/ui/dialog";
+} from "@/shared/ui/dialog";
 import { User, LogIn, Link as LinkIcon, Share2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { Author } from "@/feature/user/type";
-import { createClient } from "@/lib/supabase/client";
+import { Author } from "@/entities/author/model/types";
+import { createClient } from "@/shared/lib/supabase/client";
+import { getSessionUser } from "@/feature/page/server/getSessionUser";
 
-interface AuthorHeaderProps {
-  user?: Author;
-}
-
-export default function AuthorHeader({ user }: AuthorHeaderProps) {
+export default function AuthorHeader() {
   const router = useRouter();
   const supabase = createClient();
   const [open, setOpen] = useState(false);
+  const [user, setUser] = useState<Author | null>(null);
+
+  useEffect(() => {
+    const fetchSessionUser = async () => {
+      const sessionUser = await getSessionUser();
+      setUser(sessionUser);
+    };
+    fetchSessionUser();
+  }, []);
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(window.location.href);

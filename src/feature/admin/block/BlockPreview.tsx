@@ -1,4 +1,4 @@
-import { Block } from "@/feature/admin/types";
+import { Block } from "@/entities/page/model/types";
 import TextBlock from "@/feature/author/blocks/TextBlock";
 import ImageBlock from "@/feature/author/blocks/ImageBlock";
 import LinkBlock from "@/feature/author/blocks/LinkBlock";
@@ -7,7 +7,7 @@ import WorkBlock from "@/feature/author/blocks/work/WorkBlock";
 import CalendarBlock from "@/feature/author/blocks/CalendarBlock";
 import BlankBlock from "@/feature/author/blocks/BlankBlock";
 import BookBlock from "@/feature/author/blocks/BookBlock";
-import { PageStyle } from "@/feature/admin/types";
+import { PageStyle } from "@/entities/page/model/types";
 
 export default function BlockPreview({
   block,

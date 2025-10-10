@@ -1,8 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { Block, BlockDataCalendar, PageStyle } from "@/feature/admin/types";
-import { Card, CardContent } from "@/components/ui/card";
+import {
+  Block,
+  BlockDataCalendar,
+  PageStyle,
+} from "@/entities/page/model/types";
+import { Card, CardContent } from "@/shared/ui/card";
 import {
   format,
   isSameMonth,
@@ -11,7 +15,7 @@ import {
   addDays,
   startOfDay,
 } from "date-fns";
-import CustomCalendar from "@/components/ui/calendar-custom";
+import CustomCalendar from "@/shared/ui/calendar-custom";
 
 interface CalendarBlockProps {
   block: Block;

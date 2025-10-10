@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "../globals.css";
-// import { Header } from "@/components/layout/header";
-import { Toaster } from "@/components/ui/sonner";
+import { Toaster } from "@/shared/ui/sonner";
 import { ViewerProvider } from "@/feature/viewer/ViewerProvider";
 // import Footer from "@/components/layout/footer";
 

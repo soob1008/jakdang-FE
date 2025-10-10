@@ -5,8 +5,8 @@ import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/shared/ui/input";
+import { Textarea } from "@/shared/ui/textarea";
 import { ImageIcon } from "lucide-react";
 import {
   Form,
@@ -15,11 +15,11 @@ import {
   FormLabel,
   FormControl,
   FormMessage,
-} from "@/components/ui/form";
-import { Checkbox } from "@/components/ui/checkbox";
-import { ResponsiveDialog } from "@/components/ui/ResponsiveDialog";
-import { uploadImage } from "@/lib/api/api.client";
-import { handleAction } from "@/lib/api/action";
+} from "@/shared/ui/form";
+import { Checkbox } from "@/shared/ui/checkbox";
+import { ResponsiveDialog } from "@/shared/ui/ResponsiveDialog";
+import { uploadImage } from "@/shared/lib/api/api.client";
+import { handleAction } from "@/shared/lib/api/action";
 import { toast } from "sonner";
 
 const schema = z.object({
@@ -33,7 +33,6 @@ const schema = z.object({
 export type WorkValues = z.infer<typeof schema>;
 
 interface WorkDialogProps {
-  userId: string;
   mode?: "create" | "edit";
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
@@ -44,7 +43,6 @@ interface WorkDialogProps {
 export function WorkDialog({
   mode = "create",
   open,
-  userId,
   onOpenChange,
   defaultValues,
   onSubmitSuccess,
@@ -83,7 +81,7 @@ export function WorkDialog({
     const file: File | null = e.target.files?.[0] || null;
 
     if (file) {
-      await handleAction(() => uploadImage(file, userId), {
+      await handleAction(() => uploadImage(file), {
         successMessage: "이미지가 성공적으로 업로드되었습니다.",
         errorMessage: "이미지 업로드에 실패했습니다.",
         onSuccess: ({ imagePath }) => {

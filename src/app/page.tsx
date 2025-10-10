@@ -1,12 +1,15 @@
 import Image from "next/image";
-import { LinkButton } from "@/components/ui/link-button";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { LinkButton } from "@/shared/ui/link-button";
+import { Author } from "@/entities/author/model/types";
+import { fetchServerAPI } from "@/shared/lib/api/api.server";
 
 export default async function Home() {
-  const supabase = await createSupabaseServerClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  let user: Author | null = null;
+  try {
+    user = await fetchServerAPI<Author>("/users/me");
+  } catch {
+    user = null;
+  }
 
   return (
     <section className="flex flex-col justify-between min-h-[calc(100vh-3.5rem)] lg:justify-center px-4">

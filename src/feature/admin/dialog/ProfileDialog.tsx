@@ -13,16 +13,16 @@ import {
   FormLabel,
   FormControl,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { ResponsiveDialog } from "@/components/ui/ResponsiveDialog";
-import { Author } from "@/feature/user/type";
-import { updateUser } from "@/feature/user/api.server";
+} from "@/shared/ui/form";
+import { Input } from "@/shared/ui/input";
+import { Button } from "@/shared/ui/button";
+import { ResponsiveDialog } from "@/shared/ui/ResponsiveDialog";
+import { Author } from "@/entities/author/model/types";
+import { updateUser } from "@/entities/author/lib/repository";
 import { toast } from "sonner";
-import { uploadImage } from "@/lib/api/api.client";
-import { handleAction } from "@/lib/api/action";
-import { Textarea } from "@/components/ui/textarea";
+import { uploadImage } from "@/shared/lib/api/api.client";
+import { handleAction } from "@/shared/lib/api/action";
+import { Textarea } from "@/shared/ui/textarea";
 
 const schema = z.object({
   display_name: z.string().min(1, "필명을 입력해주세요."),
@@ -66,7 +66,7 @@ export function ProfileDialog({ author }: ProfileDialogProps) {
     const file: File | null = e.target.files?.[0] || null;
 
     if (file) {
-      await handleAction(() => uploadImage(file, author.id), {
+      await handleAction(() => uploadImage(file), {
         successMessage: "이미지가 성공적으로 업로드되었습니다.",
         errorMessage: "이미지 업로드에 실패했습니다.",
         onSuccess: ({ imagePath }) => {

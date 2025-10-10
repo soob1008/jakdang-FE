@@ -3,8 +3,8 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
-import { getUser, createUser } from "@/feature/user/api.server";
+import { createClient } from "@/shared/lib/supabase/client";
+import { getUser, createUser } from "@/entities/author/lib/repository";
 import { toast } from "sonner";
 
 export default function AuthCallback() {

@@ -3,10 +3,10 @@
 import { ChangeEvent, useState } from "react";
 import Image from "next/image";
 import { useFormContext, useFieldArray, Controller } from "react-hook-form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
-import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/shared/ui/input";
+import { Button } from "@/shared/ui/button";
+import { Switch } from "@/shared/ui/switch";
+import { Textarea } from "@/shared/ui/textarea";
 import { X, Plus, GripVertical, Upload } from "lucide-react";
 import {
   AlertDialog,
@@ -16,9 +16,9 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { handleAction } from "@/lib/api/action";
-import { uploadImage } from "@/lib/api/api.client";
+} from "@/shared/ui/alert-dialog";
+import { handleAction } from "@/shared/lib/api/action";
+import { uploadImage } from "@/shared/lib/api/api.client";
 import {
   DragDropContext,
   Droppable,
@@ -31,7 +31,7 @@ import {
   FormControl,
   FormMessage,
   FormLabel,
-} from "@/components/ui/form";
+} from "@/shared/ui/form";
 
 type WorkItem = {
   title: string;
@@ -68,7 +68,7 @@ export default function WorkBlockEdit({ index }: { index: number }) {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    await handleAction(() => uploadImage(file, watch("user_id")), {
+    await handleAction(() => uploadImage(file), {
       successMessage: "이미지 업로드 완료",
       errorMessage: "이미지 업로드 실패",
       onSuccess: ({ imagePath }) => {
@@ -125,7 +125,7 @@ export default function WorkBlockEdit({ index }: { index: number }) {
               작품 블록 제목
             </FormLabel>
             <FormControl>
-              <Input placeholder="제목" {...field} />
+              <Input placeholder="제목" {...field} value={field.value ?? ""} />
             </FormControl>
             <FormMessage />
           </FormItem>

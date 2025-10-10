@@ -1,12 +1,10 @@
 import type { Metadata } from "next";
 import "@/app/globals.css";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/app-sidebar";
+import { SidebarProvider, SidebarTrigger } from "@/shared/ui/sidebar";
 import AdminHeader from "@/feature/admin/header";
-import { redirect } from "next/navigation";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { fetchServer } from "@/lib/api/api.server";
-import { Author } from "@/feature/user/type";
+import { AppSidebar } from "@/shared/components/app-sidebar";
+import { Author } from "@/entities/author/model/types";
+import { fetchServerAPI } from "@/shared/lib/api/api.server";
 
 export const metadata: Metadata = {
   title: "작당 - 당신의 공간을 꾸며보세요.",
@@ -16,32 +14,16 @@ export const metadata: Metadata = {
 export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const supabase = await createSupabaseServerClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    redirect("/auth/login");
-  }
-
-  const {
-    user: userData,
-  }: {
-    user: Author;
-  } = await fetchServer("/api/user", {
-    next: { revalidate: 60 },
-  });
+  const user = await fetchServerAPI<Author>("/users/me");
 
   return (
     <SidebarProvider>
       <div className="relative">
-        <AppSidebar email={userData.email ?? ""} />
+        <AppSidebar email={user.email ?? ""} />
         <SidebarTrigger className="absolute top-1 right-[-34px]" />
       </div>
       <div className="flex flex-col gap-4 w-full bg-gray-50 dark:bg-background">
-        <AdminHeader email={userData.email ?? ""} slug={userData?.slug} />
+        <AdminHeader email={user.email ?? ""} slug={user?.slug} />
         <div className=" flex-1">{children}</div>
       </div>
     </SidebarProvider>

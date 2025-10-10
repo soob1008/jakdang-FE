@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 import Image from "next/image";
-import { Badge } from "@/components/ui/badge";
-import { Switch } from "@/components/ui/switch";
+import { Badge } from "@/shared/ui/badge";
+import { Switch } from "@/shared/ui/switch";
 import { Pencil, Trash2 } from "lucide-react";
-import { AuthorWork } from "@/feature/user/type";
+import { AuthorWork } from "@/entities/author/model/types";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -14,8 +14,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { Skeleton } from "@/components/ui/skeleton";
+} from "@/shared/ui/alert-dialog";
+import { Skeleton } from "@/shared/ui/skeleton";
 
 interface WorkItemProps {
   work: AuthorWork;

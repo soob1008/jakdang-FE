@@ -1,20 +1,20 @@
 "use client";
 
 import { useRef } from "react";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
+import { Label } from "@/shared/ui/label";
+import { Input } from "@/shared/ui/input";
+import { cn } from "@/shared/lib/utils";
 import { useFormContext } from "react-hook-form";
 import {
   FormItem,
   FormLabel,
   FormControl,
   FormMessage,
-} from "@/components/ui/form";
-import { Page } from "@/feature/admin/types";
-import { handleAction } from "@/lib/api/action";
+} from "@/shared/ui/form";
+import { Page } from "@/entities/page/model/types";
+import { handleAction } from "@/shared/lib/api/action";
 import Image from "next/image";
-import { uploadImage } from "@/lib/api/api.client";
+import { uploadImage } from "@/shared/lib/api/api.client";
 import { toast } from "sonner";
 
 export default function PageCustomizer() {
@@ -47,7 +47,7 @@ export default function PageCustomizer() {
     const file: File | null = e.target.files?.[0] || null;
 
     if (file) {
-      await handleAction(() => uploadImage(file, watch("user_id")), {
+      await handleAction(() => uploadImage(file), {
         successMessage: "이미지가 성공적으로 업로드되었습니다.",
         errorMessage: "이미지 업로드에 실패했습니다.",
         onSuccess: ({ imagePath }) => {

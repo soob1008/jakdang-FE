@@ -4,8 +4,8 @@ import {
   FormLabel,
   FormControl,
   FormMessage,
-} from "@/components/ui/form";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+} from "@/shared/ui/form";
+import { RadioGroup, RadioGroupItem } from "@/shared/ui/radio-group";
 import { LayoutList, Grid2X2 } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 

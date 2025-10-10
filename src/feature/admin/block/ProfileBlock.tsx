@@ -1,14 +1,14 @@
 "use client";
 
 import { useState, ChangeEvent } from "react";
-import { FormField, FormItem, FormControl } from "@/components/ui/form";
-import { Switch } from "@/components/ui/switch";
-import { Button } from "@/components/ui/button";
+import { FormField, FormItem, FormControl } from "@/shared/ui/form";
+import { Switch } from "@/shared/ui/switch";
+import { Button } from "@/shared/ui/button";
 import { ChevronUp, ChevronDown, Upload } from "lucide-react";
 import Image from "next/image";
-import { Input } from "@/components/ui/input";
-import { uploadImage } from "@/lib/api/api.client";
-import { handleAction } from "@/lib/api/action";
+import { Input } from "@/shared/ui/input";
+import { uploadImage } from "@/shared/lib/api/api.client";
+import { handleAction } from "@/shared/lib/api/action";
 import { useFormContext } from "react-hook-form";
 
 export default function ProfileBlock() {
@@ -22,7 +22,7 @@ export default function ProfileBlock() {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    await handleAction(() => uploadImage(file, watch("user_id")), {
+    await handleAction(() => uploadImage(file), {
       successMessage: "프로필 이미지가 업로드되었습니다.",
       errorMessage: "이미지 업로드 실패",
       onSuccess: ({ imagePath }) => {

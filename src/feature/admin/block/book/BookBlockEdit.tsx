@@ -2,10 +2,10 @@
 
 import { useState, useRef } from "react";
 import { useFormContext } from "react-hook-form";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent } from "@/components/ui/card";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
+import { Input } from "@/shared/ui/input";
+import { Card, CardContent } from "@/shared/ui/card";
+import { RadioGroup, RadioGroupItem } from "@/shared/ui/radio-group";
+import { Label } from "@/shared/ui/label";
 import {
   Dialog,
   DialogContent,
@@ -13,19 +13,15 @@ import {
   DialogTitle,
   DialogTrigger,
   DialogFooter,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
+} from "@/shared/ui/dialog";
+import { Button } from "@/shared/ui/button";
+import { Calendar } from "@/shared/ui/calendar";
 import Image from "next/image";
-import { SearchBookList } from "@/feature/admin/types";
+import { SearchBookList } from "@/entities/page/model/types";
 import { ChangeEvent } from "react";
-import { uploadImage } from "@/lib/api/api.client";
-import { handleAction } from "@/lib/api/action";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { uploadImage } from "@/shared/lib/api/api.client";
+import { handleAction } from "@/shared/lib/api/action";
+import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
 import { format } from "date-fns";
 import {
   FormControl,
@@ -33,7 +29,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from "@/shared/ui/form";
 
 type BookDocument = {
   title: string;
@@ -114,7 +110,7 @@ export default function BookBlockEdit({ index }: { index: number }) {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    await handleAction(() => uploadImage(file, watch("user_id")), {
+    await handleAction(() => uploadImage(file), {
       successMessage: "책 이미지가 업로드되었습니다.",
       errorMessage: "이미지 업로드 실패",
       onSuccess: ({ imagePath }) => {

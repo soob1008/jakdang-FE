@@ -6,8 +6,8 @@ import {
   CarouselItem,
   CarouselPrevious,
   CarouselNext,
-} from "@/components/ui/carousel";
-import { AuthorProfile, AuthorWork } from "@/feature/user/type";
+} from "@/shared/ui/carousel";
+import { AuthorProfile, AuthorWork } from "@/entities/author/model/types";
 import WorkItem from "./components/WorkItem";
 import WorkDialog from "./blocks/work/WorkDialog";
 
