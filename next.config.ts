@@ -1,5 +1,7 @@
 import type { NextConfig } from "next";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 const nextConfig: NextConfig = {
   webpack(config) {
     config.module.rules.push({
@@ -28,7 +30,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/api/:path*",
-        destination: "http://localhost:8000/api/:path*",
+        destination: `${API_URL}/api/:path*`,
       },
     ];
   },
