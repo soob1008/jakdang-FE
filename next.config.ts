@@ -1,5 +1,7 @@
 import type { NextConfig } from "next";
 
+const isProd = process.env.NODE_ENV === "production";
+
 const nextConfig: NextConfig = {
   webpack(config) {
     config.module.rules.push({
@@ -28,7 +30,9 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/api/:path*",
-        destination: "http://localhost:8000/api/:path*",
+        destination: isProd
+          ? "https://your-django-service.onrender.com/api/:path*"
+          : "http://localhost:8000/api/:path*",
       },
     ];
   },
