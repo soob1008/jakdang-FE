@@ -1,8 +1,8 @@
 "use client";
 
-import { Button } from "@/shared/ui/button";
-import WorkList from "@/feature/admin/works/WorkList";
-
+import { useState } from "react";
+import WorkList from "@/feature/admin/works/components/WorkList";
+import WorkAddDialog from "@/feature/admin/works/components/WorkAddDialog";
 import { Work } from "@/entities/work/model/type";
 
 export const works: Work[] = [
@@ -132,6 +132,8 @@ export const works: Work[] = [
 ];
 
 export default function WorksContainer() {
+  const [openAddWorkDialog, setOpenAddWorkDialog] = useState(false);
+
   return (
     <div className="px-10">
       {/* 작품 제목 및 추가 */}
@@ -140,7 +142,11 @@ export default function WorksContainer() {
           <h2 className="font-semibold">작품 관리</h2>
           <p className="text-gray-500 text-sm">작품을 관리하세요.</p>
         </div>
-        <Button onClick={() => {}}>작품 추가</Button>
+        {/* 작품 추가 다이얼로그 */}
+        <WorkAddDialog
+          open={openAddWorkDialog}
+          setOpen={setOpenAddWorkDialog}
+        />
       </div>
 
       {/* 작품 리스트 */}

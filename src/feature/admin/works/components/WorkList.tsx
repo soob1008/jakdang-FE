@@ -28,12 +28,12 @@ export default function WorkList({ works, itemsPerPage = 8 }: WorkListProps) {
   return (
     <div className="space-y-10">
       {/* 작품 리스트 */}
-      <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
+      <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
         {visibleWorks.map((work) => (
           <li
             key={work.id}
             className={cn(
-              "rounded-xl overflow-hidden shadow-sm bg-white border border-gray-100 transition-all",
+              "rounded overflow-hidden shadow-sm bg-white border border-gray-100 transition-all",
               "hover:shadow-md hover:-translate-y-1"
             )}
           >
@@ -44,7 +44,7 @@ export default function WorkList({ works, itemsPerPage = 8 }: WorkListProps) {
                   src={work.thumbnailUrl}
                   alt={work.title}
                   fill
-                  className="object-cover transition-transform duration-300 hover:scale-105"
+                  className="object-contain transition-transform duration-300 hover:scale-105"
                 />
               ) : (
                 <div className="flex items-center justify-center h-full text-gray-400 text-sm">
@@ -69,12 +69,12 @@ export default function WorkList({ works, itemsPerPage = 8 }: WorkListProps) {
             </div>
 
             {/* 내용 */}
-            <div className="p-4 space-y-2">
+            <div className="p-2">
               <h3 className="font-semibold text-gray-900 line-clamp-1">
                 {work.title}
               </h3>
 
-              <div className="flex items-center justify-between text-xs text-gray-500">
+              <div className="flex items-center justify-between text-xs text-gray-500 mt-1">
                 <span>
                   {work.type === "SINGLE" ? "단일" : "시리즈"} ·{" "}
                   {format(new Date(work.createdAt), "yyyy.MM.dd")}
@@ -83,7 +83,7 @@ export default function WorkList({ works, itemsPerPage = 8 }: WorkListProps) {
 
               {/* 예약 정보 */}
               {work.isScheduled && work.scheduledAt && (
-                <div className="flex justify-end">
+                <div className="flex justify-end mt-4">
                   <span className="text-amber-600 bg-amber-50 px-2 py-1 rounded-md text-xs ">
                     예약 발행:{" "}
                     {format(new Date(work.scheduledAt), "yyyy.MM.dd HH:mm")}
