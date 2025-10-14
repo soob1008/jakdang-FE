@@ -133,11 +133,17 @@ export const works: Work[] = [
 ];
 
 export default function WorksContainer() {
-  const [openAddWorkDialog, setOpenAddWorkDialog] = useState(false);
   const [selectedWork, setSelectedWork] = useState<Work | null>(null);
+  const [editingWork, setEditingWork] = useState<Work | null>(null);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
   const handleWorkSelect = (work: Work) => {
     setSelectedWork(work);
+  };
+
+  const handleEditWork = (work: Work) => {
+    setEditingWork(work);
+    setIsEditDialogOpen(true);
   };
 
   return (
@@ -153,8 +159,9 @@ export default function WorksContainer() {
           </div>
           {/* 작품 추가 다이얼로그 */}
           <WorkInfoDialog
-            open={openAddWorkDialog}
-            setOpen={setOpenAddWorkDialog}
+            open={isEditDialogOpen}
+            setOpen={setIsEditDialogOpen}
+            work={editingWork}
           />
         </div>
 
@@ -164,6 +171,7 @@ export default function WorksContainer() {
             works={works}
             selectedWork={selectedWork}
             onSelectWork={handleWorkSelect}
+            onEditWork={handleEditWork}
           />
         </div>
       </section>

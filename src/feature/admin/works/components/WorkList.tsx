@@ -20,6 +20,7 @@ type WorkListProps = {
   itemsPerPage?: number;
   selectedWork: Work | null;
   onSelectWork: (work: Work) => void;
+  onEditWork: (work: Work) => void;
 };
 
 export default function WorkList({
@@ -27,6 +28,7 @@ export default function WorkList({
   itemsPerPage = 8,
   selectedWork,
   onSelectWork,
+  onEditWork,
 }: WorkListProps) {
   const [page, setPage] = useState(1);
   const totalPages = Math.ceil(works.length / itemsPerPage);
@@ -68,7 +70,10 @@ export default function WorkList({
                   variant="ghost"
                   size="icon"
                   className="h-8 w-8 rounded-full bg-white/80 hover:bg-gray-100 text-gray-600 hover:text-gray-800 shadow-sm"
-                  onClick={(e) => e.stopPropagation()}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onEditWork(work);
+                  }}
                 >
                   <Pencil className="h-4 w-4" />
                 </Button>
