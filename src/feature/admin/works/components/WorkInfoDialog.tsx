@@ -16,14 +16,14 @@ type WorkAddDialogProps = {
   setOpen: (open: boolean) => void;
 };
 
-export default function WorkAddDialog({ open, setOpen }: WorkAddDialogProps) {
+export default function WorkInfoDialog({ open, setOpen }: WorkAddDialogProps) {
   const [title, setTitle] = useState("");
   const handleAddWork = () => {};
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button onClick={() => {}}>작품 추가</Button>
+        <Button onClick={() => {}}>새 작품</Button>
       </DialogTrigger>
       <DialogContent className="w-8/9 max-w-2xl sm:max-w-3xl">
         <DialogHeader>

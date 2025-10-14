@@ -13,13 +13,21 @@ import {
 import { Button } from "@/shared/ui/button";
 import { format } from "date-fns";
 import { cn } from "@/shared/lib/utils";
+import { Pencil, Trash2 } from "lucide-react";
 
 type WorkListProps = {
   works: Work[];
   itemsPerPage?: number;
+  selectedWork: Work | null;
+  onSelectWork: (work: Work) => void;
 };
 
-export default function WorkList({ works, itemsPerPage = 8 }: WorkListProps) {
+export default function WorkList({
+  works,
+  itemsPerPage = 8,
+  selectedWork,
+  onSelectWork,
+}: WorkListProps) {
   const [page, setPage] = useState(1);
   const totalPages = Math.ceil(works.length / itemsPerPage);
   const startIndex = (page - 1) * itemsPerPage;
@@ -28,23 +36,25 @@ export default function WorkList({ works, itemsPerPage = 8 }: WorkListProps) {
   return (
     <div className="space-y-10">
       {/* 작품 리스트 */}
-      <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+      <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {visibleWorks.map((work) => (
           <li
             key={work.id}
             className={cn(
-              "rounded overflow-hidden shadow-sm bg-white border border-gray-100 transition-all",
-              "hover:shadow-md hover:-translate-y-1"
+              "rounded-lg overflow-hidden h-52 shadow-sm bg-white border border-gray-100 transition-all cursor-pointer group",
+              "hover:shadow-md hover:-translate-y-1",
+              selectedWork?.id === work.id && "ring-2 ring-primary"
             )}
+            onClick={() => onSelectWork(work)}
           >
-            {/* 썸네일 */}
+            {/* 썸네일 영역 */}
             <div className="relative aspect-[3/2] w-full overflow-hidden bg-gray-100">
               {work.thumbnailUrl ? (
                 <Image
                   src={work.thumbnailUrl}
                   alt={work.title}
                   fill
-                  className="object-contain transition-transform duration-300 hover:scale-105"
+                  className="object-cover transition-transform duration-300 group-hover:scale-105"
                 />
               ) : (
                 <div className="flex items-center justify-center h-full text-gray-400 text-sm">
@@ -52,41 +62,51 @@ export default function WorkList({ works, itemsPerPage = 8 }: WorkListProps) {
                 </div>
               )}
 
-              <span
-                className={cn(
-                  "absolute top-2 right-2 px-2 py-0.5 rounded-md font-medium text-xs",
-                  work.visibility === "PUBLIC" && "bg-green-50 text-green-700",
-                  work.visibility === "PRIVATE" && "bg-gray-100 text-gray-500",
-                  work.visibility === "UNLISTED" && "bg-blue-50 text-blue-600"
-                )}
-              >
+              {/* 수정/삭제 버튼 */}
+              <div className="absolute top-2 right-2 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8 rounded-full bg-white/80 hover:bg-gray-100 text-gray-600 hover:text-gray-800 shadow-sm"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <Pencil className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8 rounded-full bg-white/80 hover:bg-gray-100 text-gray-600 hover:text-gray-800 shadow-sm"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </div>
+
+              {/* 공개 상태 뱃지 - 하단 왼쪽 */}
+              <div className="absolute bottom-2 left-2 px-2 py-0.5 rounded-md text-[11px] font-medium bg-black/60 text-white backdrop-blur-sm">
                 {work.visibility === "PUBLIC"
                   ? "공개"
                   : work.visibility === "PRIVATE"
                   ? "비공개"
                   : "한정 공개"}
-              </span>
+              </div>
             </div>
 
             {/* 내용 */}
-            <div className="p-2">
-              <h3 className="font-semibold text-gray-900 line-clamp-1">
+            <div className="p-3">
+              <h3 className="font-semibold text-gray-900 text-[15px] mb-1">
                 {work.title}
               </h3>
 
-              <div className="flex items-center justify-between text-xs text-gray-500 mt-1">
-                <span>
-                  {work.type === "SINGLE" ? "단일" : "시리즈"} ·{" "}
-                  {format(new Date(work.createdAt), "yyyy.MM.dd")}
-                </span>
+              <div className="flex items-center justify-between text-xs text-gray-500">
+                <span>{format(new Date(work.createdAt), "yyyy.MM.dd")}</span>
               </div>
 
               {/* 예약 정보 */}
               {work.isScheduled && work.scheduledAt && (
-                <div className="flex justify-end mt-4">
-                  <span className="text-amber-600 bg-amber-50 px-2 py-1 rounded-md text-xs ">
-                    예약 발행:{" "}
-                    {format(new Date(work.scheduledAt), "yyyy.MM.dd HH:mm")}
+                <div className="flex justify-end mt-3">
+                  <span className="text-xs text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md flex items-center gap-1">
+                    {format(new Date(work.scheduledAt), "MM.dd HH:mm")}
                   </span>
                 </div>
               )}
