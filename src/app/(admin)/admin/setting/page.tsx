@@ -7,7 +7,7 @@ export default async function AdminSettingPage() {
   const user = await fetchServerAPI<Author>("/users/me");
 
   return (
-    <div className="space-y-6 m-auto pt-10 px-4 lg:px-0 lg:w-[900px]">
+    <div className="space-y-6 m-auto pt-8 px-4 lg:px-0 lg:w-[900px]">
       <MyInformation user={user} />
       <AccountDelete />
     </div>

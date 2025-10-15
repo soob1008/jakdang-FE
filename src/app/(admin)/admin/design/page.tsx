@@ -10,7 +10,7 @@ export default function AdminDesignPage() {
 
   return (
     <FormProvider {...form}>
-      <div className="grid h-full grid-cols-1 gap-6 lg:grid-cols-[2fr_1fr]">
+      <div className="grid h-full grid-cols-1 gap-6 lg:grid-cols-[2fr_1fr] mt-4">
         <div className="order-2 lg:order-1">
           <PageDesignEditor />
         </div>

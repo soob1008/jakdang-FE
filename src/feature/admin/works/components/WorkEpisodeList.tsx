@@ -1,6 +1,7 @@
 import { Button } from "@/shared/ui/button";
 import { cn } from "@/shared/lib/utils";
 import { Work } from "@/entities/work/model/type";
+import { useRouter } from "next/navigation";
 
 type WorkEpisodeListProps = {
   selectedWork: Work | null;
@@ -9,6 +10,8 @@ type WorkEpisodeListProps = {
 export default function WorkEpisodeList({
   selectedWork,
 }: WorkEpisodeListProps) {
+  const router = useRouter();
+
   if (!selectedWork) {
     return (
       <aside className="w-1/3 bg-white border rounded-lg shadow-sm p-4 flex flex-col items-center justify-center text-gray-500">
@@ -42,7 +45,14 @@ export default function WorkEpisodeList({
     <aside className="w-1/3 bg-white border rounded-lg shadow-sm p-4">
       <div className="flex items-center justify-between mb-6">
         <h3 className="font-semibold">{selectedWork.title}</h3>
-        <Button size="sm">새 글 추가</Button>
+        <Button
+          size="sm"
+          onClick={() => {
+            router.push(`/admin/works/${selectedWork.id}/new`);
+          }}
+        >
+          새 글 추가
+        </Button>
       </div>
       {hasEpisodes ? (
         <ul className="overflow-auto max-h-[500px] flex flex-col gap-2">

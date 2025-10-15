@@ -147,7 +147,7 @@ export default function WorksContainer() {
   };
 
   return (
-    <div className="flex gap-6 px-10">
+    <div className="flex gap-6 px-10 mt-4">
       <section className="flex-1">
         {/* 작품 제목 및 추가 */}
         <div className="flex items-center justify-between mb-8">
