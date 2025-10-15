@@ -38,7 +38,7 @@ export function ToolbarPlugin() {
   const [fontSize, setFontSize] = useState<string>("16px");
   const [fontFamily, setFontFamily] = useState<string>("Pretendard");
 
-  // ✅ Lexical 상태 업데이트 감시
+  // Lexical 상태 업데이트 감시
   useEffect(() => {
     return editor.registerUpdateListener(({ editorState }) => {
       editorState.read(() => {
@@ -79,7 +79,7 @@ export function ToolbarPlugin() {
   const toggle = (command: LexicalCommand<string>, val: string) =>
     editor.dispatchCommand(command, val);
 
-  // ✅ 색상 / 폰트 크기 / 폰트 패밀리 변경 핸들러
+  // 색상 / 폰트 크기 / 폰트 패밀리 변경 핸들러
   const handleColorChange = (newColor: string) => {
     setColor(newColor);
     editor.update(() => {
@@ -110,7 +110,7 @@ export function ToolbarPlugin() {
     });
   };
 
-  // ✅ 이미지 업로드 핸들러
+  // 이미지 업로드 핸들러
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {

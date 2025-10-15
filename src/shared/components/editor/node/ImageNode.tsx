@@ -1,7 +1,6 @@
 import type { JSX } from "react";
 import {
   DecoratorNode,
-  type EditorConfig,
   type LexicalNode,
   type NodeKey,
   type SerializedLexicalNode,
@@ -10,7 +9,12 @@ import {
 } from "lexical";
 import { ImageComponent } from "./ImageComponent";
 
-export type ImageAlign = "left" | "center" | "right" | "text-left" | "text-right";
+export type ImageAlign =
+  | "left"
+  | "center"
+  | "right"
+  | "text-left"
+  | "text-right";
 
 const DEFAULT_WIDTH = 100;
 const DEFAULT_ALIGN: ImageAlign = "center";
@@ -64,7 +68,7 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
     };
   }
 
-  createDOM(_config: EditorConfig): HTMLElement {
+  createDOM(): HTMLElement {
     return document.createElement("span");
   }
 

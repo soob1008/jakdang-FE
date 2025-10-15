@@ -57,7 +57,10 @@ export function ImageUploadPlugin({ upload }: ImageUploadPluginProps) {
           if (payload.align !== undefined) {
             node.setAlign(payload.align);
 
-            if (payload.align === "text-left" || payload.align === "text-right") {
+            if (
+              payload.align === "text-left" ||
+              payload.align === "text-right"
+            ) {
               if (node.getWidth() > 60) {
                 node.setWidth(60);
               }
