@@ -1,7 +1,6 @@
 import WorkViewContainer from "@/feature/admin/works/components/WorkViewContainer";
 import Footer from "@/shared/components/layout/footer";
 import { Header } from "@/shared/components/layout/header";
-import { id } from "date-fns/locale";
 
 export default function AuthorWorksViewPage() {
   return (
