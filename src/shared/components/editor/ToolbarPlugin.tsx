@@ -9,8 +9,13 @@ import {
   LexicalCommand,
   $isTextNode,
 } from "lexical";
-import { AlignLeft, AlignCenter, AlignRight } from "lucide-react";
-import { useEffect, useState } from "react";
+import {
+  AlignLeft,
+  AlignCenter,
+  AlignRight,
+  Image as ImageIcon,
+} from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { $patchStyleText } from "@lexical/selection";
 import {
   Select,
@@ -19,9 +24,11 @@ import {
   SelectContent,
   SelectItem,
 } from "@/shared/ui/select";
+import { INSERT_IMAGE_COMMAND } from "./plugins/imageCommands";
 
 export function ToolbarPlugin() {
   const [editor] = useLexicalComposerContext();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [isBold, setIsBold] = useState(false);
   const [isItalic, setIsItalic] = useState(false);
@@ -31,6 +38,7 @@ export function ToolbarPlugin() {
   const [fontSize, setFontSize] = useState<string>("16px");
   const [fontFamily, setFontFamily] = useState<string>("Pretendard");
 
+  // ✅ Lexical 상태 업데이트 감시
   useEffect(() => {
     return editor.registerUpdateListener(({ editorState }) => {
       editorState.read(() => {
@@ -51,7 +59,7 @@ export function ToolbarPlugin() {
 
           const node = selection.anchor.getNode();
           if ($isTextNode(node)) {
-            const styles = node.getStyle(); // string e.g. "font-size: 20px; font-family: Pretendard;"
+            const styles = node.getStyle();
             if (styles) {
               const sizeMatch = styles.match(/font-size:\s*([^;]+)/);
               const familyMatch = styles.match(/font-family:\s*([^;]+)/);
@@ -71,6 +79,7 @@ export function ToolbarPlugin() {
   const toggle = (command: LexicalCommand<string>, val: string) =>
     editor.dispatchCommand(command, val);
 
+  // ✅ 색상 / 폰트 크기 / 폰트 패밀리 변경 핸들러
   const handleColorChange = (newColor: string) => {
     setColor(newColor);
     editor.update(() => {
@@ -101,8 +110,36 @@ export function ToolbarPlugin() {
     });
   };
 
+  // ✅ 이미지 업로드 핸들러
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      editor.dispatchCommand(INSERT_IMAGE_COMMAND, { file });
+    }
+    e.target.value = ""; // 동일 파일 다시 선택 가능하게
+  };
+
   return (
     <div className="flex flex-wrap items-center gap-1 border-t border-b bg-white px-2 py-1">
+      {/* ✅ 이미지 업로드 버튼 */}
+      <div className="flex items-center border-r pr-2">
+        <button
+          type="button"
+          onClick={() => fileInputRef.current?.click()}
+          className="w-8 h-7 flex items-center justify-center hover:bg-gray-100"
+          title="이미지 삽입"
+        >
+          <ImageIcon size={16} />
+        </button>
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={handleFileSelect}
+        />
+      </div>
+
       {/* Bold / Italic / Underline */}
       <div className="flex border-r">
         <button
@@ -175,12 +212,9 @@ export function ToolbarPlugin() {
         />
       </div>
 
-      {/* Font Size (shadcn Select) */}
-      <Select
-        onValueChange={(value) => handleFontSizeChange(value)}
-        value={fontSize}
-      >
-        <SelectTrigger className="w-[140px] h-7 text-sm">
+      {/* Font Size (Select) */}
+      <Select onValueChange={handleFontSizeChange} value={fontSize}>
+        <SelectTrigger className="w-[120px] h-7 text-sm">
           <SelectValue placeholder="폰트 크기" />
         </SelectTrigger>
         <SelectContent>
@@ -193,11 +227,8 @@ export function ToolbarPlugin() {
         </SelectContent>
       </Select>
 
-      {/* Font Family (shadcn Select) */}
-      <Select
-        onValueChange={(value) => handleFontFamilyChange(value)}
-        value={fontFamily}
-      >
+      {/* Font Family (Select) */}
+      <Select onValueChange={handleFontFamilyChange} value={fontFamily}>
         <SelectTrigger className="w-[140px] h-7 text-sm">
           <SelectValue placeholder="폰트 종류" />
         </SelectTrigger>

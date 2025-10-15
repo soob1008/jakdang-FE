@@ -20,7 +20,7 @@ export default function TextBlockEdit({ index }: { index: number }) {
           <FormItem>
             <FormLabel>내용</FormLabel>
             <FormControl>
-              <LexicalEditor name={`${namePrefix}.content`} />
+              {/* <LexicalEditor name={`${namePrefix}.content`} /> */}
             </FormControl>
             <FormMessage />
           </FormItem>

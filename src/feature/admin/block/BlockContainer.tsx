@@ -65,7 +65,7 @@ export default function BlockContainer() {
 
   return (
     <FormProvider {...form}>
-      <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6 h-full">
+      <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6 h-full mt-4">
         <div className="order-2 lg:order-1">
           <PageEditor />
         </div>
