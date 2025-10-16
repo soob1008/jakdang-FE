@@ -16,6 +16,8 @@ import { Work } from "@/entities/work/model/type";
 import { uploadImage } from "@/shared/lib/api/api.client";
 import { handleAction } from "@/shared/lib/api/action";
 import Image from "next/image";
+import useCreateWork from "../hooks/useCreateWork";
+import useUpdateWork from "../hooks/useUpdateWork";
 
 type WorkInfoDialogProps = {
   open: boolean;
@@ -30,23 +32,26 @@ export default function WorkInfoDialog({
 }: WorkInfoDialogProps) {
   const isEditMode = !!work;
   const [title, setTitle] = useState("");
-  const [thumbnail, setThumbnail] = useState<string | null>(null);
+  const [thumbnail, setThumbnail] = useState<string>();
+
+  const { mutateAsync: createWork } = useCreateWork();
+  const { mutateAsync: updateWork } = useUpdateWork();
 
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     setTitle(work?.title ?? "");
-    setThumbnail(work?.thumbnailUrl ?? null);
+    setThumbnail(work?.thumbnail ?? "");
   }, [work]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim()) return;
 
     if (isEditMode) {
-      console.log("작품 수정:", { ...work, title, thumbnail });
+      await updateWork({ id: work.id, title, thumbnail } as Work);
     } else {
-      console.log("작품 추가:", { title, thumbnail });
+      await createWork({ title, thumbnail });
     }
 
     setOpen(false);
@@ -76,17 +81,11 @@ export default function WorkInfoDialog({
       <DialogContent className="w-[90%] max-w-2xl sm:max-w-3xl">
         <DialogHeader>
           <DialogTitle>{isEditMode ? "작품 수정" : "새 작품 추가"}</DialogTitle>
-          <DialogDescription>
-            {isEditMode ? (
-              <>작품 정보를 수정할 수 있습니다.</>
-            ) : (
-              <div className="bg-gray-50 text-gray-600 text-sm p-3 rounded-md">
-                생성된 작품 하위에 콘텐츠를 자유롭게 구성할 수 있습니다.
-                <br />
-                목차로 구성해 단일 작품으로 만들거나, 여러 편을 이어 시리즈
-                형태로 전개할 수도 있습니다.
-              </div>
-            )}
+          <DialogDescription className="text-gray-500 text-sm">
+            생성된 작품 하위에 콘텐츠를 자유롭게 구성할 수 있습니다.
+            <br />
+            목차로 구성해 단일 작품으로 만들거나, 여러 편을 이어 시리즈 형태로
+            전개할 수도 있습니다.
           </DialogDescription>
         </DialogHeader>
 
@@ -115,7 +114,7 @@ export default function WorkInfoDialog({
               <div className="relative w-40 h-28 bg-gray-100 border rounded overflow-hidden flex items-center justify-center">
                 {thumbnail ? (
                   <Image
-                    src={thumbnail}
+                    src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${thumbnail}`}
                     alt="썸네일 미리보기"
                     fill
                     className="object-cover"
@@ -150,7 +149,7 @@ export default function WorkInfoDialog({
 
           <DialogFooter>
             <Button type="submit" disabled={!title.trim()}>
-              {isEditMode ? "작품 수정" : "작품 추가"}
+              {isEditMode ? "수정하기" : "등록하기"}
             </Button>
           </DialogFooter>
         </form>
