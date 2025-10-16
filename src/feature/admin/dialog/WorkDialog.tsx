@@ -103,7 +103,7 @@ export function WorkDialog({
   return (
     <ResponsiveDialog
       trigger={undefined}
-      title={isEdit ? "작품 수정" : "작품 등록"}
+      title={isEdit ? "수정하기" : "등록하기"}
       description={
         isEdit ? "작가님의 작품을 수정하세요." : "작가님의 작품을 등록해주세요."
       }

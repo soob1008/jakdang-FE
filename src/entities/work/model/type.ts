@@ -1,19 +1,19 @@
 export interface Work {
   id: string;
   title: string;
-  createdAt: string;
-  updatedAt: string;
-  thumbnailUrl: string;
+  author_name: string;
+  author_slug: string;
+  created_at: string;
+  updated_at: string;
+  thumbnail: string;
   type: WorkType;
-  isPublished: boolean;
-  isScheduled?: boolean;
-  scheduledAt?: string;
-  publishedAt?: string;
+  is_public: boolean;
+  scheduled_at?: string;
+  published_at?: string;
   description?: string;
   content?: string;
-  tags?: string[];
   episodes?: Episode[];
-  authorId: string;
+  author_id: string;
   visibility?: "PUBLIC" | "PRIVATE" | "UNLISTED";
   stats?: Stats;
 }

@@ -14,8 +14,8 @@ export default function WorkEpisodeList({
 
   if (!selectedWork) {
     return (
-      <aside className="w-1/3 bg-white border rounded-lg shadow-sm p-4 flex flex-col items-center justify-center text-gray-500">
-        <p>작품을 선택해주세요.</p>
+      <aside className="w-1/3 bg-white border h-140 rounded-lg shadow-sm p-4 flex flex-col items-center justify-center text-gray-500">
+        <p className="text-sm">작품을 선택해주세요.</p>
       </aside>
     );
   }
