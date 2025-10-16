@@ -32,7 +32,7 @@ export default function WorkInfoDialog({
 }: WorkInfoDialogProps) {
   const isEditMode = !!work;
   const [title, setTitle] = useState("");
-  const [thumbnail, setThumbnail] = useState<string>();
+  const [thumbnail, setThumbnail] = useState<string | undefined>();
 
   const { mutateAsync: createWork } = useCreateWork();
   const { mutateAsync: updateWork } = useUpdateWork();
@@ -40,21 +40,37 @@ export default function WorkInfoDialog({
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    setTitle(work?.title ?? "");
-    setThumbnail(work?.thumbnail ?? "");
-  }, [work]);
+    if (!open) return;
+
+    if (work) {
+      setTitle(work.title ?? "");
+      setThumbnail(work.thumbnail ?? undefined);
+    } else {
+      resetForm();
+    }
+  }, [work, open]);
+
+  const resetForm = () => {
+    setTitle("");
+    setThumbnail(undefined);
+    if (inputRef.current) {
+      inputRef.current.value = "";
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim()) return;
 
-    if (isEditMode) {
-      await updateWork({ id: work.id, title, thumbnail } as Work);
-    } else {
-      await createWork({ title, thumbnail });
-    }
-
-    setOpen(false);
+    try {
+      if (isEditMode) {
+        await updateWork({ id: work.id, title, thumbnail } as Work);
+      } else {
+        await createWork({ title, thumbnail });
+        resetForm();
+      }
+      setOpen(false);
+    } catch {}
   };
 
   const handleUpload = async (e: ChangeEvent<HTMLInputElement>) => {

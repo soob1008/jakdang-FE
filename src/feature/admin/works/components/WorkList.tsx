@@ -15,14 +15,15 @@ import { format } from "date-fns";
 import { cn } from "@/shared/lib/utils";
 import { Pencil, Trash2 } from "lucide-react";
 import { Switch } from "@/shared/ui/switch";
-import useUpdateWork from "../hooks/useUpdateWork";
-
 type WorkListProps = {
   works: Work[];
   itemsPerPage?: number;
   selectedWork: Work | null;
   onSelectWork: (work: Work) => void;
   onEditWork: (work: Work) => void;
+  onDeleteWork: (work: Work) => void;
+  onTogglePublic: (work: Work, isPublic: boolean) => Promise<void>;
+  isUpdating: boolean;
 };
 
 export default function WorkList({
@@ -31,10 +32,11 @@ export default function WorkList({
   selectedWork,
   onSelectWork,
   onEditWork,
+  onDeleteWork,
+  onTogglePublic,
+  isUpdating,
 }: WorkListProps) {
   const [page, setPage] = useState(1);
-
-  const { mutateAsync: updateWork } = useUpdateWork();
 
   const totalPages = Math.ceil(works.length / itemsPerPage);
   const startIndex = (page - 1) * itemsPerPage;
@@ -87,9 +89,12 @@ export default function WorkList({
                     variant="ghost"
                     size="icon"
                     className="h-8 w-8 rounded-full bg-white/80 hover:bg-gray-100 text-gray-600 hover:text-gray-800 shadow-sm"
-                    onClick={(e) => e.stopPropagation()}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onDeleteWork(work);
+                    }}
                   >
-                    <Trash2 className="h-4 w-4" />
+                    <Trash2 className="w-4 h-4 text-muted-foreground hover:text-gray-900" />
                   </Button>
                 </div>
 
@@ -120,11 +125,9 @@ export default function WorkList({
                   <Switch
                     checked={work.is_public}
                     onCheckedChange={async (checked) => {
-                      await updateWork({
-                        id: work.id,
-                        is_public: checked,
-                      } as Work);
+                      await onTogglePublic(work, checked);
                     }}
+                    disabled={isUpdating}
                   />
                 </div>
               </div>
