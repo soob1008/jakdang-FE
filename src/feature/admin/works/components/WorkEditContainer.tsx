@@ -4,10 +4,9 @@ import WorkEditorForm, {
   type WorkFormValues,
 } from "@/feature/admin/works/components/WorkEditorForm";
 import useWriting from "../hooks/useWriting";
+import useUpdateWriting from "../hooks/useUpdateWriting";
 
 type WorkEditContainerProps = {
-  // defaultValues?: Partial<WorkFormValues>;
-  // onSubmit?: (values: WorkFormValues) => Promise<void> | void;
   workId: string;
   writingId: string;
 };
@@ -15,15 +14,12 @@ type WorkEditContainerProps = {
 export default function WorkEditContainer({
   workId,
   writingId,
-}: // defaultValues,
-// onSubmit,
-WorkEditContainerProps) {
+}: WorkEditContainerProps) {
   const { data: writing } = useWriting(workId, writingId);
-
-  console.log("writing:", writing);
+  const { mutateAsync: updateWriting } = useUpdateWriting();
 
   const handleSubmit = async (values: WorkFormValues) => {
-    // await updateWriting({ workId, writingId, writing: values });
+    await updateWriting({ workId, writingId, writing: values });
   };
 
   return (

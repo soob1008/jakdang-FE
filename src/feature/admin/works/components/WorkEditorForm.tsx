@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useEffect } from "react";
+import { useEffect } from "react";
 import { FormProvider, useForm, Controller } from "react-hook-form";
 import LexicalEditor from "@/shared/components/editor/LexicalEditor";
 import { Button } from "@/shared/ui/button";

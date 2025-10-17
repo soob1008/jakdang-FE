@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import WorkList from "@/feature/admin/works/components/WorkList";
 import WorkInfoDialog from "@/feature/admin/works/components/WorkInfoDialog";
 import { Work } from "@/entities/work/model/type";
@@ -19,8 +19,13 @@ import {
   AlertDialogAction,
 } from "@/shared/ui/alert-dialog";
 import { toast } from "sonner";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 export default function WorksContainer() {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
   const [selectedWork, setSelectedWork] = useState<Work | null>(null);
   const [editingWork, setEditingWork] = useState<Work | null>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -32,8 +37,34 @@ export default function WorksContainer() {
   const { mutateAsync: deleteWork, isPending: isDeleting } = useDeleteWork();
   const { mutateAsync: updateWork, isPending: isUpdating } = useUpdateWork();
 
+  const selectedWorkIdParam = searchParams.get("selectedWorkId");
+
+  const updateSelectedWorkParam = (workId?: string | null) => {
+    const currentId = searchParams.get("selectedWorkId");
+
+    if (workId) {
+      if (currentId === workId) return;
+    } else if (!currentId) {
+      return;
+    }
+
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (workId) {
+      params.set("selectedWorkId", workId);
+    } else {
+      params.delete("selectedWorkId");
+    }
+
+    const queryString = params.toString();
+    router.replace(queryString ? `${pathname}?${queryString}` : pathname, {
+      scroll: false,
+    });
+  };
+
   const handleWorkSelect = (work: Work) => {
     setSelectedWork(work);
+    updateSelectedWorkParam(work.id);
   };
 
   const handleEditWork = (work: Work) => {
@@ -59,6 +90,7 @@ export default function WorksContainer() {
 
       if (selectedWork?.id === workToDelete.id) {
         setSelectedWork(null);
+        updateSelectedWorkParam(null);
       }
 
       if (editingWork?.id === workToDelete.id) {
@@ -83,6 +115,15 @@ export default function WorksContainer() {
       // 이미 useUpdateWork에서 토스트를 통해 에러를 처리합니다.
     }
   };
+
+  useEffect(() => {
+    if (!works || !selectedWorkIdParam) return;
+
+    const matchedWork = works.find((item) => item.id === selectedWorkIdParam);
+    if (matchedWork) {
+      setSelectedWork(matchedWork);
+    }
+  }, [works, selectedWorkIdParam]);
 
   return (
     <div className="flex gap-6 px-10 mt-4">

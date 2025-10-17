@@ -16,10 +16,12 @@ export default function useCreateWriting() {
       workId: string;
       writing: WorkFormValues;
     }) => apiClient.post(`/works/${workId}/writings`, writing),
-    onSuccess: () => {
+    onSuccess: (_, { workId }) => {
       toast.success("새 글이 생성되었습니다.");
       queryClient.invalidateQueries({ queryKey: ["works"] });
-      router.push("/admin/works");
+      const searchParams = new URLSearchParams();
+      searchParams.set("selectedWorkId", workId);
+      router.push(`/admin/works?${searchParams.toString()}`);
     },
     onError: (error: Error) => {
       toast.error(error.message || "글 생성에 실패했습니다.");

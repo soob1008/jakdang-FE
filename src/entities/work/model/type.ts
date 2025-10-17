@@ -21,6 +21,7 @@ export interface Work {
 export interface Writing {
   id: string;
   title: string;
+  subtitle?: string;
   order: number;
   is_public: boolean;
   published_at?: string | null;
