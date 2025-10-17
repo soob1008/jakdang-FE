@@ -30,10 +30,9 @@ import {
   FormItem,
   FormControl,
   FormMessage,
-  FormLabel,
 } from "@/shared/ui/form";
 
-type WorkItem = {
+type ListItem = {
   title: string;
   short_description?: string;
   description?: string;
@@ -43,19 +42,19 @@ type WorkItem = {
   is_representative: boolean;
 };
 
-export default function WorkBlockEdit({ index }: { index: number }) {
+export default function ListBlockEdit({ index }: { index: number }) {
   const namePrefix = `blocks_draft.${index}.data`;
-  const workNamePrefix = `${namePrefix}.works`;
+  const itemNamePrefix = `${namePrefix}.lists`;
 
   const { control, register, watch, setValue } = useFormContext();
 
   const { fields, append, remove, move } = useFieldArray({
     control,
-    name: workNamePrefix,
+    name: itemNamePrefix,
     keyName: "_key",
   });
 
-  const works: WorkItem[] = watch(workNamePrefix) || [];
+  const items: ListItem[] = watch(itemNamePrefix) || [];
 
   const [deleteKey, setDeleteKey] = useState<string | null>(null);
   const getIndexByKey = (key: string | null) =>
@@ -74,7 +73,7 @@ export default function WorkBlockEdit({ index }: { index: number }) {
       onSuccess: ({ imagePath }) => {
         const idx = getIndexByKey(key);
         if (idx > -1) {
-          setValue(`${workNamePrefix}.${idx}.image_url`, imagePath, {
+          setValue(`${itemNamePrefix}.${idx}.image_url`, imagePath, {
             shouldDirty: true,
           });
         }
@@ -84,7 +83,7 @@ export default function WorkBlockEdit({ index }: { index: number }) {
     e.target.value = "";
   };
 
-  const handleAddWork = () => {
+  const handleAddItem = () => {
     append({
       id: crypto.randomUUID(),
       title: "",
@@ -94,7 +93,7 @@ export default function WorkBlockEdit({ index }: { index: number }) {
       image_url: "",
       is_active: true,
       is_representative: false,
-    } as WorkItem);
+    } as ListItem);
   };
 
   const handleDragEnd = (result: DropResult) => {
@@ -110,10 +109,10 @@ export default function WorkBlockEdit({ index }: { index: number }) {
           type="button"
           variant="outline"
           size="sm"
-          onClick={handleAddWork}
+          onClick={handleAddItem}
         >
-          <Plus className="w-4 h-4 mr-2" />
-          작품 추가
+          <Plus className="w-4 h-4" />
+          추가
         </Button>
       </div>
 
@@ -121,9 +120,6 @@ export default function WorkBlockEdit({ index }: { index: number }) {
         name={`${namePrefix}.title`}
         render={({ field }) => (
           <FormItem className="w-1/2">
-            <FormLabel className="text-sm font-semibold">
-              작품 블록 제목
-            </FormLabel>
             <FormControl>
               <Input placeholder="제목" {...field} value={field.value ?? ""} />
             </FormControl>
@@ -133,7 +129,7 @@ export default function WorkBlockEdit({ index }: { index: number }) {
       />
 
       <DragDropContext onDragEnd={handleDragEnd}>
-        <Droppable droppableId="work-list" direction="vertical">
+        <Droppable droppableId="list-items" direction="vertical">
           {(provided) => (
             <div
               ref={provided.innerRef}
@@ -141,7 +137,7 @@ export default function WorkBlockEdit({ index }: { index: number }) {
               className="space-y-3 md:space-y-4"
             >
               {fields.map((field, i: number) => {
-                const path = `${workNamePrefix}.${i}`;
+                const itemPath = `${itemNamePrefix}.${i}`;
 
                 return (
                   <Draggable
@@ -167,12 +163,12 @@ export default function WorkBlockEdit({ index }: { index: number }) {
                         <div className="relative w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 flex-shrink-0 rounded overflow-hidden bg-white border">
                           <Image
                             src={
-                              works[i]?.image_url
+                              items[i]?.image_url
                                 ? (process.env.NEXT_PUBLIC_IMAGE_URL || "") +
-                                  works[i].image_url
+                                  items[i].image_url
                                 : "/assets/basic_book.jpg"
                             }
-                            alt="작품 이미지"
+                            alt="리스트 항목 이미지"
                             fill
                             className="object-cover"
                           />
@@ -191,11 +187,11 @@ export default function WorkBlockEdit({ index }: { index: number }) {
                         <div className="flex flex-col flex-grow gap-2 md:gap-3">
                           {/* 상단 스위치들 */}
                           <div className="flex flex-wrap items-center gap-3">
-                            <div className="flex items-center gap-2 text-xs">
-                              대표작
+                            {/* <div className="flex items-center gap-2 text-xs">
+                              대표 항목
                               <Controller
                                 control={control}
-                                name={`${path}.is_representative`}
+                                name={`${itemPath}.is_representative`}
                                 render={({ field }) => (
                                   <Switch
                                     checked={!!field.value}
@@ -203,12 +199,12 @@ export default function WorkBlockEdit({ index }: { index: number }) {
                                   />
                                 )}
                               />
-                            </div>
+                            </div> */}
                             <div className="flex items-center gap-2 text-xs">
                               공개
                               <Controller
                                 control={control}
-                                name={`${path}.is_active`}
+                                name={`${itemPath}.is_active`}
                                 render={({ field }) => (
                                   <Switch
                                     checked={!!field.value}
@@ -222,25 +218,25 @@ export default function WorkBlockEdit({ index }: { index: number }) {
                           {/* 텍스트 입력: 반응형 그리드 */}
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-3">
                             <Input
-                              {...register(`${path}.title`)}
+                              {...register(`${itemPath}.title`)}
                               placeholder="제목"
                               className="text-sm"
                             />
                             <Input
-                              {...register(`${path}.short_description`)}
+                              {...register(`${itemPath}.short_description`)}
                               placeholder="한줄 설명"
                               className="text-sm"
                             />
                             <Input
-                              {...register(`${path}.url`)}
+                              {...register(`${itemPath}.url`)}
                               placeholder="링크 주소"
                               className="text-sm md:col-span-2"
                             />
                           </div>
 
                           <Textarea
-                            {...register(`${path}.description`)}
-                            placeholder="작품에 대한 내용이나 긴 설명을 적어주세요."
+                            {...register(`${itemPath}.description`)}
+                            placeholder="항목에 대한 내용이나 긴 설명을 적어주세요."
                             className="text-sm h-28 md:h-32 lg:h-40 resize-none"
                           />
                         </div>
@@ -273,7 +269,7 @@ export default function WorkBlockEdit({ index }: { index: number }) {
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>작품을 삭제할까요?</AlertDialogTitle>
+            <AlertDialogTitle>항목을 삭제할까요?</AlertDialogTitle>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>취소</AlertDialogCancel>

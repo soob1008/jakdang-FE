@@ -1,26 +1,26 @@
 import { ResponsiveDialog } from "@/shared/ui/ResponsiveDialog";
 import { Badge } from "@/shared/ui/badge";
-import { AuthorWork } from "@/entities/author/model/types";
+import { WorkItem } from "@/entities/page/model/types";
 
-interface WorkDialogProps {
+interface ListContentDialogProps {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
-  work?: AuthorWork;
+  item?: WorkItem;
 }
 
-export default function WorkDialog({
+export default function ListContentDialog({
   open,
   onOpenChange,
-  work,
-}: WorkDialogProps) {
-  const hasLink = Boolean(work?.url);
-  const isRepresentative = work?.is_representative;
-  const title = work?.title ?? "제목 없음";
-  const description = work?.description?.trim();
+  item,
+}: ListContentDialogProps) {
+  const hasLink = Boolean(item?.url);
+  const isRepresentative = item?.is_representative;
+  const title = item?.title ?? "제목 없음";
+  const description = item?.description?.trim();
 
   const handleSubmit = () => {
     if (hasLink) {
-      window.open(work!.url, "_blank");
+      window.open(item!.url, "_blank");
     }
   };
 
@@ -29,8 +29,8 @@ export default function WorkDialog({
       trigger={undefined}
       open={open}
       onOpenChange={onOpenChange}
-      title="작품 상세"
-      submitText="작품 링크"
+      title="상세"
+      submitText="링크 열기"
       onSubmit={handleSubmit}
       isSubmit={hasLink}
     >
@@ -38,7 +38,7 @@ export default function WorkDialog({
         <div className="flex flex-col gap-1">
           {isRepresentative && (
             <Badge variant="primary-outline" className="text-xs">
-              대표작
+              대표 항목
             </Badge>
           )}
           <h2 className="text-xl font-semibold">{title}</h2>

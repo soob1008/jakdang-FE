@@ -11,7 +11,7 @@ import { BlockItemType } from "@/entities/page/model/types";
 import ImageBlockEdit from "./image/ImageBlockEdit";
 import LinkBlockEdit from "./link/LinkBlockEdit";
 import SNSBlockEdit from "./sns/SNSBlockEdit";
-import WorkBlockEdit from "./work/WorkBlockEdit";
+import ListBlockEdit from "./list/ListBlockEdit";
 import CalendarBlockEdit from "./calendar/CalendarBlockEdit";
 import {
   AlertDialog,
@@ -138,7 +138,9 @@ export default function BlockItem({
           {block.type === "image" && <ImageBlockEdit index={index} />}
           {block.type === "link" && <LinkBlockEdit index={index} />}
           {block.type === "sns" && <SNSBlockEdit index={index} />}
-          {block.type === "work" && <WorkBlockEdit index={index} />}
+          {(block.type === "list" || block.type === "work") && (
+            <ListBlockEdit index={index} />
+          )}
           {block.type === "calendar" && <CalendarBlockEdit index={index} />}
           {block.type === "blank" && <BlankBlockEdit index={index} />}
           {block.type === "book" && <BookBlockEdit index={index} />}

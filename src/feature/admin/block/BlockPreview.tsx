@@ -3,7 +3,7 @@ import TextBlock from "@/feature/author/blocks/TextBlock";
 import ImageBlock from "@/feature/author/blocks/ImageBlock";
 import LinkBlock from "@/feature/author/blocks/LinkBlock";
 import SNSBlock from "@/feature/author/blocks/SNSBlock";
-import WorkBlock from "@/feature/author/blocks/work/WorkBlock";
+import ListBlock from "@/feature/author/blocks/list/ListBlock";
 import CalendarBlock from "@/feature/author/blocks/CalendarBlock";
 import BlankBlock from "@/feature/author/blocks/BlankBlock";
 import BookBlock from "@/feature/author/blocks/BookBlock";
@@ -30,7 +30,9 @@ export default function BlockPreview({
       return <SNSBlock block={block} style={style} />;
 
     case "work":
-      return <WorkBlock block={block} isPreview style={style} />;
+      return <div>작품</div>;
+    case "list":
+      return <ListBlock block={block} isPreview style={style} />;
 
     case "calendar":
       return <CalendarBlock block={block} style={style} />;

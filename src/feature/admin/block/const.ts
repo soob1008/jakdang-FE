@@ -63,9 +63,9 @@ export const BLOCK_LIST: BlockList[] = [
         icon: CalendarIcon,
       },
       {
-        type: "work",
+        type: "list",
         name: "리스트",
-        description: "대표 작품을 보여줘요",
+        description: "콘텐츠를 리스트로 정리해요",
         icon: LayoutList,
       },
       {

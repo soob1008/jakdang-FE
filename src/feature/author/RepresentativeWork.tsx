@@ -9,7 +9,7 @@ import {
 } from "@/shared/ui/carousel";
 import { AuthorProfile, AuthorWork } from "@/entities/author/model/types";
 import WorkItem from "./components/WorkItem";
-import WorkDialog from "./blocks/work/WorkDialog";
+import ListContentDialog from "./blocks/list/ListContentDialog";
 
 interface RepresentativeWorkProps {
   user: AuthorProfile;
@@ -44,12 +44,12 @@ export default function RepresentativeWork({ user }: RepresentativeWorkProps) {
         <CarouselNext className="hidden md:flex" />
       </Carousel>
 
-      <WorkDialog
+      <ListContentDialog
         open={!!selectedWork}
         onOpenChange={(open) => {
           if (!open) setSelectedWork(null);
         }}
-        work={selectedWork ?? undefined}
+        item={selectedWork ?? undefined}
       />
     </section>
   );
