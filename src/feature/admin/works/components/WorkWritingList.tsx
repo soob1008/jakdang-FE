@@ -7,7 +7,7 @@ type WorkEpisodeListProps = {
   selectedWork: Work | null;
 };
 
-export default function WorkEpisodeList({
+export default function WorkWritingList({
   selectedWork,
 }: WorkEpisodeListProps) {
   const router = useRouter();
@@ -20,26 +20,7 @@ export default function WorkEpisodeList({
     );
   }
 
-  const episodes = [
-    {
-      id: 1,
-      title: "1화. 작당을 시작하다",
-      createdAt: "2025-10-14",
-      likes: 23,
-      comments: 4,
-      status: "공개",
-    },
-    {
-      id: 2,
-      title: "2화. 작품 관리 구조 설계",
-      createdAt: "2025-10-13",
-      likes: 15,
-      comments: 1,
-      status: "비공개",
-    },
-  ];
-
-  const hasEpisodes = episodes.length > 0;
+  const hasWritings = selectedWork.writings.length > 0;
 
   return (
     <aside className="w-1/3 bg-white border rounded-lg shadow-sm p-4">
@@ -54,20 +35,20 @@ export default function WorkEpisodeList({
           새 글 추가
         </Button>
       </div>
-      {hasEpisodes ? (
+      {hasWritings ? (
         <ul className="overflow-auto max-h-[500px] flex flex-col gap-2">
-          {episodes.map((episode) => (
+          {selectedWork.writings.map((writing) => (
             <li
-              key={episode.id}
+              key={writing.id}
               className="border rounded-md p-3 hover:bg-gray-50 transition-colors"
             >
               {/* 제목 + 날짜 */}
               <div className="flex items-start justify-between mb-1.5">
                 <h4 className="font-medium text-sm leading-snug line-clamp-1">
-                  {episode.title}
+                  {writing.title}
                 </h4>
                 <span className="text-xs text-gray-500 whitespace-nowrap ml-2">
-                  {episode.createdAt}
+                  {writing.created_at}
                 </span>
               </div>
 
@@ -76,14 +57,14 @@ export default function WorkEpisodeList({
                 <span
                   className={cn(
                     "text-xs font-medium",
-                    episode.status === "공개"
+                    writing.status === "공개"
                       ? "text-green-600"
-                      : episode.status === "비공개"
+                      : writing.status === "비공개"
                       ? "text-gray-500"
                       : "text-blue-600"
                   )}
                 >
-                  {episode.status}
+                  {writing.status}
                 </span>
 
                 <div className="flex items-center gap-1.5 ml-auto">
@@ -100,8 +81,11 @@ export default function WorkEpisodeList({
         </ul>
       ) : (
         <div className="flex flex-col items-center justify-center py-16 text-gray-500">
-          <p>아직 등록된 콘텐츠가 없습니다.</p>
-          <p className="text-sm mt-1">새로운 글을 추가해보세요.</p>
+          <p className="text-sm text-center">
+            아직 등록된 콘텐츠가 없습니다.
+            <br />
+            새로운 글을 추가해보세요.
+          </p>
         </div>
       )}
     </aside>

@@ -4,7 +4,7 @@ import { useState } from "react";
 import WorkList from "@/feature/admin/works/components/WorkList";
 import WorkInfoDialog from "@/feature/admin/works/components/WorkInfoDialog";
 import { Work } from "@/entities/work/model/type";
-import WorkEpisodeList from "@/feature/admin/works/components/WorkEpisodeList";
+import WorkWritingList from "@/feature/admin/works/components/WorkWritingList";
 import useWorks from "../hooks/useWorks";
 import useDeleteWork from "../hooks/useDeleteWork";
 import useUpdateWork from "../hooks/useUpdateWork";
@@ -117,7 +117,7 @@ export default function WorksContainer() {
         </div>
       </section>
       {/* 작품 하위 에피소드 리스트 */}
-      <WorkEpisodeList selectedWork={selectedWork} />
+      <WorkWritingList selectedWork={selectedWork} />
 
       <AlertDialog
         open={isOpenDeleteAlert}
