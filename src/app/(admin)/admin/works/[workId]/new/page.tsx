@@ -3,7 +3,7 @@ import WorkNewContainer from "@/feature/admin/works/components/WorkNewContainer"
 export default async function AdminWorksNewPage({
   params,
 }: {
-  params: { workId: string };
+  params: Promise<{ workId: string }>;
 }) {
   const param = await params;
 

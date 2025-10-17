@@ -3,7 +3,7 @@ import WorkEditContainer from "@/feature/admin/works/components/WorkEditContaine
 export default async function AdminWorksEditPage({
   params,
 }: {
-  params: { workId: string; writingId: string };
+  params: Promise<{ workId: string; writingId: string }>;
 }) {
   const { workId, writingId } = await params;
 
