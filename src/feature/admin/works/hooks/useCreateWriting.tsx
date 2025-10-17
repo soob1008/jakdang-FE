@@ -2,9 +2,11 @@ import { apiClient } from "@/shared/lib/api/api.client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { WorkFormValues } from "../components/WorkEditorForm";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export default function useCreateWriting() {
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   return useMutation({
     mutationFn: ({
@@ -17,6 +19,7 @@ export default function useCreateWriting() {
     onSuccess: () => {
       toast.success("새 글이 생성되었습니다.");
       queryClient.invalidateQueries({ queryKey: ["works"] });
+      router.push("/admin/works");
     },
     onError: (error: Error) => {
       toast.error(error.message || "글 생성에 실패했습니다.");
