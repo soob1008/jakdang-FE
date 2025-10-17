@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import WorkList from "@/feature/admin/works/components/WorkList";
 import WorkInfoDialog from "@/feature/admin/works/components/WorkInfoDialog";
 import { Work } from "@/entities/work/model/type";
@@ -8,6 +8,7 @@ import WorkWritingList from "@/feature/admin/works/components/WorkWritingList";
 import useWorks from "../hooks/useWorks";
 import useDeleteWork from "../hooks/useDeleteWork";
 import useUpdateWork from "../hooks/useUpdateWork";
+import useDeleteWriting from "../hooks/useDeleteWriting";
 import {
   AlertDialog,
   AlertDialogContent,
@@ -21,64 +22,109 @@ import {
 import { toast } from "sonner";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
+const SELECTED_WORK_PARAM = "selectedWorkId";
+
 export default function WorksContainer() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const [selectedWork, setSelectedWork] = useState<Work | null>(null);
-  const [editingWork, setEditingWork] = useState<Work | null>(null);
+  const [selectedWorkId, setSelectedWorkId] = useState<string | null>(null);
+  const [editingWorkId, setEditingWorkId] = useState<string | null>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
-  const [isOpenDeleteAlert, setIsOpenDeleteAlert] = useState(false);
+  const [isWorkDeleteDialogOpen, setIsWorkDeleteDialogOpen] = useState(false);
   const [workToDelete, setWorkToDelete] = useState<Work | null>(null);
+
+  const [isWritingDeleteDialogOpen, setIsWritingDeleteDialogOpen] =
+    useState(false);
+  const [writingToDelete, setWritingToDelete] = useState<{
+    workId: string;
+    writingId: string;
+    title: string;
+  } | null>(null);
 
   const { data: works } = useWorks();
   const { mutateAsync: deleteWork, isPending: isDeleting } = useDeleteWork();
   const { mutateAsync: updateWork, isPending: isUpdating } = useUpdateWork();
 
-  const selectedWorkIdParam = searchParams.get("selectedWorkId");
+  const { mutateAsync: deleteWriting, isPending: isDeletingWriting } =
+    useDeleteWriting();
 
-  const updateSelectedWorkParam = (workId?: string | null) => {
-    const currentId = searchParams.get("selectedWorkId");
+  // ----- Derived data -----
+  const worksList = useMemo(() => works ?? [], [works]);
 
-    if (workId) {
-      if (currentId === workId) return;
-    } else if (!currentId) {
-      return;
-    }
+  const selectedWork = useMemo(
+    () =>
+      selectedWorkId
+        ? worksList.find((item) => item.id === selectedWorkId) ?? null
+        : null,
+    [selectedWorkId, worksList]
+  );
 
-    const params = new URLSearchParams(searchParams.toString());
+  const editingWork = useMemo(
+    () =>
+      editingWorkId
+        ? worksList.find((item) => item.id === editingWorkId) ?? null
+        : null,
+    [editingWorkId, worksList]
+  );
 
-    if (workId) {
-      params.set("selectedWorkId", workId);
-    } else {
-      params.delete("selectedWorkId");
-    }
+  const selectedWorkIdParam = searchParams.get(SELECTED_WORK_PARAM);
 
-    const queryString = params.toString();
-    router.replace(queryString ? `${pathname}?${queryString}` : pathname, {
-      scroll: false,
-    });
-  };
+  const updateSelectedWorkParam = useCallback(
+    (workId: string | null) => {
+      if (selectedWorkIdParam === workId) return;
+
+      const params = new URLSearchParams(searchParams.toString());
+      if (workId) {
+        params.set(SELECTED_WORK_PARAM, workId);
+      } else {
+        params.delete(SELECTED_WORK_PARAM);
+      }
+
+      const nextPath =
+        params.size > 0 ? `${pathname}?${params.toString()}` : pathname;
+
+      router.replace(nextPath, { scroll: false });
+    },
+    [pathname, router, searchParams, selectedWorkIdParam]
+  );
+
+  // ----- Work actions -----
+  const clearSelectedWork = useCallback(() => {
+    setSelectedWorkId(null);
+    updateSelectedWorkParam(null);
+  }, [updateSelectedWorkParam]);
 
   const handleWorkSelect = (work: Work) => {
-    setSelectedWork(work);
+    setSelectedWorkId(work.id);
     updateSelectedWorkParam(work.id);
   };
 
   const handleEditWork = (work: Work) => {
-    setEditingWork(work);
+    setEditingWorkId(work.id);
     setIsEditDialogOpen(true);
   };
 
   const handleRequestDeleteWork = (work: Work) => {
     setWorkToDelete(work);
-    setIsOpenDeleteAlert(true);
+    setIsWorkDeleteDialogOpen(true);
   };
 
-  const handleCloseDeleteDialog = () => {
-    setIsOpenDeleteAlert(false);
+  const handleWorkDialogToggle = useCallback(
+    (open: boolean) => {
+      setIsEditDialogOpen(open);
+      if (!open) {
+        setEditingWorkId(null);
+      }
+    },
+    []
+  );
+
+  const handleCloseDeleteWorkDialog = () => {
+    setIsWorkDeleteDialogOpen(false);
+    setWorkToDelete(null);
   };
 
   const handleDeleteWork = async () => {
@@ -89,19 +135,43 @@ export default function WorksContainer() {
       toast.success("작품이 삭제되었습니다.");
 
       if (selectedWork?.id === workToDelete.id) {
-        setSelectedWork(null);
-        updateSelectedWorkParam(null);
+        clearSelectedWork();
       }
 
       if (editingWork?.id === workToDelete.id) {
-        setEditingWork(null);
+        setEditingWorkId(null);
         setIsEditDialogOpen(false);
       }
 
-      setIsOpenDeleteAlert(false);
+      setIsWorkDeleteDialogOpen(false);
       setWorkToDelete(null);
     } catch {
       toast.error("작품 삭제에 실패했습니다. 다시 시도해주세요.");
+    }
+  };
+
+  // ----- Writing actions -----
+  const handleRequestDeleteWriting = (
+    workId: string,
+    writingId: string,
+    title: string
+  ) => {
+    setWritingToDelete({ workId, writingId, title });
+    setIsWritingDeleteDialogOpen(true);
+  };
+
+  const handleDeleteWriting = async () => {
+    if (!writingToDelete) return;
+
+    try {
+      await deleteWriting({
+        workId: writingToDelete.workId,
+        writingId: writingToDelete.writingId,
+      });
+      setIsWritingDeleteDialogOpen(false);
+      setWritingToDelete(null);
+    } catch {
+      // onError에서 토스트 처리
     }
   };
 
@@ -116,14 +186,35 @@ export default function WorksContainer() {
     }
   };
 
+  // ----- Effects -----
   useEffect(() => {
-    if (!works || !selectedWorkIdParam) return;
-
-    const matchedWork = works.find((item) => item.id === selectedWorkIdParam);
-    if (matchedWork) {
-      setSelectedWork(matchedWork);
+    if (!selectedWorkIdParam) {
+      setSelectedWorkId((prev) => (prev === null ? prev : null));
+      return;
     }
-  }, [works, selectedWorkIdParam]);
+
+    setSelectedWorkId((prev) =>
+      prev === selectedWorkIdParam ? prev : selectedWorkIdParam
+    );
+  }, [selectedWorkIdParam]);
+
+  useEffect(() => {
+    if (!selectedWorkId) return;
+
+    const exists = worksList.some((item) => item.id === selectedWorkId);
+    if (!exists) {
+      clearSelectedWork();
+    }
+  }, [clearSelectedWork, selectedWorkId, worksList]);
+
+  useEffect(() => {
+    if (!editingWorkId) return;
+    if (!works) return;
+    if (editingWork) return;
+
+    setEditingWorkId(null);
+    setIsEditDialogOpen(false);
+  }, [editingWork, editingWorkId, works]);
 
   return (
     <div className="flex gap-6 px-10 mt-4">
@@ -139,7 +230,7 @@ export default function WorksContainer() {
           {/* 작품 추가 다이얼로그 */}
           <WorkInfoDialog
             open={isEditDialogOpen}
-            setOpen={setIsEditDialogOpen}
+            setOpen={handleWorkDialogToggle}
             work={editingWork}
           />
         </div>
@@ -147,7 +238,7 @@ export default function WorksContainer() {
         {/* 작품 리스트 */}
         <div className="">
           <WorkList
-            works={works || []}
+            works={worksList}
             selectedWork={selectedWork}
             onSelectWork={handleWorkSelect}
             onEditWork={handleEditWork}
@@ -158,12 +249,15 @@ export default function WorksContainer() {
         </div>
       </section>
       {/* 작품 하위 에피소드 리스트 */}
-      <WorkWritingList selectedWork={selectedWork} />
+      <WorkWritingList
+        selectedWork={selectedWork}
+        onDeleteWriting={handleRequestDeleteWriting}
+      />
 
       <AlertDialog
-        open={isOpenDeleteAlert}
+        open={isWorkDeleteDialogOpen}
         onOpenChange={(open) => {
-          setIsOpenDeleteAlert(open);
+          setIsWorkDeleteDialogOpen(open);
           if (!open) {
             setWorkToDelete(null);
           }
@@ -179,7 +273,7 @@ export default function WorksContainer() {
             )}
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel onClick={handleCloseDeleteDialog}>
+            <AlertDialogCancel onClick={handleCloseDeleteWorkDialog}>
               취소
             </AlertDialogCancel>
             <AlertDialogAction
@@ -187,6 +281,43 @@ export default function WorksContainer() {
               disabled={isDeleting || !workToDelete}
             >
               {isDeleting ? "삭제 중..." : "삭제"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog
+        open={isWritingDeleteDialogOpen}
+        onOpenChange={(open) => {
+          setIsWritingDeleteDialogOpen(open);
+          if (!open) {
+            setWritingToDelete(null);
+          }
+        }}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>삭제하시겠습니까?</AlertDialogTitle>
+            {writingToDelete && (
+              <AlertDialogDescription>
+                {writingToDelete.title} 글을 삭제하면 복구할 수 없습니다.
+              </AlertDialogDescription>
+            )}
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel
+              onClick={() => {
+                setIsWritingDeleteDialogOpen(false);
+                setWritingToDelete(null);
+              }}
+            >
+              취소
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDeleteWriting}
+              disabled={isDeletingWriting || !writingToDelete}
+            >
+              {isDeletingWriting ? "삭제 중..." : "삭제"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

@@ -6,10 +6,12 @@ import { format } from "date-fns";
 
 type WorkEpisodeListProps = {
   selectedWork: Work | null;
+  onDeleteWriting: (workId: string, writingId: string, title: string) => void;
 };
 
 export default function WorkWritingList({
   selectedWork,
+  onDeleteWriting,
 }: WorkEpisodeListProps) {
   const router = useRouter();
 
@@ -25,8 +27,8 @@ export default function WorkWritingList({
 
   return (
     <aside className="w-1/3 bg-white border rounded-lg shadow-sm p-4">
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="font-semibold">{selectedWork.title}</h3>
+      <div className="flex items-center justify-between mb-6 ">
+        <h3 className="font-semibold text-sm mr-2">{selectedWork.title}</h3>
         <Button
           size="sm"
           onClick={() => {
@@ -78,7 +80,17 @@ export default function WorkWritingList({
                   >
                     수정
                   </Button>
-                  <Button variant="outline" size="xs">
+                  <Button
+                    variant="outline"
+                    size="xs"
+                    onClick={() => {
+                      onDeleteWriting(
+                        selectedWork.id,
+                        writing.id,
+                        writing.title
+                      );
+                    }}
+                  >
                     삭제
                   </Button>
                 </div>
