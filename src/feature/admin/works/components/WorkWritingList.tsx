@@ -2,6 +2,7 @@ import { Button } from "@/shared/ui/button";
 import { cn } from "@/shared/lib/utils";
 import { Work } from "@/entities/work/model/type";
 import { useRouter } from "next/navigation";
+import { format } from "date-fns";
 
 type WorkEpisodeListProps = {
   selectedWork: Work | null;
@@ -48,7 +49,7 @@ export default function WorkWritingList({
                   {writing.title}
                 </h4>
                 <span className="text-xs text-gray-500 whitespace-nowrap ml-2">
-                  {writing.created_at}
+                  {format(new Date(writing.created_at), "yyyy-MM-dd")}
                 </span>
               </div>
 
@@ -56,19 +57,25 @@ export default function WorkWritingList({
               <div className="flex items-center justify-between mt-2">
                 <span
                   className={cn(
-                    "text-xs font-medium",
-                    writing.status === "공개"
-                      ? "text-green-600"
-                      : writing.status === "비공개"
-                      ? "text-gray-500"
-                      : "text-blue-600"
+                    "text-xs font-medium px-2 py-0.5 rounded-sm",
+                    writing.is_public
+                      ? "text-green-600 bg-green-100"
+                      : "text-gray-500 bg-gray-100"
                   )}
                 >
-                  {writing.status}
+                  {writing.is_public ? "공개" : "비공개"}
                 </span>
 
                 <div className="flex items-center gap-1.5 ml-auto">
-                  <Button size="xs" variant="secondary">
+                  <Button
+                    size="xs"
+                    variant="secondary"
+                    onClick={() => {
+                      router.push(
+                        `/admin/works/${selectedWork.id}/edit/${writing.id}`
+                      );
+                    }}
+                  >
                     수정
                   </Button>
                   <Button variant="outline" size="xs">

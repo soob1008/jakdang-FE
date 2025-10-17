@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { use, useEffect } from "react";
 import { FormProvider, useForm, Controller } from "react-hook-form";
 import LexicalEditor from "@/shared/components/editor/LexicalEditor";
 import { Button } from "@/shared/ui/button";
@@ -81,6 +81,13 @@ export default function WorkEditorForm({
   } = form;
 
   const isPublic = watch("is_public");
+
+  useEffect(() => {
+    form.reset({
+      ...DEFAULT_VALUES,
+      ...defaultValues,
+    });
+  }, [defaultValues, form]);
 
   // const isScheduled = watch("isScheduled");
   // const scheduledAt = watch("scheduledAt");
