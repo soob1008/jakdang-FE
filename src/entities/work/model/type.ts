@@ -12,18 +12,23 @@ export interface Work {
   published_at?: string;
   description?: string;
   content?: string;
-  episodes?: Episode[];
+  writings: Writing[];
   author_id: string;
   visibility?: "PUBLIC" | "PRIVATE" | "UNLISTED";
   stats?: Stats;
 }
 
-export interface Episode {
+export interface Writing {
   id: string;
   title: string;
+  subtitle?: string;
   order: number;
-  isPublished: boolean;
-  publishedAt?: string | null;
+  is_public: boolean;
+  published_at?: string | null;
+  created_at: string;
+  updated_at: string;
+  work_id: string;
+  status: "공개" | "비공개" | "예약";
   content?: string;
 }
 

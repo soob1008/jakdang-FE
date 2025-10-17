@@ -1,40 +1,43 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import type { ChangeEvent } from "react";
-import { FormProvider, useForm } from "react-hook-form";
-import {
-  addMinutes,
-  format,
-  isBefore,
-  setHours,
-  setMinutes,
-  startOfDay,
-} from "date-fns";
-import { CalendarDays } from "lucide-react";
-
+import { useEffect } from "react";
+import { FormProvider, useForm, Controller } from "react-hook-form";
 import LexicalEditor from "@/shared/components/editor/LexicalEditor";
 import { Button } from "@/shared/ui/button";
-import { Input } from "@/shared/ui/input";
 import { Switch } from "@/shared/ui/switch";
-import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
-import { Calendar } from "@/shared/ui/calendar";
-import { cn } from "@/shared/lib/utils";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+// import { Input } from "@/shared/ui/input";
+// import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
+// import { Calendar } from "@/shared/ui/calendar";
+// import { cn } from "@/shared/lib/utils";
+// import {
+//   addMinutes,
+//   format,
+//   isBefore,
+//   setHours,
+//   setMinutes,
+//   startOfDay,
+// } from "date-fns";
+// import { CalendarDays } from "lucide-react";
 
 export type WorkFormValues = {
   title: string;
+  subtitle?: string;
   content: string;
-  isPublic: boolean;
-  isScheduled: boolean;
-  scheduledAt: Date | null;
+  is_public: boolean;
+  // isScheduled: boolean;
+  // scheduledAt: Date | null;
 };
 
 const DEFAULT_VALUES: WorkFormValues = {
   title: "",
+  subtitle: "",
   content: "",
-  isPublic: true,
-  isScheduled: false,
-  scheduledAt: null,
+  is_public: true,
+  // isScheduled: false,
+  // scheduledAt: null,
 };
 
 type WorkEditorFormProps = {
@@ -43,6 +46,15 @@ type WorkEditorFormProps = {
   defaultValues?: Partial<WorkFormValues>;
   onSubmit?: (values: WorkFormValues) => Promise<void> | void;
 };
+
+const WorkFormSchema = z.object({
+  title: z.string().min(1, "제목을 입력해주세요."),
+  subtitle: z.string().optional(),
+  content: z.string().min(1, "내용을 입력해주세요."),
+  is_public: z.boolean(),
+  // isScheduled: z.boolean(),
+  // scheduledAt: z.date().nullable(),
+});
 
 export default function WorkEditorForm({
   heading,
@@ -55,70 +67,77 @@ export default function WorkEditorForm({
       ...DEFAULT_VALUES,
       ...defaultValues,
     },
+    mode: "onChange",
+    reValidateMode: "onChange",
+    resolver: zodResolver(WorkFormSchema),
   });
 
-  const { register, setValue, watch, handleSubmit } = form;
+  const {
+    register,
+    setValue,
+    watch,
+    handleSubmit,
+    formState: { isValid },
+  } = form;
+
+  const isPublic = watch("is_public");
 
   useEffect(() => {
-    register("content");
-  }, [register]);
+    form.reset({
+      ...DEFAULT_VALUES,
+      ...defaultValues,
+    });
+  }, [defaultValues, form]);
 
-  const isPublic = watch("isPublic");
-  const isScheduled = watch("isScheduled");
-  const scheduledAt = watch("scheduledAt");
-  const content = watch("content");
+  // const isScheduled = watch("isScheduled");
+  // const scheduledAt = watch("scheduledAt");
+  // const [isScheduleOpen, setIsScheduleOpen] = useState(false);
 
-  const [isScheduleOpen, setIsScheduleOpen] = useState(false);
+  // const scheduleLabel = useMemo(() => {
+  //   if (isScheduled && scheduledAt) {
+  //     return format(scheduledAt, "M월 d일 HH:mm 예약");
+  //   }
+  //   return "예약 발행";
+  // }, [isScheduled, scheduledAt]);
 
-  const scheduleLabel = useMemo(() => {
-    if (isScheduled && scheduledAt) {
-      return format(scheduledAt, "M월 d일 HH:mm 예약");
-    }
-    return "예약 발행";
-  }, [isScheduled, scheduledAt]);
+  // const ensureScheduleDate = () => {
+  //   const base = scheduledAt ?? addMinutes(new Date(), 30);
+  //   setValue("scheduledAt", base, { shouldDirty: true, shouldTouch: true });
+  //   return base;
+  // };
 
-  const ensureScheduleDate = () => {
-    const base = scheduledAt ?? addMinutes(new Date(), 30);
-    setValue("scheduledAt", base, { shouldDirty: true, shouldTouch: true });
-    return base;
-  };
+  // const handleScheduleToggle = (checked: boolean) => {
+  //   if (checked) {
+  //     ensureScheduleDate();
+  //   } else {
+  //     setValue("scheduledAt", null, { shouldDirty: true, shouldTouch: true });
+  //   }
+  //   setValue("isScheduled", checked, { shouldDirty: true, shouldTouch: true });
+  // };
 
-  const handleScheduleToggle = (checked: boolean) => {
-    if (checked) {
-      ensureScheduleDate();
-    } else {
-      setValue("scheduledAt", null, { shouldDirty: true, shouldTouch: true });
-    }
-    setValue("isScheduled", checked, { shouldDirty: true, shouldTouch: true });
-  };
+  // const handleDateSelect = (date?: Date) => {
+  //   if (!date) return;
+  //   const base = ensureScheduleDate();
+  //   const updated = setMinutes(
+  //     setHours(date, base.getHours()),
+  //     base.getMinutes()
+  //   );
+  //   setValue("scheduledAt", updated, { shouldDirty: true, shouldTouch: true });
+  //   setValue("isScheduled", true, { shouldDirty: true, shouldTouch: true });
+  // };
 
-  const handleDateSelect = (date?: Date) => {
-    if (!date) return;
-    const base = ensureScheduleDate();
-    const updated = setMinutes(
-      setHours(date, base.getHours()),
-      base.getMinutes()
-    );
-    setValue("scheduledAt", updated, { shouldDirty: true, shouldTouch: true });
-    setValue("isScheduled", true, { shouldDirty: true, shouldTouch: true });
-  };
+  // const handleTimeChange = (event: ChangeEvent<HTMLInputElement>) => {
+  //   const value = event.target.value;
+  //   if (!value) return;
 
-  const handleTimeChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    if (!value) return;
+  //   const [hour, minute] = value.split(":").map(Number);
+  //   const base = ensureScheduleDate();
+  //   const updated = setMinutes(setHours(base, hour), minute);
+  //   setValue("scheduledAt", updated, { shouldDirty: true, shouldTouch: true });
+  //   setValue("isScheduled", true, { shouldDirty: true, shouldTouch: true });
+  // };
 
-    const [hour, minute] = value.split(":").map(Number);
-    const base = ensureScheduleDate();
-    const updated = setMinutes(setHours(base, hour), minute);
-    setValue("scheduledAt", updated, { shouldDirty: true, shouldTouch: true });
-    setValue("isScheduled", true, { shouldDirty: true, shouldTouch: true });
-  };
-
-  const handleContentChange = (next: string) => {
-    setValue("content", next, { shouldDirty: true, shouldTouch: true });
-  };
-
-  const disabledDate = (date: Date) => isBefore(date, startOfDay(new Date()));
+  // const disabledDate = (date: Date) => isBefore(date, startOfDay(new Date()));
 
   return (
     <FormProvider {...form}>
@@ -137,14 +156,25 @@ export default function WorkEditorForm({
               {...register("title", { required: true })}
               className="w-full text-2xl font-semibold outline-none border-none focus:ring-0 placeholder-gray-300"
             />
+            <input
+              type="text"
+              placeholder="소제목을 입력하세요"
+              {...register("subtitle", { required: true })}
+              className="w-full mt-4 text-sm font-semibold outline-none border-none focus:ring-0 placeholder-gray-300"
+            />
           </div>
 
           <div className="min-h-[60vh]">
-            <LexicalEditor
-              height="60vh"
-              placeholder="내용을 입력하세요"
-              value={content}
-              onChange={handleContentChange}
+            <Controller
+              name="content"
+              control={form.control}
+              render={({ field }) => (
+                <LexicalEditor
+                  value={field.value}
+                  onChange={field.onChange}
+                  placeholder="내용을 입력하세요."
+                />
+              )}
             />
           </div>
         </div>
@@ -155,18 +185,25 @@ export default function WorkEditorForm({
             <Switch
               checked={isPublic}
               onCheckedChange={(checked) =>
-                setValue("isPublic", checked, { shouldDirty: true, shouldTouch: true })
+                setValue("is_public", checked, {
+                  shouldDirty: true,
+                  shouldTouch: true,
+                })
               }
             />
           </div>
 
-          <Popover open={isScheduleOpen} onOpenChange={setIsScheduleOpen}>
+          {/* TODO: 예약 발행 */}
+          {/* <Popover open={isScheduleOpen} onOpenChange={setIsScheduleOpen}>
             <PopoverTrigger asChild>
               <Button
                 type="button"
                 variant={isScheduled ? "secondary" : "outline"}
                 size="sm"
-                className={cn("flex items-center gap-2", !isScheduled && "text-gray-600")}
+                className={cn(
+                  "flex items-center gap-2",
+                  !isScheduled && "text-gray-600"
+                )}
               >
                 <CalendarDays className="h-4 w-4" />
                 <span className="text-sm">{scheduleLabel}</span>
@@ -180,7 +217,10 @@ export default function WorkEditorForm({
                     지정한 시간에 자동으로 공개돼요.
                   </p>
                 </div>
-                <Switch checked={isScheduled} onCheckedChange={handleScheduleToggle} />
+                <Switch
+                  checked={isScheduled}
+                  onCheckedChange={handleScheduleToggle}
+                />
               </div>
 
               <div
@@ -206,9 +246,9 @@ export default function WorkEditorForm({
                 </div>
               </div>
             </PopoverContent>
-          </Popover>
+          </Popover> */}
 
-          <Button type="submit" size="xl">
+          <Button type="submit" size="xl" disabled={!isValid}>
             {submitLabel}
           </Button>
         </div>
@@ -216,4 +256,3 @@ export default function WorkEditorForm({
     </FormProvider>
   );
 }
-
