@@ -44,7 +44,7 @@ export type BlockType =
   | "book"
   | "list"; // 리스트
 
-export interface WorkItem {
+export interface ListItem {
   id: string;
   title: string;
   image_url?: string;
@@ -54,8 +54,6 @@ export interface WorkItem {
   description?: string;
   url?: string;
 }
-
-export type ListItem = WorkItem;
 
 export interface BlockDataText {
   content: string;
