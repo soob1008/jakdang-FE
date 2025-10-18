@@ -9,7 +9,7 @@ import { RadioGroup, RadioGroupItem } from "@/shared/ui/radio-group";
 import { LayoutList, Grid2X2 } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 
-export default function WorkOption({ index }: { index: number }) {
+export default function ListOption({ index }: { index: number }) {
   const namePrefix = `blocks_draft.${index}.data`;
   const { setValue } = useFormContext();
   // const { fields, move } = useFieldArray({ control, name: imagesPrefix });

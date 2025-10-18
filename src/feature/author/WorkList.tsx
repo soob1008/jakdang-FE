@@ -2,7 +2,7 @@
 import { useState } from "react";
 import WorkItem from "./components/WorkItem";
 import { AuthorProfile, AuthorWork } from "@/entities/author/model/types";
-import WorkDialog from "./blocks/work/WorkDialog";
+import ListContentDialog from "./blocks/list/ListContentDialog";
 
 interface WorkListProps {
   user: AuthorProfile;
@@ -27,12 +27,12 @@ export default function WorkList({ user }: WorkListProps) {
           />
         ))}
       </div>
-      <WorkDialog
+      <ListContentDialog
         open={!!selectedWork}
         onOpenChange={(open) => {
           if (!open) setSelectedWork(null);
         }}
-        work={selectedWork ?? undefined}
+        item={selectedWork ?? undefined}
       />
     </section>
   );

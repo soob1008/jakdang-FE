@@ -1,3 +1,5 @@
+import type { Work } from "@/entities/work/model/type";
+
 export interface Page {
   id: string;
   blocks_draft: Block[];
@@ -31,7 +33,7 @@ export type ImageStyle = "single" | "grid" | "carousel";
 export type BlockType =
   | "text" // 글 - 문장/인용
   | "image" // 이미지
-  | "work" // 작품
+  | "work" // 작품 (추후 구현 예정)
   | "link" // 링크모음
   | "notice" // 공지/일정
   | "challenge" // 글쓰기챌린지
@@ -39,9 +41,10 @@ export type BlockType =
   | "sns" // SNS
   | "calendar"
   | "blank"
-  | "book"; // 여백
+  | "book"
+  | "list"; // 리스트
 
-export interface WorkItem {
+export interface ListItem {
   id: string;
   title: string;
   image_url?: string;
@@ -63,10 +66,10 @@ export interface BlockDataImage {
   display: "fill" | "fit";
 }
 
-export interface BlockDataWork {
+export interface BlockDataList {
   title?: string;
-  works: WorkItem[];
-  layout: Layout; // 작품 정렬 방식
+  lists: ListItem[];
+  layout: Layout; // 리스트 레이아웃 방식
 }
 
 export interface BlockDataLink {
@@ -139,6 +142,7 @@ export interface BlockDataBlank {
 export type BlockData =
   | BlockDataText
   | BlockDataImage
+  | BlockDataList
   | BlockDataWork
   | BlockDataLink
   | BlockDataSNS
@@ -186,7 +190,7 @@ export interface PageStyle {
   button_style: "rounded" | "sharp"; // 버튼 스타일
 }
 
-export interface WorkItem {
+export interface ListItem {
   id: string;
   title: string;
   image_url?: string;
@@ -208,10 +212,16 @@ export interface BlockDataImage {
   display: "fill" | "fit";
 }
 
+export interface BlockDataList {
+  title?: string;
+  lists: ListItem[];
+  layout: Layout; // 리스트 레이아웃 방식
+}
+
 export interface BlockDataWork {
   title?: string;
-  works: WorkItem[];
-  layout: Layout; // 작품 정렬 방식
+  work?: Work | null;
+  slug?: string;
 }
 
 export interface BlockDataLink {

@@ -3,11 +3,13 @@ import TextBlock from "@/feature/author/blocks/TextBlock";
 import ImageBlock from "@/feature/author/blocks/ImageBlock";
 import LinkBlock from "@/feature/author/blocks/LinkBlock";
 import SNSBlock from "@/feature/author/blocks/SNSBlock";
-import WorkBlock from "@/feature/author/blocks/work/WorkBlock";
+import ListBlock from "@/feature/author/blocks/list/ListBlock";
 import CalendarBlock from "@/feature/author/blocks/CalendarBlock";
 import BlankBlock from "@/feature/author/blocks/BlankBlock";
 import BookBlock from "@/feature/author/blocks/BookBlock";
+import WorkBlock from "@/feature/author/blocks/work/WorkBlock";
 import { PageStyle } from "@/entities/page/model/types";
+import { useFormContext } from "react-hook-form";
 
 export default function BlockPreview({
   block,
@@ -16,6 +18,8 @@ export default function BlockPreview({
   block: Block;
   style: PageStyle;
 }) {
+  const { watch } = useFormContext();
+
   switch (block.type) {
     case "text":
       return <TextBlock block={block} />;
@@ -30,7 +34,9 @@ export default function BlockPreview({
       return <SNSBlock block={block} style={style} />;
 
     case "work":
-      return <WorkBlock block={block} isPreview style={style} />;
+      return <WorkBlock block={block} style={style} slug={watch("slug")} />;
+    case "list":
+      return <ListBlock block={block} isPreview style={style} />;
 
     case "calendar":
       return <CalendarBlock block={block} style={style} />;
