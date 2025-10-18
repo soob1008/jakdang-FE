@@ -20,13 +20,14 @@ interface WorkBlockProps {
 export default function WorkBlock({ block, style, slug }: WorkBlockProps) {
   const data = block.data as BlockDataWork | undefined;
   const work = data?.work;
-
-  if (!work) return null;
-
-  const { thumbnail, title: workTitle, writings = [], id, description } = work;
+  const { writings = [] } = work || {};
 
   const visibleWritings = useMemo(() => writings.slice(0, 3), [writings]);
   const hasMore = writings.length > 3;
+
+  if (!work?.id) return null;
+
+  const { thumbnail, title: workTitle, id, description } = work;
 
   const imageBase = process.env.NEXT_PUBLIC_IMAGE_URL || "";
   const coverSrc = thumbnail

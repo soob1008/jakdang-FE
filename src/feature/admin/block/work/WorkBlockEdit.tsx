@@ -26,7 +26,7 @@ type WorkBlockEditProps = {
 
 export default function WorkBlockEdit({ index, works }: WorkBlockEditProps) {
   const hasWorks = works && works.length > 0;
-  const { control, setValue } = useFormContext<any>();
+  const { control, setValue } = useFormContext();
   const { data: user } = useUser();
   const userSlug = user?.slug ?? "";
 
@@ -53,9 +53,6 @@ export default function WorkBlockEdit({ index, works }: WorkBlockEditProps) {
 
   return (
     <div className="space-y-4">
-      <p className="text-sm text-muted-foreground mb-8">
-        [작품관리] 에서 등록한 작품 목록이 표시됩니다.
-      </p>
       <FormField
         control={control}
         name={workField}
