@@ -47,15 +47,24 @@ export function createDefaultBlock(type: BlockType): BlockDefault {
         },
       };
     case "list":
+      return {
+        id: crypto.randomUUID(),
+        type,
+        name: "리스트",
+        data: {
+          title: "",
+          lists: [],
+          layout: "grid",
+        },
+      };
     case "work":
       return {
         id: crypto.randomUUID(),
         type,
-        name: type === "list" ? "리스트" : "작품",
+        name: "작품",
         data: {
-          title: "",
-          works: [],
-          layout: "grid",
+          work: null,
+          slug: "",
         },
       };
     case "calendar":
@@ -192,7 +201,7 @@ export function getTemplateBlocks(args: GetTemplateBlocksArgs): Block[] | null {
           is_active: true,
           data: {
             title: "주요 리스트",
-            works: [
+            lists: [
               {
                 id: `work-${crypto.randomUUID()}`,
                 title: "리스트 항목 1",
@@ -232,7 +241,7 @@ export function getTemplateBlocks(args: GetTemplateBlocksArgs): Block[] | null {
           data: {
             title: "전체 리스트",
             layout: "list",
-            works: [
+            lists: [
               {
                 id: `work-${crypto.randomUUID()}`,
                 title: "리스트 항목 1",
@@ -318,7 +327,7 @@ export function getTemplateBlocks(args: GetTemplateBlocksArgs): Block[] | null {
           is_active: true,
           data: {
             title: "",
-            works: [
+            lists: [
               {
                 id: `work-${crypto.randomUUID()}`,
                 title: "리스트 항목 1",

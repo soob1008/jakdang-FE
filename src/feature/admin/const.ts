@@ -2,7 +2,7 @@ import { Settings, Blocks, Brush, Book } from "lucide-react";
 
 export const MENUS = [
   {
-    label: "작품",
+    label: "콘텐츠",
     items: [
       {
         label: "작품관리",

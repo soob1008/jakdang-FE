@@ -7,14 +7,13 @@ export interface Work {
   updated_at: string;
   thumbnail: string;
   type: WorkType;
-  is_public: boolean;
+  is_active: boolean;
   scheduled_at?: string;
   published_at?: string;
   description?: string;
   content?: string;
   writings: Writing[];
   author_id: string;
-  visibility?: "PUBLIC" | "PRIVATE" | "UNLISTED";
   stats?: Stats;
 }
 

@@ -24,55 +24,59 @@ interface BlockList {
 
 export const BLOCK_LIST: BlockList[] = [
   {
-    category: "요소",
+    category: "기본 요소",
     blocks: [
       {
         type: "text",
         name: "텍스트",
-        description: "간단한 문장을 작성해요",
         icon: FileText,
       },
       {
         type: "image",
         name: "이미지",
-        description: "이미지를 업로드하거나 링크를 연결해요",
         icon: ImageIcon,
       },
       {
         type: "blank",
         name: "여백",
-        description: "블록 사이에 공간을 만들어요",
         icon: AlignVerticalSpaceAround,
       },
       {
         type: "link",
         name: "링크",
-        description: "외부 링크를 연결해요",
         icon: Link2,
+      },
+      {
+        type: "list",
+        name: "리스트",
+        icon: LayoutList,
       },
       {
         type: "sns",
         name: "SNS",
-        description: "SNS 링크를 연결해요",
         icon: Network,
       },
       {
         type: "calendar",
         name: "일정",
-        description: "일정을 공유해요",
         icon: CalendarIcon,
-      },
-      {
-        type: "list",
-        name: "리스트",
-        description: "콘텐츠를 리스트로 정리해요",
-        icon: LayoutList,
       },
       {
         type: "book",
         name: "책",
         description: "",
         icon: BookOpenText,
+      },
+    ],
+  },
+  {
+    category: "콘텐츠",
+    blocks: [
+      {
+        type: "work",
+        name: "작품",
+        description: "내가 등록한 작품 목록이 표시됩니다.",
+        icon: FileText,
       },
     ],
   },

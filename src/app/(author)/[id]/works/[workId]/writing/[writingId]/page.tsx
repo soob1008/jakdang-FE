@@ -2,7 +2,19 @@ import WorkViewContainer from "@/feature/admin/works/components/WorkViewContaine
 import Footer from "@/shared/components/layout/footer";
 import { Header } from "@/shared/components/layout/header";
 
-export default function AuthorWorksViewPage() {
+type AuthorWorksViewPageProps = {
+  params: Promise<{
+    id: string;
+    workId: string;
+    writingId: string;
+  }>;
+};
+
+export default async function AuthorWorksViewPage({
+  params,
+}: AuthorWorksViewPageProps) {
+  const { id, workId, writingId } = await params;
+
   return (
     <>
       <Header />

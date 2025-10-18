@@ -20,7 +20,8 @@ export default function BlockOptions({ type, index }: BlockOptionsProps) {
     type === "event" ||
     type === "blank" ||
     type === "book" ||
-    type === "text"
+    type === "text" ||
+    type === "work"
   )
     return null;
 
@@ -44,9 +45,7 @@ export default function BlockOptions({ type, index }: BlockOptionsProps) {
       {showOptions && (
         <div className="mt-2 border-t pt-4 space-y-6">
           {type === "image" && <ImageOption index={index} />}
-          {(type === "list" || type === "work") && (
-            <ListOption index={index} />
-          )}
+          {type === "list" && <ListOption index={index} />}
           {type === "calendar" && <CalendarOption index={index} />}
         </div>
       )}

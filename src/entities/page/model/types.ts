@@ -1,3 +1,5 @@
+import type { Work } from "@/entities/work/model/type";
+
 export interface Page {
   id: string;
   blocks_draft: Block[];
@@ -52,6 +54,8 @@ export interface WorkItem {
   description?: string;
   url?: string;
 }
+
+export type ListItem = WorkItem;
 
 export interface BlockDataText {
   content: string;
@@ -141,6 +145,7 @@ export type BlockData =
   | BlockDataText
   | BlockDataImage
   | BlockDataList
+  | BlockDataWork
   | BlockDataLink
   | BlockDataSNS
   | BlockDataNotice
@@ -211,8 +216,14 @@ export interface BlockDataImage {
 
 export interface BlockDataList {
   title?: string;
-  works: WorkItem[];
+  lists: ListItem[];
   layout: Layout; // 리스트 레이아웃 방식
+}
+
+export interface BlockDataWork {
+  title?: string;
+  work?: Work | null;
+  slug?: string;
 }
 
 export interface BlockDataLink {

@@ -25,6 +25,8 @@ import {
 } from "@/shared/ui/alert-dialog";
 import BlankBlockEdit from "./blank/BlankBlockEdit";
 import BookBlockEdit from "./book/BookBlockEdit";
+import WorkBlockEdit from "./work/WorkBlockEdit";
+import useWorks from "@/feature/admin/works/hooks/useWorks";
 
 // import 기타 블록들
 
@@ -43,6 +45,8 @@ export default function BlockItem({
 }: BlockItemProps) {
   const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+
+  const { data: works } = useWorks(true);
 
   // mount 이후에 localStorage 값 반영
   useEffect(() => {
@@ -138,12 +142,13 @@ export default function BlockItem({
           {block.type === "image" && <ImageBlockEdit index={index} />}
           {block.type === "link" && <LinkBlockEdit index={index} />}
           {block.type === "sns" && <SNSBlockEdit index={index} />}
-          {(block.type === "list" || block.type === "work") && (
-            <ListBlockEdit index={index} />
-          )}
+          {block.type === "list" && <ListBlockEdit index={index} />}
           {block.type === "calendar" && <CalendarBlockEdit index={index} />}
           {block.type === "blank" && <BlankBlockEdit index={index} />}
           {block.type === "book" && <BookBlockEdit index={index} />}
+          {block.type === "work" && (
+            <WorkBlockEdit index={index} works={works ?? []} />
+          )}
           {/* 다른 블록들도 필요 시 추가 */}
           <BlockOptions type={block.type} index={index} />
         </div>
