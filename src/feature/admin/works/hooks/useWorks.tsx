@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "@/shared/lib/api/api.client";
 import { Work } from "@/entities/work/model/type";
 
-export default function useWorks(isPublic: boolean) {
+export default function useWorks(isPublic: boolean = false) {
   return useQuery({
     queryKey: ["works", isPublic],
     queryFn: () =>

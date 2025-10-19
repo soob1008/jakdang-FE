@@ -1,11 +1,11 @@
 import { ResponsiveDialog } from "@/shared/ui/ResponsiveDialog";
 import { Badge } from "@/shared/ui/badge";
-import { WorkItem } from "@/entities/page/model/types";
+import { ListItem } from "@/entities/page/model/types";
 
 interface ListContentDialogProps {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
-  item?: WorkItem;
+  item?: ListItem;
 }
 
 export default function ListContentDialog({
