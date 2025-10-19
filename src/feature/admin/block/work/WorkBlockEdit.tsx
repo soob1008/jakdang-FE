@@ -77,7 +77,7 @@ export default function WorkBlockEdit({ index, works }: WorkBlockEditProps) {
 
                   const selected = workLookup.get(value) ?? null;
                   field.onChange(selected ? mapWorkToWorkItem(selected) : null);
-                  setValue(slugField, userSlug || selected?.author_slug || "", {
+                  setValue(slugField, userSlug || "", {
                     shouldDirty: true,
                     shouldTouch: true,
                   });
