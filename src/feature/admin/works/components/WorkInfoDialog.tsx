@@ -11,6 +11,7 @@ import {
 } from "@/shared/ui/dialog";
 import { Button } from "@/shared/ui/button";
 import { Input } from "@/shared/ui/input";
+import { Textarea } from "@/shared/ui/textarea";
 import { useEffect, useState, useRef, ChangeEvent } from "react";
 import { Work } from "@/entities/work/model/type";
 import { uploadImage } from "@/shared/lib/api/api.client";
@@ -32,6 +33,7 @@ export default function WorkInfoDialog({
 }: WorkInfoDialogProps) {
   const isEditMode = !!work;
   const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
   const [thumbnail, setThumbnail] = useState<string | undefined>();
 
   const { mutateAsync: createWork } = useCreateWork();
@@ -44,6 +46,7 @@ export default function WorkInfoDialog({
 
     if (work) {
       setTitle(work.title ?? "");
+      setDescription(work.description ?? "");
       setThumbnail(work.thumbnail ?? undefined);
     } else {
       resetForm();
@@ -52,6 +55,7 @@ export default function WorkInfoDialog({
 
   const resetForm = () => {
     setTitle("");
+    setDescription("");
     setThumbnail(undefined);
     if (inputRef.current) {
       inputRef.current.value = "";
@@ -64,9 +68,14 @@ export default function WorkInfoDialog({
 
     try {
       if (isEditMode) {
-        await updateWork({ id: work.id, title, thumbnail } as Work);
+        await updateWork({
+          id: work.id,
+          title,
+          description,
+          thumbnail,
+        } as Work);
       } else {
-        await createWork({ title, thumbnail });
+        await createWork({ title, description, thumbnail });
         resetForm();
       }
       setOpen(false);
@@ -119,6 +128,21 @@ export default function WorkInfoDialog({
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="작품 제목을 입력하세요."
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label
+              htmlFor="description"
+              className="text-sm font-medium text-gray-700"
+            >
+              작품 설명
+            </label>
+            <Textarea
+              id="description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="작품 설명을 입력하세요."
             />
           </div>
 

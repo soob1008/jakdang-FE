@@ -112,15 +112,12 @@ export default function WorksContainer() {
     setIsWorkDeleteDialogOpen(true);
   };
 
-  const handleWorkDialogToggle = useCallback(
-    (open: boolean) => {
-      setIsEditDialogOpen(open);
-      if (!open) {
-        setEditingWorkId(null);
-      }
-    },
-    []
-  );
+  const handleWorkDialogToggle = useCallback((open: boolean) => {
+    setIsEditDialogOpen(open);
+    if (!open) {
+      setEditingWorkId(null);
+    }
+  }, []);
 
   const handleCloseDeleteWorkDialog = () => {
     setIsWorkDeleteDialogOpen(false);

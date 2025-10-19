@@ -9,13 +9,16 @@ export default function useCreateWork() {
     mutationFn: ({
       title,
       thumbnail = "",
+      description = "",
     }: {
       title: string;
       thumbnail?: string;
+      description?: string;
     }) =>
       apiClient.post("/works", {
         title,
         thumbnail,
+        description,
       }),
     onSuccess: () => {
       toast.success("작품이 생성되었습니다.");

@@ -1,19 +1,17 @@
 export interface Work {
   id: string;
   title: string;
+  description?: string;
   author_name: string;
-  author_slug: string;
   created_at: string;
   updated_at: string;
   thumbnail: string;
   type: WorkType;
-  is_active: boolean;
+  is_public: boolean;
   scheduled_at?: string;
   published_at?: string;
-  description?: string;
   content?: string;
   writings: Writing[];
-  author_id: string;
   stats?: Stats;
 }
 

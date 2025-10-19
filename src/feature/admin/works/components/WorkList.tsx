@@ -73,34 +73,58 @@ export default function WorkList({
                 )}
 
                 {/* 수정/삭제 버튼 */}
-                <div className="absolute top-2 right-2 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-8 w-8 rounded-full bg-white/80 hover:bg-gray-100 text-gray-600 hover:text-gray-800 shadow-sm"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onEditWork(work);
-                    }}
-                  >
-                    <Pencil className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-8 w-8 rounded-full bg-white/80 hover:bg-gray-100 text-gray-600 hover:text-gray-800 shadow-sm"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onDeleteWork(work);
-                    }}
-                  >
-                    <Trash2 className="w-4 h-4 text-muted-foreground hover:text-gray-900" />
-                  </Button>
-                </div>
+                <div className="absolute top-1 w-full px-2 flex items-center justify-between gap-1">
+                  <div className="flex items-center gap-2">
+                    <div
+                      className={`w-2 h-2 rounded-full ${
+                        work.is_public ? "bg-green-500" : "bg-gray-500"
+                      }`}
+                    >
+                      {/* {work.is_public ? "공개" : "비공개"} */}
+                    </div>
+                    <Switch
+                      checked={work.is_public}
+                      onCheckedChange={async (checked) => {
+                        await onTogglePublic(work, checked);
+                      }}
+                      onClick={(e) => e.stopPropagation()}
+                      disabled={isUpdating}
+                      className="opacity-0 group-hover:opacity-100 transition-opacity"
+                    />
+                  </div>
 
-                {/* 공개 상태 뱃지 - 하단 왼쪽 */}
-                <div className="absolute bottom-2 left-2 px-2 py-0.5 rounded-md text-[11px] font-medium bg-black/60 text-white backdrop-blur-sm">
-                  {work.is_public ? "공개" : "비공개"}
+                  <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    {/* <Switch
+                      checked={work.is_public}
+                      onCheckedChange={async (checked) => {
+                        await onTogglePublic(work, checked);
+                      }}
+                      onClick={(e) => e.stopPropagation()}
+                      disabled={isUpdating}
+                    /> */}
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 rounded-full bg-white/80 hover:bg-gray-100 text-gray-600 hover:text-gray-800 shadow-sm"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onEditWork(work);
+                      }}
+                    >
+                      <Pencil className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 rounded-full bg-white/80 hover:bg-gray-100 text-gray-600 hover:text-gray-800 shadow-sm"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onDeleteWork(work);
+                      }}
+                    >
+                      <Trash2 className="w-4 h-4 text-muted-foreground hover:text-gray-900" />
+                    </Button>
+                  </div>
                 </div>
               </div>
 
@@ -109,26 +133,9 @@ export default function WorkList({
                 <h3 className="font-semibold text-gray-900 text-[15px] mb-1">
                   {work.title}
                 </h3>
-
-                <div className="flex items-center justify-between text-xs text-gray-500">
+                <p className="text-xs text-gray-600">{work.description}</p>
+                <div className="flex items-center justify-between mt-2 text-xs text-gray-500">
                   <span>{format(new Date(work.created_at), "yyyy.MM.dd")}</span>
-                </div>
-                <div className="flex items-center justify-between mt-2">
-                  {/* 예약 정보 */}
-                  <div className="flex items-center gap-2">
-                    {work.scheduled_at && (
-                      <span className="text-xs text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md flex items-center gap-1">
-                        {format(new Date(work.scheduled_at), "MM.dd HH:mm")}
-                      </span>
-                    )}
-                  </div>
-                  <Switch
-                    checked={work.is_public}
-                    onCheckedChange={async (checked) => {
-                      await onTogglePublic(work, checked);
-                    }}
-                    disabled={isUpdating}
-                  />
                 </div>
               </div>
             </li>
