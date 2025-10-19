@@ -42,8 +42,8 @@ export default function AdminHeader({ email, slug }: AdminHeaderProps) {
 function getMenuLabelByPath(pathname: string): string | null {
   for (const group of MENUS) {
     for (const item of group.items) {
-      if (item.href === pathname) {
-        return group.label;
+      if (item.href.startsWith(pathname)) {
+        return `${group.label}`;
       }
     }
   }

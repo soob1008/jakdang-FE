@@ -20,6 +20,7 @@ export default function BlockContainer() {
     defaultValues: {
       id: "",
       user_id: "",
+      slug: "",
       display_name: "",
       style_draft: {},
       style_published: {},
@@ -45,6 +46,7 @@ export default function BlockContainer() {
     reset({
       id: page.id ?? "",
       user_id: user.id ?? "",
+      slug: user.slug ?? "",
       display_name: user.display_name ?? "",
       style_draft: page.style_draft ?? {},
       style_published: page.style_published ?? {},
@@ -65,7 +67,7 @@ export default function BlockContainer() {
 
   return (
     <FormProvider {...form}>
-      <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6 h-full">
+      <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6 h-full mt-4">
         <div className="order-2 lg:order-1">
           <PageEditor />
         </div>

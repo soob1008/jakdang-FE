@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/shared/ui/button";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import ImageOption from "./image/ImageOption";
-import WorkOption from "./work/WorkOption";
+import ListOption from "./list/ListOption";
 import CalendarOption from "./calendar/CalendarOption";
 
 interface BlockOptionsProps {
@@ -20,7 +20,8 @@ export default function BlockOptions({ type, index }: BlockOptionsProps) {
     type === "event" ||
     type === "blank" ||
     type === "book" ||
-    type === "text"
+    type === "text" ||
+    type === "work"
   )
     return null;
 
@@ -44,11 +45,7 @@ export default function BlockOptions({ type, index }: BlockOptionsProps) {
       {showOptions && (
         <div className="mt-2 border-t pt-4 space-y-6">
           {type === "image" && <ImageOption index={index} />}
-          {
-            /* 기타 블록 옵션 추가 예정 */ type === "work" && (
-              <WorkOption index={index} />
-            )
-          }
+          {type === "list" && <ListOption index={index} />}
           {type === "calendar" && <CalendarOption index={index} />}
         </div>
       )}

@@ -46,14 +46,25 @@ export function createDefaultBlock(type: BlockType): BlockDefault {
           sns_links: [],
         },
       };
+    case "list":
+      return {
+        id: crypto.randomUUID(),
+        type,
+        name: "리스트",
+        data: {
+          title: "",
+          lists: [],
+          layout: "grid",
+        },
+      };
     case "work":
       return {
         id: crypto.randomUUID(),
         type,
         name: "작품",
         data: {
-          works: [],
-          layout: "grid",
+          work: null,
+          slug: "",
         },
       };
     case "calendar":
@@ -184,70 +195,70 @@ export function getTemplateBlocks(args: GetTemplateBlocksArgs): Block[] | null {
           },
         } as Block,
 
-        // 3) 대표작 카드 (3~6개 권장)
+        // 3) 주요 항목 카드 (3~6개 권장)
         {
-          ...createDefaultBlock("work"),
+          ...createDefaultBlock("list"),
           is_active: true,
           data: {
-            title: "대표작",
-            works: [
+            title: "주요 리스트",
+            lists: [
               {
                 id: `work-${crypto.randomUUID()}`,
-                title: "작품 제목1",
+                title: "리스트 항목 1",
                 is_active: true,
                 is_representative: true,
-                short_description: "작품 간략 설명",
-                description: "작품 상세 설명을 여기에 입력하세요.",
-                url: "https://your-work-link.com",
+                short_description: "항목 간략 소개",
+                description: "항목 상세 설명을 여기에 입력하세요.",
+                url: "https://your-item-link.com",
               },
               {
                 id: `work-${crypto.randomUUID()}`,
-                title: "작품 제목2",
+                title: "리스트 항목 2",
                 is_active: true,
                 is_representative: true,
-                short_description: "작품 간략 설명",
-                description: "작품 상세 설명을 여기에 입력하세요.",
-                url: "https://your-work-link.com",
+                short_description: "항목 간략 소개",
+                description: "항목 상세 설명을 여기에 입력하세요.",
+                url: "https://your-item-link.com",
               },
               {
                 id: `work-${crypto.randomUUID()}`,
-                title: "작품 제목3",
+                title: "리스트 항목 3",
                 is_active: true,
                 is_representative: true,
-                short_description: "작품 간략 설명",
-                description: "작품 상세 설명을 여기에 입력하세요.",
-                url: "https://your-work-link.com",
+                short_description: "항목 간략 소개",
+                description: "항목 상세 설명을 여기에 입력하세요.",
+                url: "https://your-item-link.com",
               },
             ],
             layout: "grid", // 카드 레이아웃
           },
         } as Block,
 
-        // 4) 작품 리스트 (필수)
+        // 4) 리스트 항목 (필수)
         {
-          ...createDefaultBlock("work"),
+          ...createDefaultBlock("list"),
           is_active: true,
           data: {
-            title: "작품",
+            title: "전체 리스트",
             layout: "list",
-            works: [
+            lists: [
               {
                 id: `work-${crypto.randomUUID()}`,
-                title: "작품 제목1",
+                title: "리스트 항목 1",
                 is_active: true,
                 is_representative: true,
-                short_description: "작품 간략 설명",
-                description: "작품 상세 설명을 여기에 입력하세요.",
-                url: "https://your-work-link.com",
+                short_description: "항목 간략 소개",
+                description: "항목 상세 설명을 여기에 입력하세요.",
+                url: "https://your-item-link.com",
               },
               {
                 id: `work-${crypto.randomUUID()}`,
-                title: "작품 제목2",
+                title: "리스트 항목 2",
                 is_active: true,
                 is_representative: true,
-                short_description: "작품 간략 설명",
-                description: "작품 상세 설명을 여기에 입력하세요.",
-                url: "https://your-work-link.com",
+                short_description: "항목 간략 소개",
+                description: "항목 상세 설명을 여기에 입력하세요.",
+                url: "https://your-item-link.com",
               },
             ],
           },
@@ -312,28 +323,28 @@ export function getTemplateBlocks(args: GetTemplateBlocksArgs): Block[] | null {
           },
         } as Block,
         {
-          ...createDefaultBlock("work"),
+          ...createDefaultBlock("list"),
           is_active: true,
           data: {
             title: "",
-            works: [
+            lists: [
               {
                 id: `work-${crypto.randomUUID()}`,
-                title: "작품 제목1",
+                title: "리스트 항목 1",
                 is_active: true,
                 is_representative: true,
-                short_description: "작품 간략 설명",
-                description: "작품 상세 설명을 여기에 입력하세요.",
-                url: "https://your-work-link.com",
+                short_description: "항목 간략 소개",
+                description: "항목 상세 설명을 여기에 입력하세요.",
+                url: "https://your-item-link.com",
               },
               {
                 id: `work-${crypto.randomUUID()}`,
-                title: "작품 제목2",
+                title: "리스트 항목 2",
                 is_active: true,
                 is_representative: true,
-                short_description: "작품 간략 설명",
-                description: "작품 상세 설명을 여기에 입력하세요.",
-                url: "https://your-work-link.com",
+                short_description: "항목 간략 소개",
+                description: "항목 상세 설명을 여기에 입력하세요.",
+                url: "https://your-item-link.com",
               },
             ],
             layout: "grid", // 카드 레이아웃

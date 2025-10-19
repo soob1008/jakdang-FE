@@ -3,7 +3,6 @@
 import {
   FormField,
   FormItem,
-  FormLabel,
   FormControl,
   FormMessage,
 } from "@/shared/ui/form";
@@ -13,14 +12,18 @@ export default function TextBlockEdit({ index }: { index: number }) {
   const namePrefix = `blocks_draft.${index}.data`;
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 border-l border-r border-b">
       <FormField
         name={`${namePrefix}.content`}
-        render={() => (
+        render={({ field }) => (
           <FormItem>
-            <FormLabel>내용</FormLabel>
             <FormControl>
-              <LexicalEditor name={`${namePrefix}.content`} />
+              <LexicalEditor
+                value={field.value}
+                onChange={field.onChange}
+                placeholder="내용을 입력하세요"
+                height={320}
+              />
             </FormControl>
             <FormMessage />
           </FormItem>
