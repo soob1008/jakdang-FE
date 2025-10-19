@@ -4,7 +4,7 @@ import { useState } from "react";
 import {
   Block,
   PageStyle,
-  WorkItem,
+  ListItem,
   BlockDataList,
 } from "@/entities/page/model/types";
 import Image from "next/image";
@@ -18,7 +18,7 @@ interface ListBlockProps {
 }
 
 export default function ListBlock({ block, isPreview, style }: ListBlockProps) {
-  const [selectedItem, setSelectedItem] = useState<WorkItem | null>(null);
+  const [selectedItem, setSelectedItem] = useState<ListItem | null>(null);
 
   if (!block.is_active) return null;
 
@@ -29,7 +29,7 @@ export default function ListBlock({ block, isPreview, style }: ListBlockProps) {
 
   if (!items || items.length === 0) return null;
 
-  const handleClick = (item: WorkItem) => {
+  const handleClick = (item: ListItem) => {
     setSelectedItem(item);
   };
 
