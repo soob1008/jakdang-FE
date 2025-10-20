@@ -14,7 +14,8 @@ interface WorkBlockProps {
 
 export default function WorkBlock({ work }: WorkBlockProps) {
   const params = useParams();
-  const slug = params?.id as string;
+  const slug = params?.id;
+
   const { writings = [] } = work || {};
 
   const visibleWritings = useMemo(() => writings.slice(0, 3), [writings]);
@@ -22,15 +23,12 @@ export default function WorkBlock({ work }: WorkBlockProps) {
 
   if (!work?.id) return null;
 
-  const { thumbnail, title: workTitle, id, description } = work;
+  const { thumbnail, title: workTitle, description } = work;
 
   const imageBase = process.env.NEXT_PUBLIC_IMAGE_URL || "";
   const coverSrc = thumbnail
     ? `${imageBase}${thumbnail}`
     : "/assets/basic_book.jpg";
-
-  const buildHref = (writingId: string) =>
-    `/${slug}/works/${id}/writing/${writingId}`;
 
   return (
     <section className="rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden">
@@ -62,7 +60,15 @@ export default function WorkBlock({ work }: WorkBlockProps) {
               {visibleWritings.map((writing, idx) => (
                 <li key={writing.id}>
                   <Link
-                    href={buildHref(writing.id)}
+                    href={{
+                      pathname: "/[slug]/works/[workId]/writing/[writingId]",
+                      query: {
+                        slug: slug || "",
+                        workId: work.id,
+                        writingId: writing.id,
+                      },
+                    }}
+                    as={`/${slug}/works/${work.id}/writing/${writing.id}`}
                     className="flex items-center gap-3 rounded-xl border border-gray-100 px-4 py-2.5 transition hover:border-[var(--accent)]/50 hover:bg-[var(--accent)]/5"
                   >
                     <span className="inline-flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-[var(--accent)]/10 text-xs font-semibold text-[var(--accent)]">
@@ -106,7 +112,15 @@ export default function WorkBlock({ work }: WorkBlockProps) {
                   {writings.map((writing, idx) => (
                     <Link
                       key={writing.id}
-                      href={buildHref(writing.id)}
+                      href={{
+                        pathname: "/[slug]/works/[workId]/writing/[writingId]",
+                        query: {
+                          slug: slug || "",
+                          workId: work.id,
+                          writingId: writing.id,
+                        },
+                      }}
+                      as={`/${slug}/works/${work.id}/writing/${writing.id}`}
                       className="flex items-start gap-3 rounded-xl border border-gray-100 bg-gray-50 px-4 py-3 transition hover:border-[var(--accent)]/60 hover:bg-[var(--accent)]/5"
                     >
                       <span className="mt-0.5 inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-[var(--accent)]/10 text-xs font-semibold text-[var(--accent)]">

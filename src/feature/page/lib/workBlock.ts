@@ -1,7 +1,4 @@
-import type {
-  Block,
-  BlockDataWork,
-} from "@/entities/page/model/types";
+import type { Block, BlockDataWork } from "@/entities/page/model/types";
 import type { Work } from "@/entities/work/model/type";
 
 export function collectWorkIds(blocks: Block[]): string[] {
@@ -22,7 +19,10 @@ export function mapWorksById(works: Work[] = []): Map<string, Work> {
   }, new Map<string, Work>());
 }
 
-export function attachWorkToBlock(block: Block, worksById: Map<string, Work>): Block {
+export function attachWorkToBlock(
+  block: Block,
+  worksById: Map<string, Work>
+): Block {
   if (block.type !== "work") return block;
 
   const data = block.data as BlockDataWork | undefined;
@@ -40,7 +40,10 @@ export function attachWorkToBlock(block: Block, worksById: Map<string, Work>): B
   };
 }
 
-export function attachWorksToBlocks(blocks: Block[], worksById: Map<string, Work>): Block[] {
+export function attachWorksToBlocks(
+  blocks: Block[],
+  worksById: Map<string, Work>
+): Block[] {
   if (!worksById.size) return blocks;
   return blocks.map((block) => attachWorkToBlock(block, worksById));
 }
