@@ -12,10 +12,10 @@ import {
 } from "@/shared/ui/dialog";
 import { User, LogIn, Link as LinkIcon, Share2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 import { Author } from "@/entities/author/model/types";
 import { getSessionUser } from "@/feature/page/server/getSessionUser";
 import { useLogout } from "@/feature/auth/hooks/useLogout";
+import { copyLink, shareLink } from "@/shared/lib/share";
 
 export default function AuthorHeader() {
   const { mutate: logout } = useLogout();
@@ -33,27 +33,13 @@ export default function AuthorHeader() {
   }, []);
 
   const handleCopyLink = () => {
-    navigator.clipboard.writeText(window.location.href);
-    toast("링크가 복사되었습니다.");
+    copyLink();
   };
 
   const handleShare = async () => {
-    const url = window.location.href;
-    const title = document?.title || "페이지 공유";
-    try {
-      if (navigator.share) {
-        await navigator.share({ title, url });
-        toast.success("공유했습니다.");
-      } else {
-        handleCopyLink();
-        toast.info("이 브라우저는 공유를 지원하지 않아 링크를 복사했어요.");
-      }
+    const result = await shareLink();
+    if (result === "shared") {
       setOpen(false);
-    } catch (e: unknown) {
-      if ((e as Error)?.name !== "AbortError") {
-        toast.error("공유 중 문제가 발생했어요. 링크를 대신 복사합니다.");
-        handleCopyLink();
-      }
     }
   };
 

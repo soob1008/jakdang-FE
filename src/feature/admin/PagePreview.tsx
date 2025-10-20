@@ -9,7 +9,6 @@ import PageRenderer from "../page/components/PageRenderer";
 export default function PagePreview() {
   const { watch, control } = useFormContext();
 
-  // blocks/profile
   const blocks: Block[] =
     useWatch({ name: "blocks_draft", control }) ?? ([] as Block[]);
 
