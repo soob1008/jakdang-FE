@@ -1,11 +1,18 @@
 "use client";
 
-import { Block } from "@/entities/page/model/types";
+import { useMemo } from "react";
+import { Block, PageStyle } from "@/entities/page/model/types";
 import { useFormContext, useWatch } from "react-hook-form";
-import BlockPreview from "@/feature/admin/block/BlockPreview";
 import ProfileBlock from "../author/blocks/ProfileBlock";
 import React from "react";
 import { autoContrast } from "@/shared/lib/utils";
+import useWorks from "@/feature/admin/works/hooks/useWorks";
+import {
+  attachWorksToBlocks,
+  collectWorkIds,
+  mapWorksById,
+} from "@/feature/page/lib/workBlock";
+import PageRenderer from "../page/components/PageRenderer";
 
 export default function PagePreview() {
   const { watch, control } = useFormContext();
@@ -13,6 +20,13 @@ export default function PagePreview() {
   // blocks/profile
   const blocks: Block[] =
     useWatch({ name: "blocks_draft", control }) ?? ([] as Block[]);
+  const workIds = useMemo(() => collectWorkIds(blocks), [blocks]);
+  const { data: worksData } = useWorks({ ids: workIds, isPublic: true });
+  const worksById = useMemo(() => mapWorksById(worksData ?? []), [worksData]);
+  const hydratedBlocks = useMemo(
+    () => attachWorksToBlocks(blocks, worksById),
+    [blocks, worksById]
+  );
   const profile = watch("profile");
   const displayName = watch("display_name") as string;
 
@@ -84,11 +98,10 @@ export default function PagePreview() {
           )}
 
           <div className="flex flex-col gap-12 px-1 pb-16">
-            {blocks.map((block: Block, index: number) => (
-              <article key={index} aria-label={`콘텐츠 블록 ${index + 1}`}>
-                <BlockPreview block={block} style={watch("style_draft")} />
-              </article>
-            ))}
+            {/* <PageRenderer
+              blocks={hydratedBlocks}
+              style={(style || {}) as PageStyle}
+            /> */}
           </div>
         </div>
       </section>

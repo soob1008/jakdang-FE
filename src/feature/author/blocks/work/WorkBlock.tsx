@@ -1,25 +1,20 @@
 "use client";
 
 import { useMemo } from "react";
-import type {
-  Block,
-  PageStyle,
-  BlockDataWork,
-} from "@/entities/page/model/types";
-import Image from "next/image";
+import { useParams } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/shared/ui/button";
 import { ResponsiveDialog } from "@/shared/ui/ResponsiveDialog";
+import { Work } from "@/entities/work/model/type";
 
 interface WorkBlockProps {
-  block: Block;
-  style: PageStyle;
-  slug: string;
+  work: Work;
 }
 
-export default function WorkBlock({ block, style, slug }: WorkBlockProps) {
-  const data = block.data as BlockDataWork | undefined;
-  const work = data?.work;
+export default function WorkBlock({ work }: WorkBlockProps) {
+  const params = useParams();
+  const slug = params?.id as string;
   const { writings = [] } = work || {};
 
   const visibleWritings = useMemo(() => writings.slice(0, 3), [writings]);
@@ -33,18 +28,12 @@ export default function WorkBlock({ block, style, slug }: WorkBlockProps) {
   const coverSrc = thumbnail
     ? `${imageBase}${thumbnail}`
     : "/assets/basic_book.jpg";
-  const accent = style?.theme_color || "#111827";
 
   const buildHref = (writingId: string) =>
     `/${slug}/works/${id}/writing/${writingId}`;
 
   return (
-    <section
-      className="rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden"
-      style={{
-        ["--accent" as string]: accent,
-      }}
-    >
+    <section className="rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden">
       <div className="relative aspect-[3/2] sm:aspect-[16/9]">
         <Image
           src={coverSrc}

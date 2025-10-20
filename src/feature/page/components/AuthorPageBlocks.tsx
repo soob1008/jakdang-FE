@@ -1,23 +1,36 @@
 import ProfileBlock from "@/feature/author/blocks/ProfileBlock";
-import TextBlock from "@/feature/author/blocks/TextBlock";
-import ImageBlock from "@/feature/author/blocks/ImageBlock";
-import LinkBlock from "@/feature/author/blocks/LinkBlock";
-import SNSBlock from "@/feature/author/blocks/SNSBlock";
-import ListBlock from "@/feature/author/blocks/list/ListBlock";
-import CalendarBlock from "@/feature/author/blocks/CalendarBlock";
-import BlankBlock from "@/feature/author/blocks/BlankBlock";
-import BookBlock from "@/feature/author/blocks/BookBlock";
-import type { Block, Page, PageStyle } from "@/entities/page/model/types";
+
+import PageRenderer from "@/feature/page/components/PageRenderer";
+import type { Page, PageStyle } from "@/entities/page/model/types";
 import type { Author } from "@/entities/author/model/types";
+import type { Work } from "@/entities/work/model/type";
+import {
+  attachWorksToBlocks,
+  collectWorkIds,
+  mapWorksById,
+} from "@/feature/page/lib/workBlock";
+import { fetchServerAPI } from "@/shared/lib/api/api.server";
 
 type AuthorPageBlocksProps = {
   author: Author;
   page: Page;
 };
 
-export function AuthorPageBlocks({ author, page }: AuthorPageBlocksProps) {
+export default async function AuthorPageBlocks({
+  author,
+  page,
+}: AuthorPageBlocksProps) {
   const blocks = page.blocks_published ?? [];
   const style: PageStyle | undefined = page.style_published;
+
+  const workIds = collectWorkIds(blocks);
+  const fetchedWorks: Work[] = workIds.length
+    ? await fetchServerAPI<Work[]>(
+        `/works?ids=${encodeURIComponent(workIds.join(","))}&is_public=true`
+      )
+    : [];
+  const worksById = mapWorksById(fetchedWorks);
+  const hydratedBlocks = attachWorksToBlocks(blocks, worksById);
 
   return (
     <div className="flex flex-col gap-12 pt-2.5">
@@ -28,7 +41,7 @@ export function AuthorPageBlocks({ author, page }: AuthorPageBlocksProps) {
         />
       )}
       {blocks.length ? (
-        blocks.map((block) => renderBlock(block, style))
+        <PageRenderer blocks={hydratedBlocks} style={style || {}} />
       ) : (
         <p className="pt-18 text-center text-gray-500">
           작가님의 콘텐츠가 준비 중입니다.
@@ -36,32 +49,4 @@ export function AuthorPageBlocks({ author, page }: AuthorPageBlocksProps) {
       )}
     </div>
   );
-}
-
-function renderBlock(block: Block, style: PageStyle) {
-  switch (block.type) {
-    case "text":
-      return <TextBlock key={block.id} block={block} />;
-    case "image":
-      return <ImageBlock key={block.id} block={block} style={style} />;
-    case "link":
-      return <LinkBlock key={block.id} block={block} style={style} />;
-    case "sns":
-      return <SNSBlock key={block.id} block={block} style={style} />;
-    case "work":
-    case "list":
-      return <ListBlock key={block.id} block={block} style={style} />;
-    case "calendar":
-      return <CalendarBlock key={block.id} block={block} style={style} />;
-    case "blank":
-      return <BlankBlock key={block.id} block={block} />;
-    case "book":
-      return <BookBlock key={block.id} block={block} style={style} />;
-    default:
-      return (
-        <div key={block.id} className="text-center text-sm text-gray-500">
-          지원하지 않는 블럭입니다.
-        </div>
-      );
-  }
 }

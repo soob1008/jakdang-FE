@@ -10,6 +10,7 @@ export default function useUpdateWork() {
     mutationFn: (work: Work) => {
       return apiClient.patch<Work>(`/works/${work.id}`, {
         title: work.title,
+        description: work.description,
         thumbnail: work.thumbnail,
         is_public: work.is_public,
       });
