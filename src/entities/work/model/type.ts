@@ -1,15 +1,16 @@
 export interface Work {
   id: string;
+  slug: string;
+  author_name: string;
   title: string;
   description?: string;
-  author_name: string;
-  created_at: string;
-  updated_at: string;
+  created_at: Date;
+  updated_at: Date;
   thumbnail: string;
   type: WorkType;
   is_public: boolean;
-  scheduled_at?: string;
-  published_at?: string;
+  scheduled_at?: Date;
+  published_at?: Date;
   content?: string;
   writings: Writing[];
   stats?: Stats;
@@ -17,13 +18,15 @@ export interface Work {
 
 export interface Writing {
   id: string;
+  slug: string;
+  author_name: string;
   title: string;
   subtitle?: string;
   order: number;
   is_public: boolean;
-  published_at?: string | null;
-  created_at: string;
-  updated_at: string;
+  published_at?: Date;
+  created_at: Date;
+  updated_at: Date;
   work_id: string;
   status: "공개" | "비공개" | "예약";
   content?: string;

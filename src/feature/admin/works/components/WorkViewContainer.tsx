@@ -1,28 +1,31 @@
+"use client";
+
+import useWriting from "../hooks/useWriting";
+import { lexicalJsonToHtml } from "@/shared/lib/editor/lexical";
+import { format } from "date-fns";
+import { shareLink } from "@/shared/lib/share";
+
 type WorkViewContainerProps = {
-  title: string;
-  subtitle?: string;
-  authorName: string;
-  publishedAt: string;
-  contentHtml: string;
-  estimatedReadMinutes?: number;
-  relatedArticles?: Array<{
-    id: string;
-    title: string;
-    excerpt?: string;
-    publishedAt: string;
-    href: string;
-  }>;
+  workId: string;
+  writingId: string;
 };
 
 export default function WorkViewContainer({
-  title,
-  subtitle,
-  authorName,
-  publishedAt,
-  contentHtml,
-  estimatedReadMinutes,
-  relatedArticles,
+  workId,
+  writingId,
 }: WorkViewContainerProps) {
+  const { data: writing } = useWriting(workId, writingId);
+
+  if (writing == null || writing.is_public === false) {
+    return <div>작품을 불러올 수 없습니다.</div>;
+  }
+  const { title, subtitle, author_name, published_at, content } = writing;
+  const htmlContent = lexicalJsonToHtml(content as string) || "";
+
+  const handleShare = async () => {
+    await shareLink();
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b  pt-14">
       <header className="mx-auto w-full max-w-3xl px-6 pt-8 pb-12">
@@ -44,17 +47,13 @@ export default function WorkViewContainer({
             </span> */}
             <div>
               <span className="block font-myungjo text-base text-gray-800">
-                {authorName}
+                {author_name}
               </span>
-              <div className="flex items-center gap-2 text-xs text-gray-400 mt-2">
-                <time>{publishedAt}</time>
-                {estimatedReadMinutes ? (
-                  <>
-                    <span className="h-1 w-1 rounded-full bg-gray-300" />
-                    <span>{estimatedReadMinutes} min read</span>
-                  </>
-                ) : null}
-              </div>
+              {published_at && (
+                <div className="flex items-center gap-2 text-xs text-gray-400 mt-2">
+                  <time>{format(published_at, "yyyy-MM-dd")}</time>
+                </div>
+              )}
             </div>
           </div>
 
@@ -68,6 +67,7 @@ export default function WorkViewContainer({
             <button
               type="button"
               className="rounded-full border border-gray-200 bg-white/80 px-3 py-1 hover:border-gray-300 hover:text-gray-600"
+              onClick={handleShare}
             >
               공유
             </button>
@@ -79,16 +79,16 @@ export default function WorkViewContainer({
         <article className="prose prose-neutral max-w-none leading-[1.85] text-gray-800 border-gray-200 border-t">
           <section
             className="prose-base whitespace-pre-wrap pt-6 leading-[1.85] prose-p:first-letter:float-left prose-p:first-letter:pr-3 prose-p:first-letter:text-4xl prose-p:first-letter:font-bold prose-p:first-letter:text-gray-700"
-            dangerouslySetInnerHTML={{ __html: contentHtml }}
+            dangerouslySetInnerHTML={{ __html: htmlContent }}
           />
 
           <footer className="mt-20 border-t border-gray-200 pt-10 text-[13px] leading-relaxed text-gray-400">
             <p>
-              * 본 작품은 {authorName} 님의 작품입니다. 무단 전재 및 재배포를
+              * 본 작품은 {author_name} 님의 작품입니다. 무단 전재 및 재배포를
               금합니다.
             </p>
 
-            {relatedArticles && relatedArticles.length > 0 ? (
+            {/* {relatedArticles && relatedArticles.length > 0 ? (
               <div className="mt-12 space-y-6">
                 <div className="flex items-center gap-3 text-xs uppercase tracking-[0.35em] text-gray-400">
                   <span className="h-px w-6 bg-gray-300" />
@@ -118,7 +118,7 @@ export default function WorkViewContainer({
                   ))}
                 </ul>
               </div>
-            ) : null}
+            ) : null} */}
           </footer>
         </article>
       </main>

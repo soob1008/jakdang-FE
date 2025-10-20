@@ -2,7 +2,7 @@ import { Author } from "@/entities/author/model/types";
 import { Page } from "@/entities/page/model/types";
 import { buildPageBackgroundStyle } from "@/entities/page/model/background";
 import AuthorHeader from "@/feature/author/AuthorHeader";
-import { AuthorPageBlocks } from "@/feature/page/components/AuthorPageBlocks";
+import AuthorPageBlocks from "@/feature/page/components/AuthorPageBlocks";
 
 type AuthorPageContentProps = {
   author: Author;
