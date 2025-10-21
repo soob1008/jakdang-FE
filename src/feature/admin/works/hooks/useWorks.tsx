@@ -22,7 +22,7 @@ export default function useWorks({
       if (hasIds) params.set("ids", ids!.join(","));
       else if (isPublic) params.set("is_public", "true");
 
-      const url = `/works${params.toString() ? `?${params}` : ""}`;
+      const url = `/works/list${params.toString() ? `?${params}` : ""}`;
       return apiClient.get<Work[]>(url);
     },
   });
