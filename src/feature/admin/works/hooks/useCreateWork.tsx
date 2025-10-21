@@ -15,7 +15,7 @@ export default function useCreateWork() {
       thumbnail?: string;
       description?: string;
     }) =>
-      apiClient.post("/works", {
+      apiClient.post("/works/list", {
         title,
         thumbnail,
         description,
