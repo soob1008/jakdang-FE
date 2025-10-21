@@ -2,18 +2,9 @@
 
 import { useEffect } from "react";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import {
-  COMMAND_PRIORITY_EDITOR,
-  $getNodeByKey,
-  $createParagraphNode,
-  $createTextNode,
-  $isElementNode,
-} from "lexical";
-import { insertImageNode, $isImageNode } from "../node/ImageNode";
-import {
-  INSERT_IMAGE_COMMAND,
-  type InsertImagePayload,
-} from "./imageCommands";
+import { COMMAND_PRIORITY_EDITOR } from "lexical";
+import { insertImageNode } from "../node/ImageNode";
+import { INSERT_IMAGE_COMMAND, type InsertImagePayload } from "./imageCommands";
 
 type ImageUploadPluginProps = {
   upload: (file: File) => Promise<string | null | undefined>;
