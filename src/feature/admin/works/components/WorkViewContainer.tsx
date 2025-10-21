@@ -75,10 +75,10 @@ export default function WorkViewContainer({
         </div>
       </header>
 
-      <main className="mx-auto w-full max-w-3xl px-6 pb-32">
+      <main className="mx-auto w-full max-w-3xl  px-6 pb-32">
         <article className="prose prose-neutral max-w-none leading-[1.85] text-gray-800 border-gray-200 border-t">
           <section
-            className="prose-base whitespace-pre-wrap pt-6 leading-[1.85] prose-p:first-letter:float-left prose-p:first-letter:pr-3 prose-p:first-letter:text-4xl prose-p:first-letter:font-bold prose-p:first-letter:text-gray-700"
+            className="overflow-hidden prose-base whitespace-pre-wrap pt-6 leading-[1.85] prose-p:first-letter:float-left prose-p:first-letter:pr-3 prose-p:first-letter:text-4xl prose-p:first-letter:font-bold prose-p:first-letter:text-gray-700"
             dangerouslySetInnerHTML={{ __html: htmlContent }}
           />
 
