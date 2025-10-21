@@ -2,12 +2,19 @@
 
 import type { CSSProperties } from "react";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
+import { $getNodeByKey } from "lexical";
 import type { NodeKey } from "lexical";
 import type { ImageAlign } from "./ImageNode";
-import { UPDATE_IMAGE_COMMAND } from "../plugins/imageCommands";
+import { $isImageNode } from "./ImageNode";
 import { Popover, PopoverTrigger, PopoverContent } from "@/shared/ui/popover";
 import { Slider } from "@/shared/ui/slider";
-import { AlignLeft, AlignCenter, AlignRight, PanelLeft, PanelRight } from "lucide-react";
+import {
+  AlignLeft,
+  AlignCenter,
+  AlignRight,
+  PanelLeft,
+  PanelRight,
+} from "lucide-react";
 import { cn } from "@/shared/lib/utils";
 
 interface ImageComponentProps {
@@ -31,16 +38,25 @@ export function ImageComponent({
 
   const handleWidthChange = (nextWidth: number) => {
     const clamped = clamp(nextWidth, 10, 100);
-    editor.dispatchCommand(UPDATE_IMAGE_COMMAND, {
-      nodeKey,
-      width: clamped,
+    editor.update(() => {
+      const node = $getNodeByKey(nodeKey);
+      if ($isImageNode(node)) {
+        node.setWidth(clamped);
+      }
     });
   };
 
   const handleAlignChange = (nextAlign: ImageAlign) => {
-    editor.dispatchCommand(UPDATE_IMAGE_COMMAND, {
-      nodeKey,
-      align: nextAlign,
+    editor.update(() => {
+      const node = $getNodeByKey(nodeKey);
+      if (!$isImageNode(node)) return;
+      node.setAlign(nextAlign);
+      if (
+        (nextAlign === "text-left" || nextAlign === "text-right") &&
+        node.getWidth() > 60
+      ) {
+        node.setWidth(60);
+      }
     });
   };
 
@@ -60,15 +76,13 @@ export function ImageComponent({
     minWidth: isSideBySide ? "240px" : undefined,
   };
 
-  const alignmentOptions = (
-    [
-      { value: "left", icon: AlignLeft, label: "왼쪽 정렬" },
-      { value: "center", icon: AlignCenter, label: "가운데 정렬" },
-      { value: "right", icon: AlignRight, label: "오른쪽 정렬" },
-      { value: "text-left", icon: PanelLeft, label: "이미지 왼쪽 + 텍스트" },
-      { value: "text-right", icon: PanelRight, label: "이미지 오른쪽 + 텍스트" },
-    ] as const
-  );
+  const alignmentOptions = [
+    { value: "left", icon: AlignLeft, label: "왼쪽 정렬" },
+    { value: "center", icon: AlignCenter, label: "가운데 정렬" },
+    { value: "right", icon: AlignRight, label: "오른쪽 정렬" },
+    { value: "text-left", icon: PanelLeft, label: "이미지 왼쪽 + 텍스트" },
+    { value: "text-right", icon: PanelRight, label: "이미지 오른쪽 + 텍스트" },
+  ] as const;
 
   return (
     <>

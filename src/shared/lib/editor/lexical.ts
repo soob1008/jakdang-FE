@@ -1,9 +1,12 @@
+import { ImageNode } from "@/shared/components/editor/node/ImageNode";
 import { $generateHtmlFromNodes } from "@lexical/html";
 import { createEditor, EditorState } from "lexical";
 
 export function lexicalJsonToHtml(jsonString: string): string {
   try {
-    const editor = createEditor();
+    const editor = createEditor({
+      nodes: [ImageNode],
+    });
     const editorState: EditorState = editor.parseEditorState(jsonString);
 
     let html = "";

@@ -7,7 +7,6 @@ import { Button } from "@/shared/ui/button";
 import { Switch } from "@/shared/ui/switch";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-
 // import { Input } from "@/shared/ui/input";
 // import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
 // import { Calendar } from "@/shared/ui/calendar";
@@ -247,7 +246,14 @@ export default function WorkEditorForm({
               </div>
             </PopoverContent>
           </Popover> */}
-
+          <Button
+            type="button"
+            size="xl"
+            variant="outline-primary"
+            onClick={() => history.back()}
+          >
+            취소
+          </Button>
           <Button type="submit" size="xl" disabled={!isValid}>
             {submitLabel}
           </Button>
