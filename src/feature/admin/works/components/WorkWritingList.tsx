@@ -60,6 +60,7 @@ export default function WorkWritingList({
                 <Link
                   href={`/@${selectedWork.slug}/works/${selectedWork.id}/writing/${writing.id}`}
                   className="flex items-center gap-1 shrink-0 text-xs"
+                  target="_blank"
                 >
                   글 보기
                   <ArrowUpRight className="h-3.5 w-3.5" />
