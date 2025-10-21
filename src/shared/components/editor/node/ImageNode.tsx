@@ -93,11 +93,11 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
     );
   }
 
-  // ✅ HTML Export 시 호출되는 함수
+  // HTML Export 시 호출되는 함수
   exportDOM(): { element: HTMLElement } {
     const element = document.createElement("img");
 
-    // ✅ 환경 변수에서 베이스 URL 가져오기
+    // 환경 변수에서 베이스 URL 가져오기
     const baseUrl = process.env.NEXT_PUBLIC_IMAGE_URL || "";
     const imageSrc = this.__src.startsWith("http")
       ? this.__src // 이미 절대경로면 그대로 사용
