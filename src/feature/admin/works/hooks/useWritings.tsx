@@ -1,4 +1,4 @@
-import { Work } from "@/entities/work/model/type";
+import { Writing } from "@/entities/work/model/type";
 import { apiClient } from "@/shared/lib/api/api.client";
 import { useQuery } from "@tanstack/react-query";
 
@@ -11,7 +11,7 @@ export default function useWritings({ workId }: UseWritingsOptions) {
     queryKey: ["writings", workId],
     enabled: !!workId,
     queryFn: async () => {
-      return apiClient.get<Work[]>(`/works/${workId}/writings`);
+      return apiClient.get<Writing[]>(`/works/${workId}/writings`);
     },
   });
 }
