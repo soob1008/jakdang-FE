@@ -52,7 +52,8 @@ const WorkFormSchema = z.object({
   content: z.string().min(1, "내용을 입력해주세요."),
   is_public: z.boolean(),
   is_scheduled: z.boolean(),
-  scheduled_at: z.date().optional().nullable(),
+  published_at: z.date().optional(),
+  scheduled_at: z.date().optional(),
 });
 
 export default function WorkEditorForm({
