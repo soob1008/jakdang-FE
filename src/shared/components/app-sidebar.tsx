@@ -48,8 +48,6 @@ export function AppSidebar({ email }: AppSidebarProps) {
                 {menu.items.map((item) => {
                   const isActive = pathname.startsWith(item.href);
 
-                  console.log(item.href, pathname, isActive);
-
                   return (
                     <SidebarMenuItem
                       key={item.label}

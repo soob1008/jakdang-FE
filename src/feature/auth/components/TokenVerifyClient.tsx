@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { handleAction } from "@/shared/lib/api/action";
 import { apiClient } from "@/shared/lib/api/api.client";
+import Loading from "@/shared/components/loading";
 
 export default function VerifyPageClient({ token }: { token?: string }) {
   const router = useRouter();
@@ -34,7 +35,7 @@ export default function VerifyPageClient({ token }: { token?: string }) {
 
   return (
     <div className="flex items-center justify-center h-screen">
-      <p>로그인 확인 중...</p>
+      <Loading />
     </div>
   );
 }
