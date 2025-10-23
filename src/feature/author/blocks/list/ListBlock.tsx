@@ -33,9 +33,8 @@ export default function ListBlock({ block, isPreview, style }: ListBlockProps) {
     setSelectedItem(item);
   };
 
-  const className = isPreview
-    ? "@container grid grid-cols-2 @md:grid-cols-3 @lg:grid-cols-4 gap-y-4 @md:gap-y-8 gap-x-2 @md:gap-x-4"
-    : "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-4 md:gap-y-8 gap-x-2 md:gap-x-4";
+  const className =
+    "@container grid grid-cols-2 @md:grid-cols-3 @lg:grid-cols-4 gap-y-4 @md:gap-y-8 gap-x-2 @md:gap-x-4";
 
   return (
     <div className="flex flex-col gap-4">
@@ -50,55 +49,57 @@ export default function ListBlock({ block, isPreview, style }: ListBlockProps) {
         </h3>
       )}
       {layout === "grid" ? (
-        <div className={className}>
-          {items.map((item) => {
-            if (!item.is_active || !item.id) return null;
+        <div className="w-full [container-type:inline-size]">
+          <div className="@container grid grid-cols-2 @md:grid-cols-3 @lg:grid-cols-4 gap-y-4 @md:gap-y-8 gap-x-2 @md:gap-x-4">
+            {items.map((item) => {
+              if (!item.is_active || !item.id) return null;
 
-            return (
-              <button
-                key={`${item.id}-grid`}
-                onClick={() => handleClick(item)}
-                className="flex flex-col items-center gap-2 transition text-card-foreground"
-                style={{
-                  ["--theme-color" as string]: "#222",
-                  ["--text-color" as string]: textColor,
-                }}
-              >
-                <div
-                  className="relative w-full h-40 overflow-hidden rounded-[var(--btn-radius)]"
+              return (
+                <button
+                  key={`${item.id}-grid`}
+                  onClick={() => handleClick(item)}
+                  className="flex flex-col items-center gap-2 transition text-card-foreground"
                   style={{
-                    ["--btn-radius" as string]:
-                      style?.button_style === "sharp" ? "0" : "8px",
+                    ["--theme-color" as string]: "#222",
+                    ["--text-color" as string]: textColor,
                   }}
                 >
-                  <Image
-                    src={
-                      item.image_url
-                        ? `${cdn}${item.image_url}`
-                        : "/assets/basic_book.jpg"
-                    }
-                    alt={item.title || "리스트 항목 이미지"}
-                    fill
-                    className={`${
-                      item.image_url ? "object-contain" : "object-cover"
-                    } transition-transform hover:scale-105`}
-                  />
-                </div>
-                <span
-                  className={`text-sm font-bold text-center text-[var(--text-color)]`}
-                >
-                  {item.title || "제목 없음"}
-                </span>
-                {item.short_description && (
-                  <span
-                    className={`text-xs-md line-clamp-1 text-[var(--text-color)]`}
+                  <div
+                    className="relative w-full aspect-[3/2] overflow-hidden rounded-[var(--btn-radius)]"
+                    style={{
+                      ["--btn-radius" as string]:
+                        style?.button_style === "sharp" ? "0" : "8px",
+                    }}
                   >
-                    {item.short_description}
+                    <Image
+                      src={
+                        item.image_url
+                          ? `${cdn}${item.image_url}`
+                          : "/assets/basic_book.jpg"
+                      }
+                      alt={item.title || "리스트 항목 이미지"}
+                      fill
+                      className={`${
+                        item.image_url ? "object-contain" : "object-cover"
+                      } transition-transform hover:scale-105`}
+                    />
+                  </div>
+                  <span
+                    className={`text-sm font-bold text-center text-[var(--text-color)]`}
+                  >
+                    {item.title || "제목 없음"}
                   </span>
-                )}
-              </button>
-            );
-          })}
+                  {item.short_description && (
+                    <span
+                      className={`text-xs-md line-clamp-1 text-[var(--text-color)]`}
+                    >
+                      {item.short_description}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
         </div>
       ) : (
         <div className="space-y-3">
