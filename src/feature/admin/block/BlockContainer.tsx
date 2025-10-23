@@ -7,6 +7,7 @@ import PageEditor from "@/feature/admin/block/PageEditor";
 import { Page } from "@/entities/page/model/types";
 import usePage from "@/feature/page/hooks/usePage";
 import useUser from "@/feature/auth/hooks/useUser";
+import Loading from "@/shared/components/loading";
 
 export const STORAGE_KEY = "selected-block-id";
 
@@ -60,7 +61,12 @@ export default function BlockContainer() {
     });
   }, [page, user, reset]);
 
-  if (isLoading) return <div>로딩 중...</div>;
+  if (isLoading)
+    return (
+      <div className="flex items-center justify-center h-full">
+        <Loading />
+      </div>
+    );
   //  if (error || !data) return <div>에러 발생</div>;
 
   if (!hasMounted) return null;
