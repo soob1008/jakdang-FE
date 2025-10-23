@@ -21,15 +21,14 @@ import {
 import { CalendarDays } from "lucide-react";
 import { Input } from "@/shared/ui/input";
 
-export type WorkFormValues = {
+export interface WorkFormValues {
   title: string;
   subtitle?: string;
   content: string;
   is_public: boolean;
   is_scheduled: boolean;
-  published_at?: Date;
   scheduled_at?: Date;
-};
+}
 
 const DEFAULT_VALUES: WorkFormValues = {
   title: "",
@@ -52,8 +51,6 @@ const WorkFormSchema = z.object({
   content: z.string().min(1, "내용을 입력해주세요."),
   is_public: z.boolean(),
   is_scheduled: z.boolean(),
-  published_at: z.date().optional(),
-  scheduled_at: z.date().optional(),
 });
 
 export default function WorkEditorForm({
@@ -79,6 +76,8 @@ export default function WorkEditorForm({
     handleSubmit,
     formState: { isValid },
   } = form;
+
+  console.log(watch());
 
   const isPublic = watch("is_public");
   const canSchedule = !isPublic;
@@ -272,7 +271,7 @@ export default function WorkEditorForm({
               >
                 <Calendar
                   mode="single"
-                  selected={scheduledAt ?? undefined}
+                  selected={(scheduledAt as Date) ?? undefined}
                   onSelect={handleDateSelect}
                   disabled={[disabledDate]}
                   initialFocus

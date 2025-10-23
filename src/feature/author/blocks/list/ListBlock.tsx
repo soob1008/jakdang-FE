@@ -14,10 +14,9 @@ import { autoContrast } from "@/shared/lib/utils";
 interface ListBlockProps {
   block: Block;
   style: PageStyle;
-  isPreview?: boolean;
 }
 
-export default function ListBlock({ block, isPreview, style }: ListBlockProps) {
+export default function ListBlock({ block, style }: ListBlockProps) {
   const [selectedItem, setSelectedItem] = useState<ListItem | null>(null);
 
   if (!block.is_active) return null;
@@ -32,9 +31,6 @@ export default function ListBlock({ block, isPreview, style }: ListBlockProps) {
   const handleClick = (item: ListItem) => {
     setSelectedItem(item);
   };
-
-  const className =
-    "@container grid grid-cols-2 @md:grid-cols-3 @lg:grid-cols-4 gap-y-4 @md:gap-y-8 gap-x-2 @md:gap-x-4";
 
   return (
     <div className="flex flex-col gap-4">

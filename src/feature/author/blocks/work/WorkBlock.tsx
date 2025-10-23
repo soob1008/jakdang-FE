@@ -69,6 +69,7 @@ export default function WorkBlock({ work }: WorkBlockProps) {
                       },
                     }}
                     as={`/${slug}/works/${work.id}/writing/${writing.id}`}
+                    target="_blank"
                     className="flex items-center gap-3 rounded-xl border border-gray-100 px-4 py-2.5 transition hover:border-[var(--accent)]/50 hover:bg-[var(--accent)]/5"
                   >
                     <span className="inline-flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-[var(--accent)]/10 text-xs font-semibold text-[var(--accent)]">
@@ -121,6 +122,7 @@ export default function WorkBlock({ work }: WorkBlockProps) {
                         },
                       }}
                       as={`/${slug}/works/${work.id}/writing/${writing.id}`}
+                      target="_blank"
                       className="flex items-start gap-3 rounded-xl border border-gray-100 bg-gray-50 px-4 py-3 transition hover:border-[var(--accent)]/60 hover:bg-[var(--accent)]/5"
                     >
                       <span className="mt-0.5 inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-[var(--accent)]/10 text-xs font-semibold text-[var(--accent)]">

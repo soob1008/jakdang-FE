@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@/shared/ui/button";
-import { useRouter } from "next/navigation";
 import { MENUS } from "@/feature/admin/const";
 import { usePathname } from "next/navigation";
 
@@ -11,7 +10,6 @@ interface AdminHeaderProps {
 }
 
 export default function AdminHeader({ email, slug }: AdminHeaderProps) {
-  const router = useRouter();
   const pathname = usePathname();
   const menuLabel = getMenuLabelByPath(pathname);
 
@@ -29,7 +27,7 @@ export default function AdminHeader({ email, slug }: AdminHeaderProps) {
         <Button
           variant="secondary"
           onClick={() => {
-            router.push(`/@${slug}`);
+            window.open(`/@${slug}`);
           }}
         >
           내 공간 보러가기
