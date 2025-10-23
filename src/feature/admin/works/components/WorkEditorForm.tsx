@@ -1,43 +1,41 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState, useMemo, ChangeEvent } from "react";
 import { FormProvider, useForm, Controller } from "react-hook-form";
 import LexicalEditor from "@/shared/components/editor/LexicalEditor";
 import { Button } from "@/shared/ui/button";
 import { Switch } from "@/shared/ui/switch";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
+import { Calendar } from "@/shared/ui/calendar";
+import { cn } from "@/shared/lib/utils";
+import {
+  addMinutes,
+  format,
+  isBefore,
+  setHours,
+  setMinutes,
+  startOfDay,
+} from "date-fns";
+import { CalendarDays } from "lucide-react";
+import { Input } from "@/shared/ui/input";
 
-// import { Input } from "@/shared/ui/input";
-// import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
-// import { Calendar } from "@/shared/ui/calendar";
-// import { cn } from "@/shared/lib/utils";
-// import {
-//   addMinutes,
-//   format,
-//   isBefore,
-//   setHours,
-//   setMinutes,
-//   startOfDay,
-// } from "date-fns";
-// import { CalendarDays } from "lucide-react";
-
-export type WorkFormValues = {
+export interface WorkFormValues {
   title: string;
   subtitle?: string;
   content: string;
   is_public: boolean;
-  // isScheduled: boolean;
-  // scheduledAt: Date | null;
-};
+  is_scheduled: boolean;
+  scheduled_at?: Date;
+}
 
 const DEFAULT_VALUES: WorkFormValues = {
   title: "",
   subtitle: "",
   content: "",
   is_public: true,
-  // isScheduled: false,
-  // scheduledAt: null,
+  is_scheduled: false,
 };
 
 type WorkEditorFormProps = {
@@ -52,8 +50,7 @@ const WorkFormSchema = z.object({
   subtitle: z.string().optional(),
   content: z.string().min(1, "내용을 입력해주세요."),
   is_public: z.boolean(),
-  // isScheduled: z.boolean(),
-  // scheduledAt: z.date().nullable(),
+  is_scheduled: z.boolean(),
 });
 
 export default function WorkEditorForm({
@@ -80,7 +77,10 @@ export default function WorkEditorForm({
     formState: { isValid },
   } = form;
 
+  console.log(watch());
+
   const isPublic = watch("is_public");
+  const canSchedule = !isPublic;
 
   useEffect(() => {
     form.reset({
@@ -89,55 +89,85 @@ export default function WorkEditorForm({
     });
   }, [defaultValues, form]);
 
-  // const isScheduled = watch("isScheduled");
-  // const scheduledAt = watch("scheduledAt");
-  // const [isScheduleOpen, setIsScheduleOpen] = useState(false);
+  const isScheduled = watch("is_scheduled");
+  const scheduledAt = watch("scheduled_at");
+  const [isScheduleOpen, setIsScheduleOpen] = useState(false);
 
-  // const scheduleLabel = useMemo(() => {
-  //   if (isScheduled && scheduledAt) {
-  //     return format(scheduledAt, "M월 d일 HH:mm 예약");
-  //   }
-  //   return "예약 발행";
-  // }, [isScheduled, scheduledAt]);
+  const selectedTime = useMemo(
+    () => (scheduledAt ? format(scheduledAt, "HH:mm") : ""),
+    [scheduledAt]
+  );
 
-  // const ensureScheduleDate = () => {
-  //   const base = scheduledAt ?? addMinutes(new Date(), 30);
-  //   setValue("scheduledAt", base, { shouldDirty: true, shouldTouch: true });
-  //   return base;
-  // };
+  const scheduleLabel = useMemo(() => {
+    if (!canSchedule) return "비공개 설정 시 예약 발행 가능";
+    if (!isScheduled || !scheduledAt) return "예약 발행 없음";
+    return format(scheduledAt, "yyyy.MM.dd HH:mm 예약");
+  }, [canSchedule, isScheduled, scheduledAt]);
 
-  // const handleScheduleToggle = (checked: boolean) => {
-  //   if (checked) {
-  //     ensureScheduleDate();
-  //   } else {
-  //     setValue("scheduledAt", null, { shouldDirty: true, shouldTouch: true });
-  //   }
-  //   setValue("isScheduled", checked, { shouldDirty: true, shouldTouch: true });
-  // };
+  useEffect(() => {
+    if (!canSchedule) {
+      setValue("is_scheduled", false, { shouldDirty: true, shouldTouch: true });
+      setValue("scheduled_at", undefined, {
+        shouldDirty: true,
+        shouldTouch: true,
+      });
+      setIsScheduleOpen(false);
+    }
+  }, [canSchedule, setValue]);
 
-  // const handleDateSelect = (date?: Date) => {
-  //   if (!date) return;
-  //   const base = ensureScheduleDate();
-  //   const updated = setMinutes(
-  //     setHours(date, base.getHours()),
-  //     base.getMinutes()
-  //   );
-  //   setValue("scheduledAt", updated, { shouldDirty: true, shouldTouch: true });
-  //   setValue("isScheduled", true, { shouldDirty: true, shouldTouch: true });
-  // };
+  const ensureScheduleDate = () => {
+    const base = scheduledAt ?? addMinutes(new Date(), 30);
+    setValue("scheduled_at", base, { shouldDirty: true, shouldTouch: true });
+    return base;
+  };
 
-  // const handleTimeChange = (event: ChangeEvent<HTMLInputElement>) => {
-  //   const value = event.target.value;
-  //   if (!value) return;
+  const handleScheduleToggle = (checked: boolean) => {
+    if (checked) {
+      if (!canSchedule) return;
+      ensureScheduleDate();
+    } else {
+      setValue("scheduled_at", undefined, {
+        shouldDirty: true,
+        shouldTouch: true,
+      });
+    }
+    setValue("is_scheduled", checked && canSchedule, {
+      shouldDirty: true,
+      shouldTouch: true,
+    });
+  };
 
-  //   const [hour, minute] = value.split(":").map(Number);
-  //   const base = ensureScheduleDate();
-  //   const updated = setMinutes(setHours(base, hour), minute);
-  //   setValue("scheduledAt", updated, { shouldDirty: true, shouldTouch: true });
-  //   setValue("isScheduled", true, { shouldDirty: true, shouldTouch: true });
-  // };
+  const handleDateSelect = (date?: Date) => {
+    if (!canSchedule) return;
+    if (!date) return;
+    const base = ensureScheduleDate();
+    const updated = setMinutes(
+      setHours(date, base.getHours()),
+      base.getMinutes()
+    );
+    setValue("scheduled_at", updated, { shouldDirty: true, shouldTouch: true });
+    setValue("is_scheduled", true, { shouldDirty: true, shouldTouch: true });
+  };
 
-  // const disabledDate = (date: Date) => isBefore(date, startOfDay(new Date()));
+  const updateScheduleTime = (hour: number, minute: number) => {
+    if (!canSchedule) return;
+    const base = ensureScheduleDate();
+    const updated = setMinutes(setHours(base, hour), minute);
+    setValue("scheduled_at", updated, { shouldDirty: true, shouldTouch: true });
+    setValue("is_scheduled", true, { shouldDirty: true, shouldTouch: true });
+  };
+
+  const handleTimeInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    if (!canSchedule) return;
+    const value = event.target.value;
+    if (!value) return;
+    const [hour, minute] = value.split(":").map(Number);
+    if (!Number.isNaN(hour) && !Number.isNaN(minute)) {
+      updateScheduleTime(hour, minute);
+    }
+  };
+
+  const disabledDate = (date: Date) => isBefore(date, startOfDay(new Date()));
 
   return (
     <FormProvider {...form}>
@@ -193,61 +223,92 @@ export default function WorkEditorForm({
             />
           </div>
 
-          {/* TODO: 예약 발행 */}
-          {/* <Popover open={isScheduleOpen} onOpenChange={setIsScheduleOpen}>
+          {/* 예약 발행 설정 */}
+          <Popover
+            open={isScheduleOpen && canSchedule}
+            onOpenChange={(open) => canSchedule && setIsScheduleOpen(open)}
+          >
             <PopoverTrigger asChild>
               <Button
                 type="button"
                 variant={isScheduled ? "secondary" : "outline"}
                 size="sm"
                 className={cn(
-                  "flex items-center gap-2",
-                  !isScheduled && "text-gray-600"
+                  "flex items-center gap-2 text-sm",
+                  (!canSchedule || !isScheduled) && "text-gray-600"
                 )}
+                disabled={!canSchedule}
               >
                 <CalendarDays className="h-4 w-4" />
-                <span className="text-sm">{scheduleLabel}</span>
+                <span>{scheduleLabel}</span>
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-72 space-y-4" align="end">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-semibold">예약 발행</p>
+            <PopoverContent className="w-80 space-y-4 p-5" align="end">
+              <div className="flex items-center justify-between gap-3">
+                <div className="space-y-1">
+                  <p className="text-sm font-semibold text-gray-900">
+                    예약 발행
+                  </p>
                   <p className="text-xs text-muted-foreground">
-                    지정한 시간에 자동으로 공개돼요.
+                    {canSchedule
+                      ? "지정한 시간에 자동으로 공개돼요."
+                      : "비공개 상태에서만 예약 발행을 사용할 수 있어요."}
                   </p>
                 </div>
                 <Switch
                   checked={isScheduled}
                   onCheckedChange={handleScheduleToggle}
+                  disabled={!canSchedule}
                 />
               </div>
 
               <div
                 className={cn(
-                  "rounded-md border p-3 space-y-3",
-                  !isScheduled && "pointer-events-none opacity-50"
+                  "rounded-md border p-3 space-y-4 bg-gray-50/60",
+                  (!isScheduled || !canSchedule) &&
+                    "pointer-events-none opacity-50"
                 )}
               >
                 <Calendar
                   mode="single"
-                  selected={scheduledAt ?? undefined}
+                  selected={(scheduledAt as Date) ?? undefined}
                   onSelect={handleDateSelect}
-                  disabled={disabledDate}
+                  disabled={[disabledDate]}
                   initialFocus
                 />
-                <div className="flex items-center gap-2">
+                <div className="space-y-3">
+                  <label
+                    htmlFor="schedule-time"
+                    className="text-xs font-medium text-gray-600"
+                  >
+                    발행 시각 (KST)
+                  </label>
                   <Input
+                    id="schedule-time"
                     type="time"
-                    value={scheduledAt ? format(scheduledAt, "HH:mm") : ""}
-                    onChange={handleTimeChange}
+                    value={selectedTime}
+                    onChange={handleTimeInputChange}
+                    className="w-32 text-sm"
+                    step={60}
                   />
-                  <span className="text-xs text-muted-foreground">KST</span>
+                </div>
+                <div className="flex items-center justify-between text-xs text-muted-foreground">
+                  <span>
+                    예약 시간은 설정된 시각에 자동으로 공개됩니다. 최소 30분
+                    이후부터 설정할 수 있어요.
+                  </span>
                 </div>
               </div>
             </PopoverContent>
-          </Popover> */}
-
+          </Popover>
+          <Button
+            type="button"
+            size="xl"
+            variant="outline-primary"
+            onClick={() => history.back()}
+          >
+            취소
+          </Button>
           <Button type="submit" size="xl" disabled={!isValid}>
             {submitLabel}
           </Button>

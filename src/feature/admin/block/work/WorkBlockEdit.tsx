@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import type { Work } from "@/entities/work/model/type";
 import {
   Select,
@@ -16,8 +16,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/shared/ui/form";
-import { useFormContext, useWatch } from "react-hook-form";
-import useUser from "@/feature/auth/hooks/useUser";
+import { useFormContext } from "react-hook-form";
 
 type WorkBlockEditProps = {
   index: number;
@@ -26,12 +25,9 @@ type WorkBlockEditProps = {
 
 export default function WorkBlockEdit({ index, works }: WorkBlockEditProps) {
   const hasWorks = works && works.length > 0;
-  const { control, setValue } = useFormContext();
-  const { data: user } = useUser();
-  const userSlug = user?.slug ?? "";
+  const { control } = useFormContext();
 
   const workField = `blocks_draft.${index}.data.work` as const;
-  const slugField = `blocks_draft.${index}.data.slug` as const;
 
   const workLookup = useMemo(() => {
     const map = new Map<string, Work>();
@@ -40,16 +36,6 @@ export default function WorkBlockEdit({ index, works }: WorkBlockEditProps) {
     });
     return map;
   }, [works]);
-
-  const currentSlug = useWatch({ control, name: slugField }) as
-    | string
-    | undefined;
-
-  useEffect(() => {
-    if (userSlug && !currentSlug) {
-      setValue(slugField, userSlug, { shouldDirty: false, shouldTouch: false });
-    }
-  }, [currentSlug, setValue, slugField, userSlug]);
 
   return (
     <div className="space-y-4">
@@ -68,19 +54,12 @@ export default function WorkBlockEdit({ index, works }: WorkBlockEditProps) {
                 onValueChange={(value) => {
                   if (value === "__reset__" || !value) {
                     field.onChange(null);
-                    setValue(slugField, userSlug, {
-                      shouldDirty: true,
-                      shouldTouch: true,
-                    });
+
                     return;
                   }
 
                   const selected = workLookup.get(value) ?? null;
                   field.onChange(selected ? mapWorkToWorkItem(selected) : null);
-                  setValue(slugField, userSlug || "", {
-                    shouldDirty: true,
-                    shouldTouch: true,
-                  });
                 }}
                 disabled={!hasWorks}
               >
@@ -121,7 +100,6 @@ export default function WorkBlockEdit({ index, works }: WorkBlockEditProps) {
 
 function mapWorkToWorkItem(work: Work) {
   return {
-    ...work,
-    writings: work.writings ?? [],
+    id: work.id,
   };
 }

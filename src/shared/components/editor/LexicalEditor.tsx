@@ -134,8 +134,12 @@ function InitialValuePlugin({ value }: { value?: string }) {
 
     try {
       const parsed = editor.parseEditorState(value);
-      editor.setEditorState(parsed);
-      lastValueRef.current = value;
+
+      // React 렌더링 종료 후 실행되도록 큐에 넣기
+      queueMicrotask(() => {
+        editor.setEditorState(parsed);
+        lastValueRef.current = value;
+      });
     } catch (error) {
       console.error("Failed to parse editor state", error);
     }

@@ -28,8 +28,6 @@ import BookBlockEdit from "./book/BookBlockEdit";
 import WorkBlockEdit from "./work/WorkBlockEdit";
 import useWorks from "@/feature/admin/works/hooks/useWorks";
 
-// import 기타 블록들
-
 interface BlockItemProps {
   index: number;
   block: BlockItemType;
@@ -46,9 +44,10 @@ export default function BlockItem({
   const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
-  const { data: works } = useWorks(true);
+  const { data: works } = useWorks({
+    isPublic: true,
+  });
 
-  // mount 이후에 localStorage 값 반영
   useEffect(() => {
     const id = localStorage.getItem("selected-block-id");
     setSelectedBlockId(
@@ -56,7 +55,6 @@ export default function BlockItem({
     );
   }, []);
 
-  // 현재 블럭이 선택된 블럭인지 계산
   const isOpen = selectedBlockId === block.id;
 
   const handleToggle = () => {

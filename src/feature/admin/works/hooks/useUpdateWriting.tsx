@@ -4,6 +4,15 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
+interface WritingRequest {
+  title: string;
+  subtitle?: string | null;
+  content: string;
+  is_public: boolean;
+  is_scheduled?: boolean;
+  scheduled_at?: Date | null;
+}
+
 export default function useUpdateWriting() {
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -16,18 +25,15 @@ export default function useUpdateWriting() {
     }: {
       workId: string;
       writingId: string;
-      writing: {
-        title: string;
-        subtitle?: string;
-        content?: string;
-        is_public: boolean;
-      };
+      writing: WritingRequest;
     }) => {
       return apiClient.patch<Writing>(`/works/${workId}/writing/${writingId}`, {
         title: writing.title,
         subtitle: writing.subtitle,
         content: writing.content,
         is_public: writing.is_public,
+        is_scheduled: writing.is_scheduled,
+        scheduled_at: writing.scheduled_at,
       });
     },
     onSuccess: (_, { workId, writingId }) => {

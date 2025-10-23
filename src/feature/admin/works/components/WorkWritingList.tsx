@@ -3,6 +3,8 @@ import { cn } from "@/shared/lib/utils";
 import { Work } from "@/entities/work/model/type";
 import { useRouter } from "next/navigation";
 import { format } from "date-fns";
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 
 type WorkEpisodeListProps = {
   selectedWork: Work | null;
@@ -46,13 +48,23 @@ export default function WorkWritingList({
               className="border rounded-md p-3 hover:bg-gray-50 transition-colors"
             >
               {/* 제목 + 날짜 */}
-              <div className="flex items-start justify-between mb-1.5">
-                <h4 className="font-medium text-sm leading-snug line-clamp-1">
-                  {writing.title}
-                </h4>
-                <span className="text-xs text-gray-500 whitespace-nowrap ml-2">
-                  {format(new Date(writing.created_at), "yyyy-MM-dd")}
-                </span>
+              <div className="flex items-start justify-between mb-1.5 gap-3">
+                <div className="flex-1 min-w-0">
+                  <p className="font-medium text-sm text-gray-900 line-clamp-1">
+                    {writing.title}
+                  </p>
+                  <span className="mt-1 inline-block text-xs text-gray-500">
+                    {format(new Date(writing.created_at), "yyyy-MM-dd")}
+                  </span>
+                </div>
+                <Link
+                  href={`/@${selectedWork.slug}/works/${selectedWork.id}/writing/${writing.id}`}
+                  className="flex items-center gap-1 shrink-0 text-xs"
+                  target="_blank"
+                >
+                  글 보기
+                  <ArrowUpRight className="h-3.5 w-3.5" />
+                </Link>
               </div>
 
               {/* 상태 + 버튼 */}

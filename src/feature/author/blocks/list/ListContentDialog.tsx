@@ -1,6 +1,7 @@
 import { ResponsiveDialog } from "@/shared/ui/ResponsiveDialog";
 import { Badge } from "@/shared/ui/badge";
 import { ListItem } from "@/entities/page/model/types";
+import Image from "next/image";
 
 interface ListContentDialogProps {
   open?: boolean;
@@ -43,6 +44,17 @@ export default function ListContentDialog({
           )}
           <h2 className="text-xl font-semibold">{title}</h2>
         </div>
+        {item?.image_url && (
+          <div className="overflow-hidden w-full rounded-md max-h-76 ">
+            <Image
+              src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${item.image_url}`}
+              alt={item?.title || "리스트 항목 이미지"}
+              width={400}
+              height={300}
+              className="object-contain max-h-76 mx-auto"
+            />
+          </div>
+        )}
 
         {description && (
           <p className="text-sm text-gray-600 whitespace-pre-line">
