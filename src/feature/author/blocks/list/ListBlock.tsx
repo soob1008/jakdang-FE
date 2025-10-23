@@ -80,8 +80,9 @@ export default function ListBlock({ block, style }: ListBlockProps) {
                       } transition-transform hover:scale-105`}
                     />
                   </div>
+
                   <span
-                    className={`text-sm font-bold text-center text-[var(--text-color)]`}
+                    className={`text-sm font-bold text-[var(--text-color)]`}
                   >
                     {item.title || "제목 없음"}
                   </span>
