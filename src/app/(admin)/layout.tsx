@@ -24,7 +24,7 @@ export default async function RootLayout({
       </div>
       <div className="flex flex-col w-full bg-gray-50 dark:bg-background">
         <AdminHeader email={user.email ?? ""} slug={user?.slug} />
-        <div className="flex-1">{children}</div>
+        <div className="flex-1 pb-20">{children}</div>
       </div>
     </SidebarProvider>
   );

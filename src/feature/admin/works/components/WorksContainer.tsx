@@ -214,12 +214,12 @@ export default function WorksContainer() {
   }, [editingWork, editingWorkId, works]);
 
   return (
-    <div className="flex gap-6 px-10 mt-4">
-      <section className="flex-1">
+    <div className="flex flex-col lg:flex-row gap-6 px-4 md:px-8 lg:px-10 mt-4">
+      <section className="w-full lg:flex-[2]">
         {/* 작품 제목 및 추가 */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-6">
           <div className="space-y-1">
-            <h2 className="font-semibold">작품 관리</h2>
+            <h2 className="font-semibold text-lg text-gray-900">작품 관리</h2>
             <p className="text-gray-500 text-sm">
               작품을 생성하고, 하위 콘텐츠를 추가하거나 수정할 수 있습니다.
             </p>
@@ -233,20 +233,20 @@ export default function WorksContainer() {
         </div>
 
         {/* 작품 리스트 */}
-        <div className="">
-          <WorkList
-            works={worksList}
-            selectedWork={selectedWork}
-            onSelectWork={handleWorkSelect}
-            onEditWork={handleEditWork}
-            onDeleteWork={handleRequestDeleteWork}
-            onTogglePublic={handleToggleWorkPublic}
-            isUpdating={isUpdating}
-          />
-        </div>
+        <WorkList
+          works={worksList}
+          selectedWork={selectedWork}
+          onSelectWork={handleWorkSelect}
+          onEditWork={handleEditWork}
+          onDeleteWork={handleRequestDeleteWork}
+          onTogglePublic={handleToggleWorkPublic}
+          isUpdating={isUpdating}
+        />
       </section>
+
       {/* 작품 하위 에피소드 리스트 */}
       <WorkWritingList
+        className="w-full lg:flex-[1]"
         selectedWork={selectedWork}
         onDeleteWriting={handleRequestDeleteWriting}
       />

@@ -9,17 +9,29 @@ import { ArrowUpRight } from "lucide-react";
 type WorkEpisodeListProps = {
   selectedWork: Work | null;
   onDeleteWriting: (workId: string, writingId: string, title: string) => void;
+  className?: string;
 };
 
 export default function WorkWritingList({
   selectedWork,
   onDeleteWriting,
+  className,
 }: WorkEpisodeListProps) {
   const router = useRouter();
+  const containerClasses = cn(
+    "bg-white border rounded-lg shadow-sm p-4",
+    "w-full lg:w-1/3",
+    className
+  );
 
   if (!selectedWork) {
     return (
-      <aside className="w-1/3 bg-white border h-140 rounded-lg shadow-sm p-4 flex flex-col items-center justify-center text-gray-500">
+      <aside
+        className={cn(
+          containerClasses,
+          "h-60 flex flex-col items-center justify-center text-gray-500"
+        )}
+      >
         <p className="text-sm">작품을 선택해주세요.</p>
       </aside>
     );
@@ -28,8 +40,8 @@ export default function WorkWritingList({
   const hasWritings = selectedWork.writings.length > 0;
 
   return (
-    <aside className="w-1/3 bg-white border rounded-lg shadow-sm p-4">
-      <div className="flex items-center justify-between mb-6 ">
+    <aside className={containerClasses}>
+      <div className="flex flex-wrap items-center gap-2 justify-between mb-6">
         <h3 className="font-semibold text-sm mr-2">{selectedWork.title}</h3>
         <Button
           size="sm"
@@ -41,7 +53,7 @@ export default function WorkWritingList({
         </Button>
       </div>
       {hasWritings ? (
-        <ul className="overflow-auto max-h-[500px] flex flex-col gap-2">
+        <ul className="overflow-auto max-h-[460px] flex flex-col gap-2 pr-1">
           {selectedWork.writings.map((writing) => (
             <li
               key={writing.id}
