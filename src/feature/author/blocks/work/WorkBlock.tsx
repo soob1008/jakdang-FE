@@ -1,173 +1,151 @@
 "use client";
 
-import { useState } from "react";
-import {
-  Block,
-  PageStyle,
-  WorkItem,
-  BlockDataWork,
-} from "@/entities/page/model/types";
+import { useMemo } from "react";
+import { useParams } from "next/navigation";
+import Link from "next/link";
 import Image from "next/image";
-import WorkDialog from "@/feature/author/blocks/work/WorkDialog";
-import { autoContrast } from "@/shared/lib/utils";
+import { Button } from "@/shared/ui/button";
+import { ResponsiveDialog } from "@/shared/ui/ResponsiveDialog";
+import { Work } from "@/entities/work/model/type";
 
 interface WorkBlockProps {
-  block: Block;
-  style: PageStyle;
-  isPreview?: boolean;
+  work: Work;
 }
 
-export default function WorkBlock({ block, isPreview, style }: WorkBlockProps) {
-  const [selectedWork, setSelectedWork] = useState<WorkItem | null>(null);
+export default function WorkBlock({ work }: WorkBlockProps) {
+  const params = useParams();
+  const slug = params?.id;
 
-  if (!block.is_active) return null;
+  const { writings = [] } = work || {};
 
-  const { works, layout, title } = block.data as BlockDataWork;
+  const visibleWritings = useMemo(() => writings.slice(0, 3), [writings]);
+  const hasMore = writings.length > 3;
 
-  const cdn = process.env.NEXT_PUBLIC_IMAGE_URL || "";
-  const textColor = autoContrast(style.background_color || "#ffffff");
+  if (!work?.id) return null;
 
-  if (!works || works.length === 0) return null;
+  const { thumbnail, title: workTitle, description } = work;
 
-  const handleClick = (work: WorkItem) => {
-    setSelectedWork(work);
-  };
-
-  const className = isPreview
-    ? "@container grid grid-cols-2 @md:grid-cols-3 @lg:grid-cols-4 gap-y-4 @md:gap-y-8 gap-x-2 @md:gap-x-4"
-    : "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-4 md:gap-y-8 gap-x-2 md:gap-x-4";
+  const imageBase = process.env.NEXT_PUBLIC_IMAGE_URL || "";
+  const coverSrc = thumbnail
+    ? `${imageBase}${thumbnail}`
+    : "/assets/basic_book.jpg";
 
   return (
-    <div className="flex flex-col gap-4">
-      {title && (
-        <h3
-          className="font-bold text-lg text-[var(--text-color)]"
-          style={{
-            ["--text-color" as string]: textColor,
-          }}
-        >
-          {title}
-        </h3>
-      )}
-      {layout === "grid" ? (
-        <div className={className}>
-          {works.map((work) => {
-            if (!work.is_active || !work.id) return null;
-
-            return (
-              <button
-                key={`${work.id}-grid`}
-                onClick={() => handleClick(work)}
-                className="flex flex-col items-center gap-2 transition text-card-foreground"
-                style={{
-                  ["--theme-color" as string]: "#222",
-                  ["--text-color" as string]: textColor,
-                }}
-              >
-                <div
-                  className="relative w-full h-40 overflow-hidden rounded-[var(--btn-radius)]"
-                  style={{
-                    ["--btn-radius" as string]:
-                      style?.button_style === "sharp" ? "0" : "8px",
-                  }}
-                >
-                  <Image
-                    src={
-                      work.image_url
-                        ? `${cdn}${work.image_url}`
-                        : "/assets/basic_book.jpg"
-                    }
-                    alt={work.title || "작품 이미지"}
-                    fill
-                    className={`${
-                      work.image_url ? "object-contain" : "object-cover"
-                    } transition-transform hover:scale-105`}
-                  />
-                </div>
-                <span
-                  className={`text-sm font-bold text-center text-[var(--text-color)]`}
-                >
-                  {work.title || "제목 없음"}
-                </span>
-                {work.short_description && (
-                  <span
-                    className={`text-xs-md line-clamp-1 text-[var(--text-color)]`}
-                  >
-                    {work.short_description}
-                  </span>
-                )}
-              </button>
-            );
-          })}
-        </div>
-      ) : (
-        <div className="space-y-3">
-          {works.map((work) => {
-            if (!work.is_active || !work.id) return null;
-            return (
-              <button
-                key={`${work.id}-list`}
-                onClick={() => handleClick(work)}
-                className={`flex items-center gap-4 p-3 border transition bg-card text-card-foreground w-full text-left
-                ${
-                  style?.button_style === "sharp"
-                    ? "rounded-none"
-                    : "rounded-lg"
-                }
-                border-[var(--br)]
-                hover:bg-[var(--hover)]
-                focus-visible:ring-2 focus-visible:ring-[var(--br)]
-                rounded-[var(--btn-radius)]
-              `}
-                style={
-                  {
-                    // 테마 보더 색
-                    ["--br" as string]: style?.theme_color || "#e5e7eb",
-                    // 테마색 12%만 섞은 hover 배경 (살짝 흐려짐)
-                    ["--hover" as string]:
-                      "color-mix(in srgb, var(--br) 5%, transparent)",
-                    ["--btn-radius" as string]:
-                      style?.button_style === "sharp" ? "0" : "8px",
-                  } as React.CSSProperties
-                }
-              >
-                <div className="relative w-16 h-16 rounded-md overflow-hidden flex-shrink-0">
-                  <Image
-                    src={
-                      work.image_url
-                        ? `${cdn}${work.image_url}`
-                        : "/assets/basic_book.jpg"
-                    }
-                    alt={work.title || "작품 이미지"}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-
-                <div className="flex flex-col">
-                  <h4 className="text-base font-bold truncate">
-                    {work.title || "제목 없음"}
-                  </h4>
-                  {work.short_description && (
-                    <span className="text-sm text-muted-foreground line-clamp-1">
-                      {work.short_description}
-                    </span>
-                  )}
-                </div>
-              </button>
-            );
-          })}
-        </div>
-      )}
-
-      {/* WorkDialog: 선택된 작품이 있을 때 표시 */}
-      {selectedWork && (
-        <WorkDialog
-          open={!!selectedWork}
-          onOpenChange={(open) => !open && setSelectedWork(null)}
-          work={selectedWork}
+    <section className="rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+      <div className="relative aspect-[3/2] sm:aspect-[16/9]">
+        <Image
+          src={coverSrc}
+          alt={workTitle || "Work Cover"}
+          fill
+          className="object-cover"
+          sizes="100vw"
         />
-      )}
-    </div>
+      </div>
+
+      <div className="px-5 sm:px-6 py-6 sm:py-7 space-y-4">
+        <h3 className="text-lg sm:text-xl font-semibold text-gray-900">
+          {workTitle || "제목 없음"}
+        </h3>
+        {description && (
+          <p className="mt-1 text-sm text-gray-600 whitespace-pre-line line-clamp-4">
+            {description}
+          </p>
+        )}
+
+        <div className="space-y-3">
+          <h5 className="text-sm font-semibold text-gray-900">글 목록</h5>
+
+          {visibleWritings.length > 0 ? (
+            <ul className="space-y-2">
+              {visibleWritings.map((writing, idx) => (
+                <li key={writing.id}>
+                  <Link
+                    href={{
+                      pathname: "/[slug]/works/[workId]/writing/[writingId]",
+                      query: {
+                        slug: slug || "",
+                        workId: work.id,
+                        writingId: writing.id,
+                      },
+                    }}
+                    as={`/${slug}/works/${work.id}/writing/${writing.id}`}
+                    target="_blank"
+                    className="flex items-center gap-3 rounded-xl border border-gray-100 px-4 py-2.5 transition hover:border-[var(--accent)]/50 hover:bg-[var(--accent)]/5"
+                  >
+                    <span className="inline-flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-[var(--accent)]/10 text-xs font-semibold text-[var(--accent)]">
+                      {idx + 1}
+                    </span>
+                    <span className="text-sm font-medium text-gray-900 line-clamp-1 hover:text-[var(--accent)]">
+                      {writing.title}
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-sm text-gray-400">
+              아직 등록된 글이 없습니다. 작품에 글을 추가해 주세요.
+            </p>
+          )}
+        </div>
+
+        {hasMore && (
+          <div className="pt-1">
+            <ResponsiveDialog
+              trigger={
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="w-full h-9 px-4 hover:text-primary hover:bg-gray-50"
+                >
+                  더보기
+                </Button>
+              }
+              title="전체 글 목록"
+              isSubmit={false}
+            >
+              <div className="space-y-4">
+                <p className="text-sm text-gray-500">
+                  총 {writings.length}개의 글이 등록되어 있습니다.
+                </p>
+                <div className="grid gap-3">
+                  {writings.map((writing, idx) => (
+                    <Link
+                      key={writing.id}
+                      href={{
+                        pathname: "/[slug]/works/[workId]/writing/[writingId]",
+                        query: {
+                          slug: slug || "",
+                          workId: work.id,
+                          writingId: writing.id,
+                        },
+                      }}
+                      as={`/${slug}/works/${work.id}/writing/${writing.id}`}
+                      target="_blank"
+                      className="flex items-start gap-3 rounded-xl border border-gray-100 bg-gray-50 px-4 py-3 transition hover:border-[var(--accent)]/60 hover:bg-[var(--accent)]/5"
+                    >
+                      <span className="mt-0.5 inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-[var(--accent)]/10 text-xs font-semibold text-[var(--accent)]">
+                        {idx + 1}
+                      </span>
+                      <div className="flex-1 space-y-1">
+                        <p className="text-sm font-medium text-gray-900 hover:text-[var(--accent)]">
+                          {writing.title}
+                        </p>
+                        {writing.subtitle && (
+                          <p className="text-xs text-gray-500 line-clamp-2">
+                            {writing.subtitle}
+                          </p>
+                        )}
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </ResponsiveDialog>
+          </div>
+        )}
+      </div>
+    </section>
   );
 }

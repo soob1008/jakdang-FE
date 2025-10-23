@@ -1,8 +1,18 @@
-import { Settings, Blocks, Brush } from "lucide-react";
+import { Settings, Blocks, Brush, Book } from "lucide-react";
 
 export const MENUS = [
   {
-    label: "나의 공간",
+    label: "콘텐츠",
+    items: [
+      {
+        label: "작품관리",
+        href: "/admin/works",
+        icon: Book,
+      },
+    ],
+  },
+  {
+    label: "페이지",
     items: [
       {
         label: "구성하기",
@@ -16,21 +26,6 @@ export const MENUS = [
       },
     ],
   },
-  // {
-  //   label: "활동",
-  //   items: [
-  //     {
-  //       label: "챌린지 관리",
-  //       href: "/admin/challenge",
-  //       icon: Medal,
-  //     },
-  //     {
-  //       label: "이벤트 관리",
-  //       href: "/admin/event",
-  //       icon: Tickets,
-  //     },
-  //   ],
-  // },
   {
     label: "설정",
     items: [

@@ -7,6 +7,7 @@ import PageEditor from "@/feature/admin/block/PageEditor";
 import { Page } from "@/entities/page/model/types";
 import usePage from "@/feature/page/hooks/usePage";
 import useUser from "@/feature/auth/hooks/useUser";
+import Loading from "@/shared/components/loading";
 
 export const STORAGE_KEY = "selected-block-id";
 
@@ -20,6 +21,7 @@ export default function BlockContainer() {
     defaultValues: {
       id: "",
       user_id: "",
+      slug: "",
       display_name: "",
       style_draft: {},
       style_published: {},
@@ -45,6 +47,7 @@ export default function BlockContainer() {
     reset({
       id: page.id ?? "",
       user_id: user.id ?? "",
+      slug: user.slug ?? "",
       display_name: user.display_name ?? "",
       style_draft: page.style_draft ?? {},
       style_published: page.style_published ?? {},
@@ -58,14 +61,19 @@ export default function BlockContainer() {
     });
   }, [page, user, reset]);
 
-  if (isLoading) return <div>로딩 중...</div>;
+  if (isLoading)
+    return (
+      <div className="flex items-center justify-center h-full">
+        <Loading />
+      </div>
+    );
   //  if (error || !data) return <div>에러 발생</div>;
 
   if (!hasMounted) return null;
 
   return (
     <FormProvider {...form}>
-      <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6 h-full">
+      <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6 h-full mt-4">
         <div className="order-2 lg:order-1">
           <PageEditor />
         </div>

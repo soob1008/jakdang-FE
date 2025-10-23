@@ -60,7 +60,7 @@ export default function SetUserNamePage() {
 
   return (
     <section className="pt-8" aria-labelledby="username-heading">
-      {/* {isLoading && <Loading />} */}
+      {/* {isLoading && <PageLoading />} */}
       <header>
         <h2 id="slug-heading" className="text-2xl lg:text-3xl font-bold">
           작가 주소 만들기

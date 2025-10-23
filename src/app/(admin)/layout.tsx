@@ -22,9 +22,9 @@ export default async function RootLayout({
         <AppSidebar email={user.email ?? ""} />
         <SidebarTrigger className="absolute top-1 right-[-34px]" />
       </div>
-      <div className="flex flex-col gap-4 w-full bg-gray-50 dark:bg-background">
+      <div className="flex flex-col w-full bg-gray-50 dark:bg-background">
         <AdminHeader email={user.email ?? ""} slug={user?.slug} />
-        <div className=" flex-1">{children}</div>
+        <div className="flex-1">{children}</div>
       </div>
     </SidebarProvider>
   );

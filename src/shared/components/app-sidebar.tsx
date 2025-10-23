@@ -24,8 +24,6 @@ import clsx from "clsx"; // tailwind class 병합용 라이브러리 (optional)
 import { MENUS } from "@/feature/admin/const";
 import { useLogout } from "@/feature/auth/hooks/useLogout";
 
-// 메뉴 구조
-
 interface AppSidebarProps {
   email: string;
 }
@@ -48,7 +46,9 @@ export function AppSidebar({ email }: AppSidebarProps) {
             <SidebarGroupContent>
               <SidebarMenu className="gap-2">
                 {menu.items.map((item) => {
-                  const isActive = pathname === item.href;
+                  const isActive = pathname.startsWith(item.href);
+
+                  console.log(item.href, pathname, isActive);
 
                   return (
                     <SidebarMenuItem
@@ -81,7 +81,7 @@ export function AppSidebar({ email }: AppSidebarProps) {
       <SidebarFooter className="border-t p-3">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <button className="flex w-full items-center justify-between rounded-md px-3 py-2 text-sm hover:bg-muted/30 transition">
+            <button className="flex w-full items-center justify-between rounded-md px-3 py-4 text-sm hover:bg-muted/30 transition">
               <div className="flex items-center gap-2">
                 {/* <Avatar className="h-6 w-6">
                   <AvatarFallback>

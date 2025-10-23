@@ -11,7 +11,7 @@ import { BlockItemType } from "@/entities/page/model/types";
 import ImageBlockEdit from "./image/ImageBlockEdit";
 import LinkBlockEdit from "./link/LinkBlockEdit";
 import SNSBlockEdit from "./sns/SNSBlockEdit";
-import WorkBlockEdit from "./work/WorkBlockEdit";
+import ListBlockEdit from "./list/ListBlockEdit";
 import CalendarBlockEdit from "./calendar/CalendarBlockEdit";
 import {
   AlertDialog,
@@ -25,8 +25,8 @@ import {
 } from "@/shared/ui/alert-dialog";
 import BlankBlockEdit from "./blank/BlankBlockEdit";
 import BookBlockEdit from "./book/BookBlockEdit";
-
-// import 기타 블록들
+import WorkBlockEdit from "./work/WorkBlockEdit";
+import useWorks from "@/feature/admin/works/hooks/useWorks";
 
 interface BlockItemProps {
   index: number;
@@ -44,7 +44,10 @@ export default function BlockItem({
   const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
-  // mount 이후에 localStorage 값 반영
+  const { data: works } = useWorks({
+    isPublic: true,
+  });
+
   useEffect(() => {
     const id = localStorage.getItem("selected-block-id");
     setSelectedBlockId(
@@ -52,7 +55,6 @@ export default function BlockItem({
     );
   }, []);
 
-  // 현재 블럭이 선택된 블럭인지 계산
   const isOpen = selectedBlockId === block.id;
 
   const handleToggle = () => {
@@ -138,10 +140,13 @@ export default function BlockItem({
           {block.type === "image" && <ImageBlockEdit index={index} />}
           {block.type === "link" && <LinkBlockEdit index={index} />}
           {block.type === "sns" && <SNSBlockEdit index={index} />}
-          {block.type === "work" && <WorkBlockEdit index={index} />}
+          {block.type === "list" && <ListBlockEdit index={index} />}
           {block.type === "calendar" && <CalendarBlockEdit index={index} />}
           {block.type === "blank" && <BlankBlockEdit index={index} />}
           {block.type === "book" && <BookBlockEdit index={index} />}
+          {block.type === "work" && (
+            <WorkBlockEdit index={index} works={works ?? []} />
+          )}
           {/* 다른 블록들도 필요 시 추가 */}
           <BlockOptions type={block.type} index={index} />
         </div>
