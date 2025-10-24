@@ -40,3 +40,13 @@ export type Stats = {
   comments: number;
   cheers: number;
 };
+
+export type Comment = {
+  id: string;
+  user_id?: string | null;
+  user_name?: string | null;
+  content: string;
+  created_at: string | Date;
+  replies?: Comment[];
+  is_author: boolean;
+};

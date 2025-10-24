@@ -12,9 +12,9 @@ function makeQueryClient(router: ReturnType<typeof useRouter>) {
   return new QueryClient({
     queryCache: new QueryCache({
       onError: (error) => {
-        if (error instanceof Error && error.message === "AUTH_EXPIRED") {
-          router.push("/auth/login");
-        }
+        // if (error instanceof Error && error.message === "AUTH_EXPIRED") {
+        //   router.push("/auth/login");
+        // }
       },
     }),
     defaultOptions: {
