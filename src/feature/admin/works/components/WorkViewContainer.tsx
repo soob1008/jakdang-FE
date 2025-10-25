@@ -14,6 +14,7 @@ import { Button } from "@/shared/ui/button";
 import { cn } from "@/shared/lib/utils";
 import Loading from "@/shared/components/loading";
 import type { Writing } from "@/entities/work/model/type";
+import CommentSection from "./CommentSection";
 
 type WorkViewContainerProps = {
   workId: string;
@@ -87,19 +88,19 @@ export default function WorkViewContainer({
         onShare={handleShare}
       />
 
-      <main className="mx-auto w-full max-w-3xl px-6 pb-32">
+      <main className="mx-auto w-full max-w-3xl px-6">
         <article className="prose prose-neutral max-w-none leading-[1.85] text-gray-800 border-t border-gray-200">
           <section
-            className="overflow-hidden prose-base whitespace-pre-wrap pt-6 leading-[1.85] prose-p:first-letter:float-left prose-p:first-letter:pr-3 prose-p:first-letter:text-4xl prose-p:first-letter:font-bold prose-p:first-letter:text-gray-700"
+            className="overflow-hidden prose-base whitespace-pre-wrap pt-6 pb-10 min-h-80 leading-[1.85] prose-p:first-letter:float-left prose-p:first-letter:pr-3 prose-p:first-letter:text-4xl prose-p:first-letter:font-bold prose-p:first-letter:text-gray-700"
             dangerouslySetInnerHTML={{ __html: htmlContent }}
           />
 
-          <footer className="mt-20 border-t border-gray-200 pt-10 text-[13px] leading-relaxed text-gray-400">
-            <p>
+          <footer className="border-t border-gray-200 pt-4 leading-relaxed text-gray-400">
+            <p className="text-xs text-gray-400 mb-10">
               * 본 작품은 {currentWriting.author_name} 님의 작품입니다. 무단
               전재 및 재배포를 금합니다.
             </p>
-
+            <CommentSection writingId={writingId} />
             {publicWritings.length > 0 && (
               <WritingCollections
                 slug={slug}
