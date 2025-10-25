@@ -6,16 +6,12 @@ import {
   QueryCache,
 } from "@tanstack/react-query";
 import { ReactNode } from "react";
-import { useRouter } from "next/navigation";
 
-function makeQueryClient(router: ReturnType<typeof useRouter>) {
+// function makeQueryClient(router: ReturnType<typeof useRouter>) {
+function makeQueryClient() {
   return new QueryClient({
     queryCache: new QueryCache({
-      onError: (error) => {
-        // if (error instanceof Error && error.message === "AUTH_EXPIRED") {
-        //   router.push("/auth/login");
-        // }
-      },
+      onError: () => {},
     }),
     defaultOptions: {
       queries: {
@@ -26,9 +22,7 @@ function makeQueryClient(router: ReturnType<typeof useRouter>) {
 }
 
 export function Providers({ children }: { children: ReactNode }) {
-  const router = useRouter();
-
-  const queryClient = makeQueryClient(router);
+  const queryClient = makeQueryClient();
 
   return (
     <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
