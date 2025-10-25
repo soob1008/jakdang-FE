@@ -65,7 +65,7 @@ export default function CommentSection({ writingId }: CommentSectionProps) {
           </div>
         </div>
       ) : (
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-gray-500 border border-dashed border-gray-200 bg-gray-50/60 rounded-lg p-4 text-center">
           댓글을 작성하려면 로그인해주세요.
         </p>
       )}
@@ -117,9 +117,7 @@ function CommentThread({
   }
 
   return (
-    <ul
-      className={cn("space-y-3", depth > 0 && "pl-5 border-l border-gray-200")}
-    >
+    <ul className={cn("space-y-3", depth > 0 && "pl-5 border-gray-200")}>
       {comments.map((comment) => (
         <li key={comment.id}>
           <CommentItemCard
@@ -202,27 +200,20 @@ function CommentItemCard({
   return (
     <article
       className={cn(
-        "rounded-lg border bg-white shadow-sm",
+        "rounded-lg border bg-white",
         depth === 0 ? "border-gray-200" : "border-gray-200/70 bg-gray-50",
         "p-4 space-y-3"
       )}
     >
       <header className="flex flex-wrap items-center gap-2">
         <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1.5">
-            {comment.is_author && (
-              <span className="rounded-full bg-orange-100 px-2 py-0.5 text-[10px] font-semibold text-orange-600">
-                작성자
-              </span>
+          <span
+            className={cn(
+              "text-xs font-semibold text-gray-900 py-0.5",
+              comment.is_author ? "bg-primary text-white px-2 rounded" : ""
             )}
-            {canEdit && (
-              <span className="rounded-full bg-gray-200 px-2 py-0.5 text-[10px] font-semibold text-gray-600">
-                내 글
-              </span>
-            )}
-          </div>
-          <span className="text-sm font-semibold text-gray-900">
-            {comment.user_name || "익명"}
+          >
+            {comment.user_name || "-"}
           </span>
         </div>
         {createdLabel && (
