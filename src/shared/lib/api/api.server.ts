@@ -5,7 +5,7 @@ import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const API_URL = process.env.API_URL;
 
 export async function fetchServer<TResponse>(
   input: string,
@@ -52,7 +52,6 @@ export async function fetchServerAPI<TResponse>(
     ?.split("=")[1];
 
   const res = await fetch(`${API_URL}/api${input}`, {
-
     ...init,
     method: init?.method || "GET",
     credentials: "include",
