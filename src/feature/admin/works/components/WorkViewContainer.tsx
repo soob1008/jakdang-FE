@@ -15,10 +15,16 @@ import { cn } from "@/shared/lib/utils";
 import Loading from "@/shared/components/loading";
 import type { Writing } from "@/entities/work/model/type";
 import CommentSection from "./CommentSection";
+import { Badge } from "@/shared/ui/badge";
 
 type WorkViewContainerProps = {
   workId: string;
   writingId: string;
+};
+
+type PaymentInfo = {
+  isPaid: boolean;
+  price?: string | null;
 };
 
 export default function WorkViewContainer({
@@ -77,6 +83,10 @@ export default function WorkViewContainer({
   const handleShare = async () => {
     await shareLink();
   };
+  const paymentInfo: PaymentInfo = {
+    isPaid: true,
+    price: "1,000원",
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b pt-24 pb-30">
@@ -86,9 +96,10 @@ export default function WorkViewContainer({
         author={currentWriting.author_name}
         dateLabel={headerDateLabel}
         onShare={handleShare}
+        payment={paymentInfo}
       />
 
-      <main className="mx-auto w-full max-w-3xl px-6">
+      <main className="mx-auto w-full max-w-3xl">
         <article className="prose prose-neutral max-w-none leading-[1.85] text-gray-800 border-t border-gray-200">
           <section
             className="overflow-hidden prose-base whitespace-pre-wrap pt-6 pb-10 min-h-80 leading-[1.85] prose-p:first-letter:float-left prose-p:first-letter:pr-3 prose-p:first-letter:text-4xl prose-p:first-letter:font-bold prose-p:first-letter:text-gray-700"
@@ -112,8 +123,47 @@ export default function WorkViewContainer({
             )}
           </footer>
         </article>
+        {paymentInfo.isPaid ? <PaymentSection payment={paymentInfo} /> : null}
       </main>
     </div>
+  );
+}
+
+function PaymentSection({ payment }: { payment: PaymentInfo }) {
+  const { isPaid, price } = payment;
+  if (!isPaid) return null;
+
+  const badgeVariant = "success";
+  const badgeLabel = "유료";
+  const priceLabel = price ?? "가격 미정";
+  const description = "이 글은 유료로 제공되는 콘텐츠입니다.";
+  const buttonLabel = "결제하고 읽기";
+
+  return (
+    <aside className="fixed inset-x-0 bottom-0 z-50 border-t border-gray-200 bg-white/95 shadow-[0_-12px_30px_-20px_rgba(15,23,42,0.25)] backdrop-blur supports-[backdrop-filter]:bg-white/70">
+      <div className="mx-auto flex max-w-3xl flex-wrap items-center justify-between gap-4 px-6 py-4">
+        <div className="flex items-center gap-3">
+          <Badge variant={badgeVariant} size="xs">
+            {badgeLabel}
+          </Badge>
+          <div className="flex flex-col leading-tight">
+            <span className={cn("font-semibold", "text-lg text-gray-900")}>
+              {priceLabel}
+            </span>
+            <span className="text-xs text-gray-500">{description}</span>
+          </div>
+        </div>
+        <Button
+          type="button"
+          size="lg"
+          variant="default"
+          className="w-full md:w-auto md:min-w-[160px]"
+        >
+          {buttonLabel}
+          <ArrowUpRight className="h-4 w-4" />
+        </Button>
+      </div>
+    </aside>
   );
 }
 
@@ -123,42 +173,65 @@ function Header({
   author,
   dateLabel,
   onShare,
+  payment,
 }: {
   title: string;
   subtitle?: string | null;
   author: string;
   dateLabel: string | null;
   onShare: () => void;
+  payment: PaymentInfo;
 }) {
+  const { isPaid, price } = payment;
+  const badgeVariant = isPaid ? "success" : "info";
+  const badgeLabel = isPaid ? "유료" : "무료";
+  const priceLabel = isPaid ? price ?? "가격 미정" : "무료 공개 중";
+
   return (
     <header className="mx-auto w-full max-w-3xl px-6 pt-8 pb-12">
-      <h1 className="text-3xl font-semibold leading-tight text-gray-900 font-myungjo">
-        {title}
-      </h1>
-      {subtitle ? <p className="mt-4 text-gray-500">{subtitle}</p> : null}
+      <div className="flex flex-col gap-6">
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div className="min-w-0">
+            <h1 className="text-3xl font-semibold leading-tight text-gray-900 font-myungjo">
+              {title}
+            </h1>
+            {subtitle ? <p className="mt-4 text-gray-500">{subtitle}</p> : null}
+          </div>
+          <div className="flex flex-col items-end gap-3 text-sm">
+            <div className="flex items-center gap-2">
+              <Badge variant={badgeVariant} size="xs">
+                {badgeLabel}
+              </Badge>
+              <span
+                className={cn(
+                  "font-medium",
+                  isPaid ? "text-gray-900" : "text-gray-500"
+                )}
+              >
+                {priceLabel}
+              </span>
+            </div>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="rounded-full border-gray-200 text-gray-500 hover:text-gray-700"
+              onClick={onShare}
+            >
+              공유
+            </Button>
+          </div>
+        </div>
 
-      <div className="mt-8 flex flex-wrap items-center gap-4 text-sm text-gray-500">
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
           <div>
             <span className="block font-myungjo text-base text-gray-800">
               {author}
             </span>
-            {dateLabel && (
-              <div className="mt-2 flex items-center gap-2 text-xs text-gray-400">
-                <time>{dateLabel}</time>
-              </div>
-            )}
+            <div className="mt-2 flex items-center gap-2 text-xs text-gray-400">
+              {dateLabel && <time>{dateLabel}</time>}
+            </div>
           </div>
-        </div>
-
-        <div className="ml-auto flex items-center gap-2 text-xs text-gray-400">
-          <button
-            type="button"
-            className="rounded-full border border-gray-200 bg-white/80 px-3 py-1 hover:border-gray-300 hover:text-gray-600"
-            onClick={onShare}
-          >
-            공유
-          </button>
         </div>
       </div>
     </header>
