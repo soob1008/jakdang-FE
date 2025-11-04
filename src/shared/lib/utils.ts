@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { format } from "date-fns";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -43,3 +44,9 @@ export function getCookie(name: string) {
   const parts = value.split(`; ${name}=`);
   if (parts.length === 2) return parts.pop()?.split(";").shift();
 }
+
+export const formatCurrency = (value: number) =>
+  `${value.toLocaleString("ko-KR")}원`;
+
+export const formatDate = (value: Date | null) =>
+  value ? format(value, "yyyy.MM.dd") : "-";

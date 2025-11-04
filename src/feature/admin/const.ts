@@ -43,7 +43,7 @@ export const MENUS = [
       },
       {
         label: "정산 내역",
-        href: "/admin/settlement/list",
+        href: "/admin/earnings",
         icon: HandCoins,
       },
     ],
