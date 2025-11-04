@@ -17,6 +17,7 @@ import { cn } from "@/shared/lib/utils";
 import useAutoSaveBlocks from "@/feature/page/hooks/useAutoSaveBlocks";
 import useAutoSaveProfile from "@/feature/page/hooks/useAutoSaveProfile";
 import useUpdatePublished from "@/feature/page/hooks/useUpdatePublished";
+import Title from "@/feature/admin/components/Title";
 
 function Skel({ className = "" }: { className?: string }) {
   return (
@@ -75,39 +76,39 @@ export default function PageEditor() {
   };
 
   return (
-    <article className="px-4 flex flex-col gap-4 pt-4 pb-24 max-w-[900px] w-full mx-auto md:pl-10 lg:max-w-none">
+    <article className="flex flex-col gap-4 pb-24 max-w-[900px] w-full mx-auto lg:max-w-none">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <h2 className="font-bold">구성하기</h2>
-        <div className="flex items-center gap-2">
-          <BlockDialog
-            open={openBlockDialog}
-            onOpenChange={setOpenBlockDialog}
-            trigger={
-              <Button
-                type="button"
-                className="w-fit"
-                variant="outline"
-                disabled={isLoading}
-              >
-                요소 추가하기
-              </Button>
-            }
-          />
-          <Button
-            type="button"
-            className="w-fit"
-            onClick={handleSavePage}
-            disabled={isLoading}
-          >
-            반영하기
-          </Button>
-        </div>
-      </div>
-      <p className="mb-6 text-sm text-muted-foreground">
-        원하는 요소를 골라서 페이지에 추가해보세요. 각각의 요소를 블록처럼 쌓아
-        올려 나만의 작가 페이지를 만들 수 있습니다.
-      </p>
+      <Title
+        title="구성하기"
+        description="원하는 요소를 골라서 페이지에 추가해보세요. 각각의 요소를 블록처럼 쌓아
+        올려 나만의 작가 페이지를 만들 수 있습니다."
+        rightContent={
+          <div className="flex items-center gap-2">
+            <BlockDialog
+              open={openBlockDialog}
+              onOpenChange={setOpenBlockDialog}
+              trigger={
+                <Button
+                  type="button"
+                  className="w-fit"
+                  variant="outline"
+                  disabled={isLoading}
+                >
+                  요소 추가하기
+                </Button>
+              }
+            />
+            <Button
+              type="button"
+              className="w-fit"
+              onClick={handleSavePage}
+              disabled={isLoading}
+            >
+              반영하기
+            </Button>
+          </div>
+        }
+      />
 
       {/* Profile skeleton */}
       {isLoading ? (
