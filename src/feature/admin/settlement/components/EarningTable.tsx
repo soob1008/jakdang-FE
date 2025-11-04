@@ -54,7 +54,6 @@ export default function EarningTable({ earnings }: EarningTableProps) {
 
   const hasData = earnings.length > 0;
   const startIndex = hasData ? (page - 1) * PAGE_SIZE + 1 : 0;
-  const endIndex = hasData ? Math.min(page * PAGE_SIZE, earnings.length) : 0;
 
   const handlePrevPage = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
