@@ -27,6 +27,10 @@ export default function PageRenderer({
   return (
     <>
       {blocks.map((block) => {
+        if (block.is_active === false) {
+          return null;
+        }
+
         if (block.type === "work") {
           const workId = (block.data as BlockDataWork).work?.id;
           const work = workMap.get(workId || "");

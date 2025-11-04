@@ -6,8 +6,6 @@ interface TextBlockProps {
 }
 
 export default function TextBlock({ block }: TextBlockProps) {
-  if (!block.is_active) return null;
-
   const { content } = block.data as BlockDataText;
 
   return <TextBlockClient content={content} />;

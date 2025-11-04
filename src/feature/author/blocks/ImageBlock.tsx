@@ -15,8 +15,6 @@ export default function ImageBlock({
   isPreview,
   style,
 }: ImageBlockProps) {
-  if (!block.is_active) return null;
-
   const {
     images,
     style: imageStyle = "single",
