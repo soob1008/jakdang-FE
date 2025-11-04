@@ -9,8 +9,6 @@ interface BookBlockProps {
 }
 
 export default function BookBlock({ block, style }: BookBlockProps) {
-  if (block.is_active === false) return null;
-
   const { mode, search, manual, thumbnail } = block.data as BlockDataBook;
   const book = mode === "search" ? search : manual;
   const textColor = autoContrast(style?.background_color || "#ffffff");

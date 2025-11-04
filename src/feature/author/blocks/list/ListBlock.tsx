@@ -19,8 +19,6 @@ interface ListBlockProps {
 export default function ListBlock({ block, style }: ListBlockProps) {
   const [selectedItem, setSelectedItem] = useState<ListItem | null>(null);
 
-  if (!block.is_active) return null;
-
   const { lists: items, layout, title } = block.data as BlockDataList;
 
   const cdn = process.env.NEXT_PUBLIC_IMAGE_URL || "";

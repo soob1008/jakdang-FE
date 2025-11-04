@@ -11,7 +11,7 @@ interface LinkBlockProps {
 
 export default function LinkBlock({ block, style }: LinkBlockProps) {
   const { links = [] } = (block.data as BlockDataLink) || {};
-  if (!block.is_active || links.length === 0) return null;
+  if (links.length === 0) return null;
 
   const raw = (style?.theme_color ?? "#3b82f6").trim().toLowerCase();
   const isWhite = raw === "#fff" || raw === "#ffffff" || raw === "white";

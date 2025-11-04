@@ -25,8 +25,6 @@ interface CalendarBlockProps {
 export default function CalendarBlock({ block, style }: CalendarBlockProps) {
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
-  if (!block.is_active) return null;
-
   const { dates, layout } = block.data as BlockDataCalendar;
 
   // 일정 범위 전체 마킹 (start_date ~ end_date)

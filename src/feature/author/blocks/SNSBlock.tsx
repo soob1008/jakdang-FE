@@ -14,7 +14,6 @@ interface SNSBlockProps {
 // --- contrast util (WCAG-ish heuristic) ---
 
 export default function SNSBlock({ block, style }: SNSBlockProps) {
-  if (!block?.is_active) return null;
   const { sns_links = [] } = (block.data as BlockDataSNS) || {};
   if (sns_links.length === 0) return null;
 
