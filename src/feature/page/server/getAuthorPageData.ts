@@ -11,7 +11,9 @@ export type AuthorPageServerData = {
   page: Page;
 };
 
-export async function getAuthorPageData(idParam: string): Promise<AuthorPageServerData> {
+export async function getAuthorPageData(
+  idParam: string
+): Promise<AuthorPageServerData> {
   const slug = decodeAuthorSlug(idParam);
 
   if (!slug) {

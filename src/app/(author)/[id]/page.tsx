@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { AuthorPageContent } from "@/feature/page/components/AuthorPageContent";
 import { buildAuthorPageMetadata } from "@/feature/page/server/buildMetadata";
 import { getAuthorPageData } from "@/feature/page/server/getAuthorPageData";
+import { notFound } from "next/navigation";
 
 interface AuthorPageProps {
   params: Promise<{ id: string }>;
@@ -22,6 +23,13 @@ export async function generateMetadata({
 
 export default async function AuthorPage({ params }: AuthorPageProps) {
   const { id } = await params;
+
+  console.log(id);
+
+  if (!id) {
+    notFound();
+  }
+
   const { author, page } = await getAuthorPageData(id);
 
   return <AuthorPageContent author={author} page={page} />;
