@@ -21,6 +21,7 @@ import {
 } from "@/shared/ui/alert-dialog";
 import { toast } from "sonner";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import Title from "@/feature/admin/components/Title";
 
 const SELECTED_WORK_PARAM = "selectedWorkId";
 
@@ -214,24 +215,20 @@ export default function WorksContainer() {
   }, [editingWork, editingWorkId, works]);
 
   return (
-    <div className="flex flex-col lg:flex-row gap-6 px-4 md:px-8 lg:px-10 mt-4">
+    <div className="flex flex-col lg:flex-row gap-6">
       <section className="w-full lg:flex-[2]">
         {/* 작품 제목 및 추가 */}
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-6">
-          <div className="space-y-1">
-            <h2 className="font-semibold text-lg text-gray-900">작품 관리</h2>
-            <p className="text-gray-500 text-sm">
-              작품을 생성하고, 하위 콘텐츠를 추가하거나 수정할 수 있습니다.
-            </p>
-          </div>
-          {/* 작품 추가 다이얼로그 */}
-          <WorkInfoDialog
-            open={isEditDialogOpen}
-            setOpen={handleWorkDialogToggle}
-            work={editingWork}
-          />
-        </div>
-
+        <Title
+          title="작품 관리"
+          description="작품을 생성하고, 하위 콘텐츠를 추가하거나 수정할 수 있습니다."
+          rightContent={
+            <WorkInfoDialog
+              open={isEditDialogOpen}
+              setOpen={handleWorkDialogToggle}
+              work={editingWork}
+            />
+          }
+        />
         {/* 작품 리스트 */}
         <WorkList
           works={worksList}
