@@ -67,7 +67,7 @@ export default function EarningTable({ earnings }: EarningTableProps) {
 
   return (
     <section className="mt-8">
-      <div className="rounded-xl border border-gray-200 bg-white/95 px-4 shadow-sm backdrop-blur-sm">
+      <div className="rounded-xl border border-gray-200 bg-white/95 px-4 backdrop-blur-sm">
         <div className="flex flex-wrap items-center justify-between gap-3 py-4">
           <div>
             <h3 className="text-base font-semibold text-gray-900">정산 내역</h3>

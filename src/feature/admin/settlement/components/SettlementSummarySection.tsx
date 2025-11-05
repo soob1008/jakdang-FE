@@ -2,7 +2,7 @@ import SummaryCard from "./SummaryCard";
 
 export default function SettlementSummarySection() {
   return (
-    <section className="grid grid-cols-3 gap-4  ">
+    <section className="grid grid-cols-1 lg:grid-cols-3 gap-4  ">
       <SummaryCard
         title="이번 달 총 수익"
         value="₩1,230,000"

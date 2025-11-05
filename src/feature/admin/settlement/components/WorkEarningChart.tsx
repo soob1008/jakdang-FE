@@ -89,7 +89,7 @@ export default function WorkEarningChart() {
       <CardHeader className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
         <div>
           <CardTitle>작품별 주간 수익 추이</CardTitle>
-          <CardDescription>
+          <CardDescription className="mt-1">
             작품을 선택해 주 단위 수익을 확인하세요.
           </CardDescription>
         </div>
@@ -139,7 +139,7 @@ export default function WorkEarningChart() {
         </ChartContainer>
       </CardContent>
 
-      <CardFooter className="flex-col items-start gap-1 text-sm">
+      <CardFooter className="flex-col items-start gap-1 text-sm mt-3">
         <div className="flex gap-2 font-medium leading-none">
           {selected}의 주 단위 수익입니다. <TrendingUp className="h-4 w-4" />
         </div>
