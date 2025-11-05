@@ -74,7 +74,7 @@ export default function EarningFilter({
   };
 
   return (
-    <section className="rounded-xl border border-gray-200 bg-white/90 px-6 py-6 shadow-sm backdrop-blur-sm">
+    <section className="rounded-xl border border-gray-200 bg-white/90 px-6 py-6 backdrop-blur-sm">
       <header className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="font-semibold text-gray-900">정산 필터</h2>

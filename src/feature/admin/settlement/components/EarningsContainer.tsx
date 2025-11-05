@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import Title from "@/feature/admin/components/Title";
 import EarningFilter from "@/feature/admin/settlement/components/EarningFilter";
 import EarningTable from "@/feature/admin/settlement/components/EarningTable";
 import useEarnings, { type UseEarningsParams } from "../hooks/useEarnings";
@@ -39,7 +38,6 @@ export default function EarningsContainer() {
 
   return (
     <>
-      <Title title="정산 내역" />
       <EarningFilter
         value={filters}
         onApply={handleApply}
