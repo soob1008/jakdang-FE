@@ -39,3 +39,8 @@ export interface EarningWeekItem {
   week: string;
   amount: number;
 }
+export interface EarningCumulativeItem {
+  title: string;
+  percent: number;
+  total_earning: number;
+}

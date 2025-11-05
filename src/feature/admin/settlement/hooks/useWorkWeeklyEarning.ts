@@ -3,9 +3,9 @@ import { useQuery } from "@tanstack/react-query";
 import { EarningWeekItem } from "@/entities/settlement/model/type";
 
 interface UseWorkWeeklyEarningParams {
-  work_id?: string;
-  year?: string;
-  month?: string;
+  work_id: string;
+  year: string;
+  month: string;
 }
 
 export default function useWorkWeeklyEarning({
@@ -20,6 +20,6 @@ export default function useWorkWeeklyEarning({
         `/earnings/trend/week?work_id=${work_id}&year=${year}&month=${month}`
       );
     },
-    enabled: !!work_id,
+    enabled: !!work_id && !!year && !!month,
   });
 }

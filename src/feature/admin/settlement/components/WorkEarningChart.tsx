@@ -26,6 +26,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid } from "recharts";
 import useWorksWeeklyEarning from "@/feature/admin/settlement/hooks/useWorkWeeklyEarning";
 import useWorks from "@/feature/admin/works/hooks/useWorks";
 import { Skeleton } from "@/shared/ui/skeleton";
+import { formatCurrencyText } from "@/shared/lib/utils";
 
 interface WorkEarningChartProps {
   year: string;
@@ -61,9 +62,8 @@ export default function WorkEarningChart({
     }
   }, [works, selected]);
 
-  const workId = selected?.value;
   const { data: weeklyEarning = [] } = useWorksWeeklyEarning({
-    work_id: workId,
+    work_id: selected?.value || "",
     year,
     month,
   });
@@ -72,7 +72,7 @@ export default function WorkEarningChart({
     return Object.fromEntries(
       works.map((work, i) => [
         work.title,
-        { label: work.title, color: `var(--chart-${(i % 5) + 1})` },
+        { label: work.title, color: `var(--chart-${(i % 6) + 1})` },
       ])
     );
   }, [works]);
@@ -131,7 +131,7 @@ export default function WorkEarningChart({
               width={30}
               axisLine={false}
               tickLine={false}
-              tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`}
+              tickFormatter={(v) => `${formatCurrencyText(v)}`}
             />
             <ChartTooltip content={<ChartTooltipContent />} />
             <Line

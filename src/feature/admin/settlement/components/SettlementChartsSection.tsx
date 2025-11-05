@@ -9,7 +9,7 @@ import {
   SelectValue,
 } from "@/shared/ui/select";
 import WorkEarningChart from "./WorkEarningChart";
-import WorkEarningShareChart from "./WorkEarningShareChart";
+import WorkCumulativeEarningChart from "./WorkCumulativeEarningChart";
 
 export default function SettlementChartsSection() {
   const [year, setYear] = useState("2025");
@@ -51,7 +51,7 @@ export default function SettlementChartsSection() {
       {/* 차트 카드 영역 */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <WorkEarningChart year={year} month={month} />
-        <WorkEarningShareChart />
+        <WorkCumulativeEarningChart year={year} month={month} />
       </div>
     </section>
   );
