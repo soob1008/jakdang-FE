@@ -26,3 +26,11 @@ export interface SettlementDto {
   failed_count: number;
   memo?: string | null;
 }
+
+export interface SettlementSummaryDto {
+  month_earning: number;
+  next_settlement_amount: number;
+  next_settlement_date: Date;
+  today_earning: number;
+  week_scheduled: number;
+}

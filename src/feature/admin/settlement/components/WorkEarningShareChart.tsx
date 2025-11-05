@@ -81,7 +81,7 @@ export default function WorkEarningShareChart() {
 
       <CardFooter className="flex-col items-start gap-2 text-sm">
         <div className="flex gap-2 font-medium leading-none">
-          이번 달 ‘달빛 아래’ 수익이 52%를 차지했습니다.
+          ‘달빛 아래’ 수익이 52%를 차지했습니다.
           <TrendingUp className="h-4 w-4" />
         </div>
         <div className="text-muted-foreground leading-none">
