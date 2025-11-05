@@ -25,7 +25,7 @@ export default function SettlementSummarySection() {
         value={formatDate(summary?.next_settlement_date ?? null)}
         sub={`${formatCurrency(
           summary?.next_settlement_amount ?? 0
-        )} 지급 ㄴ예정`}
+        )} 지급 예정`}
       />
     </section>
   );
