@@ -12,6 +12,41 @@ import { Card } from "@/shared/ui/card";
 import WorkEarningChart from "./WorkEarningChart";
 import SettlementResultChart from "./SettlementResultChart";
 
+const chartData = [
+  {
+    week: "1주차 (1~7일)",
+    works: [
+      { title: "달빛 아래", amount: 58000 },
+      { title: "밤의 노래", amount: 41000 },
+      { title: "하얀 섬", amount: 27000 },
+    ],
+  },
+  {
+    week: "2주차 (8~14일)",
+    works: [
+      { title: "달빛 아래", amount: 64000 },
+      { title: "밤의 노래", amount: 39000 },
+      { title: "하얀 섬", amount: 35000 },
+    ],
+  },
+  {
+    week: "3주차 (15~21일)",
+    works: [
+      { title: "달빛 아래", amount: 72000 },
+      { title: "밤의 노래", amount: 46000 },
+      { title: "하얀 섬", amount: 41000 },
+    ],
+  },
+  {
+    week: "4주차 (22~30일)",
+    works: [
+      { title: "달빛 아래", amount: 69000 },
+      { title: "밤의 노래", amount: 52000 },
+      { title: "하얀 섬", amount: 38000 },
+    ],
+  },
+];
+
 export default function SettlementChartsSection() {
   const [year, setYear] = useState("2025");
   const [month, setMonth] = useState("11");
@@ -51,12 +86,7 @@ export default function SettlementChartsSection() {
 
       {/* 차트 카드 영역 */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="p-5">
-          <h3 className="text-sm font-medium text-gray-600 mb-4">
-            작품별 수익 추이
-          </h3>
-          <WorkEarningChart />
-        </Card>
+        <WorkEarningChart />
 
         <Card className="p-5">
           <h3 className="text-sm font-medium text-gray-600 mb-4">
