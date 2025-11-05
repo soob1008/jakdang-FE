@@ -13,7 +13,9 @@ export default function Title({
       <div className="space-y-1">
         <h2 className="font-semibold text-lg text-gray-900">{title}</h2>
         {description && (
-          <p className="text-gray-500 text-sm break-keep">{description}</p>
+          <p className="text-gray-500 text-sm break-keep whitespace-pre-line">
+            {description}
+          </p>
         )}
       </div>
       {rightContent}
