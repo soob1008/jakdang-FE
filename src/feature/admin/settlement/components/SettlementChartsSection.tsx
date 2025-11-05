@@ -50,7 +50,7 @@ export default function SettlementChartsSection() {
 
       {/* 차트 카드 영역 */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <WorkEarningChart />
+        <WorkEarningChart year={year} month={month} />
         <WorkEarningShareChart />
       </div>
     </section>

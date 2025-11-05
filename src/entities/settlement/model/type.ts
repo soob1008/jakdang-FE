@@ -34,3 +34,8 @@ export interface SettlementSummaryDto {
   today_earning: number;
   week_scheduled: number;
 }
+
+export interface EarningWeekItem {
+  week: string;
+  amount: number;
+}
