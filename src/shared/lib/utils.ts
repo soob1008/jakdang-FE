@@ -48,5 +48,12 @@ export function getCookie(name: string) {
 export const formatCurrency = (value: number) =>
   `${value.toLocaleString("ko-KR")}원`;
 
+export const formatCurrencyText = (v: number) => {
+  if (v >= 100000000) return `${(v / 100000000).toFixed(1)}억`;
+  if (v >= 10000) return `${(v / 10000).toFixed(1)}만`;
+  if (v >= 1000) return `${(v / 1000).toFixed(1)}천`;
+  return v.toLocaleString();
+};
+
 export const formatDate = (value: Date | null) =>
   value ? format(value, "yyyy.MM.dd") : "-";

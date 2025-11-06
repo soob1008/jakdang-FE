@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
   Card,
   CardHeader,
@@ -23,66 +23,66 @@ import {
 } from "@/shared/ui/select";
 import { TrendingUp } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid } from "recharts";
+import useWorksWeeklyEarning from "@/feature/admin/settlement/hooks/useWorkWeeklyEarning";
+import useWorks from "@/feature/admin/works/hooks/useWorks";
+import { Skeleton } from "@/shared/ui/skeleton";
+import { formatCurrencyText } from "@/shared/lib/utils";
 
-// 더미 데이터
-const chartData = [
-  {
-    week: "1주차 (1~7일)",
-    works: [
-      { title: "달빛 아래", amount: 58000 },
-      { title: "밤의 노래", amount: 41000 },
-      { title: "하얀 섬", amount: 27000 },
-    ],
-  },
-  {
-    week: "2주차 (8~14일)",
-    works: [
-      { title: "달빛 아래", amount: 64000 },
-      { title: "밤의 노래", amount: 39000 },
-      { title: "하얀 섬", amount: 35000 },
-    ],
-  },
-  {
-    week: "3주차 (15~21일)",
-    works: [
-      { title: "달빛 아래", amount: 72000 },
-      { title: "밤의 노래", amount: 46000 },
-      { title: "하얀 섬", amount: 41000 },
-    ],
-  },
-  {
-    week: "4주차 (22~30일)",
-    works: [
-      { title: "달빛 아래", amount: 69000 },
-      { title: "밤의 노래", amount: 52000 },
-      { title: "하얀 섬", amount: 38000 },
-    ],
-  },
-];
+interface WorkEarningChartProps {
+  year: string;
+  month: string;
+}
 
-export default function WorkEarningChart() {
-  const titles = useMemo(
-    () => chartData[0]?.works.map((w) => w.title) ?? [],
-    [chartData]
+export default function WorkEarningChart({
+  year,
+  month,
+}: WorkEarningChartProps) {
+  const { data: works = [] } = useWorks();
+
+  const workOptions = useMemo(
+    () =>
+      works.map((w) => ({
+        label: w.title,
+        value: String(w.id),
+      })),
+    [works]
   );
-  const [selected, setSelected] = useState(titles[0]);
+
+  const [selected, setSelected] = useState<{
+    label: string;
+    value: string;
+  }>();
+
+  useEffect(() => {
+    if (works.length > 0 && !selected) {
+      setSelected({
+        label: works[0].title,
+        value: String(works[0].id),
+      });
+    }
+  }, [works, selected]);
+
+  const { data: weeklyEarning = [] } = useWorksWeeklyEarning({
+    work_id: selected?.value || "",
+    year,
+    month,
+  });
 
   const chartConfig = useMemo(() => {
-    if (!chartData.length) return {};
     return Object.fromEntries(
-      chartData[0].works.map((w, i) => [
-        w.title,
-        { label: w.title, color: `var(--chart-${(i % 6) + 1})` },
+      works.map((work, i) => [
+        work.title,
+        { label: work.title, color: `var(--chart-${(i % 6) + 1})` },
       ])
     );
-  }, [chartData]);
+  }, [works]);
 
-  const data = chartData.map((d) => ({
-    week: d.week,
-    amount: d.works.find((w) => w.title === selected)?.amount ?? 0,
-  }));
+  const selectedColor =
+    (selected && chartConfig[selected.label]?.color) || "var(--chart-1)";
 
-  const selectedColor = chartConfig[selected]?.color ?? "var(--chart-1)";
+  if (!selected) {
+    return <Skeleton />;
+  }
 
   return (
     <Card className="py-6">
@@ -94,14 +94,20 @@ export default function WorkEarningChart() {
           </CardDescription>
         </div>
 
-        <Select value={selected} onValueChange={setSelected}>
+        <Select
+          value={selected.value}
+          onValueChange={(v) => {
+            const newSelected = workOptions.find((w) => w.value === v);
+            if (newSelected) setSelected(newSelected);
+          }}
+        >
           <SelectTrigger className="w-[160px]">
             <SelectValue placeholder="작품 선택" />
           </SelectTrigger>
           <SelectContent>
-            {titles.map((title) => (
-              <SelectItem key={title} value={title}>
-                {title}
+            {workOptions.map((work) => (
+              <SelectItem key={work.value} value={work.value}>
+                {work.label}
               </SelectItem>
             ))}
           </SelectContent>
@@ -109,12 +115,12 @@ export default function WorkEarningChart() {
       </CardHeader>
 
       <CardContent>
-        <ChartContainer className="h-[300px] w-full" config={chartConfig}>
+        <ChartContainer className="mt-6 h-[300px] w-full" config={chartConfig}>
           <LineChart
-            data={data}
-            margin={{ top: 10, right: 4, left: 0, bottom: 0 }}
+            data={weeklyEarning}
+            margin={{ top: 5, right: 4, left: 10, bottom: 0 }}
           >
-            <CartesianGrid vertical={false} strokeDasharray="3 3" />
+            <CartesianGrid vertical strokeDasharray="3 3" />
             <XAxis
               dataKey="week"
               axisLine={false}
@@ -122,10 +128,10 @@ export default function WorkEarningChart() {
               interval="preserveStartEnd"
             />
             <YAxis
-              width={45}
+              width={30}
               axisLine={false}
               tickLine={false}
-              tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`}
+              tickFormatter={(v) => `${formatCurrencyText(v)}`}
             />
             <ChartTooltip content={<ChartTooltipContent />} />
             <Line
@@ -141,7 +147,8 @@ export default function WorkEarningChart() {
 
       <CardFooter className="flex-col items-start gap-1 text-sm mt-3">
         <div className="flex gap-2 font-medium leading-none">
-          {selected}의 주 단위 수익입니다. <TrendingUp className="h-4 w-4" />
+          {selected.label}의 주 단위 수익입니다.{" "}
+          <TrendingUp className="h-4 w-4" />
         </div>
       </CardFooter>
     </Card>
