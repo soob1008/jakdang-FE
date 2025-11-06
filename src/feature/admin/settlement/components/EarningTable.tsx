@@ -10,7 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/shared/ui/table";
-import { Badge } from "@/shared/ui/badge";
+import { Badge, badgeVariants } from "@/shared/ui/badge";
 import { Button } from "@/shared/ui/button";
 import {
   Pagination,
@@ -120,7 +120,12 @@ export default function EarningTable({ earnings }: EarningTableProps) {
                       {formatCurrency(earning.net_amount)}
                     </TableCell>
                     <TableCell className="text-center">
-                      <Badge variant={status.badgeVariant} size="xs">
+                      <Badge
+                        variant={
+                          status.badgeVariant as keyof typeof badgeVariants
+                        }
+                        size="xs"
+                      >
                         {status.label}
                       </Badge>
                     </TableCell>
